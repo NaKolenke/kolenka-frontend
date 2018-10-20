@@ -16,9 +16,10 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: |
-        npm install
-        gulp release
+      - run:
+        command: |
+          npm install
+          gulp release
 
       - save_cache:
           paths:
