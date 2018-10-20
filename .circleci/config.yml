@@ -19,7 +19,7 @@ jobs:
       - run:
           command: |
             npm install
-            npm install gulp -g
+            npm install gulp --save-dev
             gulp release
 
       - save_cache:
