@@ -17,9 +17,9 @@ jobs:
           - v1-dependencies-
 
       - run:
-        command: |
-          npm install
-          gulp release
+          command: |
+            npm install
+            gulp release
 
       - save_cache:
           paths:
