@@ -1,4 +1,4 @@
-# kolenka-backend
+# kolenka-frontend
 
 Репозитории для разработки фронтенда https://kolenka.net
 
