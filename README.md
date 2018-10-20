@@ -24,6 +24,6 @@ https://github.com/gulpjs/gulp/blob/v3.9.1/docs/getting-started.md
 
 Запускаем gulp:
 
-`$ gulp`
+`$ gulp release`
 
 Эта команда соберет проект и положит все файлы в папку build. При изменении js файлов будет произведена автоматическая пересборка, если gulp работает.

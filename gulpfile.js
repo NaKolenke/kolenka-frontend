@@ -33,13 +33,13 @@ gulp.task('build', ['clean'], function () {
         .pipe(gulp.dest('./build'));
 })
 
-gulp.task('js-release', bundleRelease);
+gulp.task('js-release', ['build'], bundleRelease);
 
 gulp.task('clean', function () {
     return del(['build/']);
 });
 
-gulp.task('release', ['build', 'js-release'])
+gulp.task('release', ['js-release'])
 
 gulp.task('default', ['watchify', 'build', 'js']);
 
