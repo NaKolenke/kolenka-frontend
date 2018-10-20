@@ -19,7 +19,7 @@ jobs:
       - run:
           command: |
             npm install
-            npm install gulp --save-dev
+            sudo npm install gulp -g
       - run:
           command:
             gulp release
