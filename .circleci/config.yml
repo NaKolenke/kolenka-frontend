@@ -20,6 +20,8 @@ jobs:
           command: |
             npm install
             npm install gulp --save-dev
+      - run:
+          command:
             gulp release
 
       - save_cache:
