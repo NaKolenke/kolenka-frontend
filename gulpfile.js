@@ -18,9 +18,14 @@ var b = browserify({
     plugin: []
 });
 
+b.transform(require('browserify-css'), {
+    minify: true,
+    output: './build/styles.css'
+});
+
 b.transform(hbsfy);
 
-gulp.task('js', bundle); // so you can run `gulp js` to build the file
+gulp.task('js', ['clean'], bundle); // so you can run `gulp js` to build the file
 b.on('update', bundle); // on any dep update, runs the bundler
 b.on('log', log.info); // output build logs to terminal
 

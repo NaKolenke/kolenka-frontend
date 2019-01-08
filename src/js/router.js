@@ -1,20 +1,34 @@
-
 var Backbone = require('backbone');
-var HomeView = require('./views/home.view');
+var AppView = require('./views/app.view');
+var LoginView = require('./views/login.view');
+var RegistrationView = require('./views/registration.view');
+var UsersView = require('./views/users.view');
 
 var Router = Backbone.Router.extend({
   routes: {
-    '*path': 'default'
+    '': 'default',
+    'login': 'login',
+    'register': 'registration',
   },
 
   initialize: function() {
+    this.view = new AppView();
+
     Backbone.history.start();
   },
 
   default: function() {
-    var view = new HomeView();
-    view.render();
-  }
+    this.view.switchView(UsersView);
+  },
+
+  login: function() {
+    this.view.switchView(LoginView);
+  },
+
+  registration: function() {
+    this.view.switchView(RegistrationView);
+  },
+
 });
 
 module.exports = Router;
