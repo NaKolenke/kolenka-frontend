@@ -9,6 +9,7 @@ const buffer = require('vinyl-buffer')
 const uglify = require('gulp-uglify')
 const del = require('del')
 const sass = require('gulp-sass')
+const concatCss = require('gulp-concat-css')
 
 sass.compiler = require('node-sass')
 
@@ -18,14 +19,11 @@ const bf = browserify({
 	cache: {},
 	packageCache: {},
 	plugin: [],
-	noParse: [ 'vue.js' ]
+	noParse: [ 'vue.js' ],
+	transform: [
+		[ require('vueify') ]
+	]
 })
-
-bf.transform(require('browserify-css'), {
-	minify: true,
-	output: './build/styles.css'
-})
-bf.transform(require('vueify'))
 
 bf.on('update', bundle) // on any dep update, runs the bundler
 bf.on('log', log.info) // output build logs to terminal
@@ -65,6 +63,7 @@ gulp.task('clean', function () {
 gulp.task('sass', function() {
 	return gulp.src('./src/css/**/*.scss')
 		.pipe(sass().on('error', sass.logError))
+		.pipe(concatCss('styles.css'))
 		.pipe(gulp.dest('./build'))
 })
 
@@ -73,7 +72,4 @@ gulp.task('sass:watch', function () {
 })
 
 gulp.task('release', ['js-release'])
-
 gulp.task('default', ['watchify', 'sass:watch', 'build', 'sass', 'js' ])
-
-
