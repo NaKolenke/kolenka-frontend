@@ -21,7 +21,8 @@ const bf = browserify({
 	plugin: [],
 	noParse: [ 'vue.js' ],
 	transform: [
-		[ require('vueify') ]
+		[ require('vueify') ],
+		[ require('babelify'), { presets: [ '@babel/preset-env' ] } ]
 	]
 })
 
