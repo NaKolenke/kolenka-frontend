@@ -1,5 +1,10 @@
-require('../css/styles.css')
+'use strict'
 
-var Router = require('./router');
+const Vue = require('vue')
 
-new Router();
+new Vue({
+	el: '#app',
+	render: function (h) {
+		return h(require('./components/app.vue'))
+	}
+})

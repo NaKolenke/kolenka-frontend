@@ -12,17 +12,30 @@
     "browserify": "^16.2.3",
     "browserify-css": "^0.14.0",
     "del": "^3.0.0",
+    "eslint": "^5.12.0",
+    "eslint-plugin-vue": "^5.1.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-cond": "^1.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
     "handlebars": "^4.0.12",
-    "hbsfy": "^2.8.1",
+    "node-sass": "^4.11.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
+    "vue": "^2.5.21",
+    "vue-template-compiler": "^2.5.21",
+    "vueify": "^9.4.1",
     "watchify": "^3.11.0"
   },
   "scripts": {
     "test": "test"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
   },
   "repository": {
     "type": "git",
