@@ -3,12 +3,14 @@ var AppView = require('./views/app.view');
 var LoginView = require('./views/login.view');
 var RegistrationView = require('./views/registration.view');
 var UsersView = require('./views/users.view');
+let FeedbackView = require('./views/feedback.view')
 
 var Router = Backbone.Router.extend({
   routes: {
     '': 'default',
     'login': 'login',
     'register': 'registration',
+    'feedback': 'feedback'
   },
 
   initialize: function() {
@@ -28,6 +30,10 @@ var Router = Backbone.Router.extend({
   registration: function() {
     this.view.switchView(RegistrationView);
   },
+
+  feedback: function() {
+    this.view.switchView(FeedbackView)
+  }
 
 });
 
