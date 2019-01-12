@@ -5,8 +5,7 @@
 ## Используемые инструменты
 
 * gulpjs
-* Backbone.js
-* Handlebars
+* Vue.js
 
 ## Подготовка к работе
 
