@@ -6,7 +6,7 @@ const gulp = require('gulp')
 const source = require('vinyl-source-stream')
 const log = require('gulplog')
 const buffer = require('vinyl-buffer')
-const uglify = require('gulp-uglify')
+const terser = require('gulp-terser');
 const del = require('del')
 const sass = require('gulp-sass')
 const concatCss = require('gulp-concat-css')
@@ -42,7 +42,7 @@ gulp.task('watchify', function () {
 	bf.plugin(watchify)
 })
 
-gulp.task('build', ['clean'], function () {
+gulp.task('build', ['sass'], function () {
 	return gulp.src('src/index.html')
 		.pipe(gulp.dest('./build'))
 })
@@ -52,8 +52,7 @@ gulp.task('js-release', ['build'], function bundleRelease() {
 		.on('error', log.error.bind(log, 'Browserify Error'))
 		.pipe(source('index.js'))
 		.pipe(buffer())
-		.pipe(uglify())
-		.on('error', log.error)
+		.pipe(terser())
 		.pipe(gulp.dest('./build/js'))
 })
 
@@ -61,7 +60,7 @@ gulp.task('clean', function () {
 	return del(['build/'])
 });
 
-gulp.task('sass', function() {
+gulp.task('sass', ['clean'], function() {
 	return gulp.src('./src/css/**/*.scss')
 		.pipe(sass().on('error', sass.logError))
 		.pipe(concatCss('styles.css'))
