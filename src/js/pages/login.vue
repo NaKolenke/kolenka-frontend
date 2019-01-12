@@ -1,0 +1,20 @@
+<template>
+	<div class="container">
+		<div class="columns">
+
+			<div id="login" class="column col-6 col-mx-auto">
+				<h1>Войти</h1>
+				<div class="form-group">
+					<label class="form-label" for="email">Email</label>
+					<input class="form-input" name="email" type="email"><br/>
+					<label class="form-label" for="password">Пароль</label>
+					<input class="form-input" name="password" type="password"><br/>
+					<button id="login-btn" class="btn">Войти</button> <br/>
+					<br/>
+					<p>Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link></p>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</template>

@@ -1,0 +1,41 @@
+@import 'node_modules/spectre.css/dist/spectre.css';
+
+body {
+  margin: 1;
+}
+
+#header {
+  padding: 20px 0;
+  background: #8117db;
+  background: -moz-linear-gradient(left, #8117db 0%, #0323c3 100%);
+  background: -webkit-linear-gradient(left, #8117db 0%,#0323c3 100%);
+  background: linear-gradient(to right, #8117db 0%,#0323c3 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8117db', endColorstr='#0323c3',GradientType=1 );
+}
+
+#submenu {
+  padding: 10px 0;
+  background-color: #177ac6;
+}
+
+header a {
+  color: #ffffff;
+  margin: 0 20px 0 0;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 16px;
+}
+
+@media screen and (max-width: 500px) {
+  header a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
