@@ -1,20 +1,8 @@
 <template>
 	<div>
 		<HeaderComponent></HeaderComponent>
-		
-		<div class="container">
-			<div class="columns">
 
-				<div id="content" class="column col-9">
-					<router-view></router-view>
-				</div>
-
-				<div id="sidebar" class="column col-3 hide-md">
-					{{message}}
-				</div>
-
-			</div>
-		</div>
+		<router-view></router-view>
 	</div>
 </template>
 
@@ -25,11 +13,6 @@ const HeaderComponent = require('./header.vue')
 module.exports = {
 	components: {
 		HeaderComponent
-	},
-	data () {
-		return {
-			message: 'hello'
-		}
 	}
 }
 </script>

@@ -4,6 +4,7 @@
   "description": "Репозитории для разработки фронтенда https://kolenka.net",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "jquery": "^3.3.1",
     "spectre.css": "^0.5.5",
     "vue-router": "^3.0.2"
@@ -25,7 +26,6 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
-    "handlebars": "^4.0.12",
     "node-sass": "^4.11.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
