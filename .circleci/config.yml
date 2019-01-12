@@ -51,4 +51,4 @@ workflows:
             - build
           filters:
             branches:
-              only:  /^release/\d+\.\d+\.\d+/
+              only:  master
