@@ -59,7 +59,7 @@ module.exports = {
   created: function() {
 	var component = this;
 	// TODO extract api url
-    fetch("http://127.0.0.1:5000/doc/")
+    fetch("https://beta.kolenka.net/api/doc/")
       .then(function(response) {
         return response.json();
       })
