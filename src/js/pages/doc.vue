@@ -4,9 +4,7 @@
       <div id="doc" class="column col-6 col-mx-auto">
         <div id="postman" class="accordion">
           <input type="checkbox" id="accordion-1" name="accordion-checkbox" hidden>
-          <label class="accordion-header label" for="accordion-1">
-            > Коллекция Postman
-          </label>
+          <label class="accordion-header label" for="accordion-1">> Коллекция Postman</label>
           <div class="accordion-body bg-gray">
             <p>
               Коллекция Postman:
@@ -42,9 +40,9 @@
 </template>
 
 <style scoped>
-#postman  .accordion-body{
-	margin-bottom: 26px;
-	font-size: 10pt;
+#postman .accordion-body {
+  margin-bottom: 26px;
+  font-size: 10pt;
 }
 </style>
 
@@ -57,8 +55,8 @@ module.exports = {
     return { endpoints: this.endpoints };
   },
   created: function() {
-	var component = this;
-	// TODO extract api url
+    var component = this;
+    // TODO extract api url
     fetch("https://beta.kolenka.net/api/doc/")
       .then(function(response) {
         return response.json();
