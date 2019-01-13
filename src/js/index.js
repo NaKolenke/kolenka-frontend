@@ -9,6 +9,7 @@ const routes = [
 	{ path: '/', component: require('./pages/home.vue') },
 	{ path: '/login', component: require('./pages/login.vue') },
 	{ path: '/register', component: require('./pages/register.vue') },
+	{ path: '/doc', component: require('./pages/doc.vue') },
 ]
 
 const router = new VueRouter({ routes })
