@@ -56,8 +56,8 @@ module.exports = {
   },
   created: function() {
     var component = this;
-    // TODO extract api url
-    fetch("https://beta.kolenka.net/api/doc/")
+    config = require("./../config.json")
+    fetch(config.apiUrl + "/doc/")
       .then(function(response) {
         return response.json();
       })
