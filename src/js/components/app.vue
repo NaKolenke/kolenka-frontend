@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<HeaderComponent></HeaderComponent>
+		<HeaderComponent
+			v-bind:user="user"
+		></HeaderComponent>
 
 		<router-view></router-view>
 	</div>
@@ -13,6 +15,11 @@ const HeaderComponent = require('./header.vue')
 module.exports = {
 	components: {
 		HeaderComponent
+	},
+	data: function() {
+		return {
+			user: null
+		}
 	}
 }
 </script>
