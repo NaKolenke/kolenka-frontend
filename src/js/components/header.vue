@@ -9,8 +9,23 @@
 			<router-link to="/page/about">О сайте</router-link>
 		</section>
 		<section class="navbar-section column col-6 col-mx-auto">
-			<router-link to="/login">Login</router-link>
+			<template v-if="user">
+				<router-link to="/profile">{{ user.name }}</router-link>
+			</template>
+			<template v-else>
+				<router-link to="/register">Регистрация</router-link>
+				<router-link to="/login">Войти</router-link>
+			</template>
 		</section>
 	</header>
 </div>
 </template>
+
+<script>
+module.exports = {
+	props: {
+		user: Object
+	}
+}
+</script>
+
