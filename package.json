@@ -4,7 +4,6 @@
   "description": "Репозитории для разработки фронтенда https://kolenka.net",
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.18.0",
     "jquery": "^3.3.1",
     "spectre.css": "^0.5.5",
     "vue-router": "^3.0.2"

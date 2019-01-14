@@ -10,6 +10,8 @@ const routes = [
 	{ path: '/login', component: require('./pages/login.vue') },
 	{ path: '/register', component: require('./pages/register.vue') },
 	{ path: '/doc', component: require('./pages/doc.vue') },
+	{ path: '/404', component: require('./pages/404.vue') },
+	{ path: '*', redirect: '/404' }
 ]
 
 const router = new VueRouter({ routes })
