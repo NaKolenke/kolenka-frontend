@@ -37,6 +37,7 @@
 
 <script>
 const config = require('./../config.json')
+const cookie = require('js-cookie')
 
 module.exports = {
 	data: function() {
@@ -66,18 +67,19 @@ module.exports = {
 			}
 			
 			fetch(config.apiUrl + '/users/login/', {
+				method: 'POST',
 				body: JSON.stringify({
 					username: this.username,
 					password: this.password
 				}),
 				headers: {
 					'Content-Type': 'application/json'
-				},
-				method: 'POST'
+				}
 			}).then(res => {
 				return res.json()
 			}).then(data => {
-				console.log(data)
+				this.$root.login(data)
+				this.$router.replace({ path: '/' })
 			})
 		}
 	}

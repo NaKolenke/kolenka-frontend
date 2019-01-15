@@ -9,8 +9,9 @@
 			<router-link to="/page/about">О сайте</router-link>
 		</section>
 		<section class="navbar-section column col-6 col-mx-auto">
-			<template v-if="user">
-				<router-link to="/profile">{{ user.name }}</router-link>
+			<template v-if="user && user.data">
+				<router-link to="/profile">{{ user.data.name }}</router-link>
+				<router-link to="/logout">Выйти</router-link>
 			</template>
 			<template v-else>
 				<router-link to="/register">Регистрация</router-link>
