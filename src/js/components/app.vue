@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<HeaderComponent
-			v-bind:user="user"
-		></HeaderComponent>
+		v-bind:user="user">
+		</HeaderComponent>
 
 		<router-view></router-view>
 	</div>
@@ -16,10 +16,8 @@ module.exports = {
 	components: {
 		HeaderComponent
 	},
-	data: function() {
-		return {
-			user: null
-		}
+	props: {
+		user: Object
 	}
 }
 </script>
