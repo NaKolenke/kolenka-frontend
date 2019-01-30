@@ -5,7 +5,7 @@
     <div class="container col-9 col-mx-auto">
       <div class="columns">
         <div id="content" class="column col-9">
-          <ArticleView v-for="post in posts" :key="post.id" :post="post" :cut="true"></ArticleView>
+          <ArticleView v-if="post.blog" :post="post" :cut="false"></ArticleView>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
@@ -24,20 +24,19 @@ const config = require("./../config.json");
 
 module.exports = {
   data: function() {
-    this.posts = [];
+    this.post = {};
 
     return {
-      posts: this.posts
+      post: this.post
     };
   },
   created: function() {
-	var page = this.$route.query.page || 1;
-    fetch(config.apiUrl + "/posts/?page=" + page)
+    fetch(config.apiUrl + "/posts/" + this.$route.params.post + "/")
       .then(response => {
         return response.json();
       })
       .then(data => {
-        this.posts = data.posts;
+        this.post = data.post;
       });
   },
   components: {
