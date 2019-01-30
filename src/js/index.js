@@ -2,32 +2,70 @@
 
 const Vue = require('vue')
 const VueRouter = require('vue-router')
+const Moment = require('moment')
+require('moment/locale/ru')
 
 Vue.use(VueRouter)
 
 const routes = [
-	{ path: '/', component: require('./pages/home.vue') },
-	{ path: '/login', component: require('./pages/login.vue'), meta: {
-		requiresUnAuth: true
-	} },
-	{ path: '/register', component: require('./pages/register.vue'), meta: {
-		requiresUnAuth: true
-	} },
-	{ path: '/doc', component: require('./pages/doc.vue') },
-	{ path: '/404', component: require('./pages/404.vue') },
-	{ path: '/logout', meta: {
-		logout: true
-	} },
-	{ path: '*', redirect: '/404' }
+	{
+		path: '/',
+		component: require('./pages/home.vue')
+	},
+	{
+		path: '/login',
+		component: require('./pages/login.vue'),
+		meta: {
+			requiresUnAuth: true
+		}
+	},
+	{
+		path: '/register',
+		component: require('./pages/register.vue'),
+		meta: {
+			requiresUnAuth: true
+		}
+	},
+	{
+		path: '/posts/:post',
+		component: require('./pages/post.vue')
+	},
+	{
+		path: '/doc',
+		component: require('./pages/doc.vue')
+	},
+	{
+		path: '/404',
+		component: require('./pages/404.vue')
+	},
+	{
+		path: '/logout',
+		meta: {
+			logout: true
+		}
+	},
+	{
+		path: '*',
+		redirect: '/404'
+	}
 ]
 
-const router = new VueRouter({ routes })
+const router = new VueRouter({
+	mode: 'history',
+	routes: routes
+})
+
 const appView = require('./components/app.vue')
 const Toast = require('./components/toast.vue')
 const cookie = require('js-cookie')
 const config = require('./config.json')
 
 let ToastClass = Vue.extend(Toast)
+
+Moment.locale('ru');
+Vue.filter('moment', function (timestamp) {
+	return Moment.unix(timestamp).format('LLL');
+})
 
 let app = new Vue({
 	el: '#app',
@@ -43,32 +81,32 @@ let app = new Vue({
 		toasts: [],
 		user: null
 	},
-	mounted: function() {
+	mounted: function () {
 		let data = cookie.getJSON('tokens')
 
 		if (data)
 			this.login(data)
 	},
 	methods: {
-		showToast: function(msg) {
+		showToast: function (msg) {
 			let y = this.toasts.map(i => {
 				return i.$el.offsetHeight
 			}).reduce((a, b) => a + b, 0)
-			
+
 			let instance = new ToastClass({
 				propsData: {
 					y: y
 				}
 			})
 
-			instance.$slots.default = [ msg	]
+			instance.$slots.default = [msg]
 			instance.$root = this
 			instance.$mount()
-			
+
 			this.$el.appendChild(instance.$el)
 			this.toasts.push(instance)
 		},
-		hideToast: function(t) {
+		hideToast: function (t) {
 			let index = 0
 			let height = 0
 
@@ -86,7 +124,7 @@ let app = new Vue({
 				this.toasts[i].y -= height
 			}
 		},
-		login: function(data) {
+		login: function (data) {
 
 			cookie.set('tokens', data, {
 				expires: 7
@@ -130,7 +168,7 @@ router.beforeEach((to, from, next) => {
 			})
 		}
 		next()
-	}	else {
+	} else {
 		next()
 	}
 })
