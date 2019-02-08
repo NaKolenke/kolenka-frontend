@@ -19,6 +19,7 @@ jobs:
       - run:
           command: |
             npm install
+            npm install -g npx
       - run:
           command:
             npx webpack
