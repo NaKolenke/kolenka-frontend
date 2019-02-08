@@ -19,10 +19,9 @@ jobs:
       - run:
           command: |
             npm install
-            sudo npm install gulp -g
       - run:
           command:
-            gulp release
+            npx webpack
 
       - save_cache:
           paths:
