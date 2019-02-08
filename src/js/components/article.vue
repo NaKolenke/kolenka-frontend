@@ -27,8 +27,9 @@
 </template>
 
 <script>
-const Avatar = require("./../components/avatar.vue");
-module.exports = {
+import Avatar from "./../components/avatar.vue";
+
+export default {
   props: ["post", "cut"],
   components: {
     Avatar

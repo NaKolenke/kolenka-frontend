@@ -9,10 +9,10 @@
 </template>
 
 <script>
-const VueRouter = require('vue-router')
-const HeaderComponent = require('./header.vue')
+import VueRouter from 'vue-router'
+import HeaderComponent from './header.vue'
 
-module.exports = {
+export default {
 	components: {
 		HeaderComponent
 	},

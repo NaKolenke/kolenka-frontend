@@ -14,7 +14,7 @@
 </style>
 
 <script>
-module.exports = {
+export default {
   props: {
     y: Number
   },
