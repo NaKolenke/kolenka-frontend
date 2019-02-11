@@ -28,8 +28,8 @@ h4 {
 
 <script>
 export default {
-	props: {
-		version: String
-	}
-}
+  props: {
+    version: String
+  }
+};
 </script>

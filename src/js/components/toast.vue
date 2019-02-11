@@ -1,7 +1,7 @@
 <template>
   <div class="toast toast-success" v-bind:style="{ bottom: y + 'px' }">
     <button class="btn btn-clear float-right" v-on:click="close()"></button>
-    <slot />
+    <slot/>
   </div>
 </template>
 
@@ -22,8 +22,8 @@ export default {
   },
   methods: {
     close: function() {
-      this.$root.hideToast(this)
+      this.$root.hideToast(this);
     }
   }
-}
+};
 </script>

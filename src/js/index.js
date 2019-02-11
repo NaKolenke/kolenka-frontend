@@ -8,7 +8,7 @@ import Moment from 'moment'
 import 'moment/locale/ru'
 
 import appView from './components/app.vue'
-import Toast  from './components/toast.vue'
+import Toast from './components/toast.vue'
 import cookie from 'js-cookie'
 import config from './config.json'
 

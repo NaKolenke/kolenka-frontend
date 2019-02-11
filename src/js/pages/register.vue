@@ -113,18 +113,18 @@ export default {
         })
         .then(data => {
           if (data.success == 1) {
-			this.$root.login(data);
-			
-			this.$root.showToast("Успешно зарегистрировался");
+            this.$root.login(data);
+
+            this.$root.showToast("Успешно зарегистрировался");
 
             this.$router.replace({ path: "/" });
           } else {
             this.usernameError = "Ошибка регистрации";
           }
-		})
-		.catch(err => {
+        })
+        .catch(err => {
           this.usernameError = "Ошибка регистрации";
-        });;
+        });
     }
   }
 };

@@ -32,7 +32,7 @@ export default {
     };
   },
   created: function() {
-	var page = this.$route.query.page || 1;
+    var page = this.$route.query.page || 1;
     fetch(config.apiUrl + "/posts/?page=" + page)
       .then(response => {
         return response.json();

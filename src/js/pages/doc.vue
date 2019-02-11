@@ -48,22 +48,22 @@
 
 <script>
 const EndpointView = require("./../components/doc/endpoint.vue");
-const config = require("./../config.json")
+const config = require("./../config.json");
 
 export default {
   data: function() {
     this.endpoints = [];
-    
+
     return {
       endpoints: this.endpoints
     };
   },
-  created: function() {    
+  created: function() {
     fetch(config.apiUrl + "/doc/")
-      .then((response) => {
+      .then(response => {
         return response.json();
       })
-      .then((data) => {
+      .then(data => {
         this.endpoints = data.endpoints;
       });
   },
