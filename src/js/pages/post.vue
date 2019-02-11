@@ -17,12 +17,12 @@
 </template>
 
 <script>
-const ArticleView = require("./../components/article.vue");
-const SidebarBlock = require("./../components/sidebar-block.vue");
-const SubmenuView = require("./../components/submenu.vue");
-const config = require("./../config.json");
+import ArticleView from "./../components/article.vue";
+import SidebarBlock from "./../components/sidebar-block.vue";
+import SubmenuView from "./../components/submenu.vue";
+import config from "./../config.json";
 
-module.exports = {
+export default {
   data: function() {
     this.post = {};
 

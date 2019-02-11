@@ -29,7 +29,7 @@
 </style>
 
 <script>
-module.exports = {
+export default {
   props: ["endpoint"]
 };
 </script>

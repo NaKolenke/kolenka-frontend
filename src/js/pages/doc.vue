@@ -50,7 +50,7 @@
 const EndpointView = require("./../components/doc/endpoint.vue");
 const config = require("./../config.json")
 
-module.exports = {
+export default {
   data: function() {
     this.endpoints = [];
     

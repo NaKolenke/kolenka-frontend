@@ -12,7 +12,7 @@
 </template>
 
 <script>
-module.exports = {
+export default {
   props: ["user"]
 };
 </script>

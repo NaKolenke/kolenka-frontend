@@ -36,10 +36,10 @@
 
 
 <script>
-const config = require('./../config.json')
-const cookie = require('js-cookie')
+import config  from './../config.json'
+import cookie from 'js-cookie'
 
-module.exports = {
+export default {
 	data: function() {
 		return {
 			username: '',

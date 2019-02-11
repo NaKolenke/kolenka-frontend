@@ -1,42 +1,57 @@
 'use strict'
 
-const Vue = require('vue')
-const VueRouter = require('vue-router')
-const Moment = require('moment')
-require('moment/locale/ru')
+import '../css/styles.scss'
+
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Moment from 'moment'
+import 'moment/locale/ru'
+
+import appView from './components/app.vue'
+import Toast  from './components/toast.vue'
+import cookie from 'js-cookie'
+import config from './config.json'
+
+import homePage from './pages/home.vue'
+import loginPage from './pages/login.vue'
+import registerPage from './pages/register.vue'
+import postPage from './pages/post.vue'
+import docPage from './pages/doc.vue'
+import notFoundPage from './pages/404.vue'
+
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
 		path: '/',
-		component: require('./pages/home.vue')
+		component: homePage
 	},
 	{
 		path: '/login',
-		component: require('./pages/login.vue'),
+		component: loginPage,
 		meta: {
 			requiresUnAuth: true
 		}
 	},
 	{
 		path: '/register',
-		component: require('./pages/register.vue'),
+		component: registerPage,
 		meta: {
 			requiresUnAuth: true
 		}
 	},
 	{
 		path: '/posts/:post',
-		component: require('./pages/post.vue')
+		component: postPage
 	},
 	{
 		path: '/doc',
-		component: require('./pages/doc.vue')
+		component: docPage
 	},
 	{
 		path: '/404',
-		component: require('./pages/404.vue')
+		component: notFoundPage
 	},
 	{
 		path: '/logout',
@@ -54,11 +69,6 @@ const router = new VueRouter({
 	mode: 'history',
 	routes: routes
 })
-
-const appView = require('./components/app.vue')
-const Toast = require('./components/toast.vue')
-const cookie = require('js-cookie')
-const config = require('./config.json')
 
 let ToastClass = Vue.extend(Toast)
 
