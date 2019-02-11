@@ -89,18 +89,20 @@ let app = new Vue({
 	router,
 	data: {
 		toasts: [],
+		notifications: [],
 		user: null
 	},
 	mounted: function () {
 		let data = cookie.getJSON('tokens')
 
-		if (data)
+		if (data) {
 			this.login(data)
+		}
 	},
 	methods: {
 		showToast: function (msg) {
 			let y = this.toasts.map(i => {
-				return i.$el.offsetHeight
+				return i.$el.offsetHeight + 8 // todo remove this hardcoded margin height
 			}).reduce((a, b) => a + b, 0)
 
 			let instance = new ToastClass({
@@ -115,6 +117,10 @@ let app = new Vue({
 
 			this.$el.appendChild(instance.$el)
 			this.toasts.push(instance)
+
+			setTimeout(() => {
+				this.hideToast(instance);
+			}, 3000)
 		},
 		hideToast: function (t) {
 			let index = 0
@@ -135,7 +141,6 @@ let app = new Vue({
 			}
 		},
 		login: function (data) {
-
 			cookie.set('tokens', data, {
 				expires: 7
 			})
@@ -145,8 +150,6 @@ let app = new Vue({
 				data: null
 			}
 
-			console.log(data)
-
 			fetch(config.apiUrl + '/users/self/', {
 				headers: {
 					'Authorization': this.user.tokens.access_token.token
@@ -154,7 +157,16 @@ let app = new Vue({
 			}).then(res => {
 				return res.json()
 			}).then(res => {
-				this.user.data = res.user
+				if (res.success == 1) {
+					this.user.data = res.user
+				} else {
+					app.user = null
+					cookie.remove('tokens')
+				}
+			}).catch(err => {
+				console.log(err)
+				app.user = null
+				cookie.remove('tokens')
 			})
 		}
 	}

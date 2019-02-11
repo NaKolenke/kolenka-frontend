@@ -7,7 +7,7 @@
         alt="..."
       >
     </figure>
-    {{user.login}}
+    {{user.name}}
   </div>
 </template>
 

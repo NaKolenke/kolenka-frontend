@@ -1,5 +1,5 @@
 <template>
-  <div class="toast" v-bind:style="{ bottom: y + 'px' }">
+  <div class="toast toast-success" v-bind:style="{ bottom: y + 'px' }">
     <button class="btn btn-clear float-right" v-on:click="close()"></button>
     <slot />
   </div>
@@ -7,9 +7,11 @@
 
 <style scoped>
 .toast {
-  position: absolute;
+  position: fixed;
   right: 0;
   width: 300px;
+  margin: 24px;
+  padding: 8px;
 }
 </style>
 

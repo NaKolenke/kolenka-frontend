@@ -9,7 +9,7 @@
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
-          <SidebarBlock></SidebarBlock>
+          <SidebarBlock :version="version"></SidebarBlock>
         </div>
       </div>
     </div>
@@ -27,7 +27,8 @@ export default {
     this.posts = [];
 
     return {
-      posts: this.posts
+      posts: this.posts,
+      version: config.version
     };
   },
   created: function() {
