@@ -81,7 +81,7 @@ export default {
         .then(data => {
           if (data.success == 1) {
             this.$root.login(data);
-            
+
             this.$root.showToast("Успешно авторизовался");
 
             this.$router.replace({ path: "/" });
