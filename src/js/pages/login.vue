@@ -5,12 +5,12 @@
         <h1>Войти</h1>
         <div class="form-group">
           <label class="form-label" for="text">Имя пользователя</label>
-          <input class="form-input" v-model="username" name="login">
+          <input class="form-input" v-model="username" name="login" v-on:keyup.enter="login">
           <br>
           <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
 
           <label class="form-label" for="password">Пароль</label>
-          <input class="form-input" v-model="password" name="password" type="password">
+          <input class="form-input" v-model="password" name="password" type="password" v-on:keyup.enter="login">
           <br>
           <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
 
