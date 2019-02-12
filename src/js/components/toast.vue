@@ -1,15 +1,17 @@
 <template>
-  <div class="toast" v-bind:style="{ bottom: y + 'px' }">
+  <div class="toast toast-success" v-bind:style="{ bottom: y + 'px' }">
     <button class="btn btn-clear float-right" v-on:click="close()"></button>
-    <slot />
+    <slot/>
   </div>
 </template>
 
 <style scoped>
 .toast {
-  position: absolute;
+  position: fixed;
   right: 0;
   width: 300px;
+  margin: 24px;
+  padding: 8px;
 }
 </style>
 
@@ -20,8 +22,8 @@ export default {
   },
   methods: {
     close: function() {
-      this.$root.hideToast(this)
+      this.$root.hideToast(this);
     }
   }
-}
+};
 </script>

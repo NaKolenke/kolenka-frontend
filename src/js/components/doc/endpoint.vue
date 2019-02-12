@@ -7,7 +7,6 @@
     <div v-if="endpoint.status != 'Available'">
       <span class="label label-warning">{{endpoint.status}}</span>
     </div>
-
     {{endpoint.description}}
     <div v-if="endpoint.body" class="bg-dark text-secondary">Body:
       <br>

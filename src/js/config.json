@@ -1,3 +1,4 @@
 {
-    "apiUrl": "https://beta.kolenka.net/api"
+    "apiUrl": "https://beta.kolenka.net/api",
+    "version": "0.0.2"
 }

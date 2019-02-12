@@ -36,6 +36,7 @@ module.exports = {
       }
     ]
   },
+  devtool: 'eval',
   devServer: {
     contentBase: './build',
     allowedHosts: [
