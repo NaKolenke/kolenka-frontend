@@ -9,8 +9,8 @@ import 'moment/locale/ru'
 
 import appView from './components/app.vue'
 import Toast from './components/toast.vue'
-import cookie from 'js-cookie'
 import config from './config.json'
+import api from './services/api/auth'
 
 import homePage from './pages/home.vue'
 import loginPage from './pages/login.vue'
@@ -93,10 +93,10 @@ let app = new Vue({
 		user: null
 	},
 	mounted: function () {
-		let data = cookie.getJSON('tokens')
+		let data = localStorage.getItem('accessToken')
 
 		if (data) {
-			this.login(data)
+			this.refreshUser()
 		}
 	},
 	methods: {
@@ -140,34 +140,21 @@ let app = new Vue({
 				this.toasts[i].y -= height
 			}
 		},
-		login: function (data) {
-			cookie.set('tokens', data, {
-				expires: 7
-			})
-
-			this.user = {
-				tokens: data,
-				data: null
-			}
-
-			fetch(config.apiUrl + '/users/self/', {
-				headers: {
-					'Authorization': this.user.tokens.access_token.token
-				}
-			}).then(res => {
-				return res.json()
-			}).then(res => {
-				if (res.success == 1) {
-					this.user.data = res.user
-				} else {
+		refreshUser: function () {
+			api.getSelf()
+				.then(res => {
+					if (res.success == 1) {
+						this.user = res.user
+					} else {
+						app.user = null
+						localStorage.removeItem('accessToken')
+						localStorage.removeItem('refreshToken')
+					}
+				}).catch(err => {
 					app.user = null
-					cookie.remove('tokens')
-				}
-			}).catch(err => {
-				console.log(err)
-				app.user = null
-				cookie.remove('tokens')
-			})
+					localStorage.removeItem('accessToken')
+					localStorage.removeItem('refreshToken')
+				})
 		}
 	}
 })
@@ -184,7 +171,8 @@ router.beforeEach((to, from, next) => {
 	} else if (to.matched.some(record => record.meta.logout)) {
 		if (app.user) {
 			app.user = null
-			cookie.remove('tokens')
+			localStorage.removeItem('accessToken')
+			localStorage.removeItem('refreshToken')
 			return next({
 				path: '/'
 			})

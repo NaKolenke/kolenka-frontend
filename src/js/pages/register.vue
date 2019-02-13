@@ -20,7 +20,13 @@
           <div class="toast toast-error" v-if="nameError">{{ nameError }}</div>
 
           <label class="form-label" for="password">Пароль</label>
-          <input class="form-input" v-model="password" name="password" type="password" v-on:keyup.enter="register">
+          <input
+            class="form-input"
+            v-model="password"
+            name="password"
+            type="password"
+            v-on:keyup.enter="register"
+          >
           <br>
           <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
 
@@ -96,24 +102,11 @@ export default {
         return;
       }
 
-      fetch(config.apiUrl + "/users/register/", {
-        method: "POST",
-        body: JSON.stringify({
-          username: this.username,
-          email: this.email,
-          name: this.name,
-          password: this.password
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => {
-          return res.json();
-        })
+      api
+        .register(this.username, this.name, this.email, this.password)
         .then(data => {
           if (data.success == 1) {
-            this.$root.login(data);
+            this.$root.refreshUser();
 
             this.$root.showToast("Успешно зарегистрировался");
 

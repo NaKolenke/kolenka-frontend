@@ -10,7 +10,13 @@
           <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
 
           <label class="form-label" for="password">Пароль</label>
-          <input class="form-input" v-model="password" name="password" type="password" v-on:keyup.enter="login">
+          <input
+            class="form-input"
+            v-model="password"
+            name="password"
+            type="password"
+            v-on:keyup.enter="login"
+          >
           <br>
           <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
 
@@ -35,8 +41,8 @@
 
 
 <script>
-import config from "./../config.json";
 import cookie from "js-cookie";
+import api from "./../services/api/auth";
 
 export default {
   data: function() {
@@ -65,22 +71,11 @@ export default {
         return;
       }
 
-      fetch(config.apiUrl + "/users/login/", {
-        method: "POST",
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => {
-          return res.json();
-        })
+      api
+        .login(this.username, this.password)
         .then(data => {
           if (data.success == 1) {
-            this.$root.login(data);
+            this.$root.refreshUser();
 
             this.$root.showToast("Успешно авторизовался");
 
