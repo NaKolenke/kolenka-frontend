@@ -33,6 +33,11 @@ header a {
   bottom: 16px;
 }
 
+hr {
+  border: none;
+  border-top: 1px solid #cccccc;
+}
+
 @media screen and (max-width: 500px) {
   header a {
     float: none;

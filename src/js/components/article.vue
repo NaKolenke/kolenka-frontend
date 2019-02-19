@@ -18,7 +18,11 @@
     >{{ post.cut_name || 'Читать дальше' }}</a>
 
     <div class="columns article-footer">
-      <Avatar :user="post.creator"></Avatar>
+      <div class="column col-lg-auto">
+        <Avatar :user="post.creator" :size="'sm'"></Avatar>
+        {{post.creator.name}}
+      </div>
+
       <div class="column col-auto">
         <a v-for="tag in post.tags" :key="tag.title" :href="'/tags/' + tag.url + '/'">{{tag.title}}</a>
       </div>
@@ -54,8 +58,4 @@ export default {
   border-top: 1px solid #999999;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid #cccccc;
-}
 </style>

@@ -51,8 +51,7 @@
 
 
 <script>
-import config from "./../config.json";
-import cookie from "js-cookie";
+import userService from "./../services/user";
 
 export default {
   data: function() {
@@ -102,7 +101,7 @@ export default {
         return;
       }
 
-      api
+      userService
         .register(this.username, this.name, this.email, this.password)
         .then(data => {
           if (data.success == 1) {

@@ -9,15 +9,17 @@ import 'moment/locale/ru'
 
 import appView from './components/app.vue'
 import Toast from './components/toast.vue'
-import config from './config.json'
-import api from './services/api/auth'
+import userService from './services/user'
 
 import homePage from './pages/home.vue'
 import loginPage from './pages/login.vue'
 import registerPage from './pages/register.vue'
 import postPage from './pages/post.vue'
 import docPage from './pages/doc.vue'
+import profilesPage from './pages/profiles.vue'
+import profilePage from './pages/profile.vue'
 import notFoundPage from './pages/404.vue'
+import authErrorPage from './pages/401.vue'
 
 
 Vue.use(VueRouter)
@@ -46,8 +48,21 @@ const routes = [
 		component: postPage
 	},
 	{
+		path: '/users/',
+		component: profilesPage
+	},
+	{
+		path: '/users/:user',
+		name: 'profile',
+		component: profilePage
+	},
+	{
 		path: '/doc',
 		component: docPage
+	},
+	{
+		path: '/401',
+		component: authErrorPage
 	},
 	{
 		path: '/404',
@@ -93,11 +108,7 @@ let app = new Vue({
 		user: null
 	},
 	mounted: function () {
-		let data = localStorage.getItem('accessToken')
-
-		if (data) {
-			this.refreshUser()
-		}
+		this.refreshUser()
 	},
 	methods: {
 		showToast: function (msg) {
@@ -141,19 +152,18 @@ let app = new Vue({
 			}
 		},
 		refreshUser: function () {
-			api.getSelf()
+			userService
+				.getSelf()
 				.then(res => {
 					if (res.success == 1) {
 						this.user = res.user
 					} else {
 						app.user = null
-						localStorage.removeItem('accessToken')
-						localStorage.removeItem('refreshToken')
+						userService.logout()
 					}
 				}).catch(err => {
 					app.user = null
-					localStorage.removeItem('accessToken')
-					localStorage.removeItem('refreshToken')
+					userService.logout()
 				})
 		}
 	}
@@ -171,8 +181,7 @@ router.beforeEach((to, from, next) => {
 	} else if (to.matched.some(record => record.meta.logout)) {
 		if (app.user) {
 			app.user = null
-			localStorage.removeItem('accessToken')
-			localStorage.removeItem('refreshToken')
+			userService.logout()
 			return next({
 				path: '/'
 			})

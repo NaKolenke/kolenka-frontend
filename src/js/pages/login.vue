@@ -41,8 +41,7 @@
 
 
 <script>
-import cookie from "js-cookie";
-import api from "./../services/api/auth";
+import userService from "./../services/user";
 
 export default {
   data: function() {
@@ -71,7 +70,7 @@ export default {
         return;
       }
 
-      api
+      userService
         .login(this.username, this.password)
         .then(data => {
           if (data.success == 1) {

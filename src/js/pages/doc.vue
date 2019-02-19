@@ -47,8 +47,8 @@
 </style>
 
 <script>
-const EndpointView = require("./../components/doc/endpoint.vue");
-const config = require("./../config.json");
+import EndpointView  from "./../components/doc/endpoint.vue";
+import config from "./../config.json";
 
 export default {
   data: function() {
