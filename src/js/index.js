@@ -11,6 +11,7 @@ import appView from './components/app.vue'
 import Toast from './components/toast.vue'
 import userService from './services/user'
 
+import designPage from './pages/design.vue'
 import homePage from './pages/home.vue'
 import loginPage from './pages/login.vue'
 import registerPage from './pages/register.vue'
@@ -25,6 +26,10 @@ import authErrorPage from './pages/401.vue'
 Vue.use(VueRouter)
 
 const routes = [
+	{
+		path: '/design',
+		component: designPage
+	},
 	{
 		path: '/',
 		component: homePage
