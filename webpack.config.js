@@ -1,6 +1,8 @@
+const webpack = require('webpack');
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: './src/js/index.js',
@@ -19,12 +21,16 @@ module.exports = {
       {
         test: /\.vue$/,
         use: [
+          'cache-loader',
           'vue-loader'
         ]
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader'
+        use: [
+          'cache-loader',
+          'babel-loader'
+        ]
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -36,7 +42,10 @@ module.exports = {
       }
     ]
   },
-  devtool: 'eval',
+  optimization: {
+   // runtimeChunk: true
+  },
+  // devtool: 'eval',
   devServer: {
     contentBase: './build',
     allowedHosts: [
@@ -56,6 +65,11 @@ module.exports = {
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: "index.css"
-    })
+    }),
+    // new BundleAnalyzerPlugin(),
+    new webpack.ContextReplacementPlugin(
+      /moment[/\\]locale$/,
+      /en|ru/
+    )
   ]
 };

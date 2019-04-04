@@ -1,32 +1,33 @@
 <template>
   <div>
-    <div class="user columns column col-12 pt-2">
-      <div class="column col-auto">
-        <Avatar :user="user" :size="'lg'"></Avatar>
-      </div>
-      <div class="column col-8">
-        <div>
-          <router-link :to="{ name: 'profile', params: { user: user.login }}">{{user.login}}</router-link>
-        </div>
-        <div>{{user.name}}</div>
-      </div>
-      <div class="column col-3 col-ml-auto">{{user.last_active_date | moment }}</div>
-    </div>
+    <div class="user column col-12 py-2">
+      <div class="columns">
+        <ProfileListItem :user="user"></ProfileListItem>
 
-    <div v-if="user.about" v-html="user.about"></div>
+        <div class="description column col-12 my-2 p-2" v-if="user.about" v-html="user.about"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Avatar from "./../components/avatar.vue";
+import ProfileListItem from "./../components/profile-item.vue";
 
 export default {
   props: ["user"],
   components: {
-    Avatar
+    ProfileListItem
   }
 };
 </script>
 
 <style scoped>
+.user {
+  background: #ffffff;
+}
+
+.description {
+  background: #ffe;
+  padding: 0px;
+}
 </style>

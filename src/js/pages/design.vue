@@ -12,11 +12,8 @@
 
     <div class="columns col-9 col-mx-auto row p-2 mt-2">
       <div class="col-3">Пользователи</div>
-      <div class="col-5">
-        <ProfileListItem :user="user" :size="'sm'"></ProfileListItem>
-      </div>
-      <div class="col-1">
-        
+      <div class="col-9">
+        <ProfileListItem :user="user"></ProfileListItem>
       </div>
     </div>
   </div>

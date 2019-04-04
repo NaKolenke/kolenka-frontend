@@ -163,11 +163,11 @@ let app = new Vue({
 					if (res.success == 1) {
 						this.user = res.user
 					} else {
-						app.user = null
+						this.user = null
 						userService.logout()
 					}
 				}).catch(err => {
-					app.user = null
+					this.user = null
 					userService.logout()
 				})
 		}
