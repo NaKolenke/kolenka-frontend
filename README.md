@@ -2,19 +2,20 @@
 
 Репозитории для разработки фронтенда https://kolenka.net
 
-## Используемые инструменты
+## Build Setup
 
-* webpack
-* Vue.js
+``` bash
+# install dependencies
+npm install
 
-## Подготовка к работе
+# serve with hot reload at localhost:8080
+npm run dev
 
-Переходим в папку проекта и устанавливаем зависимости:
+# build for production with minification
+npm run build
 
-`$ npm install`
+# build for production and view the bundle analyzer report
+npm run build --report
+```
 
-Запускаем webpack:
-
-`$ npm start`
-
-Эта команда соберет проект и положит все файлы в папку build. При изменении js файлов будет произведена автоматическая пересборка, если webpack работает.
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
