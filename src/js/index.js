@@ -9,20 +9,27 @@ import 'moment/locale/ru'
 
 import appView from './components/app.vue'
 import Toast from './components/toast.vue'
-import cookie from 'js-cookie'
-import config from './config.json'
+import userService from './services/user'
 
+import designPage from './pages/design.vue'
 import homePage from './pages/home.vue'
 import loginPage from './pages/login.vue'
 import registerPage from './pages/register.vue'
 import postPage from './pages/post.vue'
 import docPage from './pages/doc.vue'
+import profilesPage from './pages/profiles.vue'
+import profilePage from './pages/profile.vue'
 import notFoundPage from './pages/404.vue'
+import authErrorPage from './pages/401.vue'
 
 
 Vue.use(VueRouter)
 
 const routes = [
+	{
+		path: '/design',
+		component: designPage
+	},
 	{
 		path: '/',
 		component: homePage
@@ -46,8 +53,21 @@ const routes = [
 		component: postPage
 	},
 	{
+		path: '/users/',
+		component: profilesPage
+	},
+	{
+		path: '/users/:user',
+		name: 'profile',
+		component: profilePage
+	},
+	{
 		path: '/doc',
 		component: docPage
+	},
+	{
+		path: '/401',
+		component: authErrorPage
 	},
 	{
 		path: '/404',
@@ -93,11 +113,7 @@ let app = new Vue({
 		user: null
 	},
 	mounted: function () {
-		let data = cookie.getJSON('tokens')
-
-		if (data) {
-			this.login(data)
-		}
+		this.refreshUser()
 	},
 	methods: {
 		showToast: function (msg) {
@@ -140,34 +156,20 @@ let app = new Vue({
 				this.toasts[i].y -= height
 			}
 		},
-		login: function (data) {
-			cookie.set('tokens', data, {
-				expires: 7
-			})
-
-			this.user = {
-				tokens: data,
-				data: null
-			}
-
-			fetch(config.apiUrl + '/users/self/', {
-				headers: {
-					'Authorization': this.user.tokens.access_token.token
-				}
-			}).then(res => {
-				return res.json()
-			}).then(res => {
-				if (res.success == 1) {
-					this.user.data = res.user
-				} else {
-					app.user = null
-					cookie.remove('tokens')
-				}
-			}).catch(err => {
-				console.log(err)
-				app.user = null
-				cookie.remove('tokens')
-			})
+		refreshUser: function () {
+			userService
+				.getSelf()
+				.then(res => {
+					if (res.success == 1) {
+						this.user = res.user
+					} else {
+						this.user = null
+						userService.logout()
+					}
+				}).catch(err => {
+					this.user = null
+					userService.logout()
+				})
 		}
 	}
 })
@@ -184,7 +186,7 @@ router.beforeEach((to, from, next) => {
 	} else if (to.matched.some(record => record.meta.logout)) {
 		if (app.user) {
 			app.user = null
-			cookie.remove('tokens')
+			userService.logout()
 			return next({
 				path: '/'
 			})

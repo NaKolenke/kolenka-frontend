@@ -5,22 +5,28 @@
         <h1>Зарегистрироваться</h1>
         <div class="form-group">
           <label class="form-label" for="text">Имя пользователя</label>
-          <input class="form-input" v-model="username" name="login">
+          <input class="form-input" v-model="username" name="login" v-on:keyup.enter="register">
           <br>
           <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
 
           <label class="form-label" for="text">Почта</label>
-          <input class="form-input" v-model="email" name="email">
+          <input class="form-input" v-model="email" name="email" v-on:keyup.enter="register">
           <br>
           <div class="toast toast-error" v-if="emailError">{{ emailError }}</div>
 
           <label class="form-label" for="text">Отображаемое имя</label>
-          <input class="form-input" v-model="name" name="name">
+          <input class="form-input" v-model="name" name="name" v-on:keyup.enter="register">
           <br>
           <div class="toast toast-error" v-if="nameError">{{ nameError }}</div>
 
           <label class="form-label" for="password">Пароль</label>
-          <input class="form-input" v-model="password" name="password" type="password">
+          <input
+            class="form-input"
+            v-model="password"
+            name="password"
+            type="password"
+            v-on:keyup.enter="register"
+          >
           <br>
           <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
 
@@ -45,8 +51,7 @@
 
 
 <script>
-import config from "./../config.json";
-import cookie from "js-cookie";
+import userService from "./../services/user";
 
 export default {
   data: function() {
@@ -96,24 +101,11 @@ export default {
         return;
       }
 
-      fetch(config.apiUrl + "/users/register/", {
-        method: "POST",
-        body: JSON.stringify({
-          username: this.username,
-          email: this.email,
-          name: this.name,
-          password: this.password
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => {
-          return res.json();
-        })
+      userService
+        .register(this.username, this.name, this.email, this.password)
         .then(data => {
           if (data.success == 1) {
-            this.$root.login(data);
+            this.$root.refreshUser();
 
             this.$root.showToast("Успешно зарегистрировался");
 

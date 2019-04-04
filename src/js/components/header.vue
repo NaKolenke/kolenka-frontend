@@ -4,13 +4,13 @@
       <section class="navbar-section">
         <router-link to="/">НАКОЛЕНКЕ</router-link>
         <router-link to="/blogs">Блоги</router-link>
-        <router-link to="/people">Люди</router-link>
+        <router-link to="/users">Люди</router-link>
         <router-link to="/stream">Активность</router-link>
         <router-link to="/page/about">О сайте</router-link>
       </section>
       <section class="navbar-section column col-6 col-mx-auto">
-        <template v-if="user && user.data">
-          <router-link to="/profile">{{ user.data.name }}</router-link>
+        <template v-if="user">
+          <router-link :to="{ name: 'profile', params: { user: user.login }}">{{ user.name }}</router-link>
           <router-link to="/logout">Выйти</router-link>
         </template>
         <template v-else>
