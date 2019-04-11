@@ -9,17 +9,21 @@
 </template>
 
 <script>
-import HeaderComponent from '@/components/header.vue'
-import Toast from '@/components/toast.vue'
+import Vue from 'vue'
+import HeaderComponent from '@/components/TheHeader.vue'
+import Toast from '@/components/ToastView.vue'
 import Config from '@/config.json'
 import UserService from '@/services/user'
+
+let ToastClass = Vue.extend(Toast)
 
 export default {
   name: 'App',
   data: function () {
     return {
       user: undefined,
-      version: Config.version
+      version: Config.version,
+      toasts: []
     }
   },
   mounted: function () {
@@ -34,7 +38,7 @@ export default {
         return i.$el.offsetHeight + 8 // todo remove this hardcoded margin height
       }).reduce((a, b) => a + b, 0)
 
-      let instance = new Toast({
+      let instance = new ToastClass({
         propsData: {
           y: y
         }

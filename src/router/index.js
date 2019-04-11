@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import LoginPage from '@/pages/login'
-import RegisterPage from '@/pages/register'
-import ProfilePage from '@/pages/profile'
-import DocPage from '@/pages/doc'
+import LoginPage from '@/pages/LoginPage'
+import LogoutPage from '@/pages/LogoutPage'
+import RegisterPage from '@/pages/RegisterPage'
+import ProfilePage from '@/pages/ProfilePage'
+import ProfilesListPage from '@/pages/ProfilesListPage'
+import DocPage from '@/pages/DocPage'
 import AuthErrorPage from '@/pages/401'
 import NotFoundPage from '@/pages/404'
 
@@ -20,17 +22,19 @@ export default new Router({
     },
     {
       path: '/login',
-      component: LoginPage,
-      meta: {
-        requiresUnAuth: true
-      }
+      component: LoginPage
+    },
+    {
+      path: '/logout',
+      component: LogoutPage
     },
     {
       path: '/register',
-      component: RegisterPage,
-      meta: {
-        requiresUnAuth: true
-      }
+      component: RegisterPage
+    },
+    {
+      path: '/users/',
+      component: ProfilesListPage
     },
     {
       path: '/users/:user',

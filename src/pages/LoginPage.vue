@@ -46,6 +46,18 @@ export default {
       passwordError: null
     }
   },
+  mounted: function () {
+    UserService
+      .getSelf()
+      .then(data => {
+        if (data.success === 1) {
+          this.$router.replace({ path: '/' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  },
   methods: {
     login: function () {
       if (this.username.length === 0) {
@@ -68,9 +80,9 @@ export default {
         .login(this.username, this.password)
         .then(data => {
           if (data.success === 1) {
-            this.$root.refreshUser()
+            this.$parent.refreshUser()
 
-            this.$root.showToast('Успешно авторизовался')
+            this.$parent.showToast('Успешно авторизовался')
 
             this.$router.replace({ path: '/' })
           } else {

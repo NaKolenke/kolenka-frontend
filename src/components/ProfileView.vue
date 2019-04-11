@@ -2,7 +2,7 @@
   <div>
     <div class="user column col-12 py-2">
       <div class="columns">
-        <ProfileListItem :user="user"></ProfileListItem>
+        <profile-list-item :user="user"></profile-list-item>
 
         <div class="description column col-12 my-2 p-2" v-if="user.about" v-html="user.about"></div>
       </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ProfileListItem from '@/components/profile-item.vue'
+import ProfileListItem from '@/components/ProfileListItem.vue'
 
 export default {
   props: ['user'],

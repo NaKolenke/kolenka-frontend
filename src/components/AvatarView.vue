@@ -12,14 +12,14 @@
 
 <script>
 export default {
-  props: ["user", "size"],
+  props: ['user', 'size'],
   computed: {
-    isSmall: function() {
-      return this.size == "sm"
+    isSmall: function () {
+      return this.size === 'sm'
     },
-    isLarge: function() {
-      return this.size == "lg"
+    isLarge: function () {
+      return this.size === 'lg'
     }
   }
-};
+}
 </script>

@@ -60,6 +60,18 @@ export default {
       passwordError: null
     }
   },
+  mounted: function () {
+    UserService
+      .getSelf()
+      .then(data => {
+        if (data.success === 1) {
+          this.$router.replace({ path: '/' })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  },
   methods: {
     register: function () {
       if (this.username.length === 0) {
@@ -99,9 +111,9 @@ export default {
         .register(this.username, this.name, this.email, this.password)
         .then(data => {
           if (data.success === 1) {
-            this.$root.refreshUser()
+            this.$parent.refreshUser()
 
-            this.$root.showToast('Успешно зарегистрировался')
+            this.$parent.showToast('Успешно зарегистрировался')
 
             this.$router.replace({ path: '/' })
           } else {
