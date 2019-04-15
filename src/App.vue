@@ -79,13 +79,16 @@ export default {
         .then(res => {
           if (res.success === 1) {
             this.user = res.user
+            this.$root.user = this.user
           } else {
             this.user = null
+            this.$root.user = this.user
             UserService.logout()
           }
         }).catch(err => {
           console.log(err)
           this.user = null
+          this.$root.user = this.user
           UserService.logout()
         })
     }

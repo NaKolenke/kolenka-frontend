@@ -42,6 +42,37 @@ export default {
       return res.json()
     })
   },
+  editSelf: function (email, name, about, birthday) {
+    return fetch(Config.apiUrl + '/users/self/', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        name: name,
+        about: about,
+        birthday: birthday
+      }),
+      headers: {
+        'Authorization': localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      return res.json()
+    })
+  },
+  editAvatar: function (avatarId) {
+    return fetch(Config.apiUrl + '/users/self/', {
+      method: 'POST',
+      body: JSON.stringify({
+        avatar: avatarId
+      }),
+      headers: {
+        'Authorization': localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      return res.json()
+    })
+  },
   getUsers: function (page) {
     return fetch(Config.apiUrl + '/users/?page=' + page, {
       query: {

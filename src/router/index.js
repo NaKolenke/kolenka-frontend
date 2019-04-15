@@ -5,6 +5,7 @@ import LoginPage from '@/pages/LoginPage'
 import LogoutPage from '@/pages/LogoutPage'
 import RegisterPage from '@/pages/RegisterPage'
 import ProfilePage from '@/pages/ProfilePage'
+import ProfileEditPage from '@/pages/ProfileEditPage'
 import ProfilesListPage from '@/pages/ProfilesListPage'
 import DocPage from '@/pages/DocPage'
 import AuthErrorPage from '@/pages/401'
@@ -35,6 +36,11 @@ export default new Router({
     {
       path: '/users/',
       component: ProfilesListPage
+    },
+    {
+      path: '/edit-user',
+      name: 'editProfile',
+      component: ProfileEditPage
     },
     {
       path: '/users/:user',

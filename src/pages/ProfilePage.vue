@@ -3,7 +3,7 @@
     <div class="container col-9 col-mx-auto">
       <div class="columns">
         <div id="content" class="column col-9">
-          <profile-view v-if="user.name" :user="user"></profile-view>
+          <profile-view v-if="user.login" :user="user" :can-edit="canEdit"></profile-view>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
@@ -28,23 +28,27 @@ export default {
     }
   },
   created: function () {
-    UserService.getUser(this.$route.params.user).then(data => {
-      this.user = data.user
-    }).catch(err => {
-      console.log(err)
-
-      this.$router.replace({ path: '/404' })
-    })
+    this.refreshUser(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
-    UserService.getUser(to.params.user).then(data => {
-      this.user = data.user
-      next()
-    }).catch(err => {
-      console.log(err)
+    this.refreshUser(to)
+    next()
+  },
+  methods: {
+    refreshUser: function (route) {
+      UserService.getUser(route.params.user).then(data => {
+        this.user = data.user
+      }).catch(err => {
+        console.log(err)
 
-      this.$router.replace({ path: '/404' })
-    })
+        this.$router.replace({ path: '/404' })
+      })
+    }
+  },
+  computed: {
+    canEdit: function () {
+      return this.user.id === this.$root.user.id
+    }
   },
   components: {
     ProfileView,
