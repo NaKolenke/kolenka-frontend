@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import HomePage from '@/pages/HomePage'
+import PostPage from '@/pages/PostPage'
 import LoginPage from '@/pages/LoginPage'
 import LogoutPage from '@/pages/LogoutPage'
 import RegisterPage from '@/pages/RegisterPage'
@@ -18,8 +19,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'home',
+      component: HomePage
+    },
+    {
+      path: '/posts/:post',
+      name: 'post',
+      component: PostPage
     },
     {
       path: '/login',
