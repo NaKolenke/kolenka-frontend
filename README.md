@@ -1,6 +1,8 @@
-# kolenka-frontend
+<img src="logo.png"/>
 
-Репозитории для разработки фронтенда https://kolenka.net
+[![CircleCI](https://circleci.com/gh/NaKolenke/kolenka-frontend.svg?style=svg)](https://circleci.com/gh/NaKolenke/kolenka-frontend)
+
+kolenka.net - это сайт небольшого коммьюнити разработчиков игр. В этом репозитории лежит фронтенд всего сайта. У нас есть блоги, в которые пользователи могут писать посты, а другие пользователи могут комментировать эти посты.
 
 ## Build Setup
 
@@ -18,4 +20,9 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+Для получения детальной информации о том, что тут происходит, смотри [guide](http://vuejs-templates.github.io/webpack/) и [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Как помочь
+
+Выбери задачу из [таск-трекера](https://github.com/NaKolenke/kolenka-doc/projects/1), сделай форк, внеси изменения, протестируй, сделай пулл-реквест. Все просто!
+

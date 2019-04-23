@@ -4,6 +4,7 @@
       <div class="columns">
         <div id="content" class="column col-9">
           <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+          <pagination-view :page="page" :page-count="pageCount"></pagination-view>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
@@ -17,6 +18,7 @@
 <script>
 import PostView from '@/components/PostView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
+import PaginationView from '@/components/PaginationView.vue'
 import PostService from '@/services/post'
 
 export default {
@@ -24,7 +26,9 @@ export default {
     this.posts = []
 
     return {
-      posts: this.posts
+      posts: this.posts,
+      page: 1,
+      pageCount: 0
     }
   },
   created: function () {
@@ -36,19 +40,24 @@ export default {
   },
   methods: {
     refreshPage: function (route) {
-      var page = this.$route.query.page || 1
-      PostService.getPosts(page).then(data => {
+      this.page = parseInt(this.$route.query.page) || this.page
+      PostService.getPosts(this.page).then(data => {
         this.posts = data.posts
+        this.pageCount = data.meta.page_count
       }).catch(err => {
         console.log(err)
 
-        this.$router.replace({ path: '/404' })
+        this.$router.push({ path: '/404' })
       })
+    },
+    paginate: function (offset) {
+      this.$router.push({ name: 'home', query: { page: this.page + offset } })
     }
   },
   components: {
     PostView,
-    TheSidebar
+    TheSidebar,
+    PaginationView
   }
 }
 </script>

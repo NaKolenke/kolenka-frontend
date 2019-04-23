@@ -41,7 +41,7 @@ export default {
       }).catch(err => {
         console.log(err)
 
-        this.$router.replace({ path: '/404' })
+        this.$router.push({ path: '/404' })
       })
     }
   },
