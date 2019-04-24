@@ -1,26 +1,31 @@
 <template>
   <div class="pagination columns">
     <div class="columns column col-12">
-      <div class="page-item" :class="{disabled: !canPaginateBack}"><a v-on:click="paginate(-1)">назад</a></div>
-      <div class="page-item" :class="{disabled: !canPaginateForward}"><a v-on:click="paginate(1)">вперед</a></div>
+      <div class="page-item" :class="{disabled: !canPaginateBack}">
+        <a href="#" @click.prevent="paginateRelative(-1)">назад</a>
+      </div>
+      <div class="page-item" :class="{disabled: !canPaginateForward}">
+        <a href="#" @click.prevent="paginateRelative(1)">вперед</a>
+      </div>
     </div>
     <div class="columns column col-12">
-      <div class="column col-1">1</div>
-      <div class="column col-1">2</div>
-      <div class="column col-1">3</div>
-      <div class="column col-1">4</div>
+      <div class="page-item" :class="{active: page == n}" v-for="n in paginationPages" :key="n">
+        <span v-if="n == '...'">{{n}}</span>
+        <a v-else :href="n" @click.prevent="paginateTo(n)">{{ n }}</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import AvatarView from '@/components/AvatarView.vue'
-
 export default {
   props: ['page', 'pageCount'],
   methods: {
-    paginate: function (offset) {
-      this.$parent.paginate(offset)
+    paginateRelative: function (offset) {
+      this.$parent.paginateRelative(offset)
+    },
+    paginateTo: function (offset) {
+      this.$parent.paginateTo(offset)
     }
   },
   computed: {
@@ -29,6 +34,39 @@ export default {
     },
     canPaginateForward: function () {
       return this.page < this.pageCount
+    },
+    paginationPages: function () {
+      const displayedPagesCount = 2 // elements before and after active page
+
+      var start = this.page - displayedPagesCount
+      if (start < 1) {
+        start = 1
+      }
+
+      var end = this.page + displayedPagesCount
+      if (end > this.pageCount) {
+        end = this.pageCount
+      }
+
+      var ret = []
+      if (start > 1) {
+        ret.push(1)
+      }
+      if (start > 2) {
+        ret.push('...')
+      }
+
+      for (var i = start; i <= end; i++) {
+        ret.push(i)
+      }
+
+      if (end < this.pageCount - 1) {
+        ret.push('...')
+      }
+      if (end < this.pageCount) {
+        ret.push(this.pageCount)
+      }
+      return ret
     }
   }
 }
