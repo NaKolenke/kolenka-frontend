@@ -41,6 +41,7 @@ export default new Router({
     },
     {
       path: '/users/',
+      name: 'users',
       component: ProfilesListPage
     },
     {
