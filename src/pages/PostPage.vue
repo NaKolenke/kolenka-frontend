@@ -5,6 +5,7 @@
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
           <comment-card v-for="item in comments" :key="item.id" :comment="item"></comment-card>
+          <div class="mt-2"></div>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
