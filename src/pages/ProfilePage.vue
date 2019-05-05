@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <div class="container col-9 col-mx-auto">
+      <div class="columns">
+        <div id="content" class="column col-9">
+          <profile-view v-if="user.login" :user="user" :can-edit="canEdit"></profile-view>
+        </div>
+
+        <div id="sidebar" class="column col-3 hide-md">
+          <the-sidebar></the-sidebar>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ProfileView from '@/components/ProfileView.vue'
+import TheSidebar from '@/components/TheSidebar.vue'
+import UserService from '@/services/user'
+
+export default {
+  data: function () {
+    this.user = {}
+
+    return {
+      user: this.user
+    }
+  },
+  created: function () {
+    this.refreshUser(this.$route)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.refreshUser(to)
+    next()
+  },
+  methods: {
+    refreshUser: function (route) {
+      UserService.getUser(route.params.user).then(data => {
+        this.user = data.user
+      }).catch(err => {
+        console.log(err)
+
+        this.$router.push({ path: '/404' })
+      })
+    }
+  },
+  computed: {
+    canEdit: function () {
+      if (!this.$root.user) {
+        return false
+      }
+      return this.user.id === this.$root.user.id
+    }
+  },
+  components: {
+    ProfileView,
+    TheSidebar
+  }
+}
+</script>

@@ -1,29 +1,29 @@
 # kolenka-frontend
 
-Репозитории для разработки фронтенда https://kolenka.net
+## Project setup
+```
+npm install
+```
 
-## Используемые инструменты
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-* gulpjs
-* Backbone.js
-* Handlebars
+### Compiles and minifies for production
+```
+npm run build
+```
 
-## Подготовка к работе
+### Run your tests
+```
+npm run test
+```
 
-Для начала необходимо установить nodejs
+### Lints and fixes files
+```
+npm run lint
+```
 
-https://nodejs.org/en/
-
-Далее, устанавливаем gulpjs
-
-https://github.com/gulpjs/gulp/blob/v3.9.1/docs/getting-started.md
-
-Переходим в папку проекта и устанавливаем зависимости:
-
-`$ npm install`
-
-Запускаем gulp:
-
-`$ gulp release`
-
-Эта команда соберет проект и положит все файлы в папку build. При изменении js файлов будет произведена автоматическая пересборка, если gulp работает.
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

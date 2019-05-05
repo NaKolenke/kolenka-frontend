@@ -16,9 +16,13 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: |
-        npm install
-        gulp release
+      - run:
+          command: |
+            npm install
+
+      - run:
+          command:
+            npm run build
 
       - save_cache:
           paths:
@@ -47,4 +51,4 @@ workflows:
             - build
           filters:
             branches:
-              only:  /^release/\d+\.\d+\.\d+/
+              only:  master
