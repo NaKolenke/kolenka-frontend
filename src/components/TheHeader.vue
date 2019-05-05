@@ -13,7 +13,7 @@
         <p id="version">Версия {{version}}</p>
 
         <template v-if="user">
-          <router-link :to="{ name: 'profile', params: { user: user.login }}">{{ user.name }}</router-link>
+          <router-link :to="{ name: 'profile', params: { user: user.login }}"><avatar-view :user="user" size="sm" :card="false"></avatar-view> {{ user.name || user.login }}</router-link>
           <router-link to="/logout">Выйти</router-link>
         </template>
         <template v-else>
@@ -26,10 +26,15 @@
 </template>
 
 <script>
+import AvatarView from '@/components/AvatarView.vue'
+
 export default {
   props: {
     user: Object,
     version: String
+  },
+  components: {
+    AvatarView
   }
 }
 </script>
