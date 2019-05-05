@@ -5,16 +5,19 @@
       :version="version"
     ></header-component>
     <router-view />
+    <vue-progress-bar></vue-progress-bar>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
-import Toast from '@/components/ToastView.vue'
 import UserService from '@/services/user'
+import ToastPlugin from '@/plugins/toast'
 
-let ToastClass = Vue.extend(Toast)
+Vue.use(ProgressBar)
+Vue.use(ToastPlugin)
 
 export default {
   name: 'App',
@@ -27,51 +30,35 @@ export default {
   },
   mounted: function () {
     this.refreshUser()
+    this.$Progress.finish()
+    this.$Toast.show("Henlo")
+  },
+  created() {
+    this.$Progress.start()
+
+    //  hook the progress bar to start before we move router-view
+    this.$router.beforeEach((to, from, next) => {
+      //  does the page we want to go to have a meta.progress object
+      if (to.meta.progress !== undefined) {
+        let meta = to.meta.progress
+        // parse meta tags
+        this.$Progress.parseMeta(meta)
+      }
+      //  start the progress bar
+      this.$Progress.start()
+      //  continue to next page
+      next()
+    })
+    //  hook the progress bar to finish after we've finished moving router-view
+    this.$router.afterEach((to, from) => {
+      //  finish the progress bar
+      this.$Progress.finish()
+    })
   },
   components: {
     HeaderComponent
   },
   methods: {
-    showToast: function (msg) {
-      let y = this.toasts.map(i => {
-        return i.$el.offsetHeight + 8 // todo remove this hardcoded margin height
-      }).reduce((a, b) => a + b, 0)
-
-      let instance = new ToastClass({
-        propsData: {
-          y: y
-        }
-      })
-
-      instance.$slots.default = [msg]
-      instance.$root = this
-      instance.$mount()
-
-      this.$el.appendChild(instance.$el)
-      this.toasts.push(instance)
-
-      setTimeout(() => {
-        this.hideToast(instance)
-      }, 3000)
-    },
-    hideToast: function (t) {
-      let index = 0
-      let height = 0
-
-      for (let i = 0; i < this.toasts.length; i++) {
-        if (this.toasts[i] === t) {
-          index = i
-          height = t.$el.offsetHeight
-          this.$el.removeChild(t.$el)
-          this.toasts.splice(i, 1)
-          break
-        }
-      }
-
-      for (let i = index; i < this.toasts.length; i++) {
-        this.toasts[i].y -= height
-      }
-    },
     refreshUser: function () {
       UserService
         .getSelf()

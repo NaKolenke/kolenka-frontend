@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     close: function () {
-      this.$root.hideToast(this)
+      this.$Toast.hide(this)
     }
   }
 }
