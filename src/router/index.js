@@ -45,7 +45,7 @@ export default new Router({
       component: ProfilesListPage
     },
     {
-      path: '/edit-user',
+      path: '/users/edit',
       name: 'editProfile',
       component: ProfileEditPage
     },

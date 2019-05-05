@@ -31,7 +31,6 @@ export default {
   mounted: function () {
     this.refreshUser()
     this.$Progress.finish()
-    this.$Toast.show("Henlo")
   },
   created() {
     this.$Progress.start()
