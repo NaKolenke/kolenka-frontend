@@ -20,5 +20,15 @@ export default {
     }).then(res => {
       return res.json()
     })
+  },
+  getComments: function(post) {
+    return fetch(apiUrl + '/posts/' + post + '/comments/', {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      return res.json()
+    })
   }
 }

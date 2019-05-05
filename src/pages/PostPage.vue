@@ -4,6 +4,7 @@
       <div class="columns">
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
+          <comment-card v-for="item in comments" :key="item.id" :comment="item"></comment-card>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
@@ -18,13 +19,13 @@
 import PostView from '@/components/PostView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
 import PostService from '@/services/post'
+import CommentCard from '@/components/cards/Comment.vue'
 
 export default {
   data: function () {
-    this.post = {}
-
     return {
-      post: this.post
+      post: {},
+      comments: []
     }
   },
   created: function () {
@@ -38,6 +39,8 @@ export default {
     refreshPost: function (route) {
       PostService.getPost(route.params.post).then(data => {
         this.post = data.post
+      }).then(() => PostService.getComments(route.params.post)).then(data => {
+        this.comments = data.comments
       }).catch(err => {
         console.log(err)
 
@@ -47,7 +50,8 @@ export default {
   },
   components: {
     PostView,
-    TheSidebar
+    TheSidebar,
+    CommentCard
   }
 }
 </script>
