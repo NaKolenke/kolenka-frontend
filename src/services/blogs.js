@@ -11,8 +11,8 @@ export default {
       return res.json()
     })
   },
-  getBlogPosts: function(url) {
-    return fetch(apiUrl + `/blogs/${url}/posts/`, {
+  getBlogPosts: function(url, page) {
+    return fetch(apiUrl + `/blogs/${url}/posts/?page=` + (page || 1), {
       headers: {
         'Authorization': localStorage.getItem('accessToken'),
         'Content-Type': 'application/json'

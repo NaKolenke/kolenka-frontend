@@ -9,11 +9,11 @@
         >
       </figure>
     </router-link>
-    <div class="popover-container">
+    <div v-if="card" class="popover-container">
       <div class="card">
         <div class="card-header">
-          <div class="card-title h5">{{ user.name || user.login }}</div>
-          <div class="card-subtitle text-gray small">Последний визит: {{ user.last_active_date | moment }}</div>
+          <div class="card-title h5">{{ user.name || user.login }} <span class="text-gray small">{{ user.name ? user.login : "" }}</span></div>
+          <div class="card-subtitle text-gray small">Заходил: {{ user.last_active_date | moment }}</div>
         </div>
         <div v-if="user.about" class="card-body" v-html="user.about ? user.about.substring(0, 128) : ''"></div>
       </div>
@@ -24,7 +24,14 @@
 
 <script>
 export default {
-  props: ['user', 'size'],
+  props: {
+    user: Object,
+    size: String,
+    card: {
+      type: Boolean,
+      default: true
+    }
+  },
   computed: {
     isSmall: function () {
       return this.size === 'sm'
