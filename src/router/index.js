@@ -9,6 +9,7 @@ import ProfilePage from '@/pages/ProfilePage'
 import ProfileEditPage from '@/pages/ProfileEditPage'
 import ProfilesListPage from '@/pages/ProfilesListPage'
 import DocPage from '@/pages/DocPage'
+import BlogListPage from '@/pages/BlogList'
 import AuthErrorPage from '@/pages/401'
 import NotFoundPage from '@/pages/404'
 
@@ -53,6 +54,11 @@ export default new Router({
       path: '/users/:user',
       name: 'profile',
       component: ProfilePage
+    },
+    {
+      path: '/blogs/',
+      name: 'blogs',
+      component: BlogListPage
     },
     {
       path: '/doc',
