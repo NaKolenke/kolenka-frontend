@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:9.9
 
     working_directory: ~/repo
 
@@ -16,13 +16,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run:
-          command: |
-            npm install
-
-      - run:
-          command:
-            npm run build
+      - run: npm install @vue/cli
+      - run: npm install
+      - run: npm run build
 
       - save_cache:
           paths:
