@@ -1,8 +1,8 @@
-import Config from '@/config.json'
+var apiUrl = process.env.VUE_APP_API_URL
 
 export default {
   getPosts: function (page) {
-    return fetch(Config.apiUrl + '/posts/?page=' + page, {
+    return fetch(apiUrl + '/posts/?page=' + page, {
       headers: {
         'Authorization': localStorage.getItem('accessToken'),
         'Content-Type': 'application/json'
@@ -12,7 +12,7 @@ export default {
     })
   },
   getPost: function (post) {
-    return fetch(Config.apiUrl + '/posts/' + post + '/', {
+    return fetch(apiUrl + '/posts/' + post + '/', {
       headers: {
         'Authorization': localStorage.getItem('accessToken'),
         'Content-Type': 'application/json'

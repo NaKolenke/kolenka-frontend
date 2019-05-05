@@ -1,8 +1,8 @@
-import Config from '@/config.json'
+var apiUrl = process.env.VUE_APP_API_URL
 
 export default {
   login: function (username, password) {
-    return fetch(Config.apiUrl + '/users/login/', {
+    return fetch(apiUrl + '/users/login/', {
       method: 'POST',
       body: JSON.stringify({
         username: username,
@@ -17,7 +17,7 @@ export default {
       })
   },
   register: function (username, name, email, password) {
-    return fetch(Config.apiUrl + '/users/register/', {
+    return fetch(apiUrl + '/users/register/', {
       method: 'POST',
       body: JSON.stringify({
         username: username,
@@ -34,7 +34,7 @@ export default {
       })
   },
   getSelf: function () {
-    return fetch(Config.apiUrl + '/users/self/', {
+    return fetch(apiUrl + '/users/self/', {
       headers: {
         'Authorization': localStorage.getItem('accessToken')
       }
@@ -43,7 +43,7 @@ export default {
     })
   },
   editSelf: function (email, name, about, birthday) {
-    return fetch(Config.apiUrl + '/users/self/', {
+    return fetch(apiUrl + '/users/self/', {
       method: 'POST',
       body: JSON.stringify({
         email: email,
@@ -60,7 +60,7 @@ export default {
     })
   },
   editAvatar: function (avatarId) {
-    return fetch(Config.apiUrl + '/users/self/', {
+    return fetch(apiUrl + '/users/self/', {
       method: 'POST',
       body: JSON.stringify({
         avatar: avatarId
@@ -74,7 +74,7 @@ export default {
     })
   },
   getUsers: function (page) {
-    return fetch(Config.apiUrl + '/users/?page=' + page, {
+    return fetch(apiUrl + '/users/?page=' + page, {
       query: {
         'page': page
       },
@@ -86,7 +86,7 @@ export default {
     })
   },
   getUser: function (username) {
-    return fetch(Config.apiUrl + '/users/' + username + '/', {
+    return fetch(apiUrl + '/users/' + username + '/', {
       headers: {
         'Authorization': localStorage.getItem('accessToken')
       }
@@ -94,8 +94,8 @@ export default {
       return res.json()
     })
   },
-  isTokenValid: function (toen) {
-    fetch(Config.apiUrl + '/tokens/valid/', {
+  isTokenValid: function () {
+    fetch(apiUrl + '/tokens/valid/', {
       headers: {
         'Authorization': localStorage.getItem('accessToken')
       },
@@ -106,8 +106,8 @@ export default {
       return res.json()
     })
   },
-  refreshToken: function (token) {
-    fetch(Config.apiUrl + '/tokens/refresh/', {
+  refreshToken: function () {
+    fetch(apiUrl + '/tokens/refresh/', {
       headers: {
         'Authorization': localStorage.getItem('accessToken')
       },

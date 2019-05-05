@@ -2,7 +2,7 @@
   <div id="header">
     <header class="navbar column col-9 col-mx-auto">
       <section class="navbar-section">
-        <router-link to="/"><img id="logo" src="/static/icon.png" /></router-link>
+        <router-link to="/"><img id="logo" src="../assets/logo.png" /></router-link>
         <router-link to="/">НАКОЛЕНКЕ</router-link>
         <router-link to="/blogs">Блоги</router-link>
         <router-link to="/users">Люди</router-link>

@@ -1,8 +1,8 @@
-import Config from '@/config.json'
+var apiUrl = process.env.VUE_APP_API_URL
 
 export default {
   uploadFile: function (formData) {
-    return fetch(Config.apiUrl + '/content/', {
+    return fetch(apiUrl + '/content/', {
       method: 'POST',
       body: formData,
       headers: {

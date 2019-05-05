@@ -1,8 +1,8 @@
-import Config from '@/config.json'
+var apiUrl = process.env.VUE_APP_API_URL
 
 export default {
   getEndpoints: function () {
-    return fetch(Config.apiUrl + '/doc/', {
+    return fetch(apiUrl + '/doc/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

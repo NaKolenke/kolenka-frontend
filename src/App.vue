@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-component
+     <header-component
       :user="user"
       :version="version"
     ></header-component>
@@ -12,7 +12,6 @@
 import Vue from 'vue'
 import HeaderComponent from '@/components/TheHeader.vue'
 import Toast from '@/components/ToastView.vue'
-import Config from '@/config.json'
 import UserService from '@/services/user'
 
 let ToastClass = Vue.extend(Toast)
@@ -22,7 +21,7 @@ export default {
   data: function () {
     return {
       user: undefined,
-      version: Config.version,
+      version: process.env.VUE_APP_VERSION,
       toasts: []
     }
   },

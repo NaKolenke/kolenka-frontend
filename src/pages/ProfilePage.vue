@@ -47,6 +47,9 @@ export default {
   },
   computed: {
     canEdit: function () {
+      if (!this.$root.user) {
+        return false
+      }
       return this.user.id === this.$root.user.id
     }
   },
