@@ -12,15 +12,10 @@
     <div class="popover-container">
       <div class="card">
         <div class="card-header">
-          <div class="card-title h5">{{ user.name }}</div>
+          <div class="card-title h5">{{ user.name || user.login }}</div>
           <div class="card-subtitle text-gray small">Последний визит: {{ user.last_active_date | moment }}</div>
         </div>
-        <div class="card-body">
-          {{ user.about ? user.about.substring(0, 128) : '' }}
-        </div>
-        <div class="card-footer">
-          
-        </div>
+        <div v-if="user.about" class="card-body" v-html="user.about ? user.about.substring(0, 128) : ''"></div>
       </div>
     </div>
   </div>

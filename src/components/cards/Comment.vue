@@ -1,11 +1,15 @@
 <template>
-  <div class="tile">
-    <div class="tile-icon">
-      <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
-    </div>
-    <div class="tile-content">
-      <p class="tile-title text-bold">{{ comment.creator.name }}</p>
-      <p class="tile-subtitle">{{ comment.text }}</p>
+  <div class="card mt-2">
+    <div class="card-body">
+      <div class="tile">
+        <div class="tile-icon">
+          <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
+        </div>
+        <div class="tile-content">
+          <div class="tile-title text-bold">{{ comment.creator.name || comment.creator.login }}</div>
+          <div class="tile-subtitle mt-1 comment-body" v-html="comment.text"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -21,3 +25,8 @@ export default {
 }
 </script>
 
+<style>
+.comment-body p:last-child {
+  margin: 0;
+}
+</style>
