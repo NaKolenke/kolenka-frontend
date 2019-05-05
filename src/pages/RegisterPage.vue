@@ -113,7 +113,7 @@ export default {
           if (data.success === 1) {
             this.$parent.refreshUser()
 
-            this.$parent.showToast('Успешно зарегистрировался')
+            this.$Toast.show('Успешно зарегистрировался')
 
             this.$router.replace({ path: '/' })
           } else {

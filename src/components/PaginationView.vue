@@ -2,10 +2,10 @@
   <div class="pagination columns">
     <div class="columns column col-12">
       <div class="page-item" :class="{disabled: !canPaginateBack}">
-        <a href="#" @click.prevent="paginateRelative(-1)">назад</a>
+        <a :href="this.page - 1" @click.prevent="paginateRelative(-1)">назад</a>
       </div>
       <div class="page-item" :class="{disabled: !canPaginateForward}">
-        <a href="#" @click.prevent="paginateRelative(1)">вперед</a>
+        <a :href="this.page + 1" @click.prevent="paginateRelative(1)">вперед</a>
       </div>
     </div>
     <div class="columns column col-12">
