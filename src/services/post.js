@@ -20,5 +20,15 @@ export default {
         }
         return data
       })
+  },
+  getComments: function(post) {
+    return api
+      .getComments(post)
+      .then(data => {
+        if (data.success === 0) {
+          return Promise.reject(new Error(data.error))
+        }
+        return data
+      })
   }
 }
