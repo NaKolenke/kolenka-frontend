@@ -10,5 +10,15 @@ export default {
     }).then(res => {
       return res.json()
     })
+  },
+  getBlogPosts: function(url) {
+    return fetch(apiUrl + `/blogs/${url}/posts/`, {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken'),
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      return res.json()
+    })
   }
 }
