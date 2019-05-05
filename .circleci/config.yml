@@ -16,10 +16,11 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: |
-        npm install @vue/cli
-        npm install
-        npm run build
+      - run:
+        - command: |
+          npm install @vue/cli
+          npm install
+          npm run build
 
       - save_cache:
           paths:
