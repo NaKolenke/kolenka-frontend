@@ -29,4 +29,8 @@ export default {
 .comment-body p:last-child {
   margin: 0;
 }
+
+.comment-body img {
+  width: auto !important;
+}
 </style>

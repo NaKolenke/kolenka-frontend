@@ -1,9 +1,9 @@
 <template>
   <div class="container columns">
-    <div class="column col-2">
+    <div class="column col-1">
       <avatar-view :user="blog.creator" :size="'lg'"></avatar-view>
     </div>
-    <div class="column col-10">
+    <div class="column col-11">
       <h3>
         <a v-if="blog.url" :href="'blogs/' + blog.url">{{ blog.title }}</a>
         <span v-else>{{ blog.title }}</span>
