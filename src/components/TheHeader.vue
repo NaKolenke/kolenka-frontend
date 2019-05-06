@@ -2,8 +2,8 @@
   <div id="header">
     <header class="navbar column col-9 col-mx-auto">
       <section class="navbar-section">
-        <router-link to="/"><img id="logo" src="../assets/logo.png" /></router-link>
-        <router-link to="/">НАКОЛЕНКЕ</router-link>
+        <router-link to="/" id="brand"><img id="logo" src="../assets/logo.png" /></router-link>
+        <router-link to="/" id="brand"><span id="header-brand-prefix" class="p-1">НА</span>КОЛЕНКЕ</router-link>
         <router-link to="/blogs">Блоги</router-link>
         <router-link to="/users">Люди</router-link>
         <router-link to="/stream">Активность</router-link>
@@ -46,12 +46,21 @@ export default {
 
 header a {
   color: #ffffff;
-  margin: 0 20px 0 0;
+  margin: 0 0 0 20px;
+}
+
+#header-brand-prefix {
+  color: #2e93aa;
+}
+
+#brand {
+  text-decoration: none;
+  margin: 0;
 }
 
 #version {
   color: #5a616d;
-  margin: 0 20px 0 0;
+  margin: 0 20px 0 20px;
   font-size: .6rem;
 }
 
