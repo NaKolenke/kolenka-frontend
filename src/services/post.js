@@ -1,33 +1,36 @@
-import api from '@/services/api/post'
+import posts from './api/post'
 
 export default {
-  getPosts: function (page) {
-    return api
+  getPosts (page) {
+    return posts
       .getPosts(page)
       .then(data => {
         if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
+          throw new Error(data.error)
         }
+
         return data
       })
   },
-  getPost: function (name) {
-    return api
-      .getPost(name)
+  getPost (post) {
+    return posts
+      .getPost(post)
       .then(data => {
         if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
+          throw new Error(data.error)
         }
+
         return data
       })
   },
-  getComments: function(post) {
-    return api
-      .getComments(post)
+  getComments(post, page) {
+    return posts
+      .getComments(post, page)
       .then(data => {
         if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
+          throw new Error(data.error)
         }
+
         return data
       })
   }
