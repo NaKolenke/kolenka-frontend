@@ -1,95 +1,78 @@
-import api from '@/services/api/auth'
-import ContentService from '@/services/content'
+import users from './api/user'
+import auth from './auth'
+import ContentService from './content'
 
 export default {
-  login: function (username, password) {
-    return api
+  login(username, password) {
+    return auth
       .login(username, password)
       .then(data => {
-        if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
-        }
-        if (data.success === 1) {
-          localStorage.setItem('accessToken', data.access_token.token)
-          localStorage.setItem('accessTokenExpireDate', data.access_token.valid_until)
-          localStorage.setItem('refreshToken', data.refresh_token.token)
-          localStorage.setItem('refreshTokenExpireDate', data.refresh_token.valid_until)
-        }
+        localStorage.setItem('accessToken', data.access_token.token)
+        localStorage.setItem('accessTokenExpireDate', data.access_token.valid_until)
+        localStorage.setItem('refreshToken', data.refresh_token.token)
+        localStorage.setItem('refreshTokenExpireDate', data.refresh_token.valid_until)
+
         return data
       })
   },
-  register: function (username, name, email, password) {
-    return api
+  register(username, name, email, password) {
+    return auth
       .register(username, name, email, password)
       .then(data => {
-        if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
-        }
-        if (data.success === 1) {
-          localStorage.setItem('accessToken', data.access_token.token)
-          localStorage.setItem('accessTokenExpireDate', data.access_token.valid_until)
-          localStorage.setItem('refreshToken', data.refresh_token.token)
-          localStorage.setItem('refreshTokenExpireDate', data.refresh_token.valid_until)
-        }
+        localStorage.setItem('accessToken', data.access_token.token)
+        localStorage.setItem('accessTokenExpireDate', data.access_token.valid_until)
+        localStorage.setItem('refreshToken', data.refresh_token.token)
+        localStorage.setItem('refreshTokenExpireDate', data.refresh_token.valid_until)
+
         return data
       })
   },
-  getSelf: function () {
-    return api
-      .getSelf()
-      .then(data => {
-        if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
-        }
-        return data
-      })
+
+  getSelf () {
+    return users.getSelf()
   },
-  editSelf: function (user) {
-    return api
-      .editSelf(user.email, user.name, user.about, user.birthday)
-      .then(data => {
-        if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
-        }
-        return data
-      })
+  editSelf (user) {
+    return users.editSelf(user.email, user.name, user.about, user.birthday)
   },
-  editAvatar: function (formData) {
+  editAvatar (formData) {
     return ContentService
       .uploadFile(formData)
       .then(data => {
-        return api.editAvatar(data.file.id)
+        return users.editAvatar(data.file.id)
       })
       .then(data => {
         if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
+          throw new Error(data.error)
         }
+
         return data
       })
   },
-  logout: function () {
+  logout () {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('accessTokenExpireDate')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('refreshTokenExpireDate')
   },
-  getUsers: function (page) {
-    return api
+  getUsers (page) {
+    return users
       .getUsers(page)
       .then(data => {
         if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
+          throw new Error(data.error)
         }
+
         return data
       })
   },
-  getUser: function (username) {
-    return api
+  getUser (username) {
+    return users
       .getUser(username)
       .then(data => {
         if (data.success === 0) {
-          return Promise.reject(new Error(data.error))
+          throw new Error(data.error)
         }
+
         return data
       })
   }

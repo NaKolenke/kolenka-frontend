@@ -1,34 +1,31 @@
-var apiUrl = process.env.VUE_APP_API_URL
+import { api } from './instance'
 
 export default {
-  getPosts: function (page) {
-    return fetch(apiUrl + '/posts/?page=' + page, {
+  getPosts(page) {
+    return api.get('/posts/', {
+      params: {
+        page: page || 1
+      },
       headers: {
-        'Authorization': localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
+        'Authorization': localStorage.getItem('accessToken')
       }
-    }).then(res => {
-      return res.json()
-    })
+    }).then(res => res.data)
   },
-  getPost: function (post) {
-    return fetch(apiUrl + '/posts/' + post + '/', {
+  getPost(post) {
+    return api.get(`/posts/${post}/`, {
       headers: {
-        'Authorization': localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
+        'Authorization': localStorage.getItem('accessToken')
       }
-    }).then(res => {
-      return res.json()
-    })
+    }).then(res => res.data)
   },
-  getComments: function(post) {
-    return fetch(apiUrl + '/posts/' + post + '/comments/', {
+  getComments(post, page) {
+    return api.get(`/posts/${post}/comments/`, {
+      params: {
+        page: page || 1
+      },
       headers: {
-        'Authorization': localStorage.getItem('accessToken'),
-        'Content-Type': 'application/json'
+        'Authorization': localStorage.getItem('accessToken')
       }
-    }).then(res => {
-      return res.json()
-    })
+    }).then(res => res.data)
   }
 }
