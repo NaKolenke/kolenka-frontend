@@ -1,17 +1,11 @@
-var apiUrl = process.env.VUE_APP_API_URL
+import { api } from './instance'
 
 export default {
-  uploadFile: function (formData) {
-    return fetch(apiUrl + '/content/', {
-      method: 'POST',
-      body: formData,
+  uploadFile(formData) {
+    return api.post('/content/', formData, {
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': localStorage.getItem('accessToken')
       }
-    })
-      .then(res => {
-        return res.json()
-      })
+    }).then(res => res.data)
   }
 }

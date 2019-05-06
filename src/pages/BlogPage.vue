@@ -23,7 +23,7 @@ import PostView from '@/components/PostView.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
-import BlogService from '@/services/blogs'
+import BlogService from '@/services/blog'
 import BlogCard from '@/components/BlogCard'
 
 export default {

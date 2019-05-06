@@ -15,7 +15,7 @@
           <div class="card my-1">
             <div class="card-header">
               <div class="card-title h5"><a :href="'/posts/' + item.url">{{ item.title }}</a></div>
-              <div class="card-subtitle text-gray">{{ item.created_date | moment }} / {{ item.creator.name || item.creator.login }}</div>
+              <div class="card-subtitle text-gray"><small>{{ item.created_date | moment }} / {{ item.creator.name || item.creator.login }}</small></div>
             </div>
             <div class="card-body">
               <p v-html="item.cut_text.substring(0, 256)"></p>
@@ -34,7 +34,7 @@
 
 <script>
 import AvatarView from '@/components/AvatarView.vue'
-import BlogService from '@/services/blogs'
+import BlogService from '@/services/blog'
 
 export default {
   props: {
@@ -58,6 +58,9 @@ export default {
   },
   methods: {
     refresh: function () {
+      if (!this.blog.url)
+        return
+      
       BlogService.getBlogPosts(this.blog.url).then(data => {
         this.posts = data.posts.length > 2 ? data.posts.slice(0, 2) : data.posts
       }).catch(err => {
