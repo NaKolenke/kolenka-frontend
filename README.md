@@ -1,4 +1,10 @@
-# kolenka-frontend
+<img src="logo.png"/>
+
+[![CircleCI](https://circleci.com/gh/NaKolenke/kolenka-frontend.svg?style=shield)](https://circleci.com/gh/NaKolenke/kolenka-frontend)
+[![Hits-of-Code](https://hitsofcode.com/github/NaKolenke/kolenka-frontend)](https://hitsofcode.com/view/github/NaKolenke/kolenka-frontend)
+
+kolenka.net - это сайт небольшого коммьюнити разработчиков игр. В этом репозитории лежит фронтенд всего сайта. У нас есть блоги, в которые пользователи могут писать посты, а другие пользователи могут комментировать эти посты.
+
 
 ## Project setup
 ```
@@ -26,4 +32,8 @@ npm run lint
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Для получения детальной информации о том, что тут происходит, смотри [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Как помочь
+
+Выбери задачу из [таск-трекера](https://github.com/NaKolenke/kolenka-doc/projects/1), сделай форк, внеси изменения, протестируй, сделай пулл-реквест. Все просто!
