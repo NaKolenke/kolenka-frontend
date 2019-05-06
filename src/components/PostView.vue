@@ -1,21 +1,21 @@
 <template>
   <div class="article">
     <span class="subtitle">
-      <a :href="'/blogs/' + post.blog.url + '/'">{{post.blog.title}}</a>
+      <router-link :to="{ name: 'blog',  params: { name: post.blog.url }}">{{post.blog.title}}</router-link>
       , {{post.created_date | moment}}
     </span>
     <h2>
-      <a :href="'/posts/' + post.url + '/'">{{post.title}}</a>
+      <router-link :to="{ name: 'post',  params: { post: post.url }}">{{post.title}}</router-link>
     </h2>
 
     <div v-if="cut" v-html="post.cut_text"></div>
     <div v-else v-html="post.text"></div>
 
-    <a
+    <router-link
       v-if="cut && post.has_cut"
-      :href="'/posts/' + post.url + '/'"
+      :to="{ name: 'post',  params: { post: post.url }}"
       class="btn btn-sm"
-    >{{ post.cut_name || 'Читать дальше' }}</a>
+    >{{ post.cut_name || 'Читать дальше' }}</router-link>
 
     <div class="columns article-footer">
       <div class="column col-lg-auto">
@@ -24,7 +24,7 @@
       </div>
 
       <div class="column col-auto">
-        <a v-for="tag in post.tags" :key="tag.title" :href="'/tags/' + tag.url + '/'">{{tag.title}}</a>
+        <router-link v-for="tag in post.tags" :key="tag.title" :to="{ name: 'tag',  params: { tag: tag.url }}">{{tag.title}}</router-link>
       </div>
     </div>
   </div>
@@ -57,5 +57,4 @@ export default {
   padding-top: 6px;
   border-top: 1px solid #999999;
 }
-
 </style>
