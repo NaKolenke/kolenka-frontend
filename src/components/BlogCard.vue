@@ -8,7 +8,7 @@
         <a v-if="blog.url" :href="'blogs/' + blog.url">{{ blog.title }}</a>
         <span v-else>{{ blog.title }}</span>
       </h3>
-      <p>{{ blog.description }}</p>
+      <p v-html="blog.description"></p>
 
       <div v-if="preview && posts.length > 0" class="columns">
         <div class="column col-6" v-for="item in posts" :key="item.id">

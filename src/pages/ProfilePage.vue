@@ -4,6 +4,15 @@
       <div class="columns">
         <div id="content" class="column col-9">
           <profile-view v-if="user.login" :user="user" :can-edit="canEdit"></profile-view>
+
+          <div v-if="blogs.length > 0">
+            <h3>Блоги пользователя</h3>
+            <div class="columns blogs">
+              <div class="column col-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
+                <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
@@ -18,13 +27,13 @@
 import ProfileView from '@/components/ProfileView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
 import UserService from '@/services/user'
+import BlogCardSmall from '@/components/cards/BlogSmall'
 
 export default {
   data: function () {
-    this.user = {}
-
     return {
-      user: this.user
+      user: {},
+      blogs: []
     }
   },
   created: function () {
@@ -38,6 +47,10 @@ export default {
     refreshUser: function (route) {
       UserService.getUser(route.params.user).then(data => {
         this.user = data.user
+      }).then(() => {
+        return UserService.getUserBlogs(this.user.login)
+      }).then(data => {
+        this.blogs = data.blogs
       }).catch(err => {
         console.log(err)
 
@@ -55,7 +68,8 @@ export default {
   },
   components: {
     ProfileView,
-    TheSidebar
+    TheSidebar,
+    BlogCardSmall
   }
 }
 </script>
