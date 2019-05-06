@@ -75,5 +75,16 @@ export default {
 
         return data
       })
+  },
+  getUserBlogs (username) {
+    return users
+      .getUserBlogs(username)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }

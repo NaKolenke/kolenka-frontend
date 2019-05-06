@@ -45,5 +45,12 @@ export default {
         'Authorization': localStorage.getItem('accessToken')
       }
     }).then(res => res.data)
+  },
+  getUserBlogs(username) {
+    return api.get(`/users/${username}/blogs/`, {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken')
+      }
+    }).then(res => res.data)
   }
 }
