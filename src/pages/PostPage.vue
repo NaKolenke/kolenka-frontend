@@ -4,6 +4,7 @@
       <div class="columns">
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
+          <h3>Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
           <comment-card v-for="item in comments.reverse()" :key="item.id" :comment="item"></comment-card>
           <div class="mt-2"></div>
         </div>
@@ -26,7 +27,8 @@ export default {
   data: function () {
     return {
       post: {},
-      comments: []
+      comments: [],
+      commentsCount: 0
     }
   },
   created: function () {
@@ -41,6 +43,8 @@ export default {
       PostService.getPost(route.params.post).then(data => {
         this.post = data.post
       }).then(() => PostService.getComments(route.params.post)).then(data => {
+        this.commentsCount = data.comments.length
+        
         data.comments.forEach(item => {
           if (item.parent) {
             let parent = data.comments.find(x => x.id === item.parent.id)
