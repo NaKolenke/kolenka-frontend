@@ -20,7 +20,7 @@
     <div class="columns article-footer">
       <div class="column col-lg-auto">
         <avatar-view :user="post.creator" :size="'sm'"></avatar-view>
-        {{post.creator.name || post.creator.login}}
+        {{post.creator.name || post.creator.username}}
       </div>
 
       <div class="column col-auto">

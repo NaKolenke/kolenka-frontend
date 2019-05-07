@@ -3,7 +3,7 @@
     <div class="container col-9 col-mx-auto">
       <div class="columns">
         <div id="content" class="column col-9">
-          <profile-edit-view v-if="user.login" :user="user"></profile-edit-view>
+          <profile-edit-view v-if="user.username" :user="user"></profile-edit-view>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@ export default {
     },
     editUser: function (user) {
       UserService.editSelf(user).then(data => {
-        this.$router.replace({ name: 'profile', params: { user: this.user.login } })
+        this.$router.replace({ name: 'profile', params: { user: this.user.username } })
       }).catch(err => {
         console.log(err)
 
@@ -46,7 +46,7 @@ export default {
     },
     editAvatar: function (formData) {
       UserService.editAvatar(formData).then(data => {
-        this.$router.replace({ name: 'profile', params: { user: this.user.login } })
+        this.$router.replace({ name: 'profile', params: { user: this.user.username } })
       }).catch(err => {
         console.log(err)
 

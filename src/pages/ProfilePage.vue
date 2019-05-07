@@ -3,7 +3,7 @@
     <div class="container col-9 col-mx-auto">
       <div class="columns">
         <div id="content" class="column col-9">
-          <profile-view v-if="user.login" :user="user" :can-edit="canEdit"></profile-view>
+          <profile-view v-if="user.username" :user="user" :can-edit="canEdit"></profile-view>
 
           <div v-if="blogs.length > 0">
             <h3>Блоги пользователя</h3>
@@ -48,7 +48,7 @@ export default {
       UserService.getUser(route.params.user).then(data => {
         this.user = data.user
       }).then(() => {
-        return UserService.getUserBlogs(this.user.login)
+        return UserService.getUserBlogs(this.user.username)
       }).then(data => {
         this.blogs = data.blogs
       }).catch(err => {

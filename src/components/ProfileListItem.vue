@@ -6,7 +6,7 @@
       </div>
       <div class="column col-7">
         <div v-if="user">
-          <router-link :to="{ name: 'profile', params: { user: user.login }}">{{user.login}}</router-link>
+          <router-link :to="{ name: 'profile', params: { user: user.username }}">{{user.username}}</router-link>
         </div>
         <div>{{user.name}}</div>
       </div>
