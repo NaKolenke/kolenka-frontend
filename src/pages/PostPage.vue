@@ -4,7 +4,7 @@
       <div class="columns">
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
-          <comment-card v-for="item in comments" :key="item.id" :comment="item"></comment-card>
+          <comment-card v-for="item in comments.reverse()" :key="item.id" :comment="item"></comment-card>
           <div class="mt-2"></div>
         </div>
 
@@ -41,7 +41,17 @@ export default {
       PostService.getPost(route.params.post).then(data => {
         this.post = data.post
       }).then(() => PostService.getComments(route.params.post)).then(data => {
-        this.comments = data.comments
+        data.comments.forEach(item => {
+          if (item.parent) {
+            let parent = data.comments.find(x => x.id === item.parent.id)
+            if (!parent.children)
+              parent.children = []
+            
+            parent.children.push(item)
+          }
+        })
+
+        this.comments = data.comments.filter(x => x.parent == null)
       }).catch(err => {
         console.log(err)
 
@@ -56,3 +66,10 @@ export default {
   }
 }
 </script>
+
+<style>
+#content > .comment {
+  border: none;
+}
+</style>
+

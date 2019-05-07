@@ -1,6 +1,6 @@
 <template>
   <div class="popover popover-right">
-    <router-link :to="{ name: 'profile', params: { user: user.login }}">
+    <router-link :to="{ name: 'profile', params: { user: user.username }}">
       <figure class="avatar" v-bind:class="{  'avatar-lg' : isLarge, 'avatar-sm' : isSmall }">
         <img
           v-if="user.avatar"
@@ -12,7 +12,7 @@
     <div v-if="card" class="popover-container">
       <div class="card">
         <div class="card-header">
-          <div class="card-title h5">{{ user.name || user.login }} <span class="text-gray small">{{ user.name ? user.login : "" }}</span></div>
+          <div class="card-title h5">{{ user.name || user.username }} <span class="text-gray small">{{ user.name ? user.username : "" }}</span></div>
           <div class="card-subtitle text-gray small">Заходил: {{ user.last_active_date | moment }}</div>
         </div>
         <div v-if="user.about" class="card-body" v-html="user.about ? user.about.substring(0, 128) : ''"></div>

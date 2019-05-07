@@ -15,7 +15,7 @@
           <div class="card my-1">
             <div class="card-header">
               <div class="card-title h5"><a :href="'/posts/' + item.url">{{ item.title }}</a></div>
-              <div class="card-subtitle text-gray"><small>{{ item.created_date | moment }} / {{ item.creator.name || item.creator.login }}</small></div>
+              <div class="card-subtitle text-gray"><small>{{ item.created_date | moment }} / {{ item.creator.name || item.creator.username }}</small></div>
             </div>
             <div class="card-body">
               <p v-html="item.cut_text.substring(0, 256)"></p>
