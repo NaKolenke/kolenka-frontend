@@ -1,9 +1,13 @@
 <template>
   <div class="user column col-12 py-2">
     <div class="columns">
-      <profile-list-item :user="user"></profile-list-item>
+      <div class="column col-10">
+        <profile-list-item :user="user"></profile-list-item>
+      </div>
+      <div class="column col-2">
+        <router-link v-if="canEdit" :to="{ name: 'editProfile'}" class="btn">Редактировать</router-link>
+      </div>
 
-      <router-link v-if="canEdit" :to="{ name: 'editProfile'}">Редактировать</router-link>
       <div class="description column col-12 my-2 p-2" v-if="user.about" v-html="user.about"></div>
     </div>
   </div>

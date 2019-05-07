@@ -1,12 +1,16 @@
 <template>
-  <div :class="['card', 'comment', { 'active': active }]" @mouseover="onHover" @mouseleave="offHover">
+  <div :class="['card', 'comment', { 'active': active }]" :id="commentId" @mouseover="onHover" @mouseleave="offHover">
     <div class="card-body">
       <div class="tile">
         <div class="tile-icon">
           <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
         </div>
         <div class="tile-content">
-          <div class="tile-title text-bold">{{ comment.creator.name || comment.creator.username }}</div>
+          <div class="tile-title text-bold">
+            {{ comment.creator.name || comment.creator.username }}
+            <br>
+            <small class="text-gray">{{ comment.created_date | moment}} <a :href="'#' + commentId" title="Ссылка на комментарий">#</a></small>
+          </div>
           <div class="tile-subtitle mt-1 comment-body" v-html="comment.text"></div>
         </div>
       </div>
@@ -35,6 +39,11 @@ export default {
     },
     offHover() {
       this.active = false
+    }
+  },
+  computed: {
+    commentId() {
+      return 'comment_' + this.comment.id
     }
   },
   components: {

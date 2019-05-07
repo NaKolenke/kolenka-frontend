@@ -5,7 +5,7 @@
     </div>
     <div class="column col-11">
       <h3>
-        <a v-if="blog.url" :href="'blogs/' + blog.url">{{ blog.title }}</a>
+        <a v-if="blog.url" :href="'/blogs/' + blog.url">{{ blog.title }}</a>
         <span v-else>{{ blog.title }}</span>
       </h3>
       <p v-html="blog.description"></p>
