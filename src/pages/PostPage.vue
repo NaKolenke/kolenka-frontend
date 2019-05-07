@@ -5,7 +5,7 @@
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
           <h3>Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
-          <comment-card v-for="item in comments.reverse()" :key="item.id" :comment="item"></comment-card>
+          <comment-card v-for="item in comments" :key="item.id" :comment="item"></comment-card>
           <div class="mt-2"></div>
         </div>
 
@@ -55,7 +55,7 @@ export default {
           }
         })
 
-        this.comments = data.comments.filter(x => x.parent == null)
+        this.comments = data.comments.filter(x => x.parent == null).reverse()
       }).catch(err => {
         console.log(err)
 

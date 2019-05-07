@@ -1,4 +1,5 @@
 process.env.VUE_APP_VERSION = require('./package.json').version
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     configureWebpack: {
@@ -13,6 +14,9 @@ module.exports = {
                 'kolenka.net',
                 'youtube.com'
               ]
-        }
+        },
+        plugins: [
+          //new BundleAnalyzerPlugin()
+        ]
     }
 }
