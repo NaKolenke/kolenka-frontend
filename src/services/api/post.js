@@ -27,5 +27,15 @@ export default {
         'Authorization': localStorage.getItem('accessToken')
       }
     }).then(res => res.data)
+  },
+  postComment(post, text) {
+    return api.post(`/posts/${post}/comments/`, {
+      text,
+      parent: 0
+    }, {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken')
+      }
+    }).then(res => res.data)
   }
 }

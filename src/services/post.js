@@ -33,5 +33,16 @@ export default {
 
         return data
       })
+  },
+  postComment(post, text) {
+    return posts
+      .postComment(post, text)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }

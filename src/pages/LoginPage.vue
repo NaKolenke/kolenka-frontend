@@ -3,32 +3,39 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto">
         <h1>Войти</h1>
-        <div class="form-group">
-          <label class="form-label" for="text">Имя пользователя</label>
-          <input class="form-input" v-model="username" name="login" v-on:keyup.enter="login">
-          <br>
-          <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
+        <form method="POST" @submit.prevent="login">
+          <div class="form-group">
+            <label class="form-label" for="username">Имя пользователя</label>
+            <input 
+              class="form-input" 
+              v-model="username" 
+              name="username" 
+              id="username"
+            >
+            <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
+          </div>
 
-          <label class="form-label" for="password">Пароль</label>
-          <input
-            class="form-input"
-            v-model="password"
-            name="password"
-            type="password"
-            v-on:keyup.enter="login"
-          >
-          <br>
-          <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
+          <div class="form-group">
+            <label class="form-label" for="password">Пароль</label>
+            <input
+              class="form-input"
+              v-model="password"
+              name="password"
+              type="password"
+              id="password"
+            >
+            <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
+          </div>
 
-          <button id="login-btn" class="btn" v-on:click="login()">Войти</button>
-
-          <br>
-          <br>
-          <p>
-            Еще нет учетной записи?
-            <router-link to="/register">Зарегистрироваться</router-link>
-          </p>
-        </div>
+          <input type="submit" id="login-btn" class="btn primary">
+        </form>
+        
+        <br>
+        <br>
+        <p>
+          Еще нет учетной записи?
+          <router-link to="/register">Зарегистрироваться</router-link>
+        </p>
       </div>
     </div>
   </div>
@@ -82,7 +89,7 @@ export default {
           if (data.success === 1) {
             this.$parent.refreshUser()
 
-            this.$Toast.show('Успешно авторизовался')
+            this.$toast.show('Успешно авторизовался')
 
             this.$router.replace({ path: '/' })
           } else {
