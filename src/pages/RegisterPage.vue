@@ -3,34 +3,57 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto">
         <h1>Зарегистрироваться</h1>
-        <div class="form-group">
-          <label class="form-label" for="text">Имя пользователя</label>
-          <input class="form-input" v-model="username" name="login" v-on:keyup.enter="register">
-          <br>
-          <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
+        <form method="POST" @submit.prevent="register">
+          <div class="form-group">
+            <label class="form-label" for="username">Имя пользователя</label>
+            <input 
+              class="form-input" 
+              v-model="username" 
+              name="username" 
+              id="username" 
+              v-on:keyup.enter="register"
+            >
+            <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="email">Адрес электронной почты</label>
+            <input 
+              class="form-input" 
+              v-model="email" 
+              name="email" 
+              id="email" 
+              v-on:keyup.enter="register"
+            >
+            <div class="toast toast-error" v-if="emailError">{{ emailError }}</div>
+          </div>
 
-          <label class="form-label" for="text">Почта</label>
-          <input class="form-input" v-model="email" name="email" v-on:keyup.enter="register">
-          <br>
-          <div class="toast toast-error" v-if="emailError">{{ emailError }}</div>
+          <div class="form-group">
+            <label class="form-label" for="name">Отображаемое имя</label>
+            <input 
+              class="form-input" 
+              v-model="name" 
+              name="name" 
+              id="name" 
+              v-on:keyup.enter="register"
+            >
+            <div class="toast toast-error" v-if="nameError">{{ nameError }}</div>
+          </div>
 
-          <label class="form-label" for="text">Отображаемое имя</label>
-          <input class="form-input" v-model="name" name="name" v-on:keyup.enter="register">
-          <br>
-          <div class="toast toast-error" v-if="nameError">{{ nameError }}</div>
+          <div class="form-group">
+            <label class="form-label" for="password">Пароль</label>
+            <input
+              class="form-input"
+              v-model="password"
+              name="password"
+              type="password"
+              id="password"
+              v-on:keyup.enter="register"
+            >
+            <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
+          </div>
 
-          <label class="form-label" for="password">Пароль</label>
-          <input
-            class="form-input"
-            v-model="password"
-            name="password"
-            type="password"
-            v-on:keyup.enter="register"
-          >
-          <br>
-          <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
-
-          <button id="login-btn" class="btn" v-on:click="register()">Зарегистрироваться</button>
+          <input type="submit" id="login-btn" class="btn btn-primary" v-on:click="register()" value="Зарегистрироваться">
 
           <br>
           <br>
@@ -38,7 +61,7 @@
             Уже есть учетная запись?
             <router-link to="/login">Войти</router-link>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -113,7 +136,7 @@ export default {
           if (data.success === 1) {
             this.$parent.refreshUser()
 
-            this.$Toast.show('Успешно зарегистрировался')
+            this.$toast.show('Успешно зарегистрировался')
 
             this.$router.replace({ path: '/' })
           } else {

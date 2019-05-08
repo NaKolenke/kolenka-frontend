@@ -29,7 +29,15 @@ export default {
   },
 
   getSelf () {
-    return users.getSelf()
+    return users
+      .getSelf()
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   },
   editSelf (user) {
     return users.editSelf(user.email, user.name, user.about, user.birthday)

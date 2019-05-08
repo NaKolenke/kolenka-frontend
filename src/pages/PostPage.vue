@@ -5,7 +5,7 @@
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
           <h3>Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
-          <comment-form :post-url="post.url"></comment-form>
+          <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url"></comment-form>
           <comment-card v-for="item in comments" :key="item.id" :comment="item"></comment-card>
           <div class="mt-2"></div>
         </div>

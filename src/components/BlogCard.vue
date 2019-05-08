@@ -5,7 +5,7 @@
     </div>
     <div class="column col-11">
       <h3>
-        <a v-if="blog.url" :href="'/blogs/' + blog.url">{{ blog.title }}</a>
+        <router-link v-if="blog.url" :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
         <span v-else>{{ blog.title }}</span>
       </h3>
       <p v-html="blog.description"></p>
@@ -14,7 +14,9 @@
         <div class="column col-6" v-for="item in posts" :key="item.id">
           <div class="card my-1">
             <div class="card-header">
-              <div class="card-title h5"><a :href="'/posts/' + item.url">{{ item.title }}</a></div>
+              <div class="card-title h5">
+                <router-link  :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
+              </div>
               <div class="card-subtitle text-gray"><small>{{ item.created_date | moment }} / {{ item.creator.name || item.creator.username }}</small></div>
             </div>
             <div class="card-body">

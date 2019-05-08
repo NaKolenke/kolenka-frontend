@@ -10,7 +10,7 @@ const Toast = {
     })
     root.$mount(document.body.appendChild(document.createElement('div')))
     
-    Vue.prototype.$Toast = {
+    Vue.prototype.$toast = {
       toasts: [],
       
       show(msg) {
