@@ -37,5 +37,19 @@ export default {
         'Authorization': localStorage.getItem('accessToken')
       }
     }).then(res => res.data)
+  },
+  createPost(title, text, url, draft, blogId) {
+    return api.post('/posts/', {
+      blog: blogId,
+      cut_name: null,
+      is_draft: draft || false,
+      text,
+      title,
+      url
+    }, {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken')
+      }
+    }).then(res => res.data)
   }
 }

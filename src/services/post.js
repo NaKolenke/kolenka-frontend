@@ -1,4 +1,5 @@
 import posts from './api/post'
+import getSlug from 'speakingurl'
 
 export default {
   getPosts (page) {
@@ -37,6 +38,19 @@ export default {
   postComment(post, text, parent) {
     return posts
       .postComment(post, text, parent)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
+  },
+  createPost(title, text, draft, blogId) {
+    return posts
+      .createPost(
+        title, text, getSlug(title, { lang: 'ru' }), draft, blogId
+      )
       .then(data => {
         if (data.success === 0) {
           throw new Error(data.error)
