@@ -1,0 +1,35 @@
+@import url(https://i.icomoon.io/public/temp/3e611083ff/UntitledProject/style.css);
+
+.icon-bold:before {
+  content: "\ea62";
+}
+.icon-underline:before {
+  content: "\ea63";
+}
+.icon-italic:before {
+  content: "\ea64";
+}
+.icon-strikethrough:before {
+  content: "\ea65";
+}
+.icon-embed:before {
+  content: "\ea7f";
+}
+.icon-embed2:before {
+  content: "\ea80";
+}
+.icon-list-numbered:before {
+  content: "\e9b9";
+}
+.icon-list2:before {
+  content: "\e9bb";
+}
+.icon-quotes-right:before {
+  content: "\e978";
+}
+.icon-link:before {
+  content: "\e9cb";
+}
+.icon-bubble2:before {
+  content: "\e96e";
+}

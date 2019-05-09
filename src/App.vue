@@ -15,25 +15,10 @@ import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
 import UserService from '@/services/user'
 import ToastPlugin from '@/plugins/toast'
-import Pulse from 'pulse-framework'
+import store from '@/library'
 
 Vue.use(ProgressBar)
 Vue.use(ToastPlugin)
-
-const store = new Pulse.Library({
-  collections: {
-    meta: {
-      data: {
-        user: null
-      },
-      actions: {
-        isLoggedIn() {
-          return store.meta.data.user != null
-        }
-      }
-    }
-  }
-})
 
 Vue.use(store)
 
@@ -86,6 +71,12 @@ export default {
 
 <style>
 @import "../node_modules/spectre.css/dist/spectre.css";
+@import "./assets/icons.css";
+
+ul li p:first-child,
+ol li p:first-child {
+  display: inline-block;
+}
 
 #app {
 }

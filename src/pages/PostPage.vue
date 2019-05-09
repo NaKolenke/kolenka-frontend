@@ -5,8 +5,8 @@
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
           <h3>Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
-          <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url"></comment-form>
-          <comment-card v-for="item in comments" :key="item.id" :comment="item"></comment-card>
+          <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url" :action="addComment"></comment-form>
+          <comment-card v-for="item in comments" :key="item.id" :comment="item" :post-url="post.url"></comment-card>
           <div class="mt-2"></div>
         </div>
 
@@ -19,17 +19,23 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import PostView from '@/components/PostView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
 import PostService from '@/services/post'
 import CommentCard from '@/components/cards/Comment.vue'
 import CommentForm from '@/components/CommentForm'
+import ScrollTo from 'vue-scrollto'
+
+Vue.use(ScrollTo)
 
 export default {
   data: function () {
     return {
+      ...this.mapData({
+        comments: 'comments/everything'
+      }),
       post: {},
-      comments: [],
       commentsCount: 0
     }
   },
@@ -42,6 +48,8 @@ export default {
   },
   methods: {
     refreshPost: function (route) {
+      this.$comments.purge()
+
       PostService.getPost(route.params.post).then(data => {
         this.post = data.post
       }).then(() => PostService.getComments(route.params.post)).then(data => {
@@ -57,11 +65,17 @@ export default {
           }
         })
 
-        this.comments = data.comments.filter(x => x.parent == null).reverse()
+        this.$comments.collect(data.comments.filter(x => x.parent == null).reverse(), 'everything')
       }).catch(err => {
         console.log(err)
 
         this.$router.push({ path: '/404' })
+      })
+    },
+    addComment(id) {
+      this.commentsCount++
+      this.$nextTick(() => {
+        this.$scrollTo('#comment_' + id, 1000, { cancelable: true })
       })
     }
   },
