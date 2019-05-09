@@ -21,13 +21,13 @@ let comments = {
             let found = context.actions.findParent(item, parent)
 
             if (found) {
+              if (!found.children) found.children = []
+
               found.children.push(data.comment)
               break
             }
           }
         }
-
-        context.collect(data.comment, 'everything')
         
         return data.comment
       })
