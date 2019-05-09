@@ -14,6 +14,7 @@ import AuthErrorPage from '@/pages/401'
 import NotFoundPage from '@/pages/404'
 import BlogPage from '@/pages/BlogPage'
 import WritePostPage from '@/pages/WritePost'
+import FeedbackPage from '@/pages/FeedbackPage'
 
 Vue.use(Router)
 
@@ -71,6 +72,10 @@ export default new Router({
       path: '/blogs/:name',
       name: 'blog',
       component: BlogPage
+    },
+    {
+      path: '/feedback',
+      component: FeedbackPage
     },
     {
       path: '/doc',
