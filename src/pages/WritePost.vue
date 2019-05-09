@@ -11,6 +11,7 @@
             </div>
             <div class="col-9 col-sm-12">
               <input class="form-input" type="text" id="title" v-model="model.title">
+              <p class="form-input-hint">/posts/{{ slug }}</p>
             </div>
           </div>
 
@@ -79,9 +80,13 @@
                 <button :class="[{ 'is-active': isActive.code() }, 'button', 'tooltip']" @click="commands.code" data-tooltip="Код">
                   <span class="icon-embed"></span>
                 </button>
-                <button :class="['button', 'tooltip']" @click="showImagePrompt(commands.image)" data-tooltip="Изображение">
+                <button :class="['button', 'tooltip']" @click="showImageModal = true" data-tooltip="Изображение">
                   <span class="icon-image"></span>
                 </button>
+
+                <modal :open="showImageModal" :closed="imageModalClose" title="Вставьте ссылку на изображение" @ok="chooseImage(commands.image)">
+                  <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="model.imageUrl">
+                </modal>
 
                 <span class="span"></span>
 
@@ -89,9 +94,66 @@
                   <span class="icon-minus"></span>
                 </button>
 
+                <span class="span"></span>
+
+                <button :class="[{'is-active': isActive.table()}, 'button', 'tooltip']" @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })" data-tooltip="Таблица">
+                  <span class="icon-table2"></span>
+                </button>
+
+                <span v-if="isActive.table()">
+                  <button
+                    class="menubar__button"
+                    @click="commands.deleteTable"
+                  >
+                    удалить
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.addColumnBefore"
+                  >
+                    колонка перед
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.addColumnAfter"
+                  >
+                    колонка после
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.deleteColumn"
+                  >
+                    удалить колонку
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.addRowBefore"
+                  >
+                    строка перед
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.addRowAfter"
+                  >
+                    строка после
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.deleteRow"
+                  >
+                    удалить строку
+                  </button>
+                  <button
+                    class="menubar__button"
+                    @click="commands.toggleCellMerge"
+                  >
+                    объеденить ячецки
+                  </button>
+                </span>
+
               </div>
             </editor-menu-bar>
-            <div class="form-input editor">
+            <div class="form-input post-editor">
               <editor-content :editor="editor"></editor-content>
             </div>
           </div>
@@ -108,9 +170,11 @@
             </div>
           </div>
 
-          <div class="form-group" style="margin: 0 auto">
-            <input type="submit" class="btn btn-primary" value="Написать">
-            <input type="submit" class="btn" value="Сохранить как черновик">
+          <div class="form-group float-right">
+            <div class="btn-group btn-group-block" style="width:350px">
+              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)">
+              <input type="submit" class="btn btn-primary" value="Написать" @click="send">
+            </div>
           </div>
 
         </div>
@@ -140,20 +204,32 @@ import {
   Underline,
   History,
   HorizontalRule,
-  Image
+  Image,
+  Table,
+  TableHeader,
+  TableCell,
+  TableRow,
 } from 'tiptap-extensions'
 import UserService from '@/services/user'
+import PostService from '@/services/post'
+import getSlug from 'speakingurl'
+import Modal from '@/components/elements/modal'
 
 export default {
   data() {
     return {
+      ...this.mapData({
+        meta: 'meta/data/user'
+      }),
       editor: null,
       model: {
         title: '',
-        blog: null
+        blog: null,
+        imageUrl: ''
       },
       blogs: [],
-      showDropdown: false
+      showDropdown: false,
+      showImageModal: false
     }
   },
   mounted() {
@@ -173,31 +249,55 @@ export default {
         new History(),
         new Heading({ levels: [1, 2, 3] }),
         new HorizontalRule(),
-        new Image()
+        new Image(),
+        new Table(),
+        new TableHeader(),
+        new TableCell(),
+        new TableRow()
       ]
-    })
-
-    UserService.getUserBlogs(this.$meta.data.user.username).then(data => {
-      this.blogs = data.blogs
     })
   },
   methods: {
-    showImagePrompt(command) {
-      const src = prompt('Вставьте ссылку на изображение')
-      if (src !== null) {
-        command({ src })
-      }
+    imageModalClose() {
+      this.showImageModal = false
     },
+    chooseImage(command) {
+      if (this.model.imageUrl.length > 0) {
+        command({ src: this.model.imageUrl })
+        this.model.imageUrl = ''
+      }
+      this.showImageModal = false
+    },
+    send(draft) {
+      PostService.createPost(this.model.title, this.editor.getHTML(), draft).then(data => {
+        console.log(data)
+      })
+    }
+  },
+  computed: {
+    slug() {
+      return getSlug(this.model.title, { lang: 'ru' })
+    }
+  },
+  watch: {
+    'meta.user'(oldVal, newVal) {
+      if (newVal != null) {
+        UserService.getUserBlogs(this.$meta.data.user.username).then(data => {
+          this.blogs = data.blogs
+        })
+      }
+    }
   },
   components: {
     EditorContent,
-    EditorMenuBar
+    EditorMenuBar,
+    Modal
   }
 }
 </script>
 
 <style scoped>
-.editor {
+.post-editor {
   height: auto;
 }
 
@@ -251,19 +351,15 @@ export default {
 </style>
 
 <style>
-.editor .ProseMirror {
+.post-editor .ProseMirror {
   min-height: 300px;
 }
 
-.editor .ProseMirror:focus {
+.post-editor .ProseMirror:focus {
   outline: none;
 }
 
-.editor:focus-within {
+.post-editor:focus-within {
   border-color: blueviolet;
-}
-
-.editor .ProseMirror p {
-  margin: 0 0 0.2rem;
 }
 </style>
