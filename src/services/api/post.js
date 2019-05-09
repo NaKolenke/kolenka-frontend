@@ -28,10 +28,10 @@ export default {
       }
     }).then(res => res.data)
   },
-  postComment(post, text) {
+  postComment(post, text, parent) {
     return api.post(`/posts/${post}/comments/`, {
       text,
-      parent: 0
+      parent: parent || 0
     }, {
       headers: {
         'Authorization': localStorage.getItem('accessToken')

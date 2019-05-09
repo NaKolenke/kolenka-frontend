@@ -34,9 +34,9 @@ export default {
         return data
       })
   },
-  postComment(post, text) {
+  postComment(post, text, parent) {
     return posts
-      .postComment(post, text)
+      .postComment(post, text, parent)
       .then(data => {
         if (data.success === 0) {
           throw new Error(data.error)

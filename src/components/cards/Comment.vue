@@ -5,18 +5,28 @@
         <div class="tile-icon">
           <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
         </div>
-        <div class="tile-content">
+        <div class="tile-content p-relative">
           <div class="tile-title text-bold">
             {{ comment.creator.name || comment.creator.username }}
             <br>
             <small class="text-gray">{{ comment.created_date | moment}} <a :href="'#' + commentId" title="Ссылка на комментарий">#</a></small>
           </div>
           <div class="tile-subtitle mt-1 comment-body" v-html="comment.text"></div>
+          <small class="p-absolute" style="right: 0;bottom: 0" v-if="!isReplying">
+            <button class="reply tooltip" data-tooltip="Ответить" @click="reply">
+              <span class="icon-bubble2"></span>
+            </button>
+          </small>
+          <div class="panel mt-2" v-if="isReplying">
+            <div class="panel-header h6">Ответ <button class="btn float-right" @click="cancelReply">Отменить</button></div>
+            <div class="panel-body"><comment-form :post-url="postUrl" :parent-id="comment.id"></comment-form></div>
+            <div class="panel-footer"></div>
+          </div>
         </div>
       </div>
     
       <div v-if="comment.children">
-        <comment-card v-for="item in comment.children" :key="item.id" :comment="item"></comment-card>
+        <comment-card v-for="item in comment.children" :key="item.id" :comment="item" :parent-id="comment.id" :post-url="postUrl"></comment-card>
       </div>
     </div>
   </div>
@@ -24,13 +34,15 @@
 
 <script>
 import AvatarView from '@/components/AvatarView.vue'
+import CommentForm from '@/components/CommentForm.vue'
 
 export default {
   name: 'comment-card',
-  props: [ 'comment' ],
+  props: [ 'comment', 'parentId', 'postUrl' ],
   data() {
     return {
-      active: false
+      active: false,
+      isReplying: false
     }
   },
   methods: {
@@ -39,6 +51,12 @@ export default {
     },
     offHover() {
       this.active = false
+    },
+    reply() {
+      this.isReplying = true
+    },
+    cancelReply() {
+      this.isReplying = false
     }
   },
   computed: {
@@ -47,7 +65,8 @@ export default {
     }
   },
   components: {
-    AvatarView
+    AvatarView,
+    CommentForm
   }
 }
 </script>
@@ -77,5 +96,11 @@ export default {
 
 .comment-body img {
   width: auto !important;
+}
+
+.comment .reply {
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 </style>
