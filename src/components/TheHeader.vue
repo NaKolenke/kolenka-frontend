@@ -14,9 +14,14 @@
       </section>
       <section class="navbar-section">
         <router-link to="/page/about">О сайте</router-link>
-        <router-link to="/feedback" class="tooltip tooltip-bottom" :data-tooltip="feedbackTooltip">
+        <template v-if="user">
+          <router-link to="/feedback" class="tooltip tooltip-bottom" :data-tooltip="feedbackTooltip">
+            <p id="version">Версия {{version}}</p>
+          </router-link>
+        </template>
+        <template v-else>
           <p id="version">Версия {{version}}</p>
-        </router-link>
+        </template>
 
         <template v-if="user">
           <router-link :to="{ name: 'profile', params: { user: user.username }}">
