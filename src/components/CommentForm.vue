@@ -36,7 +36,7 @@
         <div class="clearfix"></div>
       </div>
     </editor-menu-bar>
-    <div class= "form-input editor">
+    <div class="form-input editor">
       <editor-content :editor="editor"></editor-content>
     </div>
     <br>
@@ -144,6 +144,10 @@ export default {
 <style>
 .editor .ProseMirror:focus {
   outline: none;
+}
+
+.editor:focus-within {
+  border-color: blueviolet;
 }
 
 .editor .ProseMirror p {

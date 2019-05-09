@@ -71,7 +71,7 @@ export default {
 
 <style>
 @import "../node_modules/spectre.css/dist/spectre.css";
-@import "./assets/icons.css";
+@import "./assets/icon-font/style.css";
 
 ul li p:first-child,
 ol li p:first-child {

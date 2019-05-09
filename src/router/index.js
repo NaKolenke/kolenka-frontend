@@ -13,6 +13,7 @@ import BlogListPage from '@/pages/BlogList'
 import AuthErrorPage from '@/pages/401'
 import NotFoundPage from '@/pages/404'
 import BlogPage from '@/pages/BlogPage'
+import WritePostPage from '@/pages/WritePost'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: HomePage
+    },
+    {
+      path: '/posts/new',
+      name: 'new-post',
+      component: WritePostPage
     },
     {
       path: '/posts/:post',
