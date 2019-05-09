@@ -60,10 +60,10 @@ export default {
   },
   computed: {
     canEdit: function () {
-      if (!this.$root.user) {
+      if (!this.$meta.data.user) {
         return false
       }
-      return this.user.id === this.$root.user.id
+      return this.user.id === this.$meta.data.user.id
     }
   },
   components: {

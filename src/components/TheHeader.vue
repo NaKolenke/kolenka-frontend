@@ -2,18 +2,27 @@
   <div id="header">
     <header class="navbar column col-9 col-mx-auto">
       <section class="navbar-section">
-        <router-link to="/" id="brand"><img id="logo" src="../assets/logo.png" /></router-link>
-        <router-link to="/" id="brand"><span id="header-brand-prefix" class="p-1">НА</span>КОЛЕНКЕ</router-link>
+        <router-link to="/" id="brand">
+          <img id="logo" src="../assets/logo.png">
+        </router-link>
+        <router-link to="/" id="brand">
+          <span id="header-brand-prefix" class="p-1">НА</span>КОЛЕНКЕ
+        </router-link>
         <router-link to="/blogs">Блоги</router-link>
         <router-link to="/users">Люди</router-link>
         <router-link to="/stream">Активность</router-link>
       </section>
       <section class="navbar-section">
         <router-link to="/page/about">О сайте</router-link>
-        <p id="version">Версия {{version}}</p>
+        <router-link to="/feedback" class="tooltip tooltip-bottom" :data-tooltip="feedbackTooltip">
+          <p id="version">Версия {{version}}</p>
+        </router-link>
 
         <template v-if="user">
-          <router-link :to="{ name: 'profile', params: { user: user.username }}"><avatar-view :user="user" size="sm" :card="false"></avatar-view> {{ user.name || user.username }}</router-link>
+          <router-link :to="{ name: 'profile', params: { user: user.username }}">
+            <avatar-view :user="user" size="sm" :card="false"></avatar-view>
+            {{ user.name || user.username }}
+          </router-link>
           <router-link to="/logout">Выйти</router-link>
         </template>
         <template v-else>
@@ -27,14 +36,50 @@
 
 <script>
 import AvatarView from '@/components/AvatarView.vue'
+import FeedbackService from '@/services/feedback'
 
 export default {
+  data: function () {
+    return {
+      feedbackTooltip: ''
+    }
+  },
   props: {
     user: Object,
-    version: String
+    version: String,
   },
   components: {
     AvatarView
+  },
+  mounted: function () {
+    this.$watch('user', this.refreshFeedbackTooltip)
+  },
+  methods: {
+    refreshFeedbackTooltip: function () {
+      if (this.isAdmin) {
+        FeedbackService.getList().then(data => {
+          let newFeedbackCount = data.filter(f => !f.is_resolved).length
+          if (newFeedbackCount > 0) {
+            this.feedbackTooltip = 'Есть ' + newFeedbackCount + ' новых отзывов'
+          } else {
+            this.feedbackTooltip = 'Нет новых отзывов'
+          }
+        }).catch(err => {
+          console.log(err)
+          this.feedbackTooltip = 'Не удалось получить список отзывов'
+        })
+      } else {
+        this.feedbackTooltip = 'Тут вы можете оставить комменатрий по работе сайта'
+      }
+    }
+  },
+  computed: {
+    isAdmin: function () {
+      if (!this.$meta.data.user) {
+        return false
+      }
+      return this.$meta.data.user.is_admin
+    }
   }
 }
 </script>
@@ -61,10 +106,14 @@ header a {
 #version {
   color: #5a616d;
   margin: 0 20px 0 20px;
-  font-size: .6rem;
+  font-size: 0.6rem;
 }
 
 #logo {
   height: 48px;
+}
+
+.tooltip::after {
+  max-width: 500px;
 }
 </style>
