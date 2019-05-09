@@ -27,6 +27,13 @@
         <button :class="[{ 'is-active': isActive.code() }, 'button', 'tooltip']" @click="commands.code" data-tooltip="Код">
           <span class="icon-embed"></span>
         </button>
+
+        <div class="float-right" style="margin-top: -8px">
+          <label class="form-switch">
+            <input type="checkbox"><i class="form-icon"></i> Подписаться на комментарии
+          </label>
+        </div>
+        <div class="clearfix"></div>
       </div>
     </editor-menu-bar>
     <div class= "form-input editor">
@@ -94,10 +101,11 @@ export default {
   methods: {
     send() {
       this.isSending = true
-      this.$comments.sendComment(this.postUrl, this.editor.getHTML()).then(comment => {
+      this.$comments.sendComment(this.postUrl, this.editor.getHTML(), this.parentId).then(comment => {
         this.isSending = false
         this.editor.setContent('')
-        this.action(comment.id)
+        if (this.action)
+          this.action(comment.id)
       })
     }
   },
@@ -114,7 +122,7 @@ export default {
 }
 
 .menu-bar {
-  font-size: 12px;
+  font-size: 13px;
   margin-bottom: 6px;
 }
 

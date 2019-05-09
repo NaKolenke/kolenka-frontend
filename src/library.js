@@ -15,17 +15,13 @@ let meta = {
 let comments = {
   actions: {
     sendComment(context, post, message, parent) {
-      return PostService.postComment(post, {
-        text: message,
-        parent: parent || 0
-      }).then(data => {
+      return PostService.postComment(post, message, parent).then(data => {
         if (parent) {
-          for (let item of context.everything) {
-            let found = context.findParent(item, parent)
+          for (let item of context.getGroup('everything')) {
+            let found = context.actions.findParent(item, parent)
 
             if (found) {
               found.children.push(data.comment)
-
               break
             }
           }
@@ -42,7 +38,7 @@ let comments = {
 
       if (comment.children) {
         for (let item of comment.children) {
-          let found = context.findParent(item, parentId)
+          let found = context.actions.findParent(item, parentId)
 
           if (found) return found
         }
