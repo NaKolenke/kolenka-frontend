@@ -4,41 +4,45 @@ import ToastView from '@/components/ToastView.vue'
 let ToastClass = Vue.extend(ToastView)
 
 const Toast = {
-  install(Vue, options) {    
+  install (Vue, options) {
     const root = new Vue({
       render: createElement => createElement('div')
     })
     root.$mount(document.body.appendChild(document.createElement('div')))
-    
+
     Vue.prototype.$toast = {
       toasts: [],
-      
-      show(msg) {
+
+      show (msg, opts = {}) {
         let y = this.toasts.map(i => {
           return i.$el.offsetHeight + 8 // todo remove this hardcoded margin height
         }).reduce((a, b) => a + b, 0)
-  
+
         let instance = new ToastClass({
           propsData: {
-            y: y
+            y: y,
+            isError: opts.isError || false
           }
         })
-  
-        instance.$slots.default = [ msg ]
+
+        instance.$slots.default = [msg]
         instance.$root = root
         instance.$mount()
-  
+
         root.$el.appendChild(instance.$el)
         this.toasts.push(instance)
-  
+
         setTimeout(() => {
           this.hide(instance)
         }, 3000)
       },
-      hide(toast) {
+      error (msg) {
+        this.show(msg, { isError: true })
+      },
+      hide (toast) {
         let index = 0
         let height = 0
-  
+
         for (let i = 0; i < this.toasts.length; i++) {
           if (this.toasts[i] === toast) {
             index = i
@@ -48,7 +52,7 @@ const Toast = {
             break
           }
         }
-  
+
         for (let i = index; i < this.toasts.length; i++) {
           this.toasts[i].y -= height
         }
