@@ -1,5 +1,5 @@
 <template>
-  <div class="toast toast-success" v-bind:style="{ bottom: y + 'px' }">
+  <div class="toast" :class="toastClass" v-bind:style="{ bottom: y + 'px' }">
     <button class="btn btn-clear float-right" v-on:click="close()"></button>
     <slot/>
   </div>
@@ -8,11 +8,20 @@
 <script>
 export default {
   props: {
-    y: Number
+    y: Number,
+    isError: Boolean
   },
   methods: {
     close: function () {
       this.$Toast.hide(this)
+    }
+  },
+  computed: {
+    toastClass: function  () {
+      if (this.isError) {
+        return "toast-error"
+      }
+      return "toast-success"
     }
   }
 }
