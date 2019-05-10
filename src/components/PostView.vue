@@ -9,7 +9,7 @@
     </h2>
 
     <div v-if="cut" v-html="post.cut_text"></div>
-    <div v-else v-html="post.text"></div>
+    <div v-else v-html="post.text" ></div>
 
     <router-link
       v-if="cut && post.has_cut"
@@ -20,11 +20,12 @@
     <div class="columns article-footer">
       <div class="column col-lg-auto">
         <avatar-view :user="post.creator" :size="'sm'"></avatar-view>
-        {{post.creator.name || post.creator.username}}
-      </div>
-
-      <div class="column col-auto">
-        <router-link v-for="tag in post.tags" :key="tag.title" :to="{ name: 'tag',  params: { tag: tag.url }}">{{tag.title}}</router-link>
+        <span class="chip">
+          {{ post.creator.name || post.creator.username }}
+        </span>
+        <span v-for="tag in post.tags" :key="tag.title" class="chip">
+          <router-link :to="{ name: 'tag',  params: { tag: tag.url }}">#{{tag.title}}</router-link>
+        </span>
       </div>
     </div>
   </div>
@@ -54,7 +55,5 @@ export default {
 
 .article-footer {
   margin-top: 12px;
-  padding-top: 6px;
-  border-top: 1px solid #999999;
 }
 </style>

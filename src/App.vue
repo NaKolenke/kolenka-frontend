@@ -84,6 +84,10 @@ ol li p:first-child {
   display: inline-block;
 }
 
+img {
+  width: auto;
+}
+
 #app {
 }
 

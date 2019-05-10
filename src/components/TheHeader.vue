@@ -38,7 +38,7 @@
 
               <ul class="menu">
                 <li class="menu-item"><router-link to="/posts/new">Написать пост</router-link></li>
-                <li class="menu-item"><a href="#">Создать блог</a></li>
+                <!-- <li class="menu-item"><a href="#">Создать блог</a></li> -->
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/logout">Выйти</router-link></li>
               </ul>
