@@ -88,6 +88,18 @@ img {
   width: auto;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
 #app {
 }
 
@@ -159,7 +171,7 @@ table {
 
   td,
   th {
-    border-bottom: $border-width solid $border-color;
+    border: $border-width solid $border-color;
     padding: $unit-3 $unit-2;
   }
   th {
