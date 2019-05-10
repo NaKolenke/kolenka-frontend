@@ -100,56 +100,58 @@
                   <span class="icon-table2"></span>
                 </button>
 
-                <span v-if="isActive.table()">
+                <div v-if="isActive.table()">
+                  <small>Редактировать таблицу </small>
+                  
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.deleteTable"
                   >
                     удалить
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.addColumnBefore"
                   >
                     колонка перед
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.addColumnAfter"
                   >
                     колонка после
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.deleteColumn"
                   >
                     удалить колонку
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.addRowBefore"
                   >
                     строка перед
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.addRowAfter"
                   >
                     строка после
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.deleteRow"
                   >
                     удалить строку
                   </button>
                   <button
-                    class="menubar__button"
+                    class="button"
                     @click="commands.toggleCellMerge"
                   >
                     объеденить ячецки
                   </button>
-                </span>
+                </div>
 
               </div>
             </editor-menu-bar>
@@ -160,20 +162,21 @@
 
           <div class="form-group">
             <div class="col-3 col-sm-12">
-              <label class="form-label" for="blog">Написать в блог</label>
+              <label class="form-label" for="blog">В блог</label>
             </div>
             <div class="col-9 col-sm-12">
-              <select class="form-select" id="blog">
-                <option>Нет</option>
-                <option v-for="blog in blogs" :key="blog.id">{{ blog.title }}</option>
+              <select class="form-select" id="blog" v-model="model.blog">
+                <option :value="null" selected>Нет</option>
+                <option v-for="blog in blogs" :key="blog.id" :value="blog.id">{{ blog.title }} (Создатель: {{ blog.creator.username }})</option>
               </select>
+              <p class="form-input-hint" style="margin-bottom: 0">Чтобы опубликовать запись, выберите блог</p>
             </div>
           </div>
 
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
-              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)">
-              <input type="submit" class="btn btn-primary" value="Написать" @click="send">
+              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)" :disabled="!isValidDraft">
+              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="!isValidPublish">
             </div>
           </div>
 
@@ -219,17 +222,22 @@ export default {
   data() {
     return {
       ...this.mapData({
-        meta: 'meta/data/user'
+        meta: 'meta/data/user',
+        blogs: 'userBlogs/everything'
       }),
       editor: null,
       model: {
-        title: '',
+        title: sessionStorage.getItem('post-title') || '',
         blog: null,
         imageUrl: ''
       },
-      blogs: [],
       showDropdown: false,
       showImageModal: false
+    }
+  },
+  created () {
+    if (!this.$meta.data.user) {
+      this.$router.replace({ path: '/' })
     }
   },
   mounted() {
@@ -254,8 +262,14 @@ export default {
         new TableHeader(),
         new TableCell(),
         new TableRow()
-      ]
+      ],
+      content: sessionStorage.getItem('post-text') || ''
     })
+  },
+  beforeDestroy() {
+    sessionStorage.setItem('post-text', this.editor.getHTML())
+    sessionStorage.setItem('post-title', this.model.title)
+    this.editor.destroy()
   },
   methods: {
     imageModalClose() {
@@ -269,7 +283,7 @@ export default {
       this.showImageModal = false
     },
     send(draft) {
-      PostService.createPost(this.model.title, this.editor.getHTML(), draft).then(data => {
+      PostService.createPost(this.model.title, this.editor.getHTML(), draft, this.model.blog).then(data => {
         console.log(data)
       })
     }
@@ -277,15 +291,20 @@ export default {
   computed: {
     slug() {
       return getSlug(this.model.title, { lang: 'ru' })
-    }
-  },
-  watch: {
-    'meta.user'(oldVal, newVal) {
-      if (newVal != null) {
-        UserService.getUserBlogs(this.$meta.data.user.username).then(data => {
-          this.blogs = data.blogs
-        })
-      }
+    },
+    body() {
+      return this.editor.getHTML()
+    },
+    isValidPublish() {
+      return this.model.title.length > 3 &&
+        this.editor != null &&
+        this.editor.getHTML().length > 10 &&
+        this.model.blog != null
+    },
+    isValidDraft() {
+      return this.model.title.length > 3 &&
+        this.editor != null &&
+        this.editor.getHTML().length > 10
     }
   },
   components: {

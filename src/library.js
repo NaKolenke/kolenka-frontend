@@ -15,6 +15,8 @@ let meta = {
 let comments = {
   actions: {
     sendComment(context, post, message, parent) {
+      context.throttle(1000)
+      
       return PostService.postComment(post, message, parent).then(data => {
         if (parent) {
           for (let item of context.getGroup('everything')) {
@@ -27,6 +29,8 @@ let comments = {
               break
             }
           }
+        } else {
+          context.collect(data.comment, 'everything')
         }
         
         return data.comment
@@ -48,10 +52,15 @@ let comments = {
   groups: [ 'everything' ]
 }
 
+const userBlogs = {
+  groups: [ 'everything' ]
+}
+
 const store = new Pulse.Library({
   collections: {
     meta,
-    comments
+    comments,
+    userBlogs
   }
 })
 

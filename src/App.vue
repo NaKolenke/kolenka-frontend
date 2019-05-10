@@ -32,11 +32,6 @@ export default {
       version: process.env.VUE_APP_VERSION
     }
   },
-  mounted: function () {
-    this.refreshUser().then(() => {
-      this.$Progress.finish()
-    })
-  },
   created() {
     this.$Progress.start()
 
@@ -46,6 +41,10 @@ export default {
     })
 
     this.$router.afterEach((to, from) => {
+      this.$Progress.finish()
+    })
+
+    this.refreshUser().then(() => {
       this.$Progress.finish()
     })
   },
@@ -58,6 +57,12 @@ export default {
         .getSelf()
         .then(res => {
           this.$meta.data.user = res.user
+
+          UserService.getUserBlogs(res.user.username).then(res => {
+            this.$userBlogs.collect(res.blogs, 'everything')
+          }).catch(err => {
+            console.log(err)
+          })
         })
         .catch(err => {
           console.log(err)
@@ -71,11 +76,16 @@ export default {
 
 <style>
 @import "../node_modules/spectre.css/dist/spectre.css";
+@import "../node_modules/spectre.css/dist/spectre-icons.css";
 @import "./assets/icon-font/style.css";
 
 ul li p:first-child,
 ol li p:first-child {
   display: inline-block;
+}
+
+img {
+  width: auto;
 }
 
 #app {

@@ -30,7 +30,7 @@
 
         <div class="float-right" style="margin-top: -8px">
           <label class="form-switch">
-            <input type="checkbox"><i class="form-icon"></i> Подписаться на комментарии
+            <input type="checkbox" disabled><i class="form-icon"></i> Подписаться на комментарии
           </label>
         </div>
         <div class="clearfix"></div>
@@ -41,7 +41,7 @@
     </div>
     <br>
     <div>
-      <input class="btn btn-primary float-left" type="submit" value="Отправить" @click="send" :disabled="isSending" />
+      <input class="btn btn-primary float-left" type="submit" value="Отправить" @click="send" :disabled="isSending || !isValid" />
       <div v-if="isSending" class="loading float-left" style="margin-top: 10px; margin-left: 20px"></div>
       <div class="clearfix"></div>
     </div>
@@ -107,6 +107,11 @@ export default {
         if (this.action)
           this.action(comment.id)
       })
+    }
+  },
+  computed: {
+    isValid() {
+      return this.editor != null && this.editor.getHTML().length > 10
     }
   },
   components: {

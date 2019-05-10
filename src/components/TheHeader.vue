@@ -12,6 +12,7 @@
         <router-link to="/users">Люди</router-link>
         <router-link to="/stream">Активность</router-link>
       </section>
+
       <section class="navbar-section">
         <router-link to="/page/about">О сайте</router-link>
         <template v-if="user">
@@ -24,17 +25,32 @@
         </template>
 
         <template v-if="user">
-          <router-link :to="{ name: 'profile', params: { user: user.username }}">
-            <avatar-view :user="user" size="sm" :card="false"></avatar-view>
-            {{ user.name || user.username }}
-          </router-link>
-          <router-link to="/logout">Выйти</router-link>
+          <div class="dropdown">
+            <div class="btn-group">
+              <router-link :to="{ name: 'profile', params: { user: user.username }}" class="btn btn-link text-secondary">
+                <avatar-view :user="user" size="sm" :card="false"></avatar-view>
+                {{ user.name || user.username }}
+              </router-link>
+
+              <a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+                <i class="icon icon-caret text-secondary"></i>
+              </a>
+
+              <ul class="menu">
+                <li class="menu-item"><router-link to="/posts/new">Написать пост</router-link></li>
+                <!-- <li class="menu-item"><a href="#">Создать блог</a></li> -->
+                <li class="divider"></li>
+                <li class="menu-item"><router-link to="/logout">Выйти</router-link></li>
+              </ul>
+            </div>
+          </div>          
         </template>
         <template v-else>
           <router-link to="/register">Регистрация</router-link>
           <router-link to="/login">Войти</router-link>
         </template>
       </section>
+
     </header>
   </div>
 </template>
