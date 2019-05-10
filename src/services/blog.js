@@ -22,5 +22,16 @@ export default {
 
         return data
       })
+  },
+  joinBlog(url) {
+    return blog.
+      joinBlog(url)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }

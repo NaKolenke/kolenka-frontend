@@ -14,5 +14,12 @@ export default {
         page: page || 1
       }
     }).then(res => res.data)
+  },
+  joinBlog(url) {
+    return api.post(`/blogs/${url}/join/`, {}, {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken')
+      }
+    }).then(res => res.data)
   }
 }

@@ -5,7 +5,14 @@
     </div>
     <div class="column col-11">
       <h3>
-        <router-link v-if="blog.url" :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
+        <div v-if="blog.url" class="columns">
+          <div class="column col-10">
+            <router-link  :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
+          </div>
+          <div class="column col-2">
+            <button v-if="blog.blog_type === 1 && !contains" class="btn" @click="joinBlog">Присоединиться</button>
+          </div>
+        </div>
         <span v-else>{{ blog.title }}</span>
       </h3>
       <p v-html="blog.description"></p>
@@ -48,6 +55,9 @@ export default {
   },
   data() {
     return {
+      ...this.mapData({
+        blogs: 'userBlogs/everything'
+      }),
       posts: []
     }
   },
@@ -68,6 +78,24 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    joinBlog() {
+      BlogService.joinBlog(this.blog.url).then(data => {
+        this.$toast.show(`Успешно присоединились к блогу "${this.blog.title}"`)
+        this.$userBlogs.collect(this.blog, 'everything')
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+  },
+  computed: {
+    contains() {
+      for (let item of this.blogs) {
+        if (item.id === this.blog.id) {
+          return true
+        }
+      }
+      return false
     }
   }
 }

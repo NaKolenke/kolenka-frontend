@@ -160,12 +160,12 @@
 
           <div class="form-group">
             <div class="col-3 col-sm-12">
-              <label class="form-label" for="blog">Написать в блог</label>
+              <label class="form-label" for="blog">В блог</label>
             </div>
             <div class="col-9 col-sm-12">
-              <select class="form-select" id="blog">
-                <option>Нет</option>
-                <option v-for="blog in blogs" :key="blog.id">{{ blog.title }}</option>
+              <select class="form-select" id="blog" v-model="model.blog">
+                <option :value="null" selected>Нет</option>
+                <option v-for="blog in blogs" :key="blog.id" :value="blog.id">{{ blog.title }}</option>
               </select>
             </div>
           </div>
@@ -173,7 +173,7 @@
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
               <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)">
-              <input type="submit" class="btn btn-primary" value="Написать" @click="send">
+              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="model.blog == null || model.title.length < 3">
             </div>
           </div>
 
@@ -219,7 +219,8 @@ export default {
   data() {
     return {
       ...this.mapData({
-        meta: 'meta/data/user'
+        meta: 'meta/data/user',
+        blogs: 'userBlogs/everything'
       }),
       editor: null,
       model: {
@@ -227,7 +228,6 @@ export default {
         blog: null,
         imageUrl: ''
       },
-      blogs: [],
       showDropdown: false,
       showImageModal: false
     }
@@ -269,7 +269,7 @@ export default {
       this.showImageModal = false
     },
     send(draft) {
-      PostService.createPost(this.model.title, this.editor.getHTML(), draft).then(data => {
+      PostService.createPost(this.model.title, this.editor.getHTML(), draft, this.model.blog).then(data => {
         console.log(data)
       })
     }
@@ -277,15 +277,6 @@ export default {
   computed: {
     slug() {
       return getSlug(this.model.title, { lang: 'ru' })
-    }
-  },
-  watch: {
-    'meta.user'(oldVal, newVal) {
-      if (newVal != null) {
-        UserService.getUserBlogs(this.$meta.data.user.username).then(data => {
-          this.blogs = data.blogs
-        })
-      }
     }
   },
   components: {
