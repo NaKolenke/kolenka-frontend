@@ -232,6 +232,7 @@ export default {
 
         new ListItem(),
         new BulletList(),
+        new OrderedList(),
 
         new Blockquote(),
         new Code(),
@@ -242,7 +243,6 @@ export default {
 
     if (this.isExtended) {
       options.extensions.push(
-        new OrderedList(),
         new History(),
         new Heading({ levels: [1, 2, 3, 4, 5, 6] }),
         new HorizontalRule(),
@@ -273,6 +273,9 @@ export default {
     },
     content() {
       return this.editor.getHTML()
+    },
+    setContent(body) {
+      this.editor.setContent(body)
     }
   },
   computed: {

@@ -19,7 +19,7 @@
           </small>
           <div class="panel mt-2" v-if="isReplying">
             <div class="panel-header h6">Ответ <button class="btn float-right" @click="cancelReply">Отменить</button></div>
-            <div class="panel-body"><comment-form :post-url="postUrl" :parent-id="comment.id"></comment-form></div>
+            <div class="panel-body" style="overflow:visible"><comment-form :post-url="postUrl" :parent-id="comment.id"></comment-form></div>
             <div class="panel-footer"></div>
           </div>
         </div>

@@ -31,6 +31,5 @@ export default {
 
 .description {
   background: #ffe;
-  padding: 0px;
 }
 </style>
