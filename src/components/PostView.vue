@@ -23,10 +23,12 @@
         <span class="chip">
           {{ post.creator.name || post.creator.username }}
         </span>
-        <span class="chip">
-          <span class="icon-bubble2"></span>
-          <span style="padding-left:4px">{{ post.comments }}</span>
-        </span>
+        <router-link :to="{ name: 'post',  params: { post: post.url }, hash: '#comments'}">
+          <span class="chip">
+            <span class="icon-bubble2"></span>
+            <span style="padding-left:4px">{{ post.comments }}</span>
+          </span>
+        </router-link>
         <span v-for="tag in post.tags" :key="tag.title" class="chip">
           <router-link :to="{ name: 'tag',  params: { tag: tag.url }}">#{{tag.title}}</router-link>
         </span>

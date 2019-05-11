@@ -16,6 +16,9 @@ import HeaderComponent from '@/components/TheHeader.vue'
 import UserService from '@/services/user'
 import ToastPlugin from '@/plugins/toast'
 import store from '@/library'
+import ScrollTo from 'vue-scrollto'
+
+Vue.use(ScrollTo)
 
 Vue.use(ProgressBar)
 Vue.use(ToastPlugin)
@@ -42,6 +45,12 @@ export default {
 
     this.$router.afterEach((to, from) => {
       this.$Progress.finish()
+
+      if (to.hash) {
+        this.$nextTick(() => {
+          this.$scrollTo(to.hash, 1000, { cancelable: true }) // TOOD: doesn't work
+        })
+      }
     })
 
     this.refreshUser().then(() => {

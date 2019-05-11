@@ -4,7 +4,7 @@
       <div class="columns">
         <div id="content" class="column col-9">
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
-          <h3>Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
+          <h3 id="#comments">Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
           <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url" :action="addComment"></comment-form>
           <div v-if="$meta.actions.isLoggedIn()" class="mt-2"></div>
           <comment-card v-for="item in comments" :key="item.id" :comment="item" :post-url="post.url"></comment-card>
@@ -26,9 +26,6 @@ import TheSidebar from '@/components/TheSidebar.vue'
 import PostService from '@/services/post'
 import CommentCard from '@/components/cards/Comment.vue'
 import CommentForm from '@/components/CommentForm'
-import ScrollTo from 'vue-scrollto'
-
-Vue.use(ScrollTo)
 
 export default {
   data: function () {
