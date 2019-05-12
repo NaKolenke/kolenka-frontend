@@ -1,7 +1,7 @@
 import Pulse from 'pulse-framework'
 import PostService from '@/services/post'
 
-let meta = {
+const meta = {
   data: {
     user: null
   },
@@ -12,7 +12,7 @@ let meta = {
   }
 }
 
-let comments = {
+const comments = {
   actions: {
     sendComment(context, post, message, parent) {
       context.throttle(1000)
@@ -56,11 +56,16 @@ const userBlogs = {
   groups: [ 'everything' ]
 }
 
+const posts = {
+  groups: [ 'everything' ]
+}
+
 const store = new Pulse.Library({
   collections: {
     meta,
     comments,
-    userBlogs
+    userBlogs,
+    posts
   }
 })
 

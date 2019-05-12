@@ -45,12 +45,6 @@ export default {
 
     this.$router.afterEach((to, from) => {
       this.$Progress.finish()
-
-      if (to.hash) {
-        this.$nextTick(() => {
-          this.$scrollTo(to.hash, 1000, { cancelable: true }) // TOOD: doesn't work
-        })
-      }
     })
 
     this.refreshUser().then(() => {
