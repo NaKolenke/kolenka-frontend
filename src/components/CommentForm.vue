@@ -1,7 +1,6 @@
 <template>
   <div>
     <editor type="basic" ref="editor" editor-class="comment-editor"></editor>
-    <br>
     <div>
       <input class="btn btn-primary float-left" type="submit" value="Отправить" @click="send" :disabled="isSending || !isValid" />
       <div v-if="isSending" class="loading float-left" style="margin-top: 10px; margin-left: 20px"></div>

@@ -5,7 +5,7 @@
         <profile-list-item :user="user"></profile-list-item>
       </div>
       <div class="column col-2">
-        <router-link v-if="canEdit" :to="{ name: 'editProfile'}" class="btn">Редактировать</router-link>
+        <router-link v-if="canEdit" :to="{ name: 'editProfile'}" class="btn"><i class="icon icon-edit"></i> Редактировать</router-link>
       </div>
 
       <div class="description column col-12 my-2 p-2" v-if="user.about" v-html="user.about"></div>

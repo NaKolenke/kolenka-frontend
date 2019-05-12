@@ -257,8 +257,7 @@ export default {
     this.editor = new Editor(options)
   },
   beforeDestroy() {
-    if (this.editor)
-      this.editor.destroy()
+    this.editor.destroy()
   },
   methods: {
     imageModalClose() {

@@ -22,7 +22,7 @@
 import LoadingView from '@/components/LoadingView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
-import BlogCardView from '@/components/BlogCard.vue'
+import BlogCardView from '@/components/cards/BlogCard.vue'
 import BlogService from '@/services/blog'
 
 export default {

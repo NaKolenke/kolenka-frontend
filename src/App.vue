@@ -40,7 +40,7 @@ export default {
 
     this.$router.beforeEach((to, from, next) => {
       this.$Progress.start()
-      next()
+      next()  
     })
 
     this.$router.afterEach((to, from) => {

@@ -5,8 +5,24 @@
         <loading-view></loading-view>
       </div>
       <div v-else id="content" class="column col-9">
-        <blog-card v-if="posts.length > 0" :blog="posts[0].blog" :preview="false"></blog-card>
-        <hr>
+        <div class="card">
+          <div class="card-body">
+            <blog-card v-if="posts.length > 0" :blog="posts[0].blog" :preview="false"></blog-card>
+          </div>
+          <div v-if="readers.length > 0" class="card-footer">
+            <div class="card-subtitle">
+              <span class="text-gray mx-1">Подписчики </span>
+              <avatar-view 
+                v-for="reader in readers" 
+                :key="reader.id" 
+                :user="reader" 
+                :card="false" 
+                class="mx-1 tooltip" 
+                :data-tooltip="reader.name || reader.username"
+              ></avatar-view>
+            </div>
+          </div>
+        </div>
         <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
         <pagination-view :page="page" :page-count="pageCount"></pagination-view>
       </div>
@@ -19,17 +35,19 @@
 </template>
 
 <script>
-import PostView from '@/components/PostView.vue'
-import LoadingView from '@/components/LoadingView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
-import PaginationView from '@/components/PaginationView.vue'
+import PostView from '@/components/PostView'
+import LoadingView from '@/components/LoadingView'
+import TheSidebar from '@/components/TheSidebar'
+import PaginationView from '@/components/PaginationView'
 import BlogService from '@/services/blog'
-import BlogCard from '@/components/BlogCard'
+import BlogCard from '@/components/cards/BlogCard'
+import AvatarView from '@/components/AvatarView'
 
 export default {
   data() {    
     return {
       posts: [],
+      readers: [],
       page: 1,
       isLoading: true
     }
@@ -50,6 +68,12 @@ export default {
         this.posts = data.posts
         this.pageCount = data.meta.page_count
         this.isLoading = false
+
+        BlogService.getReaders(route.params.name).then(data => {
+          this.readers = data.readers
+        }).catch(err => {
+          console.log(err)
+        })
       }).catch(err => {
         this.isLoading = false
         console.log(err)
@@ -69,7 +93,8 @@ export default {
     LoadingView,
     TheSidebar,
     PaginationView,
-    BlogCard
+    BlogCard,
+    AvatarView
   }
 }
 </script>

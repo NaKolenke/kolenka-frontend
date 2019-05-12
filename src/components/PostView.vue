@@ -23,7 +23,7 @@
         <span class="chip">
           {{ post.creator.name || post.creator.username }}
         </span>
-        <router-link :to="{ name: 'post',  params: { post: post.url }, hash: '#comments'}">
+        <router-link :to="{ name: 'post',  params: { post: post.url }, hash: '#comments'}" title="Комментарии">
           <span class="chip">
             <span class="icon-bubble2"></span>
             <span style="padding-left:4px">{{ post.comments }}</span>

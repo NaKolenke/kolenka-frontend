@@ -21,5 +21,10 @@ export default {
         'Authorization': localStorage.getItem('accessToken')
       }
     }).then(res => res.data)
+  },
+  getReaders(url) {
+    return api
+      .get(`/blogs/${url}/readers/`)
+      .then(res => res.data)
   }
 }
