@@ -10,7 +10,8 @@
             <router-link  :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
           </div>
           <div class="column col-2">
-            <button v-if="blog.blog_type === 1 && !contains" class="btn" @click="joinBlog">Присоединиться</button>
+            <button v-if="blog.blog_type === 1 && !contains" class="btn btn-sm" @click="joinBlog">Присоединиться</button>
+            <button v-if="contains" class="btn btn-sm" disabled>Вы присоединились</button>
           </div>
         </div>
         <span v-else>{{ blog.title }}</span>

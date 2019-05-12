@@ -69,13 +69,11 @@ export default {
       }
     }
   },
-  created() {
-    if (!this.$meta.data.user) {
-      this.$router.replace({ path: '/' })
-    }
-  },
   mounted() {
     //content: sessionStorage.getItem('post-text') || ''
+    if (!this.meta.user) {
+      this.$router.replace({ path: '/' })
+    }
   },
   beforeDestroy() {
     //sessionStorage.setItem('post-text', this.editor.getHTML())
