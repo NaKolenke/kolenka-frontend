@@ -98,15 +98,29 @@
 
         <modal :open="showImageModal" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
           <ul class="tab tab-block">
-            <li class="tab-item active">
-              <a href="#">По ссылке</a>
+            <li :class="['tab-item', {'active': imageModalTab === 0}]">
+              <a href="#" @click.prevent="imageModalTab = 0">По ссылке</a>
             </li>
-            <!--<li class="tab-item">
-              <a href="#">Загрузить</a>
-            </li>-->
+            <li :class="['tab-item', {'active': imageModalTab === 1}]">
+              <a href="#" @click.prevent="imageModalTab = 1">Загрузить</a>
+            </li>
           </ul>
           <br>
-          <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageUrl">
+          <div v-if="imageModalTab === 0">
+            <div :class="['form-group', {'has-error': imageUrlError}]">
+              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageUrl">
+              <p v-if="imageUrlError" class="form-input-hint">Введите ссылку на изображение</p>
+            </div>
+          </div>
+          <div v-if="imageModalTab === 1">
+            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageUploadError}]">
+              <div class="input-group">
+                <input class="form-input" type="file" name="file">
+                <button class="btn input-group-btn" @click="uploadImage()">Загрузить</button>
+              </div>
+              <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
+            </form>
+          </div>
         </modal>
 
         <span v-if="isExtended" class="span"></span>
@@ -210,6 +224,7 @@ import {
 } from 'tiptap-extensions'
 import Modal from '@/components/elements/modal'
 import Alignment from '@/editor/mark/Align'
+import ContentService from '@/services/content'
 
 export default {
   props: [ 'type', 'editorClass' ], // basic, extended
@@ -218,7 +233,10 @@ export default {
       editor: null,
       showDropdown: false,
       showImageModal: false,
-      imageUrl: ''
+      imageUrl: '',
+      imageModalTab: 0,
+      imageUrlError: false,
+      imageUploadError: null
     }
   },
   mounted() {
@@ -262,19 +280,31 @@ export default {
   methods: {
     imageModalClose() {
       this.showImageModal = false
+      this.imageUrlError = false
     },
     chooseImage(command) {
       if (this.imageUrl.length > 0) {
         command({ src: this.imageUrl })
         this.imageUrl = ''
+        this.imageModalClose()
+      } else {
+        this.imageUrlError = true
       }
-      this.showImageModal = false
     },
     content() {
       return this.editor.getHTML()
     },
     setContent(body) {
       this.editor.setContent(body)
+    },
+    uploadImage() {
+      this.imageUploadError = null
+      ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
+        this.imageUrl = 'https://beta.kolenka.net/content/' + data.file.id
+        this.imageModalTab = 0
+      }).catch(err => {
+        this.imageUploadError = err
+      })
     }
   },
   computed: {
