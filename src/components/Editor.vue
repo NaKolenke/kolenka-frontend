@@ -131,7 +131,7 @@
               <div class="input-group" style="margin: 0 auto">
                 <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
                 <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
-                <button class="btn input-group-btn" @click="uploadImage()">Загрузить</button>
+                <button class="btn input-group-btn" @click="uploadImage()" :disabled="fileInputEmpty">Загрузить</button>
               </div>
               <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
             </form>
@@ -253,7 +253,8 @@ export default {
       imageUrlError: false,
       imageUploadError: null,
       color: '#000',
-      fileInputLabel: 'Выберите файл...'
+      fileInputLabel: 'Выберите файл...',
+      fileInputEmpty: true
     }
   },
   mounted() {
@@ -324,10 +325,13 @@ export default {
       })
     },
     fileInputChange(e) {
-      if (e.target.value.length > 0)
+      if (e.target.value.length > 0) {
         this.fileInputLabel = e.target.value.split( '\\' ).pop()
-      else
+        this.fileInputEmpty = false
+      } else {
         this.fileInputLabel = 'Выберите файл...'
+        this.fileInputEmpty = true
+      }
     }
   },
   computed: {

@@ -181,5 +181,21 @@ table {
     border-bottom-width: $border-width-lg;
   }
 }
+
+// Code block styles
+
+pre {
+  border: $border-width solid $border-color;
+  background: $dark-color;
+  border-radius: $border-radius;
+  padding: $control-padding-x-lg;
+  overflow: auto;
+}
+
+pre code {
+  background: none;
+  color: $highlight-color;
+  padding: 0;
+}
 </style>
 
