@@ -37,25 +37,38 @@
         >
           <span class="icon-pilcrow"></span>
         </button>
+        <div class="dropdown">
+          <button :class="['button', 'tooltip', 'dropdown-toggle']" data-tooltip="Цвет текста">
+            <span class="icon-eyedropper"></span>
+          </button>
+          <div class="menu">
+            <color-picker
+              theme="light"
+              :color="color"
+              :sucker-hide="true"
+            />
+          </div>
+        </div>
 
         <span v-if="isExtended" class="span"></span>
 
-        <div v-if="isExtended" class="dropdown-container">
-          <button :class="[{ 'is-active': isActive.heading() ||
-                                          showDropdown }, 'button', 'tooltip']"
-                  data-tooltip="Заголовок"
-                  @click="showDropdown = !showDropdown"
+        <div v-if="isExtended" class="dropdown">
+          <button 
+            :class="[{ 'is-active': isActive.heading() }, 'button', 'tooltip', 'dropdown-toggle']"
+            tabindex="0"
+            data-tooltip="Заголовок"
           >
             <span class="icon-font-size"></span>
           </button>
-          <div class="dropdown" v-if="showDropdown">
+          <!-- menu component -->
+          <div class="menu">
             <button 
               v-for="i in (1, 6)"
               :key="i"
               :class="[{ 'is-active': isActive.heading({ level: i }) }, 'button']"
-              @click="commands.heading({ level: i }); showDropdown = false"
+              @click="commands.heading({ level: i })"
             >
-              <h1 v-if="i == 1">Заголовок {{ i }}</h1>
+              <h1 v-if="i == 1" style="width: 230px">Заголовок {{ i }}</h1>
               <h2 v-if="i == 2">Заголовок {{ i }}</h2>
               <h3 v-if="i == 3">Заголовок {{ i }}</h3>
               <h4 v-if="i == 4">Заголовок {{ i }}</h4>
@@ -126,7 +139,7 @@
         <span v-if="isExtended" class="span"></span>
 
         <button v-if="isExtended" :class="['button', 'tooltip']" @click="commands.horizontal_rule" data-tooltip="Горизонтальная линия">
-          <span class="icon-minus"></span>
+          <span class="icon-page-break"></span>
         </button>
 
         <span v-if="isExtended" class="span"></span>
@@ -225,18 +238,19 @@ import {
 import Modal from '@/components/elements/modal'
 import Alignment from '@/editor/mark/Align'
 import ContentService from '@/services/content'
+import ColorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   props: [ 'type', 'editorClass' ], // basic, extended
   data() {
     return {
       editor: null,
-      showDropdown: false,
       showImageModal: false,
       imageUrl: '',
       imageModalTab: 0,
       imageUrlError: false,
-      imageUploadError: null
+      imageUploadError: null,
+      color: '#000'
     }
   },
   mounted() {
@@ -318,7 +332,8 @@ export default {
   components: {
     EditorContent,
     EditorMenuBar,
-    Modal
+    Modal,
+    ColorPicker
   }
 }
 </script>
@@ -358,21 +373,26 @@ export default {
   overflow: visible;
 }
 
-.dropdown {
-  position: absolute;
-  left: 0;
-  top: 24px;
-  width: 250px;
-  height: auto;
-  background: #fff;
-  z-index: 99;
-  border: .05rem solid #bcc3ce;
-  border-radius: .1rem;
-}
-
 .dropdown .button {
   border-radius: 0;
   width: 100%;
   text-align: left;
+}
+
+</style>
+
+<style>
+.hu-color-picker.light {
+  box-shadow: none;
+  background: none;
+  padding: 0;
+}
+
+.hu-color-picker .color-set .alpha {
+  display: none; /* hide opacity slider */
+}
+
+.hu-color-picker .color-type:last-of-type {
+  display: none; /* hide rgba display */
 }
 </style>
