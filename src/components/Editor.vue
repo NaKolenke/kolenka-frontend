@@ -2,6 +2,7 @@
   <div class="form-group">
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
       <div class="menu-bar">
+        
         <button
           :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip']" 
           @click="commands.bold" 
@@ -127,8 +128,9 @@
           </div>
           <div v-if="imageModalTab === 1">
             <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageUploadError}]">
-              <div class="input-group">
-                <input class="form-input" type="file" name="file">
+              <div class="input-group" style="margin: 0 auto">
+                <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
+                <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
                 <button class="btn input-group-btn" @click="uploadImage()">Загрузить</button>
               </div>
               <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
@@ -250,7 +252,8 @@ export default {
       imageModalTab: 0,
       imageUrlError: false,
       imageUploadError: null,
-      color: '#000'
+      color: '#000',
+      fileInputLabel: 'Выберите файл...'
     }
   },
   mounted() {
@@ -286,7 +289,7 @@ export default {
       )
     }
 
-    this.editor = new Editor(options)
+    this.editor = new Editor(options)    
   },
   beforeDestroy() {
     this.editor.destroy()
@@ -319,6 +322,12 @@ export default {
       }).catch(err => {
         this.imageUploadError = err
       })
+    },
+    fileInputChange(e) {
+      if (e.target.value.length > 0)
+        this.fileInputLabel = e.target.value.split( '\\' ).pop()
+      else
+        this.fileInputLabel = 'Выберите файл...'
     }
   },
   computed: {
@@ -367,16 +376,19 @@ export default {
   width: 12px;
 }
 
-.dropdown-container {
-  display: inline;
-  position: relative;
-  overflow: visible;
-}
-
 .dropdown .button {
   border-radius: 0;
   width: 100%;
   text-align: left;
+}
+
+.file-input {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }
 
 </style>
