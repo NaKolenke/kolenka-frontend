@@ -2,6 +2,7 @@
   <div class="form-group">
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
       <div class="menu-bar">
+        
         <button
           :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip']" 
           @click="commands.bold" 
@@ -37,25 +38,38 @@
         >
           <span class="icon-pilcrow"></span>
         </button>
+        <div class="dropdown">
+          <button :class="['button', 'tooltip', 'dropdown-toggle']" data-tooltip="Цвет текста">
+            <span class="icon-eyedropper"></span>
+          </button>
+          <div class="menu">
+            <color-picker
+              theme="light"
+              :color="color"
+              :sucker-hide="true"
+            />
+          </div>
+        </div>
 
         <span v-if="isExtended" class="span"></span>
 
-        <div v-if="isExtended" class="dropdown-container">
-          <button :class="[{ 'is-active': isActive.heading() ||
-                                          showDropdown }, 'button', 'tooltip']"
-                  data-tooltip="Заголовок"
-                  @click="showDropdown = !showDropdown"
+        <div v-if="isExtended" class="dropdown">
+          <button 
+            :class="[{ 'is-active': isActive.heading() }, 'button', 'tooltip', 'dropdown-toggle']"
+            tabindex="0"
+            data-tooltip="Заголовок"
           >
             <span class="icon-font-size"></span>
           </button>
-          <div class="dropdown" v-if="showDropdown">
+          <!-- menu component -->
+          <div class="menu">
             <button 
               v-for="i in (1, 6)"
               :key="i"
               :class="[{ 'is-active': isActive.heading({ level: i }) }, 'button']"
-              @click="commands.heading({ level: i }); showDropdown = false"
+              @click="commands.heading({ level: i })"
             >
-              <h1 v-if="i == 1">Заголовок {{ i }}</h1>
+              <h1 v-if="i == 1" style="width: 230px">Заголовок {{ i }}</h1>
               <h2 v-if="i == 2">Заголовок {{ i }}</h2>
               <h3 v-if="i == 3">Заголовок {{ i }}</h3>
               <h4 v-if="i == 4">Заголовок {{ i }}</h4>
@@ -98,21 +112,36 @@
 
         <modal :open="showImageModal" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
           <ul class="tab tab-block">
-            <li class="tab-item active">
-              <a href="#">По ссылке</a>
+            <li :class="['tab-item', {'active': imageModalTab === 0}]">
+              <a href="#" @click.prevent="imageModalTab = 0">По ссылке</a>
             </li>
-            <!--<li class="tab-item">
-              <a href="#">Загрузить</a>
-            </li>-->
+            <li :class="['tab-item', {'active': imageModalTab === 1}]">
+              <a href="#" @click.prevent="imageModalTab = 1">Загрузить</a>
+            </li>
           </ul>
           <br>
-          <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageUrl">
+          <div v-if="imageModalTab === 0">
+            <div :class="['form-group', {'has-error': imageUrlError}]">
+              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageUrl">
+              <p v-if="imageUrlError" class="form-input-hint">Введите ссылку на изображение</p>
+            </div>
+          </div>
+          <div v-if="imageModalTab === 1">
+            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageUploadError}]">
+              <div class="input-group" style="margin: 0 auto">
+                <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
+                <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
+                <button class="btn input-group-btn" @click="uploadImage()" :disabled="fileInputEmpty">Загрузить</button>
+              </div>
+              <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
+            </form>
+          </div>
         </modal>
 
         <span v-if="isExtended" class="span"></span>
 
         <button v-if="isExtended" :class="['button', 'tooltip']" @click="commands.horizontal_rule" data-tooltip="Горизонтальная линия">
-          <span class="icon-minus"></span>
+          <span class="icon-page-break"></span>
         </button>
 
         <span v-if="isExtended" class="span"></span>
@@ -210,15 +239,22 @@ import {
 } from 'tiptap-extensions'
 import Modal from '@/components/elements/modal'
 import Alignment from '@/editor/mark/Align'
+import ContentService from '@/services/content'
+import ColorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   props: [ 'type', 'editorClass' ], // basic, extended
   data() {
     return {
       editor: null,
-      showDropdown: false,
       showImageModal: false,
-      imageUrl: ''
+      imageUrl: '',
+      imageModalTab: 0,
+      imageUrlError: false,
+      imageUploadError: null,
+      color: '#000',
+      fileInputLabel: 'Выберите файл...',
+      fileInputEmpty: true
     }
   },
   mounted() {
@@ -254,7 +290,7 @@ export default {
       )
     }
 
-    this.editor = new Editor(options)
+    this.editor = new Editor(options)    
   },
   beforeDestroy() {
     this.editor.destroy()
@@ -262,19 +298,40 @@ export default {
   methods: {
     imageModalClose() {
       this.showImageModal = false
+      this.imageUrlError = false
     },
     chooseImage(command) {
       if (this.imageUrl.length > 0) {
         command({ src: this.imageUrl })
         this.imageUrl = ''
+        this.imageModalClose()
+      } else {
+        this.imageUrlError = true
       }
-      this.showImageModal = false
     },
     content() {
       return this.editor.getHTML()
     },
     setContent(body) {
       this.editor.setContent(body)
+    },
+    uploadImage() {
+      this.imageUploadError = null
+      ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
+        this.imageUrl = 'https://beta.kolenka.net/content/' + data.file.id
+        this.imageModalTab = 0
+      }).catch(err => {
+        this.imageUploadError = err
+      })
+    },
+    fileInputChange(e) {
+      if (e.target.value.length > 0) {
+        this.fileInputLabel = e.target.value.split( '\\' ).pop()
+        this.fileInputEmpty = false
+      } else {
+        this.fileInputLabel = 'Выберите файл...'
+        this.fileInputEmpty = true
+      }
     }
   },
   computed: {
@@ -288,7 +345,8 @@ export default {
   components: {
     EditorContent,
     EditorMenuBar,
-    Modal
+    Modal,
+    ColorPicker
   }
 }
 </script>
@@ -322,27 +380,35 @@ export default {
   width: 12px;
 }
 
-.dropdown-container {
-  display: inline;
-  position: relative;
-  overflow: visible;
-}
-
-.dropdown {
-  position: absolute;
-  left: 0;
-  top: 24px;
-  width: 250px;
-  height: auto;
-  background: #fff;
-  z-index: 99;
-  border: .05rem solid #bcc3ce;
-  border-radius: .1rem;
-}
-
 .dropdown .button {
   border-radius: 0;
   width: 100%;
   text-align: left;
+}
+
+.file-input {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+</style>
+
+<style>
+.hu-color-picker.light {
+  box-shadow: none;
+  background: none;
+  padding: 0;
+}
+
+.hu-color-picker .color-set .alpha {
+  display: none; /* hide opacity slider */
+}
+
+.hu-color-picker .color-type:last-of-type {
+  display: none; /* hide rgba display */
 }
 </style>

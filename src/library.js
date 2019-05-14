@@ -57,7 +57,10 @@ const userBlogs = {
 }
 
 const posts = {
-  groups: [ 'everything' ]
+  groups: [ 
+    'everything',
+    'home'
+  ]
 }
 
 const store = new Pulse.Library({

@@ -12,8 +12,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" @click="onOk">OK</button>
-        <button class="btn" @click="onCancel">Отмена</button>
+        <div class="btn-group">
+          <button class="btn btn-primary" @click="onOk">OK</button>
+          <button class="btn" @click="onCancel">Отмена</button>
+        </div>
       </div>
     </div>
   </div>
