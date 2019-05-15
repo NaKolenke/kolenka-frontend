@@ -52,5 +52,10 @@ export default {
         'Authorization': localStorage.getItem('accessToken')
       }
     }).then(res => res.data)
+  },
+  getUserPosts(username) {
+    return api
+      .get(`/users/${username}/posts/`)
+      .then(res => res.data)
   }
 }

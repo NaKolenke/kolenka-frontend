@@ -94,5 +94,16 @@ export default {
 
         return data
       })
+  },
+  getUserPosts (username) {
+    return users
+      .getUserPosts(username)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }

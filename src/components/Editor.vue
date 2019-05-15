@@ -39,7 +39,10 @@
           <span class="icon-pilcrow"></span>
         </button>
         <div class="dropdown">
-          <button :class="['button', 'tooltip', 'dropdown-toggle']" data-tooltip="Цвет текста">
+          <button
+            :class="[{ 'is-active': isActive.color() }, 'button', 'tooltip', 'dropdown-toggle']"
+            data-tooltip="Цвет текста"
+          >
             <span class="icon-eyedropper"></span>
           </button>
           <div class="menu">
@@ -47,6 +50,7 @@
               theme="light"
               :color="color"
               :sucker-hide="true"
+              @changeColor="colorChanged($event, commands.color)"
             />
           </div>
         </div>
@@ -106,6 +110,9 @@
         <button :class="[{ 'is-active': isActive.code() }, 'button', 'tooltip']" @click="commands.code" data-tooltip="Код">
           <span class="icon-embed"></span>
         </button>
+        <button :class="[{ 'is-active': isActive.code_block() }, 'button', 'tooltip']" @click="commands.code_block" data-tooltip="Блок кода">
+          <span class="icon-embed2"></span>
+        </button>
         <button :class="[{ 'is-active': isActive.image() }, 'button', 'tooltip']" @click="showImageModal = true" data-tooltip="Изображение">
           <span class="icon-image"></span>
         </button>
@@ -149,6 +156,10 @@
         <button v-if="isExtended" :class="[{'is-active': isActive.table()}, 'button', 'tooltip']" @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })" data-tooltip="Таблица">
           <span class="icon-table2"></span>
         </button>
+
+        <div v-if="isActive.code_block()">
+          <small>Для выхода из режима редактирования кода нажмите Ctrl+Return</small>
+        </div>
 
         <div v-if="isExtended && isActive.table()">
           <small>Редактировать таблицу </small>
@@ -239,8 +250,10 @@ import {
 } from 'tiptap-extensions'
 import Modal from '@/components/elements/modal'
 import Alignment from '@/editor/mark/Align'
+import Color from '@/editor/mark/Color'
 import ContentService from '@/services/content'
 import ColorPicker from '@caohenghu/vue-colorpicker'
+import CBExtended from '@/editor/extensions/CodeBlockExtended'
 
 export default {
   props: [ 'type', 'editorClass' ], // basic, extended
@@ -254,10 +267,13 @@ export default {
       imageUploadError: null,
       color: '#000',
       fileInputLabel: 'Выберите файл...',
-      fileInputEmpty: true
+      fileInputEmpty: true,
+      isFocused: false
     }
   },
   mounted() {
+    const self = this
+    
     const options = {
       extensions: [
         new Bold(),
@@ -265,6 +281,7 @@ export default {
         new Link(),
         new Underline(),
         new Strike(),
+        new Color(),
 
         new ListItem(),
         new BulletList(),
@@ -273,8 +290,15 @@ export default {
         new Blockquote(),
         new Code(),
         new CodeBlock(),
-        new Image()
-      ]
+        new Image(),
+        new CBExtended()
+      ],
+      onFocus() {
+        self.isFocused = true
+      },
+      onBlur() {
+        self.isFocused = false
+      }
     }
 
     if (this.isExtended) {
@@ -290,7 +314,13 @@ export default {
       )
     }
 
-    this.editor = new Editor(options)    
+    this.editor = new Editor(options)
+
+    window.addEventListener('keydown', (e) => {
+      if (e.keyCode === 9 && this.isFocused && this.editor.isActive.code_block()) {
+        e.preventDefault()
+      }
+    })
   },
   beforeDestroy() {
     this.editor.destroy()
@@ -332,6 +362,10 @@ export default {
         this.fileInputLabel = 'Выберите файл...'
         this.fileInputEmpty = true
       }
+    },
+    colorChanged(color, command) {
+      let { rgba: { r, g, b, a } } = color
+      command({ color: `rgb(${r}, ${g}, ${b})` })
     }
   },
   computed: {
