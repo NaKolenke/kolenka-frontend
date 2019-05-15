@@ -14,7 +14,42 @@ class View {
   }
 
   onKeyDown(e) {
-    if (e.keyCode === 9 && this.isActive && this.editor.isActive.code_block()) {
+    if (!this.isActive || !this.editor.isActive.code_block())
+      return
+    
+    if (e.keyCode === 9 && e.shiftKey ) {
+      if (this.editorView.state.selection.empty) {
+        return
+      }
+
+      console.log(this.editorView.state.doc.textContent.substring(
+        this.editorView.state.selection.from - 1,
+        this.editorView.state.selection.to
+      ))
+          
+      let result = this.editorView.state.doc.textContent.substring(
+        this.editorView.state.selection.from - 1,
+        this.editorView.state.selection.to - 1
+      ).split('\n').map(x => {
+        let match = x.match(/^\s+/)
+        
+        if (match) {
+          return x.substring(match[0].length > 4 ? 4 : match[0].length)
+        } else {
+          return x
+        }
+      }).join('\n')
+
+      console.log(result)
+
+      let transaction = insertText(result)
+
+      transaction(
+        this.editorView.state,
+        this.editorView.dispatch,
+        this.editorView
+      )
+    } else if (e.keyCode === 9) {
       let transaction = null
 
       if (this.editorView.state.selection.empty) {

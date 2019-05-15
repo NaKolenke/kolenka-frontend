@@ -72,25 +72,27 @@ export default {
   },
   methods: {
     refreshPost: function (route) {
-      this.$comments.purge()
-
-      this.$posts.data.current = route.params.post
-      //this.post = this.$posts.byUrl
-
-      this.$nextTick(() => {
-        console.log(this.$posts)
-        console.log(route.params.post)
-        console.log(this.$posts.getByUrl(route.params.post))
-      })
-
-      PostService
-      .getPost(route.params.post)
-      .then(data => {
-        this.post = data.post
-      }).then(() => PostService.getComments(route.params.post))
-
-
+      let post = this.$posts.getByUrl(route.params.post)
       
+      if (post === null) {
+        PostService
+        .getPost(route.params.post)
+        .then(data => {
+          this.post = data.post
+          this.$posts.collect(data.post, 'everything')
+          
+          this.refreshComments(route, data.post)
+        })
+      } else {
+        this.post = post
+        this.refreshComments(route, this.post)
+      }      
+    },
+    refreshComments(route, post) {
+      this.$comments.purge()
+      
+      PostService
+      .getComments(route.params.post)
       .then(data => {
         this.commentsCount = data.comments.length
         
@@ -106,11 +108,11 @@ export default {
 
         this.$comments.collect(data.comments.filter(x => x.parent == null).reverse(), 'everything')
       })
-      .then(() => BlogService.getBlogPosts(this.post.blog.url))
+      .then(() => BlogService.getBlogPosts(post.blog.url))
       .then(data => {
         this.latestBlogPosts = data.posts
       })
-      .then(() => UserService.getUserPosts(this.post.creator.username))
+      .then(() => UserService.getUserPosts(post.creator.username))
       .then(data => {
         this.latestUserPosts = data.posts
       })

@@ -50,7 +50,7 @@ export default {
 
       PostService.getPosts(this.page).then(data => {
         this.posts = data.posts
-        this.$posts.collect(data.posts, ['home', 'group2', 'group3'])
+        this.$posts.collect(data.posts, 'everything')
         this.pageCount = data.meta.page_count
         this.isLoading = false
       }).catch(err => {

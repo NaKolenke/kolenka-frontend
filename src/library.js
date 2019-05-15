@@ -58,16 +58,19 @@ const userBlogs = {
 
 const posts = {
   groups: [ 
-    'home',
-    'group2',
-    'group3'
+    'everything',
+    'home'
   ],
-  data: {
-    current: null
-  },
   actions: {
     getByUrl(context, url) {
-      return posts.groups.everything
+      let result = context.groups.everything.filter(x => x.url === url)
+      return result.length > 0 ? result[0] : null
+    },
+    clear(context) {
+      for (let item of context.groups.everything) {
+        console.log(item)
+        context.delete(item.id)
+      }
     }
   }
 }
