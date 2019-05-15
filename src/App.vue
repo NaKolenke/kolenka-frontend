@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-     <header-component
+    <header-component
       :user="meta.user"
       :version="version"
-    ></header-component>
+    />
     <router-view />
-    <vue-progress-bar></vue-progress-bar>
+    <vue-progress-bar />
   </div>
 </template>
 

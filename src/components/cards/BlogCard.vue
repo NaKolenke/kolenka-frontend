@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import AvatarView from '@/components/AvatarView'
 import BlogService from '@/services/blog'
 
 export default {

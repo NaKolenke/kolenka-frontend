@@ -248,7 +248,7 @@ import {
   TableCell,
   TableRow,
 } from 'tiptap-extensions'
-import Modal from '@/components/elements/modal'
+import Modal from '@/components/Elements/Modal'
 import Alignment from '@/editor/mark/Align'
 import Color from '@/editor/mark/Color'
 import ContentService from '@/services/content'

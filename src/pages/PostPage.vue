@@ -43,11 +43,10 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import PostView from '@/components/PostView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
+import PostView from '@/components/PostView'
+import TheSidebar from '@/components/TheSidebar'
 import PostService from '@/services/post'
-import CommentCard from '@/components/cards/Comment.vue'
+import CommentCard from '@/components/Cards/CommentCard'
 import CommentForm from '@/components/CommentForm'
 import BlogService from '@/services/blog'
 import UserService from '@/services/user'
@@ -64,7 +63,7 @@ export default {
       latestUserPosts: []
     }
   },
-  created: function () {
+  mounted () {
     this.refreshPost(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
@@ -75,12 +74,23 @@ export default {
     refreshPost: function (route) {
       this.$comments.purge()
 
+      this.$posts.data.current = route.params.post
+      //this.post = this.$posts.byUrl
+
+      this.$nextTick(() => {
+        console.log(this.$posts)
+        console.log(route.params.post)
+        console.log(this.$posts.getByUrl(route.params.post))
+      })
+
       PostService
       .getPost(route.params.post)
       .then(data => {
         this.post = data.post
-      })
-      .then(() => PostService.getComments(route.params.post))
+      }).then(() => PostService.getComments(route.params.post))
+
+
+      
       .then(data => {
         this.commentsCount = data.comments.length
         

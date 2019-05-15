@@ -40,7 +40,7 @@ import LoadingView from '@/components/LoadingView'
 import TheSidebar from '@/components/TheSidebar'
 import PaginationView from '@/components/PaginationView'
 import BlogService from '@/services/blog'
-import BlogCard from '@/components/cards/BlogCard'
+import BlogCard from '@/components/Cards/BlogCard'
 import AvatarView from '@/components/AvatarView'
 
 export default {

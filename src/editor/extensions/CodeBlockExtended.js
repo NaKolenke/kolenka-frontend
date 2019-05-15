@@ -15,23 +15,24 @@ class View {
 
   onKeyDown(e) {
     if (e.keyCode === 9 && this.isActive && this.editor.isActive.code_block()) {
-      console.log(this.editorView.state.doc)
+      let transaction = null
+
       if (this.editorView.state.selection.empty) {
-        insertText('    ')(
-          this.editorView.state,
-          this.editorView.dispatch,
-          this.editorView
-        )
-      } else {
-        // TODO: make it work with not fully selected lines
-        
-        let result = this.editorView.state.doc.textContent.split('\n').map(x => '    ' + x).join('\n')
-        insertText(result)(
-          this.editorView.state,
-          this.editorView.dispatch,
-          this.editorView
-        )
+        transaction = insertText('    ')
+      } else {        
+        let result = this.editorView.state.doc.textContent.substring(
+          this.editorView.state.selection.from - 1,
+          this.editorView.state.selection.to
+        ).split('\n').map(x => '    ' + x).join('\n')
+        transaction = insertText(result)
       }
+
+      transaction(
+        this.editorView.state,
+        this.editorView.dispatch,
+        this.editorView
+      )
+
     }
   }
 

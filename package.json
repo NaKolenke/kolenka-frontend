@@ -12,7 +12,7 @@
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "prosemirror-state": "^1.2.3",
-    "pulse-framework": "^1.2.0",
+    "pulse-framework": "^1.7.2",
     "speakingurl": "^14.0.1",
     "spectre.css": "^0.5.8",
     "tiptap": "^1.19.2",

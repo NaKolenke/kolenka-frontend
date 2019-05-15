@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import ProfileView from '@/components/ProfileView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
+import ProfileView from '@/components/ProfileView'
+import TheSidebar from '@/components/TheSidebar'
 import UserService from '@/services/user'
-import BlogCardSmall from '@/components/cards/BlogSmall'
+import BlogCardSmall from '@/components/Cards/BlogCardSmall'
 
 export default {
   data: function () {

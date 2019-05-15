@@ -58,9 +58,18 @@ const userBlogs = {
 
 const posts = {
   groups: [ 
-    'everything',
-    'home'
-  ]
+    'home',
+    'group2',
+    'group3'
+  ],
+  data: {
+    current: null
+  },
+  actions: {
+    getByUrl(context, url) {
+      return posts.groups.everything
+    }
+  }
 }
 
 const store = new Pulse.Library({
