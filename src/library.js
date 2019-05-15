@@ -60,7 +60,19 @@ const posts = {
   groups: [ 
     'everything',
     'home'
-  ]
+  ],
+  actions: {
+    getByUrl(context, url) {
+      let result = context.groups.everything.filter(x => x.url === url)
+      return result.length > 0 ? result[0] : null
+    },
+    clear(context) {
+      for (let item of context.groups.everything) {
+        console.log(item)
+        context.delete(item.id)
+      }
+    }
+  }
 }
 
 const store = new Pulse.Library({

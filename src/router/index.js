@@ -9,11 +9,11 @@ import ProfilePage from '@/pages/ProfilePage'
 import ProfileEditPage from '@/pages/ProfileEditPage'
 import ProfilesListPage from '@/pages/ProfilesListPage'
 import DocPage from '@/pages/DocPage'
-import BlogListPage from '@/pages/BlogList'
+import BlogListPage from '@/pages/BlogListPage'
 import AuthErrorPage from '@/pages/401'
 import NotFoundPage from '@/pages/404'
 import BlogPage from '@/pages/BlogPage'
-import WritePostPage from '@/pages/WritePost'
+import WritePostPage from '@/pages/WritePostPage'
 import FeedbackPage from '@/pages/FeedbackPage'
 
 Vue.use(Router)

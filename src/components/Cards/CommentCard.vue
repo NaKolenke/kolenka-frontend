@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
-import CommentForm from '@/components/CommentForm.vue'
+import AvatarView from '@/components/AvatarView'
+import CommentForm from '@/components/CommentForm'
 
 export default {
   name: 'comment-card',

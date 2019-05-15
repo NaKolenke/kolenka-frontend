@@ -6,7 +6,7 @@
           <loading-view></loading-view>
         </div>
         <div v-else id="content" class="columns column col-8 mx-2 px-2">          
-          <blog-card-view v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card-view>
+          <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
           <pagination-view :page="page" :page-count="pageCount"></pagination-view>
         </div>
 
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import LoadingView from '@/components/LoadingView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
-import PaginationView from '@/components/PaginationView.vue'
-import BlogCardView from '@/components/cards/BlogCard.vue'
+import LoadingView from '@/components/LoadingView'
+import TheSidebar from '@/components/TheSidebar'
+import PaginationView from '@/components/PaginationView'
+import BlogCard from '@/components/Cards/BlogCard'
 import BlogService from '@/services/blog'
 
 export default {
@@ -69,7 +69,7 @@ export default {
     TheSidebar,
     PaginationView,
     LoadingView,
-    BlogCardView
+    BlogCard
   }
 }
 </script>

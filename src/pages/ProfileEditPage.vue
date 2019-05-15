@@ -11,22 +11,20 @@
 </template>
 
 <script>
-import ProfileEditView from '@/components/ProfileEditView.vue'
+import ProfileEditView from '@/components/ProfileEditView'
 import UserService from '@/services/user'
 
 export default {
-  data: function () {
-    this.user = {}
-
+  data () {
     return {
-      user: this.user
+      user: {}
     }
   },
-  created: function () {
+  created () {
     this.refreshUser(this.$route)
   },
   methods: {
-    refreshUser: function (route) {
+    refreshUser (route) {
       UserService.getSelf().then(data => {
         this.user = data.user
       }).catch(err => {
@@ -35,7 +33,7 @@ export default {
         this.$router.replace({ path: '/401' })
       })
     },
-    editUser: function (user) {
+    editUser (user) {
       UserService.editSelf(user).then(data => {
         this.$router.replace({ name: 'profile', params: { user: this.user.username } })
       }).catch(err => {
@@ -44,7 +42,7 @@ export default {
         this.$router.replace({ path: '/401' })
       })
     },
-    editAvatar: function (formData) {
+    editAvatar (formData) {
       UserService.editAvatar(formData).then(data => {
         this.$router.replace({ name: 'profile', params: { user: this.user.username } })
       }).catch(err => {

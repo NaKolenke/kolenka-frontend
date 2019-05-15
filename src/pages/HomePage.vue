@@ -26,17 +26,17 @@ import PaginationView from '@/components/PaginationView.vue'
 import PostService from '@/services/post'
 
 export default {
-  data: function () {
-    this.posts = []
-
+  data () {
     return {
-      posts: this.posts,
+      ...this.mapData({
+        posts: 'posts/home'
+      }),
       page: 1,
       pageCount: 0,
       isLoading: true
     }
   },
-  created: function () {
+  mounted () {
     this.refreshPage(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
@@ -44,11 +44,13 @@ export default {
     next()
   },
   methods: {
-    refreshPage: function (route) {
+    refreshPage (route) {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
+
       PostService.getPosts(this.page).then(data => {
         this.posts = data.posts
+        this.$posts.collect(data.posts, 'everything')
         this.pageCount = data.meta.page_count
         this.isLoading = false
       }).catch(err => {
@@ -58,10 +60,10 @@ export default {
         this.$router.push({ path: '/404' })
       })
     },
-    paginateRelative: function (offset) {
+    paginateRelative (offset) {
       this.$router.push({ name: 'home', query: { page: this.page + offset } })
     },
-    paginateTo: function (page) {
+    paginateTo (page) {
       this.$router.push({ name: 'home', query: { page: page } })
     }
   },

@@ -71,7 +71,7 @@ export default {
   },
   mounted() {
     //content: sessionStorage.getItem('post-text') || ''
-    if (!this.meta.user) {
+    if (!this.$meta.actions.isLoggedIn()) {
       this.$router.replace({ path: '/' })
     }
   },
