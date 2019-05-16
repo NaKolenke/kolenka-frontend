@@ -161,26 +161,29 @@
           <small>Для выхода из режима редактирования кода нажмите Ctrl+Return</small>
         </div>
 
-        <div v-if="isExtended && isActive.table()">
+        <div v-if="isExtended && isActive.table()" class="mt-1">
           <small>Редактировать таблицу </small>
           
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.deleteTable"
+            data-tooltip="Удалить таблицу"
           >
-            удалить таблицу
+            <span class="icon-blocked"></span>
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addColumnBefore"
+            data-tooltip="Добавить колонку перед"
           >
-            колонка перед
+            <span class="icon-arrow-left2"></span>
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addColumnAfter"
+            data-tooltip="Добавить колонку после"
           >
-            колонка после
+            <span class="icon-arrow-right2"></span>
           </button>
           <button
             class="button"
@@ -189,16 +192,18 @@
             удалить колонку
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addRowBefore"
+            data-tooltip="Добавить строку перед"
           >
-            строка перед
+            <span class="icon-arrow-up2"></span>
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addRowAfter"
+            data-tooltip="Добавить строку после"
           >
-            строка после
+            <span class="icon-arrow-down2"></span>
           </button>
           <button
             class="button"
@@ -207,10 +212,11 @@
             удалить строку
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.toggleCellMerge"
+            data-tooltip="Объединить ячейки"
           >
-            объеденить ячецки
+            <span class="icon-insert-template"></span>
           </button>
         </div>
 
