@@ -51,6 +51,10 @@
               :color="color"
               :sucker-hide="true"
               @changeColor="colorChanged($event, commands.color)"
+              :colors-default="['#000000', '#FFFFFF', '#FF1900', '#F47365',
+                                '#FFB243', '#FFE623', '#6EFF2A', '#1BC7B1',
+                                '#00BEFF', '#2E81FF', '#5D61FF', '#FF89CF',
+                                '#FC3CAD', '#BF3DCE', '#8E00A7', '#3b4351']"
             />
           </div>
         </div>
@@ -269,7 +273,7 @@ export default {
       imageModalTab: 0,
       imageUrlError: false,
       imageUploadError: null,
-      color: '#000',
+      color: '#3b4351',
       fileInputLabel: 'Выберите файл...',
       fileInputEmpty: true,
       isFocused: false
