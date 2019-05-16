@@ -232,8 +232,6 @@ import {
   OrderedList,
   BulletList,
   ListItem,
-  TodoItem,
-  TodoList,
   Bold,
   Code,
   Italic,
@@ -282,6 +280,7 @@ export default {
         new Underline(),
         new Strike(),
         new Color(),
+        new HardBreak(),
 
         new ListItem(),
         new BulletList(),
@@ -364,7 +363,7 @@ export default {
       }
     },
     colorChanged(color, command) {
-      let { rgba: { r, g, b, a } } = color
+      let { rgba: { r, g, b } } = color
       command({ color: `rgb(${r}, ${g}, ${b})` })
     }
   },

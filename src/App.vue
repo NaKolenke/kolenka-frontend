@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="meta.user">
     <header-component
       :user="meta.user"
       :version="version"

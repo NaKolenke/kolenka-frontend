@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import PostService from '@/services/post'
 import Editor from '@/components/Editor'
 
 export default {

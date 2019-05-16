@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import UserService from '@/services/user'
 import PostService from '@/services/post'
 import getSlug from 'speakingurl'
 import Editor from '@/components/Editor'
@@ -83,9 +82,9 @@ export default {
     send(draft) {
       console.log(this.$refs.editor.content())
       
-      //PostService.createPost(this.model.title, this.editor.getHTML(), draft, this.model.blog).then(data => {
-        //console.log(data)
-      //})
+      PostService.createPost(this.model.title, this.$refs.editor.content(), draft, this.model.blog).then(data => {
+        console.log(data)
+      })
     }
   },
   computed: {
@@ -98,7 +97,7 @@ export default {
         this.model.blog != null
     },
     isValidDraft() {
-      return this.model.title.length > 3
+      return this.model.title.length > 3 &&
         this.$refs.editor.content().length > 10
     }
   },
