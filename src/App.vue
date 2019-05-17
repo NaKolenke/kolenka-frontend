@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="loadingUser">
+  <div id="app" v-if="!loadingUser">
     <header-component
       :user="meta.user"
       :version="version"
