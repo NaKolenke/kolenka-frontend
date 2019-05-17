@@ -201,5 +201,11 @@ pre code {
   //color: $highlight-color;
   padding: 0;
 }
+
+pre {  
+  code {
+    @import '../node_modules/highlight.js/styles/a11y-light.css';
+  }
+}
 </style>
 

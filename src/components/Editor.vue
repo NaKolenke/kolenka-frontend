@@ -165,7 +165,7 @@
         </button>
 
         <div v-if="isActive.code_block()">
-          <small>Для выхода из режима редактирования кода нажмите Ctrl+Return</small>
+          <small>Для выхода из режима редактирования кода нажмите Ctrl/Shift+Return</small>
         </div>
 
         <div v-if="isExtended && isActive.table()" class="mt-1">
@@ -257,8 +257,7 @@ import {
   Table,
   TableHeader,
   TableCell,
-  TableRow,
-  CodeBlockHighlight
+  TableRow
 } from 'tiptap-extensions'
 import Modal from '@/components/Elements/Modal'
 import Alignment from '@/editor/mark/Align'
@@ -266,12 +265,6 @@ import Color from '@/editor/mark/Color'
 import ContentService from '@/services/content'
 import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
-
-import langJavascript from 'highlight.js/lib/languages/javascript'
-import langCPP from 'highlight.js/lib/languages/cpp'
-import langCSharp from 'highlight.js/lib/languages/cs'
-import langJava from 'highlight.js/lib/languages/java'
-import langJSON from 'highlight.js/lib/languages/json'
 
 export default {
   props: [ 'type', 'editorClass', 'limit' ], // type: basic, extended
@@ -309,18 +302,9 @@ export default {
 
         new Blockquote(),
         new Code(),
-        //new CodeBlock(),
+        new CodeBlock(),
         new Image(),
-        new CBExtended(),
-        new CodeBlockHighlight({
-          languages: {
-            'javascript': langJavascript,
-            'cpp': langCPP,
-            'cs': langCSharp,
-            'java': langJava,
-            'json': langJSON
-          }
-        })
+        new CBExtended()
       ],
       onFocus() {
         self.isFocused = true
@@ -463,23 +447,7 @@ export default {
 
 </style>
 
-
 <style lang="scss">
-pre {  
-  &::before {
-    content: attr(data-language);
-    text-transform: uppercase;
-    display: block;
-    text-align: right;
-    font-weight: bold;
-    font-size: 0.6rem;
-  }
-  
-  code {
-    @import '../../node_modules/highlight.js/styles/a11y-light.css';
-  }
-}
-
 .hu-color-picker.light {
   box-shadow: none;
   background: none;

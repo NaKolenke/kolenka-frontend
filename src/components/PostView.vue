@@ -39,11 +39,18 @@
 
 <script>
 import AvatarView from '@/components/AvatarView'
+import hljs from 'highlight.js'
 
 export default {
   props: ['post', 'cut'],
   components: {
     AvatarView
+  },
+  mounted() {
+    let targets = this.$el.querySelectorAll('code')
+    targets.forEach((target) => {
+      hljs.highlightBlock(target)
+    })
   }
 }
 </script>
