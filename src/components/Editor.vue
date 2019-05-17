@@ -142,7 +142,7 @@
               <div class="input-group" style="margin: 0 auto">
                 <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
                 <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
-                <button class="btn input-group-btn" @click="uploadImage()" :disabled="fileInputEmpty">Загрузить</button>
+                <button :class="['btn', 'input-group-btn', { 'loading': imageUploadLoading }]" @click="uploadImage(commands.image)" :disabled="fileInputEmpty">Загрузить</button>
               </div>
               <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
             </form>
@@ -276,7 +276,8 @@ export default {
       color: '#3b4351',
       fileInputLabel: 'Выберите файл...',
       fileInputEmpty: true,
-      isFocused: false
+      isFocused: false,
+      imageUploadLoading: false
     }
   },
   mounted() {
@@ -354,11 +355,14 @@ export default {
     setContent(body) {
       this.editor.setContent(body)
     },
-    uploadImage() {
+    uploadImage(command) {
       this.imageUploadError = null
+      this.imageUploadLoading = true
       ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
-        this.imageUrl = 'https://beta.kolenka.net/content/' + data.file.id
-        this.imageModalTab = 0
+        let url = 'https://beta.kolenka.net/content/' + data.file.id
+        this.imageUploadLoading = false
+        command({ src: url })
+        this.imageModalClose()
       }).catch(err => {
         this.imageUploadError = err
       })

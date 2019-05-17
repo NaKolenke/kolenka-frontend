@@ -69,21 +69,23 @@ export default {
     }
   },
   mounted() {
-    //content: sessionStorage.getItem('post-text') || ''
     if (!this.$meta.actions.isLoggedIn()) {
       this.$router.replace({ path: '/' })
+      return
     }
+
+    this.$refs.editor.setContent(sessionStorage.getItem('post-text') || '')
   },
   beforeDestroy() {
-    //sessionStorage.setItem('post-text', this.editor.getHTML())
+    sessionStorage.setItem('post-text', this.$refs.editor.content())
     sessionStorage.setItem('post-title', this.model.title)
   },
   methods: {
-    send(draft) {
-      console.log(this.$refs.editor.content())
-      
+    send(draft) {      
       PostService.createPost(this.model.title, this.$refs.editor.content(), draft, this.model.blog).then(data => {
         console.log(data)
+        sessionStorage.setItem('post-text', null)
+        sessionStorage.setItem('post-title', null)
       })
     }
   },
@@ -93,11 +95,13 @@ export default {
     },
     isValidPublish() {
       return this.model.title.length > 3 &&
+        this.$refs.editor != null &&
         this.$refs.editor.content().length > 10 &&
         this.model.blog != null
     },
     isValidDraft() {
       return this.model.title.length > 3 &&
+        this.$refs.editor != null &&
         this.$refs.editor.content().length > 10
     }
   },
