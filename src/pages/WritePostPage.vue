@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import UserService from '@/services/user'
 import PostService from '@/services/post'
 import getSlug from 'speakingurl'
 import Editor from '@/components/Editor'
@@ -70,22 +69,24 @@ export default {
     }
   },
   mounted() {
-    //content: sessionStorage.getItem('post-text') || ''
     if (!this.$meta.actions.isLoggedIn()) {
       this.$router.replace({ path: '/' })
+      return
     }
+
+    this.$refs.editor.setContent(sessionStorage.getItem('post-text') || '')
   },
   beforeDestroy() {
-    //sessionStorage.setItem('post-text', this.editor.getHTML())
+    sessionStorage.setItem('post-text', this.$refs.editor.content())
     sessionStorage.setItem('post-title', this.model.title)
   },
   methods: {
-    send(draft) {
-      console.log(this.$refs.editor.content())
-      
-      //PostService.createPost(this.model.title, this.editor.getHTML(), draft, this.model.blog).then(data => {
-        //console.log(data)
-      //})
+    send(draft) {      
+      PostService.createPost(this.model.title, this.$refs.editor.content(), draft, this.model.blog).then(data => {
+        console.log(data)
+        sessionStorage.setItem('post-text', null)
+        sessionStorage.setItem('post-title', null)
+      })
     }
   },
   computed: {
@@ -94,11 +95,13 @@ export default {
     },
     isValidPublish() {
       return this.model.title.length > 3 &&
+        this.$refs.editor != null &&
         this.$refs.editor.content().length > 10 &&
         this.model.blog != null
     },
     isValidDraft() {
-      return this.model.title.length > 3
+      return this.model.title.length > 3 &&
+        this.$refs.editor != null &&
         this.$refs.editor.content().length > 10
     }
   },

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import PostService from '@/services/post'
 import Editor from '@/components/Editor'
 
 export default {
@@ -33,7 +32,7 @@ export default {
   },
   computed: {
     isValid() {
-      return this.$refs.editor != null && this.$refs.editor.content().length > 10
+      return true //this.$refs.editor != null && this.$refs.editor.content().length > 0 // TODO: Doesn't work
     }
   },
   components: {

@@ -2,9 +2,10 @@
   <div :class="['card', 'comment', { 'active': active }]" :id="commentId" @mouseover="onHover" @mouseleave="offHover">
     <div class="card-body">
       <div class="tile">
-        <div class="tile-icon">
+        <div class="tile-icon" style="position:relative">
           <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
         </div>
+        
         <div class="tile-content p-relative">
           <div class="tile-title text-bold">
             {{ comment.creator.name || comment.creator.username }}
@@ -17,7 +18,7 @@
               <span class="icon-bubble2"></span>
             </button>
           </small>
-          <div class="panel mt-2" v-if="isReplying">
+          <div class="panel mt-2 mb-2" v-if="isReplying">
             <div class="panel-header h6">Ответ <button class="btn float-right" @click="cancelReply">Отменить</button></div>
             <div class="panel-body" style="overflow:visible"><comment-form :post-url="postUrl" :parent-id="comment.id"></comment-form></div>
             <div class="panel-footer"></div>
@@ -25,8 +26,13 @@
         </div>
       </div>
     
-      <div v-if="comment.children">
-        <comment-card v-for="item in comment.children" :key="item.id" :comment="item" :parent-id="comment.id" :post-url="postUrl"></comment-card>
+      <div v-if="comment.children" style="padding-left: .4rem">
+        <comment-card
+          v-for="item in comment.children"
+          :key="item.id" :comment="item" 
+          :parent-id="comment.id" 
+          :post-url="postUrl"
+        />
       </div>
     </div>
   </div>
@@ -46,21 +52,21 @@ export default {
     }
   },
   methods: {
-    onHover() {
+    onHover () {
       this.active = true
     },
-    offHover() {
+    offHover () {
       this.active = false
     },
-    reply() {
+    reply () {
       this.isReplying = true
     },
-    cancelReply() {
+    cancelReply () {
       this.isReplying = false
     }
   },
   computed: {
-    commentId() {
+    commentId () {
       return 'comment_' + this.comment.id
     }
   },

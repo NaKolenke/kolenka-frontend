@@ -21,11 +21,6 @@ class View {
       if (this.editorView.state.selection.empty) {
         return
       }
-
-      console.log(this.editorView.state.doc.textContent.substring(
-        this.editorView.state.selection.from - 1,
-        this.editorView.state.selection.to
-      ))
           
       let result = this.editorView.state.doc.textContent.substring(
         this.editorView.state.selection.from - 1,
@@ -39,8 +34,6 @@ class View {
           return x
         }
       }).join('\n')
-
-      console.log(result)
 
       let transaction = insertText(result)
 

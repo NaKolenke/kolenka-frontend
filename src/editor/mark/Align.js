@@ -9,7 +9,7 @@ export default class Alignment extends Mark {
 
   get defaultOptions() {
     return {
-      textAlign: ['left', 'center', 'right'],
+      textAlign: ['left', 'center', 'right', 'justify'],
     }
   }
 

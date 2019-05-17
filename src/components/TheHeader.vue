@@ -32,13 +32,18 @@
                 {{ user.name || user.username }}
               </router-link>
 
-              <a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+              <a class="btn btn-link dropdown-toggle" tabindex="0">
                 <i class="icon icon-caret text-secondary"></i>
               </a>
 
               <ul class="menu">
-                <li class="menu-item"><router-link to="/posts/new"><i class="icon icon-edit" style="margin-right: 4px"></i> Написать пост</router-link></li>
-                <!-- <li class="menu-item"><a href="#">Создать блог</a></li> -->
+                <li class="menu-item"><router-link :to="{ name: 'profile', params: { user: user.username }}"><i class="icon icon-people"></i> Профиль</router-link></li>
+                <li class="divider"></li>
+                <li class="menu-item"><router-link to="/new/post"><i class="icon icon-edit"></i> Написать пост</router-link></li>
+                <li class="menu-item"><router-link :to="{ name: 'userPosts', params: { user: user.username } }"><i class="icon icon-copy"></i> Посты</router-link></li>
+                <li class="menu-item"><router-link to="/drafts"><i class="icon icon-time"></i> Черновики</router-link></li>
+                <li class="divider"></li>
+                <li class="menu-item"><router-link to="/new/blog"><i class="icon icon-plus"></i> Создать блог</router-link></li>
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/logout">Выйти</router-link></li>
               </ul>
@@ -136,5 +141,9 @@ header a {
 
 .tooltip::after {
   max-width: 500px;
+}
+
+.icon {
+  margin-right: 4px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="loadingUser">
     <header-component
       :user="meta.user"
       :version="version"
@@ -32,7 +32,8 @@ export default {
       ...this.mapData({
         meta: 'meta/data/user'
       }),
-      version: process.env.VUE_APP_VERSION
+      version: process.env.VUE_APP_VERSION,
+      loadingUser: true
     }
   },
   created() {
@@ -71,6 +72,9 @@ export default {
           console.log(err)
           this.$meta.data.user = null
           UserService.logout()
+        })
+        .then(() => {
+          this.loadingUser = false
         })
     }
   }
@@ -186,7 +190,7 @@ table {
 
 pre {
   border: $border-width solid $border-color;
-  background: $dark-color;
+  background: $light-color;
   border-radius: $border-radius;
   padding: $control-padding-x-lg;
   overflow: auto;
@@ -194,7 +198,7 @@ pre {
 
 pre code {
   background: none;
-  color: $highlight-color;
+  //color: $highlight-color;
   padding: 0;
 }
 </style>

@@ -40,7 +40,7 @@
         </button>
         <div class="dropdown">
           <button
-            :class="[{ 'is-active': isActive.color() }, 'button', 'tooltip', 'dropdown-toggle']"
+            :class="[{ 'is-active': isActive.color() && color !== '#3b4351' }, 'button', 'tooltip', 'dropdown-toggle']"
             data-tooltip="Цвет текста"
           >
             <span class="icon-eyedropper"></span>
@@ -51,6 +51,10 @@
               :color="color"
               :sucker-hide="true"
               @changeColor="colorChanged($event, commands.color)"
+              :colors-default="['#000000', '#FFFFFF', '#FF1900', '#F47365',
+                                '#FFB243', '#FFE623', '#6EFF2A', '#1BC7B1',
+                                '#00BEFF', '#2E81FF', '#5D61FF', '#FF89CF',
+                                '#FC3CAD', '#BF3DCE', '#8E00A7', '#3b4351']"
             />
           </div>
         </div>
@@ -91,6 +95,9 @@
         </button>
         <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'right' })" data-tooltip="Выравнивание по правому краю">
           <span class="icon-paragraph-right"></span>
+        </button>
+        <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'justify' })" data-tooltip="Выравнивание по ширине">
+          <span class="icon-paragraph-justify"></span>
         </button>
 
         <span class="span"></span>
@@ -138,7 +145,7 @@
               <div class="input-group" style="margin: 0 auto">
                 <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
                 <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
-                <button class="btn input-group-btn" @click="uploadImage()" :disabled="fileInputEmpty">Загрузить</button>
+                <button :class="['btn', 'input-group-btn', { 'loading': imageUploadLoading }]" @click="uploadImage(commands.image)" :disabled="fileInputEmpty">Загрузить</button>
               </div>
               <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
             </form>
@@ -161,26 +168,29 @@
           <small>Для выхода из режима редактирования кода нажмите Ctrl+Return</small>
         </div>
 
-        <div v-if="isExtended && isActive.table()">
+        <div v-if="isExtended && isActive.table()" class="mt-1">
           <small>Редактировать таблицу </small>
           
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.deleteTable"
+            data-tooltip="Удалить таблицу"
           >
-            удалить таблицу
+            <span class="icon-blocked"></span>
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addColumnBefore"
+            data-tooltip="Добавить колонку перед"
           >
-            колонка перед
+            <span class="icon-arrow-left2"></span>
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addColumnAfter"
+            data-tooltip="Добавить колонку после"
           >
-            колонка после
+            <span class="icon-arrow-right2"></span>
           </button>
           <button
             class="button"
@@ -189,16 +199,18 @@
             удалить колонку
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addRowBefore"
+            data-tooltip="Добавить строку перед"
           >
-            строка перед
+            <span class="icon-arrow-up2"></span>
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.addRowAfter"
+            data-tooltip="Добавить строку после"
           >
-            строка после
+            <span class="icon-arrow-down2"></span>
           </button>
           <button
             class="button"
@@ -207,10 +219,11 @@
             удалить строку
           </button>
           <button
-            class="button"
+            class="button tooltip"
             @click="commands.toggleCellMerge"
+            data-tooltip="Объединить ячейки"
           >
-            объеденить ячецки
+            <span class="icon-insert-template"></span>
           </button>
         </div>
 
@@ -232,8 +245,6 @@ import {
   OrderedList,
   BulletList,
   ListItem,
-  TodoItem,
-  TodoList,
   Bold,
   Code,
   Italic,
@@ -265,10 +276,11 @@ export default {
       imageModalTab: 0,
       imageUrlError: false,
       imageUploadError: null,
-      color: '#000',
+      color: '#3b4351',
       fileInputLabel: 'Выберите файл...',
       fileInputEmpty: true,
-      isFocused: false
+      isFocused: false,
+      imageUploadLoading: false
     }
   },
   mounted() {
@@ -282,6 +294,7 @@ export default {
         new Underline(),
         new Strike(),
         new Color(),
+        new HardBreak(),
 
         new ListItem(),
         new BulletList(),
@@ -345,11 +358,14 @@ export default {
     setContent(body) {
       this.editor.setContent(body)
     },
-    uploadImage() {
+    uploadImage(command) {
       this.imageUploadError = null
+      this.imageUploadLoading = true
       ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
-        this.imageUrl = 'https://beta.kolenka.net/content/' + data.file.id
-        this.imageModalTab = 0
+        let url = 'https://beta.kolenka.net/content/' + data.file.id
+        this.imageUploadLoading = false
+        command({ src: url })
+        this.imageModalClose()
       }).catch(err => {
         this.imageUploadError = err
       })
@@ -364,7 +380,7 @@ export default {
       }
     },
     colorChanged(color, command) {
-      let { rgba: { r, g, b, a } } = color
+      let { rgba: { r, g, b } } = color
       command({ color: `rgb(${r}, ${g}, ${b})` })
     }
   },

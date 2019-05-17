@@ -21,21 +21,21 @@
 export default {
   props: ['page', 'pageCount'],
   methods: {
-    paginateRelative: function (offset) {
+    paginateRelative (offset) {
       this.$parent.paginateRelative(offset)
     },
-    paginateTo: function (offset) {
+    paginateTo (offset) {
       this.$parent.paginateTo(offset)
     }
   },
   computed: {
-    canPaginateBack: function () {
+    canPaginateBack () {
       return this.page > 1
     },
-    canPaginateForward: function () {
+    canPaginateForward () {
       return this.page < this.pageCount
     },
-    paginationPages: function () {
+    paginationPages () {
       const displayedPagesCount = 2 // elements before and after active page
 
       var start = this.page - displayedPagesCount

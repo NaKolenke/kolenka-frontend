@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?idnzj2');
-  src:  url('fonts/icomoon.eot?idnzj2#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?idnzj2') format('truetype'),
-    url('fonts/icomoon.woff?idnzj2') format('woff'),
-    url('fonts/icomoon.svg?idnzj2#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?5cb32u');
+  src:  url('fonts/icomoon.eot?5cb32u#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?5cb32u') format('truetype'),
+    url('fonts/icomoon.woff?5cb32u') format('woff'),
+    url('fonts/icomoon.svg?5cb32u#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -78,11 +78,32 @@
 .icon-eyedropper:before {
   content: "\e90a";
 }
+.icon-blocked:before {
+  content: "\ea0e";
+}
+.icon-arrow-up2:before {
+  content: "\ea3a";
+}
+.icon-arrow-right2:before {
+  content: "\ea3c";
+}
+.icon-arrow-down2:before {
+  content: "\ea3e";
+}
+.icon-arrow-left2:before {
+  content: "\ea40";
+}
 .icon-page-break:before {
   content: "\ea68";
 }
 .icon-table2:before {
   content: "\ea71";
+}
+.icon-insert-template:before {
+  content: "\ea72";
+}
+.icon-paragraph-justify:before {
+  content: "\ea7a";
 }
 .icon-embed21:before {
   content: "\ea81";
