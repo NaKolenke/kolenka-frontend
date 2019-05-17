@@ -40,7 +40,7 @@
         </button>
         <div class="dropdown">
           <button
-            :class="[{ 'is-active': isActive.color() }, 'button', 'tooltip', 'dropdown-toggle']"
+            :class="[{ 'is-active': isActive.color() && color !== '#3b4351' }, 'button', 'tooltip', 'dropdown-toggle']"
             data-tooltip="Цвет текста"
           >
             <span class="icon-eyedropper"></span>
@@ -95,6 +95,9 @@
         </button>
         <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'right' })" data-tooltip="Выравнивание по правому краю">
           <span class="icon-paragraph-right"></span>
+        </button>
+        <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'justify' })" data-tooltip="Выравнивание по ширине">
+          <span class="icon-paragraph-justify"></span>
         </button>
 
         <span class="span"></span>

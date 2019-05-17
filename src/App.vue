@@ -186,7 +186,7 @@ table {
 
 pre {
   border: $border-width solid $border-color;
-  background: $dark-color;
+  background: $light-color;
   border-radius: $border-radius;
   padding: $control-padding-x-lg;
   overflow: auto;
@@ -194,7 +194,7 @@ pre {
 
 pre code {
   background: none;
-  color: $highlight-color;
+  //color: $highlight-color;
   padding: 0;
 }
 </style>
