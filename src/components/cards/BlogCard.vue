@@ -3,6 +3,7 @@
     <div class="column col-1">
       <avatar-view :user="blog.creator" :size="'lg'"></avatar-view>
     </div>
+
     <div class="column col-11">
       <h3>
         <div v-if="blog.url" class="columns">
@@ -16,6 +17,7 @@
         </div>
         <span v-else>{{ blog.title }}</span>
       </h3>
+
       <p v-html="blog.description"></p>
 
       <div v-if="preview && posts.length > 0" class="columns">
@@ -70,7 +72,7 @@ export default {
       this.refresh()
   },
   methods: {
-    refresh: function () {
+    refresh () {
       if (!this.blog.url)
         return
       
@@ -80,7 +82,7 @@ export default {
         console.log(err)
       })
     },
-    joinBlog() {
+    joinBlog () {
       BlogService.joinBlog(this.blog.url).then(data => {
         this.$toast.show(`Успешно присоединились к блогу "${this.blog.title}"`)
         this.$userBlogs.collect(this.blog, 'everything')
@@ -90,7 +92,7 @@ export default {
     }
   },
   computed: {
-    contains() {
+    contains () {
       for (let item of this.blogs) {
         if (item.id === this.blog.id) {
           return true

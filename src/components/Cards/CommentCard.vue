@@ -5,6 +5,7 @@
         <div class="tile-icon" style="position:relative">
           <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
         </div>
+        
         <div class="tile-content p-relative">
           <div class="tile-title text-bold">
             {{ comment.creator.name || comment.creator.username }}
@@ -51,21 +52,21 @@ export default {
     }
   },
   methods: {
-    onHover() {
+    onHover () {
       this.active = true
     },
-    offHover() {
+    offHover () {
       this.active = false
     },
-    reply() {
+    reply () {
       this.isReplying = true
     },
-    cancelReply() {
+    cancelReply () {
       this.isReplying = false
     }
   },
   computed: {
-    commentId() {
+    commentId () {
       return 'comment_' + this.comment.id
     }
   },

@@ -15,6 +15,7 @@ import NotFoundPage from '@/pages/404'
 import BlogPage from '@/pages/BlogPage'
 import WritePostPage from '@/pages/WritePostPage'
 import FeedbackPage from '@/pages/FeedbackPage'
+import UserPostsPage from '@/pages/UserPostsPage'
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ export default new Router({
       path: '/users/:user',
       name: 'profile',
       component: ProfilePage
+    },
+    {
+      path: '/users/:user/posts',
+      name: 'userPosts',
+      component: UserPostsPage
     },
     {
       path: '/blogs/',

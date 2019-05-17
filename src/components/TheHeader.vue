@@ -39,11 +39,11 @@
               <ul class="menu">
                 <li class="menu-item"><router-link :to="{ name: 'profile', params: { user: user.username }}"><i class="icon icon-people"></i> Профиль</router-link></li>
                 <li class="divider"></li>
-                <li class="menu-item"><router-link to="/posts/new"><i class="icon icon-edit"></i> Написать пост</router-link></li>
-                <li class="menu-item"><router-link to="/username/posts"><i class="icon icon-copy"></i> Посты</router-link></li>
+                <li class="menu-item"><router-link to="/new/post"><i class="icon icon-edit"></i> Написать пост</router-link></li>
+                <li class="menu-item"><router-link :to="{ name: 'userPosts', params: { user: user.username } }"><i class="icon icon-copy"></i> Посты</router-link></li>
                 <li class="menu-item"><router-link to="/drafts"><i class="icon icon-time"></i> Черновики</router-link></li>
                 <li class="divider"></li>
-                <li class="menu-item"><router-link to="/blogs/new"><i class="icon icon-plus"></i> Создать блог</router-link></li>
+                <li class="menu-item"><router-link to="/new/blog"><i class="icon icon-plus"></i> Создать блог</router-link></li>
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/logout">Выйти</router-link></li>
               </ul>
