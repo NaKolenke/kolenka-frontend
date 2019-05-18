@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="loadingUser">
+  <div id="app" v-if="!loadingUser">
     <header-component
       :user="meta.user"
       :version="version"
@@ -200,6 +200,12 @@ pre code {
   background: none;
   //color: $highlight-color;
   padding: 0;
+}
+
+pre {  
+  code {
+    @import '../node_modules/highlight.js/styles/a11y-light.css';
+  }
 }
 </style>
 

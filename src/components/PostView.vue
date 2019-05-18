@@ -1,8 +1,8 @@
 <template>
   <div class="article">
     <span class="subtitle">
-      <router-link :to="{ name: 'blog',  params: { name: post.blog.url }}">{{post.blog.title}}</router-link>
-      , {{post.created_date | moment}}
+      <span v-if="post.blog"><router-link :to="{ name: 'blog',  params: { name: post.blog.url }}">{{post.blog.title}}</router-link>, </span>
+      {{post.created_date | moment}}
     </span>
     <h2>
       <router-link :to="{ name: 'post',  params: { post: post.url }}">{{post.title}}</router-link>
@@ -15,7 +15,9 @@
       v-if="cut && post.has_cut"
       :to="{ name: 'post',  params: { post: post.url }}"
       class="btn btn-sm"
-    >{{ post.cut_name || 'Читать дальше' }}</router-link>
+    >
+      {{ post.cut_name || 'Читать дальше' }}
+    </router-link>
 
     <div class="columns article-footer">
       <div class="column col-lg-auto">
@@ -39,11 +41,21 @@
 
 <script>
 import AvatarView from '@/components/AvatarView'
+import hljs from 'highlight.js/lib/highlight'
+import '@/highlight'
 
 export default {
   props: ['post', 'cut'],
   components: {
     AvatarView
+  },
+  mounted() {
+    if (this.$el.querySelectorAll) {
+      let targets = this.$el.querySelectorAll('code')
+      targets.forEach(target => {
+        hljs.highlightBlock(target)
+      })
+    }
   }
 }
 </script>

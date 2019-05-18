@@ -165,7 +165,7 @@
         </button>
 
         <div v-if="isActive.code_block()">
-          <small>Для выхода из режима редактирования кода нажмите Ctrl+Return</small>
+          <small>Для выхода из режима редактирования кода нажмите Ctrl/Shift+Return</small>
         </div>
 
         <div v-if="isExtended && isActive.table()" class="mt-1">
@@ -257,7 +257,7 @@ import {
   Table,
   TableHeader,
   TableCell,
-  TableRow,
+  TableRow
 } from 'tiptap-extensions'
 import Modal from '@/components/Elements/Modal'
 import Alignment from '@/editor/mark/Align'
@@ -267,7 +267,7 @@ import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
 
 export default {
-  props: [ 'type', 'editorClass' ], // basic, extended
+  props: [ 'type', 'editorClass', 'limit' ], // type: basic, extended
   data() {
     return {
       editor: null,
@@ -447,7 +447,7 @@ export default {
 
 </style>
 
-<style>
+<style lang="scss">
 .hu-color-picker.light {
   box-shadow: none;
   background: none;

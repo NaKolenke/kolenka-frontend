@@ -28,7 +28,7 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/posts/new',
+      path: '/new/post',
       name: 'new-post',
       component: WritePostPage
     },
