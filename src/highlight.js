@@ -35,41 +35,37 @@ import kotlin from 'highlight.js/lib/languages/kotlin'
 import lua from 'highlight.js/lib/languages/lua'
 import makefile from 'highlight.js/lib/languages/makefile'
 
-hljs.configure({
-  languages: [
-    js,
-    moonscript,
-    php,
-    plaintext,
-    powershell,
-    qml,
-    ruby,
-    rust,
-    scss,
-    shell,
-    typescript,
-    jvbnets,
-    vbscript,
-    x86asm,
-    bash,
-    xml,
-    yaml,
-    basic,
-    cmake,
-    coffeescript,
-    cs,
-    css,
-    diff,
-    dockerfile,
-    fsharp,
-    glsl,
-    go,
-    http,
-    java,
-    javascript,
-    json,
-    kotlin,
-    lua,
-    makefile,
-  ]
-})
+hljs.registerLanguage('js', js)
+hljs.registerLanguage('moonscript', moonscript)
+hljs.registerLanguage('php', php)
+hljs.registerLanguage('plaintext', plaintext)
+hljs.registerLanguage('powershell', powershell)
+hljs.registerLanguage('qml', qml)
+hljs.registerLanguage('ruby', ruby)
+hljs.registerLanguage('rust', rust)
+hljs.registerLanguage('scss', scss)
+hljs.registerLanguage('shell', shell)
+hljs.registerLanguage('typescript', typescript)
+hljs.registerLanguage('jvbnets', jvbnets)
+hljs.registerLanguage('vbscript', vbscript)
+hljs.registerLanguage('x86asm', x86asm)
+hljs.registerLanguage('bash', bash)
+hljs.registerLanguage('xml', xml)
+hljs.registerLanguage('yaml', yaml)
+hljs.registerLanguage('basic', basic)
+hljs.registerLanguage('cmake', cmake)
+hljs.registerLanguage('coffeescript', coffeescript)
+hljs.registerLanguage('cs', cs)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('diff', diff)
+hljs.registerLanguage('dockerfile', dockerfile)
+hljs.registerLanguage('fsharp', fsharp)
+hljs.registerLanguage('glsl', glsl)
+hljs.registerLanguage('go', go)
+hljs.registerLanguage('http', http)
+hljs.registerLanguage('java', java)
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('json', json)
+hljs.registerLanguage('kotlin', kotlin)
+hljs.registerLanguage('lua', lua)
+hljs.registerLanguage('makefile', makefile)
