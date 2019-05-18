@@ -27,7 +27,7 @@
 import ProfileView from '@/components/ProfileView'
 import TheSidebar from '@/components/TheSidebar'
 import UserService from '@/services/user'
-import BlogCardSmall from '@/components/Cards/BlogCardSmall'
+import BlogCardSmall from '@/components/cards/BlogCardSmall'
 
 export default {
   data: function () {

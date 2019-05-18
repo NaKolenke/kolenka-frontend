@@ -46,7 +46,7 @@
 import PostView from '@/components/PostView'
 import TheSidebar from '@/components/TheSidebar'
 import PostService from '@/services/post'
-import CommentCard from '@/components/Cards/CommentCard'
+import CommentCard from '@/components/cards/CommentCard'
 import CommentForm from '@/components/CommentForm'
 import BlogService from '@/services/blog'
 import UserService from '@/services/user'
@@ -73,35 +73,35 @@ export default {
   methods: {
     refreshPost: function (route) {
       let post = this.$posts.getByUrl(route.params.post)
-      
+
       if (post === null) {
         PostService
         .getPost(route.params.post)
         .then(data => {
           this.post = data.post
           this.$posts.collect(data.post, 'everything')
-          
+
           this.refreshComments(route, data.post)
         })
       } else {
         this.post = post
         this.refreshComments(route, this.post)
-      }      
+      }
     },
     refreshComments(route, post) {
       this.$comments.purge()
-      
+
       PostService
       .getComments(route.params.post)
       .then(data => {
         this.commentsCount = data.comments.length
-        
+
         data.comments.forEach(item => {
           if (item.parent) {
             let parent = data.comments.find(x => x.id === item.parent.id)
             if (!parent.children)
               parent.children = []
-            
+
             parent.children.push(item)
           }
         })

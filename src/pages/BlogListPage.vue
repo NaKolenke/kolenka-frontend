@@ -5,7 +5,7 @@
         <div v-if="isLoading" class="column col-9">
           <loading-view></loading-view>
         </div>
-        <div v-else id="content" class="columns column col-8 mx-2 px-2">          
+        <div v-else id="content" class="columns column col-8 mx-2 px-2">
           <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
           <pagination-view :page="page" :page-count="pageCount"></pagination-view>
         </div>
@@ -22,7 +22,7 @@
 import LoadingView from '@/components/LoadingView'
 import TheSidebar from '@/components/TheSidebar'
 import PaginationView from '@/components/PaginationView'
-import BlogCard from '@/components/Cards/BlogCard'
+import BlogCard from '@/components/cards/BlogCard'
 import BlogService from '@/services/blog'
 
 export default {
