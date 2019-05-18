@@ -2,37 +2,37 @@
   <div class="form-group">
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
       <div class="menu-bar">
-        
+
         <button
-          :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip']" 
-          @click="commands.bold" 
+          :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip']"
+          @click="commands.bold"
           data-tooltip="Жирный"
         >
           <span class="icon-bold"></span>
         </button>
-        <button 
-          :class="[{ 'is-active': isActive.italic() }, 'button', 'tooltip']" 
-          @click="commands.italic" 
+        <button
+          :class="[{ 'is-active': isActive.italic() }, 'button', 'tooltip']"
+          @click="commands.italic"
           data-tooltip="Наклонный"
         >
           <span class="icon-italic"></span>
         </button>
-        <button 
-          :class="[{ 'is-active': isActive.underline() }, 'button', 'tooltip']" 
-          @click="commands.underline" 
+        <button
+          :class="[{ 'is-active': isActive.underline() }, 'button', 'tooltip']"
+          @click="commands.underline"
           data-tooltip="Подчёркнутый"
         >
           <span class="icon-underline"></span>
         </button>
-        <button 
-          :class="[{ 'is-active': isActive.strike() }, 'button', 'tooltip']" 
-          @click="commands.strike" 
+        <button
+          :class="[{ 'is-active': isActive.strike() }, 'button', 'tooltip']"
+          @click="commands.strike"
           data-tooltip="Зачёркнутый"
         >
           <span class="icon-strikethrough"></span>
         </button>
-        <button 
-          :class="[{ 'is-active': isActive.paragraph() }, 'button', 'tooltip']" 
+        <button
+          :class="[{ 'is-active': isActive.paragraph() }, 'button', 'tooltip']"
           @click="commands.paragraph"
           data-tooltip="Параграф"
         >
@@ -62,7 +62,7 @@
         <span v-if="isExtended" class="span"></span>
 
         <div v-if="isExtended" class="dropdown">
-          <button 
+          <button
             :class="[{ 'is-active': isActive.heading() }, 'button', 'tooltip', 'dropdown-toggle']"
             tabindex="0"
             data-tooltip="Заголовок"
@@ -71,7 +71,7 @@
           </button>
           <!-- menu component -->
           <div class="menu">
-            <button 
+            <button
               v-for="i in (1, 6)"
               :key="i"
               :class="[{ 'is-active': isActive.heading({ level: i }) }, 'button']"
@@ -170,7 +170,7 @@
 
         <div v-if="isExtended && isActive.table()" class="mt-1">
           <small>Редактировать таблицу </small>
-          
+
           <button
             class="button tooltip"
             @click="commands.deleteTable"
@@ -259,7 +259,7 @@ import {
   TableCell,
   TableRow
 } from 'tiptap-extensions'
-import Modal from '@/components/Elements/Modal'
+import Modal from '@/components/Modal'
 import Alignment from '@/editor/mark/Align'
 import Color from '@/editor/mark/Color'
 import ContentService from '@/services/content'
@@ -285,7 +285,7 @@ export default {
   },
   mounted() {
     const self = this
-    
+
     const options = {
       extensions: [
         new Bold(),

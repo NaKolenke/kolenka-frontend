@@ -12,12 +12,12 @@
           <div v-if="readers.length > 0" class="card-footer">
             <div class="card-subtitle">
               <span class="text-gray mx-1">Подписчики </span>
-              <avatar-view 
-                v-for="reader in readers" 
-                :key="reader.id" 
-                :user="reader" 
-                :card="false" 
-                class="mx-1 tooltip" 
+              <avatar-view
+                v-for="reader in readers"
+                :key="reader.id"
+                :user="reader"
+                :card="false"
+                class="mx-1 tooltip"
                 :data-tooltip="reader.name || reader.username"
               ></avatar-view>
             </div>
@@ -40,11 +40,11 @@ import LoadingView from '@/components/LoadingView'
 import TheSidebar from '@/components/TheSidebar'
 import PaginationView from '@/components/PaginationView'
 import BlogService from '@/services/blog'
-import BlogCard from '@/components/Cards/BlogCard'
+import BlogCard from '@/components/cards/BlogCard'
 import AvatarView from '@/components/AvatarView'
 
 export default {
-  data() {    
+  data() {
     return {
       posts: [],
       readers: [],
@@ -63,7 +63,7 @@ export default {
     refreshPage: function (route) {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
-      
+
       BlogService.getBlogPosts(route.params.name, this.page).then(data => {
         this.posts = data.posts
         this.pageCount = data.meta.page_count
