@@ -39,7 +39,8 @@
 
 <script>
 import AvatarView from '@/components/AvatarView'
-import hljs from 'highlight.js'
+import hljs from 'highlight.js/lib/highlight'
+import '@/highlight'
 
 export default {
   props: ['post', 'cut'],

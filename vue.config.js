@@ -1,5 +1,6 @@
 process.env.VUE_APP_VERSION = require('./package.json').version
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require('webpack');
 
 module.exports = {
     configureWebpack: {
@@ -16,7 +17,8 @@ module.exports = {
               ]
         },
         plugins: [
-          //new BundleAnalyzerPlugin()
+          new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+          new BundleAnalyzerPlugin()
         ]
     }
 }
