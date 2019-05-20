@@ -207,5 +207,9 @@ pre {
     @import '../node_modules/highlight.js/styles/a11y-light.css';
   }
 }
+
+.bottom-padd {
+  margin-top: 50px;
+}
 </style>
 
