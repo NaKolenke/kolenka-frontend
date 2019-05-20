@@ -211,5 +211,9 @@ pre {
 .bottom-padd {
   margin-top: 50px;
 }
+
+p {
+  margin: 0 0 $line-height / 1.5;
+}
 </style>
 

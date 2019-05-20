@@ -320,6 +320,7 @@ import Color from '@/editor/mark/Color'
 import ContentService from '@/services/content'
 import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
+import Limit from '@/editor/extensions/Limit'
 
 export default {
   props: {
@@ -391,6 +392,12 @@ export default {
         self.store.text = self.editor.state.doc.textContent
         self.store.length = self.store.text.length
       }
+    }
+
+    if (this.limit > 0) {
+      options.extensions.push(new Limit(this.limit))
+    } else if (this.limit === 0) {
+      options.editable = false
     }
 
     if (this.isExtended) {
