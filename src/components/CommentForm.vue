@@ -1,6 +1,6 @@
 <template>
   <div>
-    <editor type="basic" ref="editor" editor-class="comment-editor"></editor>
+    <editor type="basic" ref="editor" editor-class="comment-editor" :store="store"></editor>
     <div>
       <input class="btn btn-primary float-left" type="submit" value="Отправить" @click="send" :disabled="isSending || !isValid" />
       <div v-if="isSending" class="loading float-left" style="margin-top: 10px; margin-left: 20px"></div>
@@ -16,13 +16,17 @@ export default {
   props: [ 'postUrl', 'action', 'parentId' ],
   data() {
     return {
-      isSending: false
+      isSending: false,
+      store: {
+        html: '',
+        length: 0
+      }
     }
   },
   methods: {
     send() {
       this.isSending = true
-      this.$comments.sendComment(this.postUrl, this.$refs.editor.content(), this.parentId).then(comment => {
+      this.$comments.sendComment(this.postUrl, this.store.html, this.parentId).then(comment => {
         this.isSending = false
         this.$refs.editor.setContent('')
         if (this.action)
@@ -32,7 +36,7 @@ export default {
   },
   computed: {
     isValid() {
-      return true //this.$refs.editor != null && this.$refs.editor.content().length > 0 // TODO: Doesn't work
+      return this.store.length > 3
     }
   },
   components: {

@@ -124,30 +124,30 @@
           <span class="icon-image"></span>
         </button>
 
-        <modal :open="showImageModal" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
+        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
           <ul class="tab tab-block">
-            <li :class="['tab-item', {'active': imageModalTab === 0}]">
-              <a href="#" @click.prevent="imageModalTab = 0">По ссылке</a>
+            <li :class="['tab-item', {'active': imageModal.tab === 0}]">
+              <a href="#" @click.prevent="imageModal.tab = 0">По ссылке</a>
             </li>
-            <li :class="['tab-item', {'active': imageModalTab === 1}]">
-              <a href="#" @click.prevent="imageModalTab = 1">Загрузить</a>
+            <li :class="['tab-item', {'active': imageModal.tab === 1}]">
+              <a href="#" @click.prevent="imageModal.tab = 1">Загрузить</a>
             </li>
           </ul>
           <br>
-          <div v-if="imageModalTab === 0">
-            <div :class="['form-group', {'has-error': imageUrlError}]">
-              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageUrl">
-              <p v-if="imageUrlError" class="form-input-hint">Введите ссылку на изображение</p>
+          <div v-if="imageModal.tab === 0">
+            <div :class="['form-group', {'has-error': imageModal.urlError}]">
+              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url">
+              <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
             </div>
           </div>
-          <div v-if="imageModalTab === 1">
-            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageUploadError}]">
+          <div v-if="imageModal.tab === 1">
+            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageModal.uploadError}]">
               <div class="input-group" style="margin: 0 auto">
                 <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
                 <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
                 <button :class="['btn', 'input-group-btn', { 'loading': imageUploadLoading }]" @click="uploadImage(commands.image)" :disabled="fileInputEmpty">Загрузить</button>
               </div>
-              <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
+              <p v-if="imageModal.uploadError" class="form-input-hint">{{ imageModal.uploadError }}</p>
             </form>
           </div>
         </modal>
@@ -232,6 +232,7 @@
     <div :class="[editorClass, 'editor', 'form-input']">
       <editor-content :editor="editor"></editor-content>
     </div>
+    <small>Для добавления переноса на новую строку используйте Shift+Return</small>
   </div>
 </template>
 
@@ -267,15 +268,32 @@ import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
 
 export default {
-  props: [ 'type', 'editorClass', 'limit' ], // type: basic, extended
+  props: {
+    type: null, // type: basic, extended
+    editorClass: null,
+    limit: -1, // -1 = no limit, 0 = readonly, 1+ = limit
+    store: {
+      type: Object,
+      default() {
+        return {
+          html: '',
+          text: '',
+          length: 0
+        }
+      }
+    }
+  },
   data() {
     return {
       editor: null,
-      showImageModal: false,
-      imageUrl: '',
-      imageModalTab: 0,
-      imageUrlError: false,
-      imageUploadError: null,
+      imageModal: {
+        show: false,
+        url: '',
+        tab: 0,
+        urlError: false,
+        uploadError: null
+      },
+      contentHtml: '',
       color: '#3b4351',
       fileInputLabel: 'Выберите файл...',
       fileInputEmpty: true,
@@ -311,13 +329,18 @@ export default {
       },
       onBlur() {
         self.isFocused = false
+      },
+      onUpdate() {
+        self.store.html = self.editor.getHTML()
+        self.store.text = self.editor.state.doc.textContent
+        self.store.length = self.store.text.length
       }
     }
 
     if (this.isExtended) {
       options.extensions.push(
         new History(),
-        new Heading({ levels: [1, 2, 3, 4, 5, 6] }),
+        new Heading({ levels: [ 1, 2, 3, 4, 5, 6 ] }),
         new HorizontalRule(),
         new Table(),
         new TableHeader(),
@@ -329,8 +352,10 @@ export default {
 
     this.editor = new Editor(options)
 
-    window.addEventListener('keydown', (e) => {
-      if (e.keyCode === 9 && this.isFocused && this.editor.isActive.code_block()) {
+    window.addEventListener('keydown', e => {
+      if (e.keyCode === 9 &&
+          this.isFocused &&
+          this.editor.isActive.code_block()) {
         e.preventDefault()
       }
     })
@@ -340,26 +365,23 @@ export default {
   },
   methods: {
     imageModalClose() {
-      this.showImageModal = false
-      this.imageUrlError = false
-    },
-    chooseImage(command) {
-      if (this.imageUrl.length > 0) {
-        command({ src: this.imageUrl })
-        this.imageUrl = ''
-        this.imageModalClose()
-      } else {
-        this.imageUrlError = true
-      }
-    },
-    content() {
-      return this.editor.getHTML()
+      this.imageModal.show = false
+      this.imageModal.urlError = false
     },
     setContent(body) {
       this.editor.setContent(body)
     },
+    chooseImage(command) {
+      if (this.imageModal.url.length > 0) {
+        command({ src: this.imageModal.url })
+        this.imageModal.url = ''
+        this.imageModalClose()
+      } else {
+        this.imageModal.urlError = true
+      }
+    },
     uploadImage(command) {
-      this.imageUploadError = null
+      this.imageModal.uploadError = null
       this.imageUploadLoading = true
       ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
         let url = 'https://beta.kolenka.net/content/' + data.file.id
@@ -367,7 +389,7 @@ export default {
         command({ src: url })
         this.imageModalClose()
       }).catch(err => {
-        this.imageUploadError = err
+        this.imageModal.uploadError = err
       })
     },
     fileInputChange(e) {
