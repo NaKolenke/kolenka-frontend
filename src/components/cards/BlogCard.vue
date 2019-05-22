@@ -67,7 +67,7 @@ export default {
   components: {
     AvatarView
   },
-  mounted () {
+  mounted () {    
     if (this.preview)
       this.refresh()
   },
@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style>
-.card-body img {
+.card-body p img {
   width: 100%;
   height: auto;
 }

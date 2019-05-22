@@ -44,5 +44,27 @@ export default {
 
         return data
       })
+  },
+  createBlog(type, title, description, url) {
+    return blog
+      .createBlog(type, title, description, url)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
+  },
+  getBlog(url) {
+    return blog
+      .getBlog(url)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }
