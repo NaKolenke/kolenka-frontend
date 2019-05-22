@@ -14,5 +14,6 @@ Vue.filter('moment', function (timestamp) {
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  components: { App }
 }).$mount('#app')
