@@ -95,9 +95,9 @@ export default {
         return data
       })
   },
-  getUserPosts (username) {
+  getUserPosts (username, page) {
     return users
-      .getUserPosts(username)
+      .getUserPosts(username, page)
       .then(data => {
         if (data.success === 0) {
           throw new Error(data.error)
