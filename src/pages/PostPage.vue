@@ -150,7 +150,6 @@ export default {
 }
 </style>
 
-
 <style>
 #content > .comment {
   border: none;

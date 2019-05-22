@@ -11,6 +11,12 @@ export default function (tag, options) {
 
       continue
     }
+
+    if (opt == 'style') {
+      for (let key in options.style) {
+        element.style[key] = options.style[key] // doesn't work????
+      }
+    }
     
     if (element[opt] != undefined) {
       element.setAttribute(opt, options[opt])
