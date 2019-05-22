@@ -428,13 +428,15 @@ export default {
     this.editor = new Editor(options)
 
     window.addEventListener('keydown', this.onKeyDown)
-    window.addEventListener('scroll', this.onScroll)
+    if (this.isExtended)
+      window.addEventListener('scroll', this.onScroll)
   },
   beforeDestroy() {
     this.editor.destroy()
 
     window.removeEventListener('keydown', this.onKeyDown)
-    window.removeEventListener('scroll', this.onScroll)
+    if (this.isExtended)
+      window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
     imageModalClose() {
