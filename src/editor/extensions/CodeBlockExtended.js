@@ -69,7 +69,7 @@ class View {
     let result = this.editorView.state.doc.textContent.substring(
       this.editorView.state.selection.from - 1,
       this.editorView.state.selection.to - 1
-    ).split('\n').map(x => {
+    ).split('\n').map(x => {      
       let match = x.match(/^\s+/)
       
       if (match) {

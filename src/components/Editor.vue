@@ -1,38 +1,38 @@
 <template>
   <div class="form-group">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }" :class="{ 'floating': menuBarFloats }" :style="[{ 'left': menuBarOffsetLeft }]">
       <div class="menu-bar">
 
         <button
-          :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip']"
+          :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
           @click="commands.bold"
           data-tooltip="Жирный"
         >
           <span class="icon-bold"></span>
         </button>
         <button
-          :class="[{ 'is-active': isActive.italic() }, 'button', 'tooltip']"
+          :class="[{ 'is-active': isActive.italic() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
           @click="commands.italic"
           data-tooltip="Наклонный"
         >
           <span class="icon-italic"></span>
         </button>
         <button
-          :class="[{ 'is-active': isActive.underline() }, 'button', 'tooltip']"
+          :class="[{ 'is-active': isActive.underline() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
           @click="commands.underline"
           data-tooltip="Подчёркнутый"
         >
           <span class="icon-underline"></span>
         </button>
         <button
-          :class="[{ 'is-active': isActive.strike() }, 'button', 'tooltip']"
+          :class="[{ 'is-active': isActive.strike() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
           @click="commands.strike"
           data-tooltip="Зачёркнутый"
         >
           <span class="icon-strikethrough"></span>
         </button>
         <button
-          :class="[{ 'is-active': isActive.paragraph() }, 'button', 'tooltip']"
+          :class="[{ 'is-active': isActive.paragraph() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
           @click="commands.paragraph"
           data-tooltip="Параграф"
         >
@@ -40,7 +40,7 @@
         </button>
         <div class="dropdown">
           <button
-            :class="[{ 'is-active': isActive.color() && color !== '#3b4351' }, 'button', 'tooltip', 'dropdown-toggle']"
+            :class="[{ 'is-active': isActive.color() && color !== '#3b4351' }, 'button', 'tooltip', 'dropdown-toggle', { 'tooltip-bottom': menuBarFloats }]"
             data-tooltip="Цвет текста"
           >
             <span class="icon-eyedropper"></span>
@@ -63,7 +63,7 @@
 
         <div v-if="isExtended" class="dropdown">
           <button
-            :class="[{ 'is-active': isActive.heading() }, 'button', 'tooltip', 'dropdown-toggle']"
+            :class="[{ 'is-active': isActive.heading() }, 'button', 'tooltip', 'dropdown-toggle', { 'tooltip-bottom': menuBarFloats }]"
             tabindex="0"
             data-tooltip="Заголовок"
           >
@@ -87,80 +87,134 @@
           </div>
         </div>
 
-        <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'left' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'left' })" data-tooltip="Выравнивание по левому краю">
+        <button
+          v-if="isExtended"
+          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'left' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
+          @click="commands.alignment({ textAlign: 'left' })" 
+          data-tooltip="Выравнивание по левому краю"
+        >
           <span class="icon-paragraph-left"></span>
         </button>
-        <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'center' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'center' })" data-tooltip="Выравнивание по центру">
+        <button
+          v-if="isExtended"
+          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'center' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.alignment({ textAlign: 'center' })" 
+          data-tooltip="Выравнивание по центру"
+        >
           <span class="icon-paragraph-center"></span>
         </button>
-        <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'right' })" data-tooltip="Выравнивание по правому краю">
+        <button
+          v-if="isExtended"
+          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.alignment({ textAlign: 'right' })" 
+          data-tooltip="Выравнивание по правому краю"
+        >
           <span class="icon-paragraph-right"></span>
         </button>
-        <button v-if="isExtended" :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify' }, 'button', 'tooltip']" @click="commands.alignment({ textAlign: 'justify' })" data-tooltip="Выравнивание по ширине">
+        <button
+          v-if="isExtended"
+          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.alignment({ textAlign: 'justify' })" 
+          data-tooltip="Выравнивание по ширине"
+        >
           <span class="icon-paragraph-justify"></span>
         </button>
 
         <span class="span"></span>
 
-        <button :class="[{ 'is-active': isActive.bullet_list() }, 'button', 'tooltip']" @click="commands.bullet_list" data-tooltip="Список">
+        <button
+          :class="[{ 'is-active': isActive.bullet_list() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
+          @click="commands.bullet_list" 
+          data-tooltip="Список"
+        >
           <span class="icon-list2"></span>
         </button>
-        <button :class="[{ 'is-active': isActive.ordered_list() }, 'button', 'tooltip']" @click="commands.ordered_list" data-tooltip="Нумерованный список">
+        <button 
+          :class="[{ 'is-active': isActive.ordered_list() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.ordered_list" 
+          data-tooltip="Нумерованный список"
+        >
           <span class="icon-list-numbered"></span>
         </button>
 
         <span class="span"></span>
 
-        <button :class="[{ 'is-active': isActive.blockquote() }, 'button', 'tooltip']" @click="commands.blockquote" data-tooltip="Цитата">
+        <button
+          :class="[{ 'is-active': isActive.blockquote() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.blockquote" 
+          data-tooltip="Цитата"
+        >
           <span class="icon-quotes-right"></span>
         </button>
-        <button :class="[{ 'is-active': isActive.code() }, 'button', 'tooltip']" @click="commands.code" data-tooltip="Код">
+        <button 
+          :class="[{ 'is-active': isActive.code() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.code" 
+          data-tooltip="Код"
+        >
           <span class="icon-embed"></span>
         </button>
-        <button :class="[{ 'is-active': isActive.code_block() }, 'button', 'tooltip']" @click="commands.code_block" data-tooltip="Блок кода">
+        <button 
+          :class="[{ 'is-active': isActive.code_block() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.code_block" 
+          data-tooltip="Блок кода"
+        >
           <span class="icon-embed2"></span>
         </button>
-        <button :class="[{ 'is-active': isActive.image() }, 'button', 'tooltip']" @click="showImageModal = true" data-tooltip="Изображение">
+        <button 
+          :class="[{ 'is-active': isActive.image() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="showImageModal = true" 
+          data-tooltip="Изображение"
+        >
           <span class="icon-image"></span>
         </button>
 
-        <modal :open="showImageModal" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
+        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
           <ul class="tab tab-block">
-            <li :class="['tab-item', {'active': imageModalTab === 0}]">
-              <a href="#" @click.prevent="imageModalTab = 0">По ссылке</a>
+            <li :class="['tab-item', {'active': imageModal.tab === 0}]">
+              <a href="#" @click.prevent="imageModal.tab = 0">По ссылке</a>
             </li>
-            <li :class="['tab-item', {'active': imageModalTab === 1}]">
-              <a href="#" @click.prevent="imageModalTab = 1">Загрузить</a>
+            <li :class="['tab-item', {'active': imageModal.tab === 1}]">
+              <a href="#" @click.prevent="imageModal.tab = 1">Загрузить</a>
             </li>
           </ul>
           <br>
-          <div v-if="imageModalTab === 0">
-            <div :class="['form-group', {'has-error': imageUrlError}]">
-              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageUrl">
-              <p v-if="imageUrlError" class="form-input-hint">Введите ссылку на изображение</p>
+          <div v-if="imageModal.tab === 0">
+            <div :class="['form-group', {'has-error': imageModal.urlError}]">
+              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url">
+              <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
             </div>
           </div>
-          <div v-if="imageModalTab === 1">
-            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageUploadError}]">
+          <div v-if="imageModal.tab === 1">
+            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageModal.uploadError}]">
               <div class="input-group" style="margin: 0 auto">
                 <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
                 <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
                 <button :class="['btn', 'input-group-btn', { 'loading': imageUploadLoading }]" @click="uploadImage(commands.image)" :disabled="fileInputEmpty">Загрузить</button>
               </div>
-              <p v-if="imageUploadError" class="form-input-hint">{{ imageUploadError }}</p>
+              <p v-if="imageModal.uploadError" class="form-input-hint">{{ imageModal.uploadError }}</p>
             </form>
           </div>
         </modal>
 
         <span v-if="isExtended" class="span"></span>
 
-        <button v-if="isExtended" :class="['button', 'tooltip']" @click="commands.horizontal_rule" data-tooltip="Горизонтальная линия">
+        <button 
+          v-if="isExtended" 
+          :class="['button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.horizontal_rule" 
+          data-tooltip="Горизонтальная линия"
+        >
           <span class="icon-page-break"></span>
         </button>
 
         <span v-if="isExtended" class="span"></span>
 
-        <button v-if="isExtended" :class="[{'is-active': isActive.table()}, 'button', 'tooltip']" @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })" data-tooltip="Таблица">
+        <button 
+          v-if="isExtended" 
+          :class="[{'is-active': isActive.table()}, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })" 
+          data-tooltip="Таблица"
+        >
           <span class="icon-table2"></span>
         </button>
 
@@ -229,8 +283,16 @@
 
       </div>
     </editor-menu-bar>
-    <div :class="[editorClass, 'editor', 'form-input']">
+    <div :class="[editorClass, 'editor', 'form-input']" ref="editorWrapper">
       <editor-content :editor="editor"></editor-content>
+    </div>
+    <div class="columns">
+      <div class="column col-10">
+        <small>Для добавления переноса на новую строку используйте Shift+Return</small>
+      </div>
+      <div class="column col-2 text-right">
+        <small v-if="limit > 0">{{ store.length }} / {{ limit }}</small>
+      </div>
     </div>
   </div>
 </template>
@@ -265,22 +327,45 @@ import Color from '@/editor/mark/Color'
 import ContentService from '@/services/content'
 import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
+import Limit from '@/editor/extensions/Limit'
 
 export default {
-  props: [ 'type', 'editorClass', 'limit' ], // type: basic, extended
+  props: {
+    type: null, // type: basic, extended
+    editorClass: null,
+    limit: {
+      type: Number,
+      default: -1
+    }, // -1 = no limit, 0 = readonly, 1+ = limit
+    store: {
+      type: Object,
+      default() {
+        return {
+          html: '',
+          text: '',
+          length: 0
+        }
+      }
+    }
+  },
   data() {
     return {
       editor: null,
-      showImageModal: false,
-      imageUrl: '',
-      imageModalTab: 0,
-      imageUrlError: false,
-      imageUploadError: null,
+      imageModal: {
+        show: false,
+        url: '',
+        tab: 0,
+        urlError: false,
+        uploadError: null
+      },
+      contentHtml: '',
       color: '#3b4351',
       fileInputLabel: 'Выберите файл...',
       fileInputEmpty: true,
       isFocused: false,
-      imageUploadLoading: false
+      imageUploadLoading: false,
+      menuBarFloats: false,
+      menuBarOffsetLeft: '0px'
     }
   },
   mounted() {
@@ -311,13 +396,26 @@ export default {
       },
       onBlur() {
         self.isFocused = false
+      },
+      onUpdate() {
+        self.store.html = self.editor.getHTML()
+        self.store.text = self.editor.state.doc.textContent
+        self.store.length = self.store.text.length
       }
+    }
+
+    if (this.limit > 0) {
+      options.extensions.push(new Limit({
+        limit: this.limit
+      }))
+    } else if (this.limit === 0) {
+      options.editable = false
     }
 
     if (this.isExtended) {
       options.extensions.push(
         new History(),
-        new Heading({ levels: [1, 2, 3, 4, 5, 6] }),
+        new Heading({ levels: [ 1, 2, 3, 4, 5, 6 ] }),
         new HorizontalRule(),
         new Table(),
         new TableHeader(),
@@ -329,37 +427,34 @@ export default {
 
     this.editor = new Editor(options)
 
-    window.addEventListener('keydown', (e) => {
-      if (e.keyCode === 9 && this.isFocused && this.editor.isActive.code_block()) {
-        e.preventDefault()
-      }
-    })
+    window.addEventListener('keydown', this.onKeyDown)
+    window.addEventListener('scroll', this.onScroll)
   },
   beforeDestroy() {
     this.editor.destroy()
+
+    window.removeEventListener('keydown', this.onKeyDown)
+    window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
     imageModalClose() {
-      this.showImageModal = false
-      this.imageUrlError = false
-    },
-    chooseImage(command) {
-      if (this.imageUrl.length > 0) {
-        command({ src: this.imageUrl })
-        this.imageUrl = ''
-        this.imageModalClose()
-      } else {
-        this.imageUrlError = true
-      }
-    },
-    content() {
-      return this.editor.getHTML()
+      this.imageModal.show = false
+      this.imageModal.urlError = false
     },
     setContent(body) {
       this.editor.setContent(body)
     },
+    chooseImage(command) {
+      if (this.imageModal.url.length > 0) {
+        command({ src: this.imageModal.url })
+        this.imageModal.url = ''
+        this.imageModalClose()
+      } else {
+        this.imageModal.urlError = true
+      }
+    },
     uploadImage(command) {
-      this.imageUploadError = null
+      this.imageModal.uploadError = null
       this.imageUploadLoading = true
       ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
         let url = 'https://beta.kolenka.net/content/' + data.file.id
@@ -367,7 +462,7 @@ export default {
         command({ src: url })
         this.imageModalClose()
       }).catch(err => {
-        this.imageUploadError = err
+        this.imageModal.uploadError = err
       })
     },
     fileInputChange(e) {
@@ -382,6 +477,21 @@ export default {
     colorChanged(color, command) {
       let { rgba: { r, g, b } } = color
       command({ color: `rgb(${r}, ${g}, ${b})` })
+    },
+    onKeyDown(e) {
+      if (e.keyCode === 9 &&
+          this.isFocused &&
+          this.editor.isActive.code_block()) {
+        e.preventDefault()
+      }
+    },
+    onScroll(e) {
+      if (window.pageYOffset > this.$refs.editorWrapper.offsetTop) {
+        this.menuBarOffsetLeft = this.$refs.editorWrapper.offsetLeft + 'px'
+        this.menuBarFloats = true
+      } else {
+        this.menuBarFloats = false
+      }
     }
   },
   computed: {
@@ -428,6 +538,14 @@ export default {
 .menu-bar .span {
   display: inline-block;
   width: 12px;
+}
+
+.menu-bar.floating {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  background: #fff;
 }
 
 .dropdown .button {

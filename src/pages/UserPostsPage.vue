@@ -5,6 +5,7 @@
         <loading-view></loading-view>
       </div>
       <div v-else id="content" class="column col-9">
+        <h3>Записи пользователя <router-link :to="{ name: 'profile', params: { user: $route.params.user } }">{{ $route.params.user }}</router-link></h3>
         <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
         <pagination-view :page="page" :page-count="pageCount"></pagination-view>
       </div>

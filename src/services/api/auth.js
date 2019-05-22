@@ -16,7 +16,7 @@ export default {
     }).then(res => res.data)
   },
   isTokenValid () {
-    return api.post('/tokens/valid/', {
+    return api.post('/tokens/validate/', {
       token: localStorage.getItem('accessToken')
     }, {
       headers: {

@@ -207,5 +207,13 @@ pre {
     @import '../node_modules/highlight.js/styles/a11y-light.css';
   }
 }
+
+.bottom-padd {
+  margin-top: 50px;
+}
+
+p {
+  margin: 0 0 $line-height / 1.5;
+}
 </style>
 

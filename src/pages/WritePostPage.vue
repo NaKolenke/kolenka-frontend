@@ -21,7 +21,7 @@
             </div>
           </div>
 
-          <editor type="extended" editor-class="post-editor" ref="editor"></editor>
+          <editor type="extended" editor-class="post-editor" ref="editor" :store="store"></editor>
 
           <div class="form-group">
             <div class="col-3 col-sm-12">
@@ -38,8 +38,9 @@
 
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
-              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)" :disabled="!isValidDraft">
-              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="!isValidPublish">
+              <div v-if="isSending" class="loading" style="margin-right: 32px"></div>
+              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)" :disabled="!isValidDraft || isSending">
+              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="!isValidPublish || isSending">
             </div>
           </div>
 
@@ -47,6 +48,8 @@
 
       </div>
     </div>
+
+    <div class="bottom-padd"></div>
   </div>
 </template>
 
@@ -65,7 +68,12 @@ export default {
       model: {
         title: sessionStorage.getItem('post-title') || '',
         blog: null
-      }
+      },
+      store: {
+        html: '',
+        length: 0
+      },
+      isSending: false
     }
   },
   mounted() {
@@ -77,15 +85,17 @@ export default {
     this.$refs.editor.setContent(sessionStorage.getItem('post-text') || '')
   },
   beforeDestroy() {
-    sessionStorage.setItem('post-text', this.$refs.editor.content())
+    sessionStorage.setItem('post-text', this.store.html)
     sessionStorage.setItem('post-title', this.model.title)
   },
   methods: {
-    send(draft) {      
-      PostService.createPost(this.model.title, this.$refs.editor.content(), draft, this.model.blog).then(data => {
-        console.log(data)
+    send(draft) {
+      this.isSending = true
+      PostService.createPost(this.model.title, this.store.html, draft, this.model.blog).then(data => {
         sessionStorage.setItem('post-text', null)
         sessionStorage.setItem('post-title', null)
+        this.isSending = false
+        this.$router.replace({ name: 'post', params: { post: data.post.url } })
       })
     }
   },
@@ -95,14 +105,12 @@ export default {
     },
     isValidPublish() {
       return this.model.title.length > 3 &&
-        this.$refs.editor != null &&
-        this.$refs.editor.content().length > 10 &&
+        this.store.length > 10 &&
         this.model.blog != null
     },
     isValidDraft() {
       return this.model.title.length > 3 &&
-        this.$refs.editor != null &&
-        this.$refs.editor.content().length > 10
+        this.store.length > 10
     }
   },
   components: {
