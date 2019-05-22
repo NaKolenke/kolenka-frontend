@@ -41,9 +41,7 @@
 
 <script>
 import AvatarView from '@/components/AvatarView'
-import hljs from 'highlight.js/lib/highlight'
-import '@/highlight'
-import createElement from '@/utils/createelement'
+import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 
 export default {
   props: ['post', 'cut'],
@@ -52,51 +50,8 @@ export default {
   },
   mounted() {
     if (this.$el.querySelectorAll) {
-      this.wrapCode()
-      this.wrapYoutube()      
-    }
-  },
-  methods: {
-    wrapCode() {
-      let codeTargets = this.$el.querySelectorAll('code')
-      codeTargets.forEach(target => {
-        hljs.highlightBlock(target)
-      })
-    },
-    wrapYoutube() {
-      let youtubeTargets = this.$el.querySelectorAll('iframe')
-      youtubeTargets.forEach(target => {
-        let id = target.src.match(/embed\/[a-zA-Z0-9_]+/)[0].substr(6)
-        let image = `http://img.youtube.com/vi/${id}/hqdefault.jpg`
-        
-        let wrapper = createElement('div', {
-          classList: [ 'youtube-video' ]
-        })
-        target.parentNode.insertBefore(wrapper, target)
-        wrapper.appendChild(target)
-        wrapper.removeChild(target)
-
-        let img = createElement('img', {
-          src: image,
-          width: target.width,
-          height: target.height
-        })
-        wrapper.appendChild(img)
-        
-        let span = createElement('span', {
-          classList: [ 'icon-youtube' ]
-        })
-        wrapper.appendChild(span)
-
-        let click = e => {
-          wrapper.appendChild(target)
-          img.style.display = 'none'
-          span.style.display = 'none'
-        }
-
-        img.addEventListener('click', click)
-        span.addEventListener('click', click)
-      })
+      wrapCode(this.$el)
+      wrapYoutube(this.$el)
     }
   }
 }

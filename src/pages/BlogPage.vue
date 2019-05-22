@@ -7,7 +7,7 @@
       <div v-else id="content" class="column col-9">
         <div class="card">
           <div class="card-body">
-            <blog-card v-if="posts.length > 0" :blog="posts[0].blog" :preview="false"></blog-card>
+            <blog-card v-if="blog" :blog="blog" :preview="false"></blog-card>
           </div>
           <div v-if="readers.length > 0" class="card-footer">
             <div class="card-subtitle">
@@ -46,6 +46,7 @@ import AvatarView from '@/components/AvatarView'
 export default {
   data() {
     return {
+      blog: null,
       posts: [],
       readers: [],
       page: 1,
@@ -64,17 +65,26 @@ export default {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      BlogService.getBlogPosts(route.params.name, this.page).then(data => {
+      BlogService
+      .getBlog(route.params.name)
+      .then(data => {
+        this.blog = data.blog
+        
+        return BlogService
+      })
+      .then(service => service.getBlogPosts(route.params.name, this.page))
+      .then(data => {
         this.posts = data.posts
         this.pageCount = data.meta.page_count
         this.isLoading = false
 
-        BlogService.getReaders(route.params.name).then(data => {
-          this.readers = data.readers
-        }).catch(err => {
-          console.log(err)
-        })
-      }).catch(err => {
+        return BlogService
+      })
+      .then(service => service.getReaders(route.params.name))
+      .then(data => {
+        this.readers = data.readers
+      })
+      .catch(err => {
         this.isLoading = false
         console.log(err)
 

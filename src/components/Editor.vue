@@ -196,6 +196,18 @@
           </div>
         </modal>
 
+        <button 
+          :class="[{ 'is-active': isActive.iframe() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="embedModal.show = true"
+          data-tooltip="Embed (youtube, etc)"
+        >
+          <span class="icon-new-tab"></span>
+        </button>
+
+        <modal :open="embedModal.show" :closed="embedModalClose" title="Embed" @ok="chooseEmbed(commands.iframe)">
+          <input class="form-input" type="url" placeholder="Ссылка (YouTube, Vimeo, Soundcloud)" v-model="embedModal.url" />
+        </modal>
+
         <span v-if="isExtended" class="span"></span>
 
         <button 
@@ -328,6 +340,7 @@ import ContentService from '@/services/content'
 import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
 import Limit from '@/editor/extensions/Limit'
+import Iframe from '@/editor/node/iframe'
 
 export default {
   props: {
@@ -358,7 +371,10 @@ export default {
         urlError: false,
         uploadError: null
       },
-      contentHtml: '',
+      embedModal: {
+        show: false,
+        url: ''
+      },
       color: '#3b4351',
       fileInputLabel: 'Выберите файл...',
       fileInputEmpty: true,
@@ -389,7 +405,8 @@ export default {
         new Code(),
         new CodeBlock(),
         new Image(),
-        new CBExtended()
+        new CBExtended(),
+        new Iframe()
       ],
       onFocus() {
         self.isFocused = true
@@ -428,13 +445,15 @@ export default {
     this.editor = new Editor(options)
 
     window.addEventListener('keydown', this.onKeyDown)
-    window.addEventListener('scroll', this.onScroll)
+    if (this.isExtended)
+      window.addEventListener('scroll', this.onScroll)
   },
   beforeDestroy() {
     this.editor.destroy()
 
     window.removeEventListener('keydown', this.onKeyDown)
-    window.removeEventListener('scroll', this.onScroll)
+    if (this.isExtended)
+      window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
     imageModalClose() {
@@ -474,6 +493,16 @@ export default {
         this.fileInputEmpty = true
       }
     },
+    chooseEmbed(command) {
+      if (this.embedModal.url.length > 0) {
+        command({ src: this.embedModal.url })
+        this.embedModal.url = ''
+        this.embedModal.show = false
+      }      
+    },
+    embedModalClose() {
+      this.embedModal.show = false
+    },
     colorChanged(color, command) {
       let { rgba: { r, g, b } } = color
       command({ color: `rgb(${r}, ${g}, ${b})` })
@@ -500,7 +529,8 @@ export default {
     },
     isExtended() {
       return this.type === 'extended'
-    }
+    },
+    
   },
   components: {
     EditorContent,

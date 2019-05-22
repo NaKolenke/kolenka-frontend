@@ -41,6 +41,7 @@
 <script>
 import AvatarView from '@/components/AvatarView'
 import CommentForm from '@/components/CommentForm'
+import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 
 export default {
   name: 'comment-card',
@@ -49,6 +50,12 @@ export default {
     return {
       active: false,
       isReplying: false
+    }
+  },
+  mounted() {
+    if (this.$el.querySelectorAll) {
+      wrapCode(this.$el)
+      wrapYoutube(this.$el)
     }
   },
   methods: {
