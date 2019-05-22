@@ -286,7 +286,14 @@
     <div :class="[editorClass, 'editor', 'form-input']" ref="editorWrapper">
       <editor-content :editor="editor"></editor-content>
     </div>
-    <small>Для добавления переноса на новую строку используйте Shift+Return</small>
+    <div class="columns">
+      <div class="column col-10">
+        <small>Для добавления переноса на новую строку используйте Shift+Return</small>
+      </div>
+      <div class="column col-2 text-right">
+        <small v-if="limit > 0">{{ store.length }} / {{ limit }}</small>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -326,7 +333,10 @@ export default {
   props: {
     type: null, // type: basic, extended
     editorClass: null,
-    limit: -1, // -1 = no limit, 0 = readonly, 1+ = limit
+    limit: {
+      type: Number,
+      default: -1
+    }, // -1 = no limit, 0 = readonly, 1+ = limit
     store: {
       type: Object,
       default() {
@@ -395,7 +405,9 @@ export default {
     }
 
     if (this.limit > 0) {
-      options.extensions.push(new Limit(this.limit))
+      options.extensions.push(new Limit({
+        limit: this.limit
+      }))
     } else if (this.limit === 0) {
       options.editable = false
     }

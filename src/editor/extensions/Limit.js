@@ -20,9 +20,10 @@ export default class Limit extends Extension {
       new Plugin({
         
         filterTransaction(tr, { doc }) {
+          
           if (tr.steps.length) {
             const { size } = tr.steps[0].slice.content
-            if (doc.textContent.length + size >= limit) {
+            if (doc.textContent.length + size > limit) {
               if (tr.steps[0].slice.content.size > 0) {
                 return false
               }
