@@ -105,5 +105,16 @@ export default {
 
         return data
       })
+  },
+  getUserDrafts (page) {
+    return users
+      .getUserDrafts(page)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }

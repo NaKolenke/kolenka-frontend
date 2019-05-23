@@ -17,6 +17,7 @@ import WritePostPage from '@/pages/WritePostPage'
 import FeedbackPage from '@/pages/FeedbackPage'
 import UserPostsPage from '@/pages/UserPostsPage'
 import CreateBlogPage from '@/pages/CreateBlogPage'
+import UserDraftsPage from '@/pages/UserDraftsPage'
 
 Vue.use(Router)
 
@@ -74,6 +75,11 @@ export default new Router({
       path: '/users/:user/posts',
       name: 'userPosts',
       component: UserPostsPage
+    },
+    {
+      path: '/users/drafts',
+      name: 'userDrafts',
+      component: UserDraftsPage
     },
     {
       path: '/blogs/',

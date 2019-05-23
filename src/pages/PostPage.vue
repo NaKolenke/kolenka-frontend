@@ -6,11 +6,13 @@
           <post-view v-if="post.blog" :post="post" :cut="false"></post-view>
 
           <div v-if="$meta.actions.isLoggedIn()" style="margin-top: 22px"></div>
-          <h3 id="#comments">Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
-          <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url" :action="addComment"></comment-form>
-          <div v-if="$meta.actions.isLoggedIn()" class="mt-2"></div>
-          <comment-card v-for="item in comments" :key="item.id" :comment="item" :post-url="post.url"></comment-card>
-          <div class="mt-2"></div>
+          <div v-if="!post.is_draft">
+            <h3 id="#comments">Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
+            <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url" :action="addComment"></comment-form>
+            <div v-if="$meta.actions.isLoggedIn()" class="mt-2"></div>
+            <comment-card v-for="item in comments" :key="item.id" :comment="item" :post-url="post.url"></comment-card>
+            <div class="mt-2"></div>
+          </div>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">

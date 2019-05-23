@@ -16,6 +16,7 @@
                 type="text" 
                 id="title" 
                 v-model="model.title"
+                required
               />
               <p class="form-input-hint">/posts/{{ slug }}</p>
             </div>
