@@ -62,11 +62,7 @@ export default {
         .then(res => {
           this.$meta.data.user = res.user
 
-          UserService.getUserBlogs(res.user.username).then(res => {
-            this.$userBlogs.collect(res.blogs, 'everything')
-          }).catch(err => {
-            console.log(err)
-          })
+          this.loadBlogs(res.user.username)
         })
         .catch(err => {
           console.log(err)
@@ -76,6 +72,26 @@ export default {
         .then(() => {
           this.loadingUser = false
         })
+    },
+    loadBlogs(username) {
+      UserService.getUserBlogs(username).then(res => {
+        this.$userBlogs.collect(res.blogs, 'everything')
+
+        if (res.meta.page_count > 1) {
+          for (let i = 2; i < res.meta.page_count; i++) {
+            this.loadBlogPage(username, i)
+          }
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    loadBlogPage(username, page) {
+      UserService.getUserBlogs(username, page).then(res => {
+        this.$userBlogs.collect(res.blogs, 'everything')
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }
@@ -105,9 +121,6 @@ img {
 
 .text-right {
   text-align: right;
-}
-
-#app {
 }
 
 .container {

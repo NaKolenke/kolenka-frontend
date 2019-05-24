@@ -20,8 +20,6 @@ export default class Limit extends Extension {
       new Plugin({
         
         filterTransaction(tr, { doc, selection }) {
-
-          console.log(tr)
           
           if (tr.steps.length) {
             const { size } = tr.steps[0].slice.content

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group">
+  <div class="form-group" style="position:relative">
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }" :class="{ 'floating': menuBarFloats }" :style="[{ 'left': menuBarOffsetLeft }]">
       <div class="menu-bar">
 
@@ -162,7 +162,7 @@
         </button>
         <button 
           :class="[{ 'is-active': isActive.image() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="showImageModal = true" 
+          @click="imageModal.show = true" 
           data-tooltip="Изображение"
         >
           <span class="icon-image"></span>
@@ -229,6 +229,24 @@
         >
           <span class="icon-table2"></span>
         </button>
+
+        <span class="span"></span>
+
+        <button
+          :class="['button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
+          @click="showHelp = true" 
+          data-tooltip="Помощь"
+        >
+          ?
+        </button>
+
+        <modal :open="showHelp" :closed="closeHelp" title="Помощь по редактору текста" size="lg" :hideButtons="true">
+          <h4>Общее</h4>
+          <p>Для добавления переноса на новую строку используйте <code>Ctrl/Shift+Return</code></p>
+          <p>Редактор поддерживает некоторые правила Markdown</p>
+          <h4>Embed</h4>
+          <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
+        </modal>
 
         <div v-if="isActive.code_block()">
           <small>Для выхода из режима редактирования кода нажмите Ctrl/Shift+Return</small>
@@ -298,14 +316,7 @@
     <div :class="[editorClass, 'editor', 'form-input']" ref="editorWrapper">
       <editor-content :editor="editor"></editor-content>
     </div>
-    <div class="columns">
-      <div class="column col-10">
-        <small>Для добавления переноса на новую строку используйте Shift+Return</small>
-      </div>
-      <div class="column col-2 text-right">
-        <small v-if="limit > 0">{{ store.length }} / {{ limit }}</small>
-      </div>
-    </div>
+    <small v-if="limit > 0" style="position:absolute;bottom:-18px;right:4px">{{ store.length }} / {{ limit }}</small>
   </div>
 </template>
 
@@ -359,6 +370,14 @@ export default {
           length: 0
         }
       }
+    },
+    storageKey: {
+      type: String,
+      default: null
+    },
+    storageType: {
+      type: String,
+      default: 'session' // session, local
     }
   },
   data() {
@@ -381,7 +400,8 @@ export default {
       isFocused: false,
       imageUploadLoading: false,
       menuBarFloats: false,
-      menuBarOffsetLeft: '0px'
+      menuBarOffsetLeft: '0px',
+      showHelp: false
     }
   },
   mounted() {
@@ -418,7 +438,8 @@ export default {
         self.store.html = self.editor.getHTML()
         self.store.text = self.editor.state.doc.textContent
         self.store.length = self.store.text.length
-      }
+      },
+      content: this.storageValue() || ''
     }
 
     if (this.limit > 0) {
@@ -454,6 +475,14 @@ export default {
     window.removeEventListener('keydown', this.onKeyDown)
     if (this.isExtended)
       window.removeEventListener('scroll', this.onScroll)
+
+    if (this.storageKey) {
+      if (this.storageType === 'session') {
+        sessionStorage.setItem(this.storageKey, this.store.html)
+      } else {
+        localStorage.setItem(this.storageKey, this.store.html)
+      }
+    }
   },
   methods: {
     imageModalClose() {
@@ -521,6 +550,16 @@ export default {
       } else {
         this.menuBarFloats = false
       }
+    },
+    closeHelp() {
+      this.showHelp = false
+    },
+    storageValue() {      
+      if (this.storageType === 'local') {
+        return localStorage.getItem(this.storageKey)
+      } else {
+        return sessionStorage.getItem(this.storageKey)
+      }
     }
   },
   computed: {
@@ -529,8 +568,7 @@ export default {
     },
     isExtended() {
       return this.type === 'extended'
-    },
-    
+    }
   },
   components: {
     EditorContent,

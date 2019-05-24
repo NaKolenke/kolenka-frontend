@@ -84,9 +84,9 @@ export default {
         return data
       })
   },
-  getUserBlogs (username) {
+  getUserBlogs (username, page) {
     return users
-      .getUserBlogs(username)
+      .getUserBlogs(username, page)
       .then(data => {
         if (data.success === 0) {
           throw new Error(data.error)

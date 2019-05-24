@@ -50,6 +50,15 @@ const verifiedHosts = [
       return null
 
     return `https://player.vimeo.com/video/${match[1]}`
+  },
+  // Twitter
+  function(src) {
+    let match = src.match(/twitter\.com\/[a-zA-Z0-9_]+\/status\/[0-9]+/)
+
+    if (!match)
+      return null
+
+    return `https://twitframe.com/show?url=${encodeURIComponent(src)}`
   }
 ]
 

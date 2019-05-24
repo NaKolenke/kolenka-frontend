@@ -12,12 +12,12 @@ export default {
     isError: Boolean
   },
   methods: {
-    close: function () {
+    close () {
       this.$Toast.hide(this)
     }
   },
   computed: {
-    toastClass: function  () {
+    toastClass  () {
       if (this.isError) {
         return "toast-error"
       }

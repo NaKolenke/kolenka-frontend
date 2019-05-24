@@ -49,9 +49,13 @@ export default {
       .get(`/users/${username}/`)
       .then(res => res.data)
   },
-  getUserBlogs(username) {
+  getUserBlogs(username, page) {
     return api
-      .get(`/users/${username}/blogs/`)
+      .get(`/users/${username}/blogs/`, {
+        params: {
+          page : page || 1
+        }
+      })
       .then(res => res.data)
   },
   getUserPosts(username, page) {

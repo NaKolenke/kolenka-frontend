@@ -22,7 +22,14 @@
             </div>
           </div>
 
-          <editor type="extended" editor-class="post-editor" ref="editor" :store="store"></editor>
+          <editor
+            type="extended"
+            editor-class="post-editor"
+            ref="editor"
+            :store="store"
+            storageKey="post-text"
+            storageType="local"
+          ></editor>
 
           <div class="form-group">
             <div class="col-3 col-sm-12">
@@ -67,7 +74,7 @@ export default {
         blogs: 'userBlogs/everything'
       }),
       model: {
-        title: sessionStorage.getItem('post-title') || '',
+        title: localStorage.getItem('post-title') || '',
         blog: null
       },
       store: {
@@ -82,19 +89,16 @@ export default {
       this.$router.replace({ path: '/' })
       return
     }
-
-    this.$refs.editor.setContent(sessionStorage.getItem('post-text') || '')
   },
   beforeDestroy() {
-    sessionStorage.setItem('post-text', this.store.html)
-    sessionStorage.setItem('post-title', this.model.title)
+    localStorage.setItem('post-title', this.model.title)
   },
   methods: {
     send(draft) {
       this.isSending = true
       PostService.createPost(this.model.title, this.store.html, draft, this.model.blog).then(data => {
-        sessionStorage.setItem('post-text', null)
-        sessionStorage.setItem('post-title', null)
+        localStorage.setItem('post-text', null)
+        localStorage.setItem('post-title', null)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.post.url } })
       })

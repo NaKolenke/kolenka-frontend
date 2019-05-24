@@ -66,5 +66,16 @@ export default {
 
         return data
       })
+  },
+  editBlog(url, title, description) {
+    return blog
+      .editBlog(url, title, description)
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }
