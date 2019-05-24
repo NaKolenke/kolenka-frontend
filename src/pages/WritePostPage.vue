@@ -40,8 +40,8 @@
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
               <div v-if="isSending" class="loading" style="margin-right: 32px"></div>
-              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)" :disabled="!isValidDraft || isSending">
-              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="!isValidPublish || isSending">
+              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)" :disabled="!isValid || isSending">
+              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="!isValid || isSending">
             </div>
           </div>
 
@@ -104,14 +104,10 @@ export default {
     slug() {
       return getSlug(this.model.title, { lang: 'ru' })
     },
-    isValidPublish() {
+    isValid() {
       return this.model.title.length > 3 &&
         this.store.length > 10 &&
         this.model.blog != null
-    },
-    isValidDraft() {
-      return this.model.title.length > 3 &&
-        this.store.length > 10
     }
   },
   components: {
