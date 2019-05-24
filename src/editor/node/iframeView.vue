@@ -15,6 +15,7 @@ import { throttle } from 'throttle-debounce'
 const WEB_URL = process.env.VUE_APP_URL
 
 const verifiedHosts = [
+  // YouTube
   function(src) {
     let match = src.match(/youtube.com\/watch\?v=([a-zA-Z0-9_]+)/)
 
@@ -23,6 +24,7 @@ const verifiedHosts = [
 
     return `https://www.youtube.com/embed/${match[1]}`
   },
+  // Twitch
   function(src) {
     let match = src.match(/twitch.tv\/([a-zA-Z0-9]+)/)
 
@@ -30,6 +32,24 @@ const verifiedHosts = [
       return null
 
     return `https://player.twitch.tv/?channel=${match[1]}`
+  },
+  // Soundcloud
+  function(src) {
+    let match = src.match(/soundcloud\.com\/[a-zA-Z0-9_-]+\/(sets\/[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)/)
+
+    if (!match)
+      return null
+
+    return `https://w.soundcloud.com/player/?url=${encodeURIComponent(src)}&color=%23f70000&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true`
+  },
+  // Vimeo
+  function(src) {
+    let match = src.match(/vimeo\.com\/([0-9]+)/)
+
+    if (!match)
+      return null
+
+    return `https://player.vimeo.com/video/${match[1]}`
   }
 ]
 
@@ -46,20 +66,18 @@ export default {
       this.checkUrl(src)
     })
 
-    this.throttled.call(this, this.node.attrs.src)
+    let verified = this.checkVerified(this.node.attrs.src)
+
+    if (verified) {
+      this.$nextTick(() => {
+        this.updateSrc(verified)
+      })
+    } else {
+      this.throttled.call(this, this.node.attrs.src)
+    }    
   },
   methods: {
-    checkUrl(src) {
-      let verified = this.checkVerified(src)
-
-      if (verified) {
-        this.$nextTick(() => {
-          this.updateSrc(verified)
-        })
-        
-        return
-      }
-      
+    checkUrl(src) {      
       axios
       .head(src)
       .then(res => {
