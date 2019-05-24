@@ -17,7 +17,7 @@ import WritePostPage from '@/pages/WritePostPage'
 import FeedbackPage from '@/pages/FeedbackPage'
 import UserPostsPage from '@/pages/UserPostsPage'
 import CreateBlogPage from '@/pages/CreateBlogPage'
-import UserDraftsPage from '@/pages/UserDraftsPage'
+import UserDraftsPage from '@/pages/DraftsPage'
 
 Vue.use(Router)
 

@@ -1,21 +1,67 @@
 <template>
   <div class="iframe">
-    <input class="iframe_input form-input" @paste.stop type="url" v-model="src" v-if="editable" />
+    <span class="mark icon-new-tab"></span>
+    <div :class="['form-group', 'iframe_input_wrap', { 'has-error' : error }]">
+      <input class="iframe_input form-input" @paste.stop type="url" v-model="src" v-if="editable" />
+      <p v-if="error" class="form-input-hint">{{ error }}</p>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { throttle } from 'throttle-debounce'
+
+const WEB_URL = process.env.VUE_APP_URL
+
 export default {
   props: ['node', 'updateAttrs', 'editable'],
+  data() {
+    return {
+      error: null,
+      throttled: null
+    }
+  },
+  mounted() {
+    this.throttled = throttle(1000, false, (src) => {
+      this.checkUrl(src)
+    })
+
+    this.throttled.call(this, this.node.attrs.src)
+  },
+  methods: {
+    checkUrl(src) {
+      axios
+      .head(src)
+      .then(res => {
+        const headers = res.headers
+
+        if (!headers['X-Frame-Options']) {
+          this.updateSrc()
+        } else {
+          if (headers['X-Frame-Options'] === `allow-from ${WEB_URL}`) {
+            this.updateSrc()
+          } else {
+            this.error = 'Текущий сайт не может быть отображен, так как на нем установлен заголовок "X-Frame-Options"'
+          }
+        }
+      })
+      .catch(err => {
+        this.error = 'Неверный адрес сайта'
+      })
+    },
+    updateSrc(src) {
+      this.updateAttrs({ src })
+      this.error = null
+    }
+  },
   computed: {
     src: {
       get() {
         return this.node.attrs.src
       },
       set(src) {
-        this.updateAttrs({
-          src,
-        })
+        this.throttled.call(this, src)
       },
     },
   }
@@ -34,16 +80,22 @@ export default {
   background: $gray-color-light;
 }
 
-.iframe_embed {
+.iframe .mark {
+  position: absolute;
+  left: 8px;
+  top: 8px;
   opacity: 0.5;
 }
 
-.iframe_input {
+.iframe_input_wrap {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 90%;
   transform: translate(-50%, -50%);
+}
+
+.iframe_input {
   background: none;
   border: none;
 }
