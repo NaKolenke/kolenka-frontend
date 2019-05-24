@@ -11,31 +11,38 @@
             <comment-form v-if="$meta.actions.isLoggedIn()" :post-url="post.url" :action="addComment"></comment-form>
             <div v-if="$meta.actions.isLoggedIn()" class="mt-2"></div>
             <comment-card v-for="item in comments" :key="item.id" :comment="item" :post-url="post.url"></comment-card>
-            <div class="mt-2"></div>
+            <div class="bottom-padd"></div>
           </div>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">
           <the-sidebar>
-            <div class="side-block bg-secondary">
-              <h4>Еще записи пользователя<br><i v-if="post.creator" style="word-break:break-all">{{ post.creator.name || post.creator.username }}</i></h4>
-              <ul class="relevant">
-                <li v-for="item in latestUserPosts.slice(0, 4).filter(x => !x.is_draft)" :key="item.id">
-                  <small class="label">{{ item.created_date | moment }}</small>
-                  <br>
-                  <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
-                </li>
-              </ul>
-            </div>
-            <div class="side-block bg-secondary">
-              <h4>Еще записи из блога<br><i style="word-break:break-all" v-if="post.blog">{{ post.blog.title }}</i></h4>
-              <ul class="relevant">
-                <li v-for="item in latestBlogPosts.slice(0, 4)" :key="item.id">
-                  <small class="label">{{ item.created_date | moment }}</small>
-                  <br>
-                  <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
-                </li>
-              </ul>
+            <div class="columns">
+              <div class="column col-xl-6">
+                <div class="side-block bg-secondary">
+                  <h4>Еще записи пользователя<br><i v-if="post.creator">{{ post.creator.name || post.creator.username }}</i></h4>
+                  <ul class="relevant">
+                    <li v-for="item in latestUserPosts.slice(0, 4).filter(x => !x.is_draft)" :key="item.id">
+                      <small class="label">{{ item.created_date | moment }}</small>
+                      <br>
+                      <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="column col-xl-6">
+                <div class="side-block bg-secondary">
+                  <h4>Еще записи из блога<br><i v-if="post.blog">{{ post.blog.title }}</i></h4>
+                  <ul class="relevant">
+                    <li v-for="item in latestBlogPosts.slice(0, 4)" :key="item.id">
+                      <small class="label">{{ item.created_date | moment }}</small>
+                      <br>
+                      <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </the-sidebar>
         </div>
