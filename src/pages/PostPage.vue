@@ -153,8 +153,11 @@ export default {
 </style>
 
 <style>
-#content > .comment {
+#content > div > .comment {
   border: none;
+}
+#content > div > .comment > .card-body {
+  padding-left: 0;
 }
 </style>
 
