@@ -14,6 +14,25 @@ import { throttle } from 'throttle-debounce'
 
 const WEB_URL = process.env.VUE_APP_URL
 
+const verifiedHosts = [
+  function(src) {
+    let match = src.match(/youtube.com\/watch\?v=([a-zA-Z0-9_]+)/)
+
+    if (!match)
+      return null
+
+    return `https://www.youtube.com/embed/${match[1]}`
+  },
+  function(src) {
+    let match = src.match(/twitch.tv\/([a-zA-Z0-9]+)/)
+
+    if (!match)
+      return null
+
+    return `https://player.twitch.tv/?channel=${match[1]}`
+  }
+]
+
 export default {
   props: ['node', 'updateAttrs', 'editable'],
   data() {
@@ -31,6 +50,16 @@ export default {
   },
   methods: {
     checkUrl(src) {
+      let verified = this.checkVerified(src)
+
+      if (verified) {
+        this.$nextTick(() => {
+          this.updateSrc(verified)
+        })
+        
+        return
+      }
+      
       axios
       .head(src)
       .then(res => {
@@ -53,6 +82,17 @@ export default {
     updateSrc(src) {
       this.updateAttrs({ src })
       this.error = null
+    },
+    checkVerified(src) {
+      for (let i = 0; i < verifiedHosts.length; i++) {
+        let host = verifiedHosts[i]
+        let result = host(src)
+
+        if (result)
+          return result
+      }
+
+      return null
     }
   },
   computed: {
