@@ -50,7 +50,19 @@ export default {
   },
   getBlog(url) {
     return api
-      .get(`/blogs/${url}`)
+      .get(`/blogs/${url}/`)
+      .then(res => res.data)
+  },
+  editBlog(url, title, description) {
+    return api
+      .put(`/blogs/${url}/`, {
+        title,
+        description
+      }, {
+        headers: {
+          'Authorization': localStorage.getItem('accessToken')
+        }
+      })
       .then(res => res.data)
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[{ 'modal': !size }, { 'modal-sm': size === 'sm' }, { 'modal-lg': size === 'lg' }, {'active' : isOpen}]">
+  <div :class="[{ 'modal': !size }, { 'modal-sm': size === 'sm' }, { 'modal': size === 'lg' }, { 'modal-lg': size === 'lg' }, {'active' : isOpen}]">
     <a href="#close" class="modal-overlay" aria-label="Close" @click.prevent="close"></a>
     <div class="modal-container">
       <div class="modal-header">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <div class="btn-group">
+        <div v-if="!hideButtons" class="btn-group">
           <button class="btn btn-primary" @click="onOk">OK</button>
           <button class="btn" @click="onCancel">Отмена</button>
         </div>
@@ -27,7 +27,8 @@ export default {
     open: Boolean,
     closed: Function,
     title: String,
-    size: String
+    size: String,
+    hideButtons: Boolean
   },
   data() {
     return {
