@@ -77,7 +77,7 @@ export default new Router({
       component: UserPostsPage
     },
     {
-      path: '/users/drafts',
+      path: '/drafts',
       name: 'userDrafts',
       component: UserDraftsPage
     },

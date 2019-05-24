@@ -68,8 +68,7 @@ export default {
       .get('/users/drafts/', {
         params: {
           page: page || 1
-        }
-      }, {
+        },
         headers: {
           'Authorization': localStorage.getItem('accessToken'),
         }
