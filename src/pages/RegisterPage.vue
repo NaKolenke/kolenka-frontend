@@ -12,6 +12,7 @@
               name="username" 
               id="username" 
               v-on:keyup.enter="register"
+              required
             >
             <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
           </div>
@@ -24,6 +25,7 @@
               name="email" 
               id="email" 
               v-on:keyup.enter="register"
+              required
             >
             <div class="toast toast-error" v-if="emailError">{{ emailError }}</div>
           </div>
@@ -36,6 +38,7 @@
               name="name" 
               id="name" 
               v-on:keyup.enter="register"
+              required
             >
             <div class="toast toast-error" v-if="nameError">{{ nameError }}</div>
           </div>
@@ -49,6 +52,7 @@
               type="password"
               id="password"
               v-on:keyup.enter="register"
+              required
             >
             <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
           </div>

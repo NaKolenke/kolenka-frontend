@@ -62,5 +62,17 @@ export default {
         }
       })
       .then(res => res.data)
+  },
+  getUserDrafts(page) {
+    return api
+      .get('/users/drafts/', {
+        params: {
+          page: page || 1
+        },
+        headers: {
+          'Authorization': localStorage.getItem('accessToken'),
+        }
+      })
+      .then(res => res.data)
   }
 }

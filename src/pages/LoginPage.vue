@@ -11,6 +11,7 @@
               v-model="username" 
               name="username" 
               id="username"
+              required
             >
             <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
           </div>
@@ -23,6 +24,7 @@
               name="password"
               type="password"
               id="password"
+              required
             >
             <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
           </div>

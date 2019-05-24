@@ -205,7 +205,7 @@
         </button>
 
         <modal :open="embedModal.show" :closed="embedModalClose" title="Embed" @ok="chooseEmbed(commands.iframe)">
-          <input class="form-input" type="url" placeholder="Ссылка (YouTube, Vimeo, Soundcloud)" v-model="embedModal.url" />
+          <input class="form-input" type="url" placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)" v-model="embedModal.url" />
         </modal>
 
         <span v-if="isExtended" class="span"></span>

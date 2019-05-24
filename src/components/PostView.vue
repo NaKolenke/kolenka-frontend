@@ -5,7 +5,7 @@
       {{post.created_date | moment}}
     </span>
     <h2>
-      <router-link :to="{ name: 'post',  params: { post: post.url }}">{{post.title}} <span v-if="post.is_draft" class="label label-primary">черновик</span></router-link>
+      <router-link :to="{ name: 'post',  params: { post: post.url }}"><small v-if="post.is_draft" class="label label-secondary h6">черновик</small><br>{{post.title}}</router-link>
     </h2>
 
     <div v-if="cut" v-html="post.cut_text"></div>
