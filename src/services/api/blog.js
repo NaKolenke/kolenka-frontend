@@ -53,11 +53,12 @@ export default {
       .get(`/blogs/${url}/`)
       .then(res => res.data)
   },
-  editBlog(url, title, description) {
+  editBlog(url, title, description, type) {
     return api
       .put(`/blogs/${url}/`, {
         title,
-        description
+        description,
+        blog_type: type
       }, {
         headers: {
           'Authorization': localStorage.getItem('accessToken')

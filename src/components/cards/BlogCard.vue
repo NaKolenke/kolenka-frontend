@@ -13,6 +13,11 @@
           <div class="column col-2">
             <button v-if="blog.blog_type === 1 && !contains" class="btn btn-sm" @click="joinBlog">Присоединиться</button>
             <button v-if="contains" class="btn btn-sm" disabled>Вы присоединились</button>
+            <router-link
+              v-if="$meta.data.user && blog.creator.id === $meta.data.user.id"
+              :to="{ name: 'edit-blog', params: { edit: blog } }"
+              class="btn btn-sm"
+            >Редактировать</router-link>
           </div>
         </div>
         <span v-else>{{ blog.title }}</span>

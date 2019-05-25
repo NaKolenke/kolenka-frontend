@@ -67,9 +67,9 @@ export default {
         return data
       })
   },
-  editBlog(url, title, description) {
+  editBlog(url, title, description, type) {
     return blog
-      .editBlog(url, title, description)
+      .editBlog(url, title, description, type)
       .then(data => {
         if (data.success === 0) {
           throw new Error(data.error)

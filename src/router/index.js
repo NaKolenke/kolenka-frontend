@@ -40,6 +40,11 @@ export default new Router({
       component: CreateBlogPage
     },
     {
+      path: '/edit/blog',
+      name: 'edit-blog',
+      component: CreateBlogPage
+    },
+    {
       path: '/posts/:post',
       name: 'post',
       component: PostPage

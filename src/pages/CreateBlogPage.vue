@@ -18,7 +18,7 @@
                 v-model="model.title"
                 required
               />
-              <p class="form-input-hint">/blogs/{{ slug }}</p>
+              <p v-if="!isEditing" class="form-input-hint">/blogs/{{ slug }}</p>
             </div>
           </div>
 
@@ -53,7 +53,7 @@
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
               <div v-if="isLoading" class="loading" style="margin-right: 32px"></div>
-              <input type="submit" class="btn btn-primary" value="Создать" @click="send()" :disabled="isLoading || !isValid">
+              <input type="submit" class="btn btn-primary" :value="isEditing ? 'Изменить' : 'Создать'" @click="send()" :disabled="isLoading || !isValid">
             </div>
           </div>
 
@@ -81,14 +81,31 @@ export default {
       isLoading: false
     }
   },
+  mounted() {
+    if (this.isEditing) {
+      this.model.title = this.$route.params.edit.title
+      this.model.description = this.$route.params.edit.description
+      this.model.type = this.$route.params.edit.blog_type
+    }
+  },
   methods: {
     send() {
+      let method = this.isEditing ?
+      BlogService.editBlog(
+        this.$route.params.edit.url,
+        this.model.title,
+        this.model.description,
+        this.model.type
+      ) :
       BlogService.createBlog(
         this.model.type,
         this.model.title,
         this.model.description,
         this.slug
-      ).then(data => {
+      )
+
+      method.then(data => {
+        this.$toast.show('Блог был успешно отредактирован')
         this.$router.replace({ name: 'blog', params: { name: data.blog.url } })
       })
     }
@@ -99,6 +116,9 @@ export default {
     },
     isValid() {
       return this.model.title.length > 3
+    },
+    isEditing() {
+      return this.$route.params.edit != undefined
     }
   }
 }
