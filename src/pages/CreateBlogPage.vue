@@ -18,7 +18,7 @@
                 v-model="model.title"
                 required
               />
-              <p v-if="!isEditing" class="form-input-hint">/blogs/{{ slug }}</p>
+              <p class="form-input-hint">/blogs/{{ slug }}</p>
             </div>
           </div>
 
@@ -53,7 +53,7 @@
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
               <div v-if="isLoading" class="loading" style="margin-right: 32px"></div>
-              <input type="submit" class="btn btn-primary" :value="isEditing ? 'Изменить' : 'Создать'" @click="send()" :disabled="isLoading || !isValid">
+              <input type="submit" class="btn btn-primary" :value="$route.params.edit ? 'Изменить' : 'Создать'" @click="send()" :disabled="isLoading || !isValid">
             </div>
           </div>
 
