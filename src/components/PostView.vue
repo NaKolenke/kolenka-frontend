@@ -97,5 +97,14 @@ export default {
   text-shadow: 0 10px 50px #000;
   cursor: pointer;
 }
+
+.youtube-video div {
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  color: #f5f5ff;
+}
 </style>
 

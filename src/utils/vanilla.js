@@ -1,6 +1,8 @@
 import hljs from 'highlight.js/lib/highlight'
 import '@/highlight'
 import createElement from '@/utils/createelement'
+import { throttle } from 'throttle-debounce'
+import axios from 'axios'
 
 export function wrapCode(element) {
   let codeTargets = element.querySelectorAll('code')
@@ -9,8 +11,27 @@ export function wrapCode(element) {
   })
 }
 
-const defaultWidth = '300px'
-const defaultHeight = '220px'
+const defaultWidth = '480px'
+const defaultHeight = '360px'
+
+function getVideoTitle(id) {
+  const apiKey = 'AIzaSyAJObvtrtpzFv0XlrJv4jw53q6LfqRjb80';
+
+  return axios.get('https://www.googleapis.com/youtube/v3/videos', {
+    params: {
+      part: 'snippet',
+      id,
+      key: apiKey
+    }
+  })
+}
+
+const getVideoTitleThrottled = throttle(500, (id, title) => {
+  getVideoTitle(id).then(res => {
+    let snippet = res.data.items[0].snippet
+    title.innerText = snippet.channelTitle + ' | ' + snippet.title
+  })
+})
 
 export function wrapYoutube(element) {
   let youtubeTargets = element.querySelectorAll('iframe')
@@ -19,7 +40,6 @@ export function wrapYoutube(element) {
       return
     
     let id = target.src.match(/embed\/[a-zA-Z0-9_]+/)[0].substr(6)
-
     let image = `http://img.youtube.com/vi/${id}/hqdefault.jpg`
     
     let wrapper = createElement('div', {
@@ -43,10 +63,16 @@ export function wrapYoutube(element) {
     })
     wrapper.appendChild(span)
 
+    let title = createElement('div')
+    wrapper.appendChild(title)
+
+    getVideoTitleThrottled(id, title)
+
     let click = e => {
       wrapper.appendChild(target)
       img.style.display = 'none'
       span.style.display = 'none'
+      title.style.display = 'none'
     }
 
     img.addEventListener('click', click)

@@ -2,7 +2,7 @@
   <div class="iframe">
     <span class="mark icon-new-tab"></span>
     <div :class="['form-group', 'iframe_input_wrap', { 'has-error' : error }]">
-      <input class="iframe_input form-input" @paste.stop type="url" v-model="src" v-if="editable" />
+      <input class="iframe_input form-input" @paste.stop type="url" v-model="visibleSource" :disabled="!editable" />
       <p v-if="error" class="form-input-hint">{{ error }}</p>
     </div>
   </div>
@@ -67,23 +67,26 @@ export default {
   data() {
     return {
       error: null,
-      throttled: null
+      throttled: null,
+      visibleSource: ''
     }
   },
   mounted() {
+    this.visibleSource = this.node.attrs.src
+    
     this.throttled = throttle(1000, false, (src) => {
       this.checkUrl(src)
     })
 
-    let verified = this.checkVerified(this.node.attrs.src)
+    let verified = this.checkVerified(this.visibleSource)
 
     if (verified) {
       this.$nextTick(() => {
         this.updateSrc(verified)
       })
     } else {
-      this.throttled.call(this, this.node.attrs.src)
-    }    
+      this.throttled.call(this, this.visibleSource)
+    }
   },
   methods: {
     checkUrl(src) {      
@@ -121,16 +124,6 @@ export default {
 
       return null
     }
-  },
-  computed: {
-    src: {
-      get() {
-        return this.node.attrs.src
-      },
-      set(src) {
-        this.throttled.call(this, src)
-      },
-    },
   }
 }
 </script>
@@ -149,9 +142,10 @@ export default {
 
 .iframe .mark {
   position: absolute;
-  left: 8px;
-  top: 8px;
+  left: 16px;
+  top: 50%;
   opacity: 0.5;
+  transform: translateY(-50%)
 }
 
 .iframe_input_wrap {
@@ -168,3 +162,17 @@ export default {
 }
 </style>
 
+<style lang="scss">
+iframe[src*="soundcloud.com"] {
+  width: 100%;
+}
+
+iframe[src*="youtube.com"] {
+  width: 100%;
+  height: 100%;
+}
+
+iframe[src*="twitter.com"] {
+  height: 210px;
+}
+</style>

@@ -180,7 +180,7 @@
           <br>
           <div v-if="imageModal.tab === 0">
             <div :class="['form-group', {'has-error': imageModal.urlError}]">
-              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url">
+              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url" autofocus />
               <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
             </div>
           </div>
@@ -205,7 +205,7 @@
         </button>
 
         <modal :open="embedModal.show" :closed="embedModalClose" title="Embed" @ok="chooseEmbed(commands.iframe)">
-          <input class="form-input" type="url" placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)" v-model="embedModal.url" />
+          <input class="form-input" type="url" placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)" v-model="embedModal.url" autofocus />
         </modal>
 
         <span v-if="isExtended" class="span"></span>
