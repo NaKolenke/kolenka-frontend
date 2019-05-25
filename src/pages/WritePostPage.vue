@@ -121,8 +121,11 @@ export default {
       method.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
+        this.$posts.delete(data.post.id)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.post.url } })
+      }).catch(err => {
+        console.log(err)
       })
     }
   },
