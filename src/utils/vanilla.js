@@ -26,10 +26,10 @@ function getVideoTitle(id) {
   })
 }
 
-const getVideoTitleThrottled = throttle(500, (id, title) => {
+const getVideoTitleThrottled = throttle(500, (id, element) => {
   getVideoTitle(id).then(res => {
-    let snippet = res.data.items[0].snippet
-    title.innerText = snippet.channelTitle + ' | ' + snippet.title
+    const snippet = res.data.items[0].snippet
+    element.innerText = snippet.channelTitle + ' | ' + snippet.title
   })
 })
 

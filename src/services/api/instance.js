@@ -8,3 +8,7 @@ export const api = axios.create({
     'Content-Type': 'application/json'
   }
 })
+
+export function getAccessToken() {
+  return localStorage.getItem('accessToken')
+}

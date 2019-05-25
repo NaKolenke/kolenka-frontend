@@ -1,32 +1,31 @@
-import { api } from './instance'
+import { api, getAccessToken } from './instance'
 
 export default {
   send (feedback) {
-    return api.post('/feedback/',
-      {
+    return api
+      .post('/feedback/', {
         text: feedback
-      },
-      {
+      }, {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
   getList () {
-    return api.get('/feedback/',
-      {
+    return api
+      .get('/feedback/', {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
   resolve (id) {
-    return api.get('/feedback/' + id + '/',
-      {
+    return api
+      .get('/feedback/' + id + '/', {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)

@@ -1,7 +1,7 @@
-import { api } from './instance'
+import { api, getAccessToken } from './instance'
 
 export default {
-  getBlogs(page, limit) {
+  getBlogs (page, limit) {
     return api
       .get('/blogs/', {
         params: {
@@ -11,7 +11,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getBlogPosts(url, page, limit) {
+  getBlogPosts (url, page, limit) {
     return api
       .get(`/blogs/${url}/posts/`, {
         params: {
@@ -21,21 +21,21 @@ export default {
       })
       .then(res => res.data)
   },
-  joinBlog(url) {
+  joinBlog (url) {
     return api
       .post(`/blogs/${url}/join/`, {}, {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
-  getReaders(url) {
+  getReaders (url) {
     return api
       .get(`/blogs/${url}/readers/`)
       .then(res => res.data)
   },
-  createBlog({ type, title, description, url }) {
+  createBlog ({ type, title, description, url }) {
     return api
       .post('/blogs/', {
         blog_type: type,
@@ -45,17 +45,17 @@ export default {
         url
       }, {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
-  getBlog(url) {
+  getBlog (url) {
     return api
       .get(`/blogs/${url}/`)
       .then(res => res.data)
   },
-  editBlog(url, { title, description, type }) {
+  editBlog (url, { title, description, type }) {
     return api
       .put(`/blogs/${url}/`, {
         title,
@@ -63,7 +63,7 @@ export default {
         blog_type: type
       }, {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)

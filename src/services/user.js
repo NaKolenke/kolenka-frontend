@@ -1,6 +1,7 @@
 import users from './api/user'
 import auth from './auth'
 import ContentService from './content'
+import { checkErrors } from './utils'
 
 export default {
   login(username, password) {
@@ -31,13 +32,7 @@ export default {
   getSelf () {
     return users
       .getSelf()
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   editSelf (user) {
     return users.editSelf(user.email, user.name, user.about, user.birthday)
@@ -48,13 +43,7 @@ export default {
       .then(data => {
         return users.editAvatar(data.file.id)
       })
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   logout () {
     localStorage.removeItem('accessToken')
@@ -65,56 +54,26 @@ export default {
   getUsers (page) {
     return users
       .getUsers(page)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getUser (username) {
     return users
       .getUser(username)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getUserBlogs (username, page) {
     return users
       .getUserBlogs(username, page)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getUserPosts (username, page) {
     return users
       .getUserPosts(username, page)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getUserDrafts (page) {
     return users
       .getUserDrafts(page)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   }
 }
