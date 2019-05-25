@@ -1,81 +1,40 @@
 import blog from './api/blog'
+import { checkErrors } from './utils'
 
 export default {
   getBlogs(page) {
     return blog
       .getBlogs(page)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getBlogPosts(url, page) {
     return blog
       .getBlogPosts(url, page)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   joinBlog(url) {
     return blog
       .joinBlog(url)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getReaders(url) {
     return blog
       .getReaders(url)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getBlog(url) {
     return blog
       .getBlog(url)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   createBlog(type, title, description, url) {
     return blog
       .createBlog({ type, title, description, url })
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   editBlog(url, title, description, type) {
     return blog
       .editBlog(url, { title, description, type })
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   }
 }

@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView'
+import AvatarView from '@/components/AvatarView.vue'
 import BlogService from '@/services/blog'
 
 export default {

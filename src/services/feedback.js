@@ -1,37 +1,20 @@
 import api from './api/feedback'
+import { checkErrors } from './utils'
 
 export default {
   send (feedback) {
     return api
       .send(feedback)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   },
   getList () {
     return api
       .getList()
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data.feedback.reverse()
-      })
+      .then(checkErrors)
   },
   resolve (id) {
     return api
       .resolve(id)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
+      .then(checkErrors)
   }
 }

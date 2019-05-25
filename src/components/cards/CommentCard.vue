@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView'
-import CommentForm from '@/components/CommentForm'
+import AvatarView from '@/components/AvatarView.vue'
+import CommentForm from '@/components/CommentForm.vue'
 import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 
 export default {

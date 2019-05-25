@@ -35,13 +35,13 @@
 </template>
 
 <script>
-import PostView from '@/components/PostView'
-import LoadingView from '@/components/LoadingView'
-import TheSidebar from '@/components/TheSidebar'
-import PaginationView from '@/components/PaginationView'
+import PostView from '@/components/PostView.vue'
+import LoadingView from '@/components/LoadingView.vue'
+import TheSidebar from '@/components/TheSidebar.vue'
+import PaginationView from '@/components/PaginationView.vue'
+import BlogCard from '@/components/cards/BlogCard.vue'
+import AvatarView from '@/components/AvatarView.vue'
 import BlogService from '@/services/blog'
-import BlogCard from '@/components/cards/BlogCard'
-import AvatarView from '@/components/AvatarView'
 
 export default {
   data() {

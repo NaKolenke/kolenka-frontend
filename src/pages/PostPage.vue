@@ -52,13 +52,13 @@
 </template>
 
 <script>
-import PostView from '@/components/PostView'
-import TheSidebar from '@/components/TheSidebar'
-import PostService from '@/services/post'
-import CommentCard from '@/components/cards/CommentCard'
-import CommentForm from '@/components/CommentForm'
+import PostView from '@/components/PostView.vue'
+import TheSidebar from '@/components/TheSidebar.vue'
+import CommentCard from '@/components/cards/CommentCard.vue'
+import CommentForm from '@/components/CommentForm.vue'
 import BlogService from '@/services/blog'
 import UserService from '@/services/user'
+import PostService from '@/services/post'
 
 export default {
   data: function () {

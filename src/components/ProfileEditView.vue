@@ -42,7 +42,7 @@
 <script>
 import Moment from 'moment'
 import 'moment/locale/ru'
-import Editor from '@/components/Editor'
+import Editor from '@/components/Editor.vue'
 
 Moment.locale('ru')
 

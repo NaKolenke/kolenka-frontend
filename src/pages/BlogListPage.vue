@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import LoadingView from '@/components/LoadingView'
-import TheSidebar from '@/components/TheSidebar'
-import PaginationView from '@/components/PaginationView'
-import BlogCard from '@/components/cards/BlogCard'
+import LoadingView from '@/components/LoadingView.vue'
+import TheSidebar from '@/components/TheSidebar.vue'
+import PaginationView from '@/components/PaginationView.vue'
+import BlogCard from '@/components/cards/BlogCard.vue'
 import BlogService from '@/services/blog'
 
 export default {

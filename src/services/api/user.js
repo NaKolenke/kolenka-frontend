@@ -1,16 +1,16 @@
-import { api } from './instance'
+import { api, getAccessToken } from './instance'
 
 export default {
-  getSelf() {
+  getSelf () {
     return api
       .get('/users/self/', {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
-  editSelf(email, name, about, birthday) {
+  editSelf (email, name, about, birthday) {
     return api
       .post('/users/self/', {
         email,
@@ -19,23 +19,23 @@ export default {
         birthday
       }, {
         headers: {
-          'Authorization': localStorage.getItem('accessToken')
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
-  editAvatar(avatarId) {
+  editAvatar (avatarId) {
     return api
       .post('/users/self/', {
         avatar: avatarId
       }, {
         headers: {
-          'Authorization': localStorage.getItem('accessToken'),
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
   },
-  getUsers(page) {
+  getUsers (page) {
     return api
       .get('/users/', {
         params: {
@@ -44,12 +44,12 @@ export default {
       })
       .then(res => res.data)
   },
-  getUser(username) {
+  getUser (username) {
     return api
       .get(`/users/${username}/`)
       .then(res => res.data)
   },
-  getUserBlogs(username, page) {
+  getUserBlogs (username, page) {
     return api
       .get(`/users/${username}/blogs/`, {
         params: {
@@ -58,7 +58,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getUserPosts(username, page) {
+  getUserPosts (username, page) {
     return api
       .get(`/users/${username}/posts/`, {
         params: {
@@ -67,14 +67,14 @@ export default {
       })
       .then(res => res.data)
   },
-  getUserDrafts(page) {
+  getUserDrafts (page) {
     return api
       .get('/users/drafts/', {
         params: {
           page: page || 1
         },
         headers: {
-          'Authorization': localStorage.getItem('accessToken'),
+          'Authorization': getAccessToken()
         }
       })
       .then(res => res.data)
