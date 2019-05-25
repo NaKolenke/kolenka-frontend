@@ -13,6 +13,8 @@
               </div>
             </div>
           </div>
+
+          <div class="bottom-padd"></div>
         </div>
 
         <div id="sidebar" class="column col-3 hide-md">

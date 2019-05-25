@@ -51,5 +51,17 @@ export default {
         'Authorization': localStorage.getItem('accessToken')
       }
     }).then(res => res.data)
+  },
+  editPost(url, { title, text, draft, blogId }) {
+    return api.put(`/posts/${url}/`, {
+      blog: blogId,
+      is_draft: draft || false,
+      text,
+      title
+    }, {
+      headers: {
+        'Authorization': localStorage.getItem('accessToken')
+      }
+    }).then(res => res.data)
   }
 }

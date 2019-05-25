@@ -58,5 +58,18 @@ export default {
 
         return data
       })
+  },
+  editPost(url, title, text, draft, blogId) {
+    return posts
+      .editPost(
+        url, { title, text, draft, blogId }
+      )
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
   }
 }

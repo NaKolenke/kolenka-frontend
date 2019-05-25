@@ -89,6 +89,12 @@ export default {
       this.$router.replace({ path: '/' })
       return
     }
+
+    if (this.$route.params.edit) {
+      this.model.title = this.$route.params.edit.title
+      this.model.blog = this.$route.params.edit.blog.id
+      this.$refs.editor.setContent(this.$route.params.edit.text)
+    }
   },
   beforeDestroy() {
     localStorage.setItem('post-title', this.model.title)
@@ -96,7 +102,23 @@ export default {
   methods: {
     send(draft) {
       this.isSending = true
-      PostService.createPost(this.model.title, this.store.html, draft, this.model.blog).then(data => {
+
+      let method = this.$route.params.edit ?
+      PostService.editPost(
+        this.$route.params.edit.url,
+        this.model.title,
+        this.store.html,
+        draft,
+        this.model.blog
+      ) :
+      PostService.createPost(
+        this.model.title,
+        this.store.html,
+        draft,
+        this.model.blog
+      )
+      
+      method.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
         this.isSending = false

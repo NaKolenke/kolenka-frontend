@@ -16,6 +16,7 @@ export default class Iframe extends Node {
       },
       group: 'block',
       selectable: true,
+      editable: true,
       parseDOM: [{
         tag: 'iframe',
         getAttrs: dom => ({

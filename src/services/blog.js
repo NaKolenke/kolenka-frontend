@@ -45,17 +45,6 @@ export default {
         return data
       })
   },
-  createBlog(type, title, description, url) {
-    return blog
-      .createBlog(type, title, description, url)
-      .then(data => {
-        if (data.success === 0) {
-          throw new Error(data.error)
-        }
-
-        return data
-      })
-  },
   getBlog(url) {
     return blog
       .getBlog(url)
@@ -67,9 +56,20 @@ export default {
         return data
       })
   },
-  editBlog(url, title, description) {
+  createBlog(type, title, description, url) {
     return blog
-      .editBlog(url, title, description)
+      .createBlog({ type, title, description, url })
+      .then(data => {
+        if (data.success === 0) {
+          throw new Error(data.error)
+        }
+
+        return data
+      })
+  },
+  editBlog(url, title, description, type) {
+    return blog
+      .editBlog(url, { title, description, type })
       .then(data => {
         if (data.success === 0) {
           throw new Error(data.error)
