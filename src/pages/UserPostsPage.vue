@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import PostView from '@/components/PostView'
-import LoadingView from '@/components/LoadingView'
-import TheSidebar from '@/components/TheSidebar'
-import PaginationView from '@/components/PaginationView'
+import PostView from '@/components/PostView.vue'
+import LoadingView from '@/components/LoadingView.vue'
+import TheSidebar from '@/components/TheSidebar.vue'
+import PaginationView from '@/components/PaginationView.vue'
 import UserService from '@/services/user'
 
 export default {
