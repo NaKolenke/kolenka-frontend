@@ -12,6 +12,12 @@
       </router-link>
     </h2>
 
+    <router-link 
+      v-if="$meta.data.user && $meta.data.user.id === post.creator.id"
+      :to="{ name: 'edit-post', params: { edit: post } }" 
+      class="btn btn-sm"
+    >Редактировать</router-link>
+
     <div v-if="cut" v-html="post.cut_text"></div>
     <div v-else v-html="post.text" ></div>
 
@@ -96,15 +102,27 @@ export default {
   font-size: 64px;
   text-shadow: 0 10px 50px #000;
   cursor: pointer;
+  transition: all 1s ease-in-out;
+}
+
+.youtube-video:hover span {
+  color: #FF0000;
+  text-shadow: 4px 4px 50px #fff,
+              4px -4px 50px #fff,
+              -4px 4px 50px #fff,
+              -4px -4px 50px #fff;
+  transition: all 1s ease-in-out;
 }
 
 .youtube-video div {
-  display: inline-block;
+  display: inline;
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   background: rgba(0,0,0,0.7);
   color: #f5f5ff;
+  z-index: 99;
+  padding: 4px;
 }
 </style>
 

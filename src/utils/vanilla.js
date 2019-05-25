@@ -51,6 +51,9 @@ export function wrapYoutube(element) {
     wrapper.style.width = target.width || defaultWidth
     wrapper.style.height = target.height || defaultHeight
 
+    let title = createElement('div')
+    wrapper.appendChild(title)
+
     let img = createElement('img', {
       src: image,
       width: target.width || defaultWidth,
@@ -62,9 +65,6 @@ export function wrapYoutube(element) {
       classList: [ 'icon-youtube' ]
     })
     wrapper.appendChild(span)
-
-    let title = createElement('div')
-    wrapper.appendChild(title)
 
     getVideoTitleThrottled(id, title)
 

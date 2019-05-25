@@ -1,20 +1,22 @@
 import { api } from './instance'
 
 export default {
-  getBlogs(page) {
+  getBlogs(page, limit) {
     return api
       .get('/blogs/', {
         params: {
-          page: page || 1
+          page: page || 1,
+          limit: limit || null
         }
       })
       .then(res => res.data)
   },
-  getBlogPosts(url, page) {
+  getBlogPosts(url, page, limit) {
     return api
       .get(`/blogs/${url}/posts/`, {
         params: {
-          page: page || 1
+          page: page || 1,
+          limit: limit || null
         }
       })
       .then(res => res.data)
@@ -33,7 +35,7 @@ export default {
       .get(`/blogs/${url}/readers/`)
       .then(res => res.data)
   },
-  createBlog(type, title, description, url) {
+  createBlog({ type, title, description, url }) {
     return api
       .post('/blogs/', {
         blog_type: type,
@@ -53,7 +55,7 @@ export default {
       .get(`/blogs/${url}/`)
       .then(res => res.data)
   },
-  editBlog(url, title, description, type) {
+  editBlog(url, { title, description, type }) {
     return api
       .put(`/blogs/${url}/`, {
         title,

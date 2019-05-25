@@ -82,7 +82,7 @@ export default {
     }
   },
   mounted() {
-    if (this.isEditing) {
+    if (this.$route.params.edit) {
       this.model.title = this.$route.params.edit.title
       this.model.description = this.$route.params.edit.description
       this.model.type = this.$route.params.edit.blog_type
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     send() {
-      let method = this.isEditing ?
+      let method = this.$route.params.edit ?
       BlogService.editBlog(
         this.$route.params.edit.url,
         this.model.title,
@@ -116,9 +116,6 @@ export default {
     },
     isValid() {
       return this.model.title.length > 3
-    },
-    isEditing() {
-      return this.$route.params.edit != undefined
     }
   }
 }
