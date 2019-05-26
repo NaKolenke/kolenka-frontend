@@ -12,7 +12,7 @@
 import UserService from '@/services/user'
 
 export default {
-  mounted: function () {
+  mounted () {
     UserService.logout()
     this.$parent.refreshUser()
     this.$router.replace({ path: '/' })

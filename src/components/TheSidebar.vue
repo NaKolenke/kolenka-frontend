@@ -8,12 +8,6 @@
   </div>
 </template>
 
-<script>
-export default {
-
-}
-</script>
-
 <style scoped>
 h4 {
   text-align: right;

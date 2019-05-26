@@ -47,7 +47,7 @@
 import UserService from '@/services/user'
 
 export default {
-  data: function () {
+  data () {
     return {
       username: '',
       password: '',
@@ -55,7 +55,7 @@ export default {
       passwordError: null
     }
   },
-  mounted: function () {
+  mounted () {
     UserService
       .getSelf()
       .then(data => {
@@ -68,7 +68,7 @@ export default {
       })
   },
   methods: {
-    login: function () {
+    login () {
       if (this.username.length === 0) {
         this.usernameError = 'Введите имя пользователя'
       } else {

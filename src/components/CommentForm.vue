@@ -20,7 +20,11 @@
 import Editor from '@/components/Editor.vue'
 
 export default {
-  props: [ 'postUrl', 'action', 'parentId' ],
+  props: [ 
+    'postUrl', 
+    'action', 
+    'parentId' 
+  ],
   data() {
     return {
       isSending: false,

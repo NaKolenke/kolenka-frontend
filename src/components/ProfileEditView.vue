@@ -1,39 +1,37 @@
 <template>
-  <div>
-    <div class="user column col-12 py-2">
-      <div class="columns">
-        <div class="column col-8">
-          <div class="form-group">
-            <label class="form-label" for="name">Имя пользователя</label>
-            <input class="form-input" v-model="user.name" name="name" id="name">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="email">Email</label>
-            <input class="form-input" v-model="user.email" name="email" id="email">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="birthday">День рождения</label>
-            <input class="form-input" v-model="birthday" type="date" name="birthday" id="birthday">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="about">О себе</label>
-            <editor type="basic" ref="editor" editor-class="bio-editor"></editor>
-          </div>
-
-          <button id="edit-btn" class="btn" v-on:click="edit()">Изменить</button>
+  <div class="user column col-12 py-2">
+    <div class="columns">
+      <div class="column col-8">
+        <div class="form-group">
+          <label class="form-label" for="name">Имя пользователя</label>
+          <input class="form-input" v-model="user.name" name="name" id="name">
         </div>
 
-        <div class="column col-4">
-          <form class="form-group" ref="avatar">
-            <label class="form-label" for="avatar">Аватар</label>
-            <img :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />
-            <input class="form-input" type="file" name="file" id="avatar">
-          </form>
-          <button id="edit-avatar-btn" class="btn" v-on:click="editAvatar()">Обновить аватар</button>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" v-model="user.email" name="email" id="email">
         </div>
+
+        <div class="form-group">
+          <label class="form-label" for="birthday">День рождения</label>
+          <input class="form-input" v-model="birthday" type="date" name="birthday" id="birthday">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="about">О себе</label>
+          <editor type="basic" ref="editor" editor-class="bio-editor"></editor>
+        </div>
+
+        <button id="edit-btn" class="btn" v-on:click="edit()">Изменить</button>
+      </div>
+
+      <div class="column col-4">
+        <form class="form-group" ref="avatar">
+          <label class="form-label" for="avatar">Аватар</label>
+          <img :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />
+          <input class="form-input" type="file" name="file" id="avatar">
+        </form>
+        <button id="edit-avatar-btn" class="btn" v-on:click="editAvatar()">Обновить аватар</button>
       </div>
     </div>
   </div>

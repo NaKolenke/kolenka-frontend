@@ -344,14 +344,14 @@ import {
   TableCell,
   TableRow
 } from 'tiptap-extensions'
-import Modal from '@/components/Modal.vue'
 import Alignment from '@/editor/mark/Align'
 import Color from '@/editor/mark/Color'
-import ContentService from '@/services/content'
-import ColorPicker from '@caohenghu/vue-colorpicker'
 import CBExtended from '@/editor/extensions/CodeBlockExtended'
 import Limit from '@/editor/extensions/Limit'
 import Iframe from '@/editor/node/iframe'
+import Modal from '@/components/elements/Modal.vue'
+import ColorPicker from '@caohenghu/vue-colorpicker'
+import ContentService from '@/services/content'
 
 export default {
   props: {

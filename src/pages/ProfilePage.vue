@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <div class="container col-9 col-mx-auto">
-      <div class="columns">
-        <div id="content" class="column col-9">
-          <profile-view v-if="user.username" :user="user" :can-edit="canEdit"></profile-view>
+  <div class="container col-9 col-mx-auto">
+    <div class="columns">
+      <div id="content" class="column col-9">
+        <profile-view v-if="user.username" :user="user" :can-edit="canEdit"></profile-view>
 
-          <div v-if="blogs.length > 0">
-            <h3>Блоги пользователя</h3>
-            <div class="columns blogs">
-              <div class="column col-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
-                <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
-              </div>
+        <div v-if="blogs.length > 0">
+          <h3>Блоги пользователя</h3>
+          <div class="columns blogs">
+            <div class="column col-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
+              <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
             </div>
           </div>
-
-          <div class="bottom-padd"></div>
         </div>
 
-        <div id="sidebar" class="column col-3 hide-md">
-          <the-sidebar></the-sidebar>
-        </div>
+        <div class="bottom-padd"></div>
+      </div>
+
+      <div id="sidebar" class="column col-3 hide-md">
+        <the-sidebar></the-sidebar>
       </div>
     </div>
   </div>

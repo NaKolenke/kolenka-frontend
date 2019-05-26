@@ -2,7 +2,7 @@
   <div class="user column col-12 p-2">
     <div class="columns">
       <div class="column col-1">
-        <avatar-view :user="user" :size="'lg'" :card="false"></avatar-view>
+        <avatar :user="user" :size="'lg'" :card="false" />
       </div>
       <div class="column col-7">
         <div v-if="user">
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 
 export default {
   props: ['user'],
   components: {
-    AvatarView
+    Avatar
   }
 }
 </script>

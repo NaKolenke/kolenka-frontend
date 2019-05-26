@@ -12,14 +12,14 @@
           <div v-if="readers.length > 0" class="card-footer">
             <div class="card-subtitle">
               <span class="text-gray mx-1">Подписчики </span>
-              <avatar-view
+              <avatar
                 v-for="reader in readers"
                 :key="reader.id"
                 :user="reader"
                 :card="false"
                 class="mx-1 tooltip"
                 :data-tooltip="reader.name || reader.username"
-              ></avatar-view>
+              />
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@ import LoadingView from '@/components/LoadingView.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import BlogCard from '@/components/cards/BlogCard.vue'
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import BlogService from '@/services/blog'
 
 export default {
@@ -104,7 +104,7 @@ export default {
     TheSidebar,
     PaginationView,
     BlogCard,
-    AvatarView
+    Avatar
   }
 }
 </script>

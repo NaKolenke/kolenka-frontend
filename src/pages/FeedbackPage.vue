@@ -19,18 +19,18 @@ import FeedbackPrompt from '@/components/FeedbackPrompt.vue'
 import FeedbackService from '@/services/feedback'
 
 export default {
-  data: function () {
+  data () {
     return {
       feedbacks: []
     }
   },
-  created: function () {
+  created () {
     if (this.isAdmin) {
       this.refreshFeedbacks()
     }
   },
   methods: {
-    refreshFeedbacks: function () {
+    refreshFeedbacks () {
       FeedbackService.getList().then(data => {
         this.feedbacks = data
       }).catch(err => {
@@ -39,7 +39,7 @@ export default {
         this.$router.replace({ path: '/401' })
       })
     },
-    resolved: function (id) {
+    resolved (id) {
       this.feedbacks.filter(f => f.id == id)[0].is_resolved = true
     }
   },
@@ -48,7 +48,7 @@ export default {
     FeedbackPrompt
   },
   computed: {
-    isAdmin: function () {
+    isAdmin () {
       if (!this.$meta.data.user) {
         return false
       }

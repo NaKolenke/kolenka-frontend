@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import FeedbackService from '@/services/feedback'
 
 export default {
@@ -73,9 +73,6 @@ export default {
   props: {
     user: Object,
     version: String,
-  },
-  components: {
-    AvatarView
   },
   mounted: function () {
     this.$watch('user', this.refreshFeedbackTooltip)
@@ -106,6 +103,9 @@ export default {
       }
       return this.$meta.data.user.is_admin
     }
+  },
+  components: {
+    Avatar
   }
 }
 </script>

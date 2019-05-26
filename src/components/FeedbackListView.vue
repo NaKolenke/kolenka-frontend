@@ -11,13 +11,13 @@ export default {
   props: [
     "list"
   ],
-  components: {
-    FeedbackListItem
-  },
   methods: {
     resolved: function (id) {
       this.$parent.resolved(id)
     }
+  },
+  components: {
+    FeedbackListItem
   }
 }
 </script>

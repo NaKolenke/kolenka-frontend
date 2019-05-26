@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <div class="container col-9 col-mx-auto">
-      <div class="columns">
-        <div v-if="isLoading" class="column col-9">
-          <loading-view></loading-view>
-        </div>
-        <div v-else id="content" class="users columns column col-8 mx-2 px-2">
-          <div class="column col-8">Пользователь</div>
-          <div class="column col-4 col-mr-auto">Последний раз был на сайте</div>
-          <profile-list-item v-for="user in users" :key="user.id" :user="user"></profile-list-item>
+  <div class="container col-9 col-mx-auto">
+    <div class="columns">
+      <div v-if="isLoading" class="column col-9">
+        <loading-view></loading-view>
+      </div>
+      <div v-else id="content" class="users columns column col-8 mx-2 px-2">
+        <div class="column col-8">Пользователь</div>
+        <div class="column col-4 col-mr-auto">Последний раз был на сайте</div>
+        <profile-list-item v-for="user in users" :key="user.id" :user="user"></profile-list-item>
 
-          <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-        </div>
+        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
+      </div>
 
-        <div id="sidebar" class="column col-3 hide-md">
-          <the-sidebar></the-sidebar>
-        </div>
+      <div id="sidebar" class="column col-3 hide-md">
+        <the-sidebar></the-sidebar>
       </div>
     </div>
   </div>

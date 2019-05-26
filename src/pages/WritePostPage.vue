@@ -64,7 +64,7 @@
 <script>
 import Editor from '@/components/Editor.vue'
 import PostService from '@/services/post'
-import getSlug from 'speakingurl'
+import slugify from 'speakingurl'
 
 export default {
   data() {
@@ -131,7 +131,7 @@ export default {
   },
   computed: {
     slug() {
-      return getSlug(this.model.title, { lang: 'ru' })
+      return slugify(this.model.title, { lang: 'ru' })
     },
     isValid() {
       return this.model.title.length > 3 &&
