@@ -2,7 +2,7 @@
   <div class="column col-12 p-2">
     <div class="columns">
       <div class="column col-1">
-        <avatar-view :user="feedback.user" :size="'lg'" :card="true"></avatar-view>
+        <avatar :user="feedback.user" :size="'lg'" :card="true" />
       </div>
       <div class="column col-9">{{feedback.text}}</div>
       <div class="column col-2">
@@ -20,14 +20,11 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import FeedbackService from '@/services/feedback'
 
 export default {
   props: ['feedback'],
-  components: {
-    AvatarView
-  },
   methods: {
     send () {
       FeedbackService
@@ -41,6 +38,9 @@ export default {
           this.$toast.show('Произошла ошибка при отправке запроса, напишите об этом одному из разработчиков')
         })
     }
+  },
+  components: {
+    Avatar
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="container columns">
     <div class="column col-1">
-      <avatar-view :user="blog.creator" :size="'lg'"></avatar-view>
+      <avatar :user="blog.creator" :size="'lg'" />
     </div>
 
     <div class="column col-11">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import BlogService from '@/services/blog'
 
 export default {
@@ -68,9 +68,6 @@ export default {
       }),
       posts: []
     }
-  },
-  components: {
-    AvatarView
   },
   mounted () {    
     if (this.preview)
@@ -105,6 +102,9 @@ export default {
       }
       return false
     }
+  },
+  components: {
+    Avatar
   }
 }
 </script>

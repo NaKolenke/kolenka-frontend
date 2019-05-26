@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="tile">
         <div class="tile-icon" style="position:relative">
-          <avatar-view :user="comment.creator" :size="'sm'"></avatar-view>
+          <avatar :user="comment.creator" :size="'sm'" />
         </div>
         
         <div class="tile-content p-relative">
@@ -39,20 +39,23 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
 import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 
 export default {
-  name: 'comment-card',
-  props: [ 'comment', 'parentId', 'postUrl' ],
+  props: [ 
+    'comment', 
+    'parentId', 
+    'postUrl' 
+  ],
   data() {
     return {
       active: false,
       isReplying: false
     }
   },
-  mounted() {
+  mounted () {
     if (this.$el.querySelectorAll) {
       wrapCode(this.$el)
       wrapYoutube(this.$el)
@@ -78,7 +81,7 @@ export default {
     }
   },
   components: {
-    AvatarView,
+    Avatar,
     CommentForm
   }
 }

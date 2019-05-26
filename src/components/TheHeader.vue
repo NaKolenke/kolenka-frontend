@@ -28,7 +28,7 @@
           <div class="dropdown">
             <div class="btn-group">
               <router-link :to="{ name: 'profile', params: { user: user.username }}" class="btn btn-link text-secondary">
-                <avatar-view :user="user" size="sm" :card="false"></avatar-view>
+                <avatar :user="user" size="sm" :card="false" />
                 {{ user.name || user.username }}
               </router-link>
 
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import FeedbackService from '@/services/feedback'
 
 export default {
@@ -73,9 +73,6 @@ export default {
   props: {
     user: Object,
     version: String,
-  },
-  components: {
-    AvatarView
   },
   mounted: function () {
     this.$watch('user', this.refreshFeedbackTooltip)
@@ -106,6 +103,9 @@ export default {
       }
       return this.$meta.data.user.is_admin
     }
+  },
+  components: {
+    Avatar
   }
 }
 </script>

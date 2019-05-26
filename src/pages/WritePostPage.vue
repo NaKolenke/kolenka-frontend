@@ -64,7 +64,7 @@
 <script>
 import Editor from '@/components/Editor.vue'
 import PostService from '@/services/post'
-import getSlug from 'speakingurl'
+import slugify from 'speakingurl'
 
 export default {
   data() {
@@ -121,14 +121,17 @@ export default {
       method.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
+        this.$posts.delete(data.post.id)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.post.url } })
+      }).catch(err => {
+        console.log(err)
       })
     }
   },
   computed: {
     slug() {
-      return getSlug(this.model.title, { lang: 'ru' })
+      return slugify(this.model.title, { lang: 'ru' })
     },
     isValid() {
       return this.model.title.length > 3 &&

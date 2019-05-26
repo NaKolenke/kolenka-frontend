@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <div class="container col-9 col-mx-auto">
-      <div class="columns">
-        <div v-if="isLoading" class="column col-9">
-          <loading-view></loading-view>
-        </div>
-        <div v-else id="content" class="columns column col-8 mx-2 px-2">
-          <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
-          <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-        </div>
+  <div class="container col-9 col-mx-auto">
+    <div class="columns">
+      <div v-if="isLoading" class="column col-9">
+        <loading-view></loading-view>
+      </div>
+      <div v-else id="content" class="columns column col-8 mx-2 px-2">
+        <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
+        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
+      </div>
 
-        <div id="sidebar" class="column col-3 hide-md">
-          <the-sidebar></the-sidebar>
-        </div>
+      <div id="sidebar" class="column col-3 hide-md">
+        <the-sidebar></the-sidebar>
       </div>
     </div>
   </div>
@@ -27,10 +25,8 @@ import BlogService from '@/services/blog'
 
 export default {
   data: function () {
-    this.blogs = []
-
     return {
-      users: this.blogs,
+      users: [],
       page: 1,
       pageCount: 0,
       isLoading: true

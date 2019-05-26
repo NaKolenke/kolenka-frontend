@@ -31,7 +31,7 @@
 
     <div class="columns article-footer">
       <div class="column col-lg-auto">
-        <avatar-view :user="post.creator" :size="'sm'"></avatar-view>
+        <avatar :user="post.creator" :size="'sm'" />
         <span class="chip">
           {{ post.creator.name || post.creator.username }}
         </span>
@@ -50,19 +50,19 @@
 </template>
 
 <script>
-import AvatarView from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 
 export default {
   props: ['post', 'cut'],
-  components: {
-    AvatarView
-  },
   mounted() {
     if (this.$el.querySelectorAll) {
       wrapCode(this.$el)
       wrapYoutube(this.$el)
     }
+  },
+  components: {
+    Avatar
   }
 }
 </script>

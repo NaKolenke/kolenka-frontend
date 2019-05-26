@@ -28,6 +28,9 @@ function getVideoTitle(id) {
 
 const getVideoTitleThrottled = throttle(500, (id, element) => {
   getVideoTitle(id).then(res => {
+    if (!res.data.items[0])
+      return
+
     const snippet = res.data.items[0].snippet
     element.innerText = snippet.channelTitle + ' | ' + snippet.title
   })

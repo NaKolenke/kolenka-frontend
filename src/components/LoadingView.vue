@@ -5,10 +5,6 @@
   </div>
 </template>
 
-<script>
-
-</script>
-
 <style scoped>
 .empty {
     background-color: white;

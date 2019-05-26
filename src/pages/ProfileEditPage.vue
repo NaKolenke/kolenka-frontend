@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <div class="container col-9 col-mx-auto">
-      <div class="columns">
-        <div id="content" class="column col-9">
-          <profile-edit-view v-if="user.username" :user="user"></profile-edit-view>
-        </div>
+  <div class="container col-9 col-mx-auto">
+    <div class="columns">
+      <div id="content" class="column col-9">
+        <profile-edit-view v-if="user.username" :user="user"></profile-edit-view>
       </div>
     </div>
   </div>

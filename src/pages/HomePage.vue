@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <div class="container col-9 col-mx-auto">
-      <div class="columns">
-        <div v-if="isLoading" class="column col-9">
-          <loading-view></loading-view>
-        </div>
-        <div v-else id="content" class="column col-9">
-          <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
-          <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-        </div>
+  <div class="container col-9 col-mx-auto">
+    <div class="columns">
+      <div v-if="isLoading" class="column col-9">
+        <loading-view></loading-view>
+      </div>
+      <div v-else id="content" class="column col-9">
+        <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
+      </div>
 
-        <div id="sidebar" class="column col-3 hide-md">
-          <the-sidebar></the-sidebar>
-        </div>
+      <div id="sidebar" class="column col-3 hide-md">
+        <the-sidebar></the-sidebar>
       </div>
     </div>
   </div>
