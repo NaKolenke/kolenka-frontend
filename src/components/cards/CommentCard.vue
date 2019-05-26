@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Avatar from '@/components/AvatarView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
 import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 

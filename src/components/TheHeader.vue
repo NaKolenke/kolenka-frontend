@@ -28,7 +28,7 @@
           <div class="dropdown">
             <div class="btn-group">
               <router-link :to="{ name: 'profile', params: { user: user.username }}" class="btn btn-link text-secondary">
-                <avatar-view :user="user" size="sm" :card="false"></avatar-view>
+                <avatar :user="user" size="sm" :card="false" />
                 {{ user.name || user.username }}
               </router-link>
 
