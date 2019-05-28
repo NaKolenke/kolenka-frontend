@@ -48,19 +48,25 @@ export function wrapYoutube(element) {
     let wrapper = createElement('div', {
       classList: [ 'youtube-video' ]
     })
+
+    let width = target.width || defaultWidth
+    let height = target.height || defaultHeight
+
+    wrapper.setAttribute('style', `width:${width}px; height: ${height}px;`)
+
     target.parentNode.insertBefore(wrapper, target)
     wrapper.appendChild(target)
     wrapper.removeChild(target)
-    wrapper.style.width = target.width || defaultWidth
-    wrapper.style.height = target.height || defaultHeight
 
-    let title = createElement('div')
+    let title = createElement('div', {
+      classList: [ 'title' ]
+    })
     wrapper.appendChild(title)
 
     let img = createElement('img', {
       src: image,
-      width: target.width || defaultWidth,
-      height: target.height || defaultHeight
+      width,
+      height
     })
     wrapper.appendChild(img)
     
@@ -71,7 +77,7 @@ export function wrapYoutube(element) {
 
     getVideoTitleThrottled(id, title)
 
-    let click = e => {
+    let click = () => {
       wrapper.appendChild(target)
       img.style.display = 'none'
       span.style.display = 'none'

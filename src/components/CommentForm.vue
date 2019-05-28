@@ -6,7 +6,7 @@
       editor-class="comment-editor"
       :store="store"
       :limit="400"
-      :storageKey="'comments/' + parentId"
+      :storageKey="'comments/' + postUrl + '/' + parentId"
     ></editor>
     <div>
       <input class="btn btn-primary float-left" type="submit" value="Отправить" @click="send" :disabled="isSending || !isValid" />

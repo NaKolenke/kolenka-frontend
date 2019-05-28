@@ -1,7 +1,7 @@
 import { api, getAccessToken } from './instance'
 
 export default {
-  getBlogs (page, limit) {
+  all (page, limit) {
     return api
       .get('/blogs/', {
         params: {
@@ -11,7 +11,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getBlogPosts (url, page, limit) {
+  posts (url, page, limit) {
     return api
       .get(`/blogs/${url}/posts/`, {
         params: {
@@ -21,7 +21,7 @@ export default {
       })
       .then(res => res.data)
   },
-  joinBlog (url) {
+  join (url) {
     return api
       .post(`/blogs/${url}/join/`, {}, {
         headers: {
@@ -30,12 +30,12 @@ export default {
       })
       .then(res => res.data)
   },
-  getReaders (url) {
+  readers (url) {
     return api
       .get(`/blogs/${url}/readers/`)
       .then(res => res.data)
   },
-  createBlog ({ type, title, description, url }) {
+  create ({ type, title, description, url }) {
     return api
       .post('/blogs/', {
         blog_type: type,
@@ -50,12 +50,12 @@ export default {
       })
       .then(res => res.data)
   },
-  getBlog (url) {
+  get (url) {
     return api
       .get(`/blogs/${url}/`)
       .then(res => res.data)
   },
-  editBlog (url, { title, description, type }) {
+  edit (url, { title, description, type }) {
     return api
       .put(`/blogs/${url}/`, {
         title,

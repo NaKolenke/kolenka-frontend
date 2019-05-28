@@ -1,7 +1,7 @@
 import { api, getAccessToken } from './instance'
 
 export default {
-  getSelf () {
+  self () {
     return api
       .get('/users/self/', {
         headers: {
@@ -35,7 +35,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getUsers (page) {
+  all (page) {
     return api
       .get('/users/', {
         params: {
@@ -44,12 +44,12 @@ export default {
       })
       .then(res => res.data)
   },
-  getUser (username) {
+  get (username) {
     return api
       .get(`/users/${username}/`)
       .then(res => res.data)
   },
-  getUserBlogs (username, page) {
+  blogs (username, page) {
     return api
       .get(`/users/${username}/blogs/`, {
         params: {
@@ -58,7 +58,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getUserPosts (username, page) {
+  posts (username, page) {
     return api
       .get(`/users/${username}/posts/`, {
         params: {
@@ -67,7 +67,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getUserDrafts (page) {
+  drafts (page) {
     return api
       .get('/users/drafts/', {
         params: {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['card', 'comment', { 'active': active }]" :id="commentId" @mouseover="onHover" @mouseleave="offHover">
+  <div class="card comment" :id="commentId">
     <div class="card-body">
       <div class="tile">
         <div class="tile-icon" style="position:relative">
@@ -19,7 +19,7 @@
             </button>
           </small>
           <div class="panel mt-2 mb-2" v-if="isReplying">
-            <div class="panel-header h6">Ответ <button class="btn float-right" @click="cancelReply">Отменить</button></div>
+            <div class="panel-header h6">Ответ <button class="btn btn-link btn-sm float-right tooltip" @click="cancelReply" data-tooltip="Отменить"><i class="icon icon-cross"></i></button></div>
             <div class="panel-body" style="overflow:visible"><comment-form :post-url="postUrl" :parent-id="comment.id"></comment-form></div>
             <div class="panel-footer"></div>
           </div>
@@ -44,6 +44,7 @@ import CommentForm from '@/components/CommentForm.vue'
 import { wrapCode, wrapYoutube } from '@/utils/vanilla'
 
 export default {
+  name: 'comment-card',
   props: [ 
     'comment', 
     'parentId', 
@@ -62,12 +63,6 @@ export default {
     }
   },
   methods: {
-    onHover () {
-      this.active = true
-    },
-    offHover () {
-      this.active = false
-    },
     reply () {
       this.isReplying = true
     },
@@ -102,16 +97,13 @@ export default {
   padding-bottom: 0;
 }
 
-.comment .active {
-  border-color: blueviolet;
-}
-
 .comment-body p:last-child {
   margin: 0;
 }
 
 .comment-body img {
   width: auto !important;
+  max-width: 100%;
 }
 
 .comment .reply {

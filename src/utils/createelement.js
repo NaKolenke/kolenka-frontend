@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {string} tag 
+ * @param {object} options 
+ * @returns {HTMLElement}
+ */
 export default function (tag, options) {
   let element = document.createElement(tag)
 

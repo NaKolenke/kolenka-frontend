@@ -5,18 +5,18 @@
       {{post.created_date | moment}}
     </span>
     <h2>
+      <router-link 
+        v-if="$meta.data.user && $meta.data.user.id === post.creator.id"
+        :to="{ name: 'edit-post', params: { edit: post } }" 
+        class="btn btn-sm tooltip tooltip-right"
+        data-tooltip="Редактировать запись"
+      ><i class="icon icon-edit"></i></router-link>
       <router-link :to="{ name: 'post',  params: { post: post.url }}">
         <small v-if="post.is_draft" class="label label-secondary h6">черновик</small>
         <br v-if="post.is_draft">
         {{post.title}}
       </router-link>
     </h2>
-
-    <router-link 
-      v-if="$meta.data.user && $meta.data.user.id === post.creator.id"
-      :to="{ name: 'edit-post', params: { edit: post } }" 
-      class="btn btn-sm"
-    >Редактировать</router-link>
 
     <div v-if="cut" v-html="post.cut_text"></div>
     <div v-else v-html="post.text" ></div>
@@ -89,7 +89,6 @@ export default {
 }
 
 .youtube-video img {
-  position: relative;
   cursor: pointer;
 }
 
@@ -114,7 +113,7 @@ export default {
   transition: all 1s ease-in-out;
 }
 
-.youtube-video div {
+.youtube-video .title {
   display: inline;
   position: absolute;
   top: 0;

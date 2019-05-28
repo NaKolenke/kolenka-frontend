@@ -1,7 +1,7 @@
 import { api, getAccessToken } from './instance'
 
 export default {
-  getPosts (page) {
+  all (page) {
     return api
       .get('/posts/', {
         params: {
@@ -13,7 +13,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getPost (post) {
+  get (post) {
     return api
       .get(`/posts/${post}/`, {
         headers: {
@@ -22,7 +22,7 @@ export default {
       })
       .then(res => res.data)
   },
-  getComments (post, page) {
+  comments (post, page) {
     return api
       .get(`/posts/${post}/comments/`, {
         params: {
@@ -46,7 +46,7 @@ export default {
       })
       .then(res => res.data)
   },
-  createPost (title, text, url, draft, blogId) {
+  create (title, text, url, draft, blogId) {
     return api
       .post('/posts/', {
         blog: blogId,
@@ -62,7 +62,7 @@ export default {
       })
       .then(res => res.data)
   },
-  editPost (url, { title, text, draft, blogId }) {
+  edit (url, { title, text, draft, blogId }) {
     return api
       .put(`/posts/${url}/`, {
         blog: blogId,

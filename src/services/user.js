@@ -31,7 +31,7 @@ export default {
 
   getSelf () {
     return users
-      .getSelf()
+      .self()
       .then(checkErrors)
   },
   editSelf (user) {
@@ -53,27 +53,27 @@ export default {
   },
   getUsers (page) {
     return users
-      .getUsers(page)
+      .all(page)
       .then(checkErrors)
   },
   getUser (username) {
     return users
-      .getUser(username)
+      .get(username)
       .then(checkErrors)
   },
   getUserBlogs (username, page) {
     return users
-      .getUserBlogs(username, page)
+      .blogs(username, page)
       .then(checkErrors)
   },
   getUserPosts (username, page) {
     return users
-      .getUserPosts(username, page)
+      .posts(username, page)
       .then(checkErrors)
   },
   getUserDrafts (page) {
     return users
-      .getUserDrafts(page)
+      .drafts(page)
       .then(checkErrors)
   }
 }

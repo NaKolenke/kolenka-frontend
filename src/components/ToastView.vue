@@ -1,6 +1,6 @@
 <template>
-  <div class="toast" :class="toastClass" v-bind:style="{ bottom: y + 'px' }">
-    <button class="btn btn-clear float-right" v-on:click="close()"></button>
+  <div class="toast" :class="toastClass" :style="{ bottom: y + 'px' }">
+    <button class="btn btn-clear float-right" @click="close()"></button>
     <slot/>
   </div>
 </template>

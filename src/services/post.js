@@ -5,17 +5,17 @@ import { checkErrors } from './utils'
 export default {
   getPosts (page) {
     return posts
-      .getPosts(page)
+      .all(page)
       .then(checkErrors)
   },
   getPost (post) {
     return posts
-      .getPost(post)
+      .get(post)
       .then(checkErrors)
   },
   getComments(post, page) {
     return posts
-      .getComments(post, page)
+      .comments(post, page)
       .then(checkErrors)
   },
   postComment(post, text, parent) {
@@ -25,14 +25,14 @@ export default {
   },
   createPost(title, text, draft, blogId) {
     return posts
-      .createPost(
+      .create(
         title, text, getSlug(title, { lang: 'ru' }), draft, blogId
       )
       .then(checkErrors)
   },
   editPost(url, title, text, draft, blogId) {
     return posts
-      .editPost(
+      .edit(
         url, { title, text, draft, blogId }
       )
       .then(checkErrors)
