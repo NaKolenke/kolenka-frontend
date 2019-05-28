@@ -27,7 +27,7 @@ jobs:
           key: v2-dependencies-{{ checksum "package.json" }}
       - store_artifacts:
           path: build.tar.gz
-          destination: build
+          destination: build.tar.gz
 
   deploy:
     machine:
