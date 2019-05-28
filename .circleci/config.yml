@@ -19,13 +19,14 @@ jobs:
       - run: npm install @vue/cli
       - run: npm install
       - run: npm run build
+      - run: tar czf build.tar.gz dist/
 
       - save_cache:
           paths:
             - node_modules
           key: v2-dependencies-{{ checksum "package.json" }}
       - store_artifacts:
-          path: dist/
+          path: build.tar.gz
           destination: build
 
   deploy:
