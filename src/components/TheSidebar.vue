@@ -1,20 +1,54 @@
 <template>
   <div>
     <slot></slot>
-    <div class="side-block">
+    <div v-if="isLoading">
+        Загружаем
+    </div>
+    <div v-else class="side-block">
       <h4>ТЕГИ</h4>
-      <p>90-е Break a leg jam 2 Break a leg jam 3 Castle of no Escape Castle of no Escape 2 DOS Electric Highways Game Maker gamedev Ludum Dare NES RPG RPG Maker RPG Maker VX Ace Steam АндерГамин аудио байки из жизни бродилка Гамин Геймдев геймдизайн генерация графика Гринлайт девлог Денди джем звуколенник игра игра изнутри игрострой игры инди история итоги конкурс концепт Котострим лог Мегамен музыка На Коленке Наколенник Наколенник №02 Наколенник №03 наши в Стиме Не Паззл обзор перевод пиксель-арт подборка постмортем предложения программирование разработка релиз ретро рисунки Сега серая папка сеттинг социум старое творчество Стим тег-ради-тега текст треклист чашечка геймдева юмор</p>
+      <span v-for="tag in tags" :key="tag.id">
+        <router-link :to="{ name: 'tag', params: { title: tag.title }}" class="text-primary"> {{tag.title}} </router-link>
+      </span>
+
     </div>
   </div>
 </template>
+
+<script>
+import TagService from '@/services/tag'
+
+export default {
+  data: function () {
+    return {
+      tags: [],
+      isLoading: true
+    }
+  },
+  created: function () {
+    this.isLoading = true
+      TagService.getTags().then(data => {
+        this.tags = data.tags.filter( t => t.title.length > 0)
+        this.isLoading = false
+      }).catch(err => {
+        this.isLoading = false
+        console.log(err)
+      })
+  },
+}
+</script>
+
 
 <style scoped>
 h4 {
   text-align: right;
 }
-</style>
 
-<style>
+a {
+  text-decoration: none;
+  margin-left: 0px;
+  margin-right: 6px;
+}
+
 .side-block {
   padding: 20px;
   border-radius: 3px;

@@ -12,9 +12,9 @@
       </router-link>
     </h2>
 
-    <router-link 
+    <router-link
       v-if="$meta.data.user && $meta.data.user.id === post.creator.id"
-      :to="{ name: 'edit-post', params: { edit: post } }" 
+      :to="{ name: 'edit-post', params: { edit: post } }"
       class="btn btn-sm"
     >Редактировать</router-link>
 

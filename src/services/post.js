@@ -36,5 +36,10 @@ export default {
         url, { title, text, draft, blogId }
       )
       .then(checkErrors)
-  }
+  },
+  getPostsByTag (tag, page) {
+    return posts
+      .getPostsByTag(tag, page)
+      .then(checkErrors)
+  },
 }

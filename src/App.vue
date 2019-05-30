@@ -41,7 +41,7 @@ export default {
 
     this.$router.beforeEach((to, from, next) => {
       this.$Progress.start()
-      next()  
+      next()
     })
 
     this.$router.afterEach((to, from) => {
@@ -108,7 +108,7 @@ ol li p:first-child {
 }
 
 img {
-  width: auto;
+  max-width:100%;
 }
 
 .text-left {
@@ -125,16 +125,6 @@ img {
 
 .container {
   margin-top: 20px;
-}
-
-@media (max-width: 1400px) {
-  #sidebar {
-    width: 100%;
-  }
-
-  #content {
-    width: 100%;
-  }
 }
 </style>
 
@@ -215,7 +205,7 @@ pre code {
   padding: 0;
 }
 
-pre {  
+pre {
   code {
     @import '../node_modules/highlight.js/styles/a11y-light.css';
   }
