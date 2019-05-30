@@ -18,6 +18,7 @@ import FeedbackPage from '@/pages/FeedbackPage'
 import UserPostsPage from '@/pages/UserPostsPage'
 import CreateBlogPage from '@/pages/CreateBlogPage'
 import UserDraftsPage from '@/pages/DraftsPage'
+import TagPage from '@/pages/TagPage'
 
 Vue.use(Router)
 
@@ -100,6 +101,11 @@ export default new Router({
       path: '/blogs/:name',
       name: 'blog',
       component: BlogPage
+    },
+    {
+      path: '/tags/:title',
+      name: 'tag',
+      component: TagPage
     },
     {
       path: '/feedback',

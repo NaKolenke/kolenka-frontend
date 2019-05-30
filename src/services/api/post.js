@@ -75,5 +75,17 @@ export default {
         }
       })
       .then(res => res.data)
-  }
+  },
+  getPostsByTag (tag, page) {
+    return api
+      .get(`/tags/${tag}/`, {
+        params: {
+          page: page || 1
+        },
+        headers: {
+          'Authorization': getAccessToken()
+        }
+      })
+      .then(res => res.data)
+  },
 }
