@@ -4,25 +4,48 @@
       <div class="column col-8">
         <div class="form-group">
           <label class="form-label" for="name">Имя пользователя</label>
-          <input class="form-input" v-model="user.name" name="name" id="name">
+          <input
+            class="form-input"
+            v-model="user.name"
+            v-validate="validation.username"
+            name="name"
+            id="name"
+          />
         </div>
 
         <div class="form-group">
           <label class="form-label" for="email">Email</label>
-          <input class="form-input" v-model="user.email" name="email" id="email">
+          <input
+            class="form-input"
+            v-model="user.email"
+            v-validate="validation.email"
+            name="email"
+            id="email"
+          />
         </div>
 
         <div class="form-group">
           <label class="form-label" for="birthday">День рождения</label>
-          <input class="form-input" v-model="birthday" type="date" name="birthday" id="birthday">
+          <input
+            class="form-input"
+            v-model="birthday"
+            type="date"
+            name="birthday"
+            id="birthday"
+          />
         </div>
 
         <div class="form-group">
           <label class="form-label" for="about">О себе</label>
-          <editor type="basic" ref="editor" editor-class="bio-editor"></editor>
+          <editor
+            type="basic"
+            ref="editor"
+            editor-class="bio-editor"
+            :store="store"
+          ></editor>
         </div>
 
-        <button id="edit-btn" class="btn" v-on:click="edit()">Изменить</button>
+        <button id="edit-btn" class="btn" v-on:click="edit()" :disabled="!isValid">Изменить</button>
       </div>
 
       <div class="column col-4">
@@ -46,6 +69,22 @@ Moment.locale('ru')
 
 export default {
   props: ['user'],
+  data() {
+    return {
+      store: {
+        html: ''
+      },
+      validation: {
+        username: {
+          length: () => this.user.name.length >= 3
+        },
+        email: {
+          length: () => this.user.email.length >= 5,
+          isEmail: () => /\S+@\S+\.\S+/.test(this.user.email)
+        }
+      }
+    }
+  },
   mounted() {
     this.$refs.editor.setContent(this.user.about)
   },
@@ -57,11 +96,15 @@ export default {
       set: function (date) {
         this.user.birthday = date
       }
+    },
+    isValid() {
+      return this.validation.username.success &&
+        this.validation.email.success
     }
   },
   methods: {
     edit: function () {
-      this.user.about = this.$refs.editor.content()
+      this.user.about = this.store.html
       this.$parent.editUser(this.user)
     },
     editAvatar: function () {

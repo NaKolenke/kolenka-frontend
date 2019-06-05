@@ -16,6 +16,7 @@
                 type="text" 
                 id="title"
                 v-model="model.title"
+                v-validate="validation.title"
                 required
               />
               <p class="form-input-hint">/blogs/{{ slug }}</p>
@@ -73,12 +74,25 @@ import slugify from 'speakingurl'
 export default {
   data() {
     return {
+      ...this.mapData({
+        auth: 'auth/data'
+      }),
       model: {
         title: '',
         description: '',
         type: 1
       },
+      validation: {
+        title: {
+          length: () => this.model.title.length >= 3
+        }
+      },
       isLoading: false
+    }
+  },
+  created() {
+    if (!this.auth.user) {
+      this.$router.replace({ path: '/' })
     }
   },
   mounted() {
@@ -115,7 +129,7 @@ export default {
       return slugify(this.model.title, { lang: 'ru' })
     },
     isValid() {
-      return this.model.title.length > 3
+      return this.validation.title.success
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="user column col-12 py-2">
+  <div class="column col-12 py-2">
     <div class="columns">
       <div class="column col-10">
         <profile-list-item :user="user"></profile-list-item>
@@ -25,10 +25,6 @@ export default {
 </script>
 
 <style scoped>
-.user {
-  background: #ffffff;
-}
-
 .description {
   background: #ffe;
 }

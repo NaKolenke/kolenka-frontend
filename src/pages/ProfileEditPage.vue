@@ -1,11 +1,5 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div id="content" class="column col-9">
-        <profile-edit-view v-if="user.username" :user="user"></profile-edit-view>
-      </div>
-    </div>
-  </div>
+  <profile-edit-view :user="auth.user"></profile-edit-view>
 </template>
 
 <script>
@@ -15,38 +9,33 @@ import UserService from '@/services/user'
 export default {
   data () {
     return {
-      user: {}
+      ...this.mapData({
+        auth: 'auth/data'
+      })
     }
   },
   created () {
-    this.refreshUser(this.$route)
+    if (this.auth.user == null) {
+      this.$router.replace({ path: '/401' })
+    }
   },
   methods: {
-    refreshUser (route) {
-      UserService.getSelf().then(data => {
-        this.user = data.user
-      }).catch(err => {
-        console.log(err)
-
-        this.$router.replace({ path: '/401' })
-      })
-    },
     editUser (user) {
-      UserService.editSelf(user).then(data => {
-        this.$router.replace({ name: 'profile', params: { user: this.user.username } })
+      this.$users.editSelf(user).then(data => {
+        this.$router.replace({ name: 'profile', params: { user: this.auth.user.username } })
       }).catch(err => {
         console.log(err)
 
-        this.$router.replace({ path: '/401' })
+        this.$toast.error('Не удалось')
       })
     },
     editAvatar (formData) {
-      UserService.editAvatar(formData).then(data => {
-        this.$router.replace({ name: 'profile', params: { user: this.user.username } })
+      this.$users.editAvatar(formData).then(res => {
+        this.$router.replace({ name: 'profile', params: { user: this.auth.user.username } })
       }).catch(err => {
         console.log(err)
 
-        this.$router.replace({ path: '/401' })
+        this.$toast.error('Не удалось')
       })
     }
   },

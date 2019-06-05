@@ -1,20 +1,17 @@
 <template>
   <div class="container">
-    <div class="columns">
-      <div id="doc" class="column col-6 col-mx-auto">
-        <div id="postman" class="accordion">
-          <input type="checkbox" id="accordion-1" name="accordion-checkbox" hidden>
-          <label class="accordion-header label" for="accordion-1">> Коллекция Postman</label>
-          <div class="accordion-body bg-gray">
-            <p>
-              Коллекция Postman:
-              <a
-                href="https://www.getpostman.com/collections/1f1850fa8a2c685009f6"
-              >Ссылка</a>.
-            </p>
-            <p>Данные окружения:</p>
-            <pre>
-{
+    <h2>Документация API</h2>
+    <div id="postman" class="accordion panel">
+      <input type="checkbox" id="accordion-1" name="accordion-checkbox" hidden>
+      <label class="accordion-header label panel-header" for="accordion-1">> Коллекция Postman</label>
+      <div class="accordion-body panel-body">
+        <br>
+        <p>
+          Коллекция Postman:
+          <a href="https://www.getpostman.com/collections/1f1850fa8a2c685009f6">Ссылка</a>.
+        </p>
+        <p>Данные окружения:</p>
+        <pre><code>{
   "key": "url",
   "value": "https://beta.kolenka.net/api"
 },
@@ -25,17 +22,15 @@
 {
   "key": "password",
   "value": "qwerty123"
-}
-</pre>
-          </div>
-        </div>
-        <endpoint-view
-          v-for="endpoint in endpoints"
-          v-bind:key="endpoint.description"
-          v-bind:endpoint="endpoint"
-        ></endpoint-view>
+}</code></pre>
       </div>
     </div>
+    <br><br>
+    <endpoint-view
+      v-for="endpoint in endpoints"
+      v-bind:key="endpoint.description"
+      v-bind:endpoint="endpoint"
+    ></endpoint-view>
   </div>
 </template>
 
@@ -63,10 +58,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#postman .accordion-body {
-  margin-bottom: 26px;
-  font-size: 10pt;
-}
-</style>

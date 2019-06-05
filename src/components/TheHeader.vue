@@ -15,7 +15,7 @@
 
       <section class="navbar-section">
         <router-link to="/page/about">О сайте</router-link>
-        <template v-if="user">
+        <template v-if="auth.user">
           <router-link to="/feedback" class="tooltip tooltip-bottom" :data-tooltip="feedbackTooltip">
             <p id="version">Версия {{version}}</p>
           </router-link>
@@ -24,12 +24,12 @@
           <p id="version">Версия {{version}}</p>
         </template>
 
-        <template v-if="user">
+        <template v-if="auth.user">
           <div class="dropdown">
             <div class="btn-group">
-              <router-link :to="{ name: 'profile', params: { user: user.username }}" class="btn btn-link text-secondary">
-                <avatar :user="user" size="sm" :card="false" />
-                {{ user.name || user.username }}
+              <router-link :to="{ name: 'profile', params: { user: auth.user.username }}" class="btn btn-link text-secondary">
+                <avatar :user="auth.user" size="sm" :card="false" />
+                {{ auth.user.name || auth.user.username }}
               </router-link>
 
               <a class="btn btn-link dropdown-toggle" tabindex="0">
@@ -37,15 +37,15 @@
               </a>
 
               <ul class="menu">
-                <li class="menu-item"><router-link :to="{ name: 'profile', params: { user: user.username }}"><i class="icon icon-people"></i> Профиль</router-link></li>
+                <li class="menu-item"><router-link :to="{ name: 'profile', params: { user: auth.user.username }}"><i class="icon icon-people"></i> Профиль</router-link></li>
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/new/post"><i class="icon icon-edit"></i> Написать пост</router-link></li>
-                <li class="menu-item"><router-link :to="{ name: 'userPosts', params: { user: user.username } }"><i class="icon icon-copy"></i> Посты</router-link></li>
+                <li class="menu-item"><router-link :to="{ name: 'userPosts', params: { user: auth.user.username } }"><i class="icon icon-copy"></i> Посты</router-link></li>
                 <li class="menu-item"><router-link to="/drafts"><i class="icon icon-time"></i> Черновики</router-link></li>
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/new/blog"><i class="icon icon-plus"></i> Создать блог</router-link></li>
                 <li class="divider"></li>
-                <li class="menu-item"><router-link to="/logout">Выйти</router-link></li>
+                <li class="menu-item"><a href="/logout" @click.prevent="$auth.logout(); $router.go()">Выйти</a></li>
               </ul>
             </div>
           </div>          
@@ -67,15 +67,18 @@ import FeedbackService from '@/services/feedback'
 export default {
   data: function () {
     return {
+      ...this.mapData({
+        auth: 'auth/data'
+      }),
       feedbackTooltip: ''
     }
   },
   props: {
-    user: Object,
     version: String,
   },
   mounted: function () {
-    this.$watch('user', this.refreshFeedbackTooltip)
+    //this.$watch('user', this.refreshFeedbackTooltip)
+    console.log(this.user)
   },
   methods: {
     refreshFeedbackTooltip: function () {
@@ -98,10 +101,10 @@ export default {
   },
   computed: {
     isAdmin: function () {
-      if (!this.$meta.data.user) {
+      if (!this.user) {
         return false
       }
-      return this.$meta.data.user.is_admin
+      return this.user.is_admin
     }
   },
   components: {

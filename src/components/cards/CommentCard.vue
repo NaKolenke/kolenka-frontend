@@ -41,7 +41,8 @@
 <script>
 import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
-import { wrapCode, wrapYoutube } from '@/utils/vanilla'
+import wrapCode from '@/utils/wrapCode'
+import wrapYoutube from '@/utils/wrapYoutube'
 
 export default {
   name: 'comment-card',
@@ -59,7 +60,7 @@ export default {
   mounted () {
     if (this.$el.querySelectorAll) {
       wrapCode(this.$el)
-      wrapYoutube(this.$el)
+      wrapYoutube(this.$el, this)
     }
   },
   methods: {

@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       ...this.mapData({
-        meta: 'meta/data/user',
+        auth: 'auth/data',
         blogs: 'userBlogs/everything'
       }),
       model: {
@@ -84,12 +84,13 @@ export default {
       isSending: false
     }
   },
-  mounted() {
-    if (!this.$meta.actions.isLoggedIn()) {
+  created() {    
+    if (!this.auth.user) {
       this.$router.replace({ path: '/' })
       return
     }
-
+  },
+  mounted() {
     if (this.$route.params.edit) {
       this.model.title = this.$route.params.edit.title
       this.model.blog = this.$route.params.edit.blog.id
