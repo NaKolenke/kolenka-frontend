@@ -51,7 +51,7 @@ export default {
     }
   },
   watch: {
-    'open'(oldVal, newVal) {
+    'open'() {
       this.isOpen = this.open
     }
   }

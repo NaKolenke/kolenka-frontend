@@ -1,10 +1,19 @@
 <template>
-  <div id="app" v-if="!loadingUser">
-    <header-component
-      :user="meta.user"
-      :version="version"
-    />
-    <router-view />
+  <div id="app" v-if="!loadingData">
+    <header-component :version="version" />
+
+    <div class="container col-9 col-mx-auto">
+      <div class="columns">
+        <div :class="['column', { 'col-9': showSidebar }, { 'col-12': !showSidebar }]">
+          <router-view />
+        </div>
+
+        <div v-if="showSidebar" id="sidebar" class="column col-3 hide-md">
+          <router-view name="sidebar" />
+        </div>
+      </div>
+    </div>
+
     <vue-progress-bar />
   </div>
 </template>
@@ -13,13 +22,12 @@
 import Vue from 'vue'
 import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
-import UserService from '@/services/user'
 import ToastPlugin from '@/plugins/toast'
-import store from '@/library'
+import store from '@/library/index'
 import ScrollTo from 'vue-scrollto'
+import '@/directives/validate'
 
 Vue.use(ScrollTo)
-
 Vue.use(ProgressBar)
 Vue.use(ToastPlugin)
 
@@ -30,10 +38,10 @@ export default {
   data: function () {
     return {
       ...this.mapData({
-        meta: 'meta/data/user'
+        auth: 'auth/data'
       }),
       version: process.env.VUE_APP_VERSION,
-      loadingUser: true
+      loadingData: true
     }
   },
   created() {
@@ -48,56 +56,31 @@ export default {
       this.$Progress.finish()
     })
 
-    this.refreshUser().then(() => {
-      this.$Progress.finish()
+    this.$auth
+    .login()
+    .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
+    .then(pages => {
+      // ...
     })
+    .then(() => {
+      this.loadingData = false
+    })
+    .catch(() => {
+      this.loadingData = false
+    })
+  },
+  computed: {
+    showSidebar() {
+      return !this.$route.matched[0].props.sidebar
+    }
   },
   components: {
     HeaderComponent
   },
-  methods: {
-    refreshUser () {
-      return UserService
-        .getSelf()
-        .then(res => {
-          this.$meta.data.user = res.user
-
-          this.loadBlogs(res.user.username)
-        })
-        .catch(err => {
-          console.log(err)
-          this.$meta.data.user = null
-          UserService.logout()
-        })
-        .then(() => {
-          this.loadingUser = false
-        })
-    },
-    loadBlogs(username) {
-      UserService.getUserBlogs(username).then(res => {
-        this.$userBlogs.collect(res.blogs, 'everything')
-
-        if (res.meta.page_count > 1) {
-          for (let i = 2; i < res.meta.page_count; i++) {
-            this.loadBlogPage(username, i)
-          }
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    loadBlogPage(username, page) {
-      UserService.getUserBlogs(username, page).then(res => {
-        this.$userBlogs.collect(res.blogs, 'everything')
-      }).catch(err => {
-        console.log(err)
-      })
-    }
-  }
 }
 </script>
 
-<style>
+<style lang="scss">
 @import "../node_modules/spectre.css/dist/spectre.css";
 @import "../node_modules/spectre.css/dist/spectre-icons.css";
 @import "./assets/icon-font/style.css";
@@ -126,66 +109,66 @@ img {
 .container {
   margin-top: 20px;
 }
-</style>
 
-<style lang="scss">
 @import '../node_modules/spectre.css/src/_variables.scss';
 
-// Tables override (so we don't need to specify .table every time)
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  @if $rtl == true {
-    text-align: right;
-  } @else {
-    text-align: left;
-  }
-
-  &.table-striped {
-    tbody {
-      tr:nth-of-type(odd) {
-        background: $bg-color;
-      }
+// Tables override for editor (so we don't need to specify .table every time)
+.form-group {
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    @if $rtl == true {
+      text-align: right;
+    } @else {
+      text-align: left;
     }
-  }
 
-  &,
-  &.table-striped {
-    tbody {
-      tr {
-        &.active {
-          background: $bg-color-dark;
+    &.table-striped {
+      tbody {
+        tr:nth-of-type(odd) {
+          background: $bg-color;
         }
       }
     }
-  }
 
-  &.table-hover {
-    tbody {
-      tr {
-        &:hover {
-          background: $bg-color-dark;
+    &,
+    &.table-striped {
+      tbody {
+        tr {
+          &.active {
+            background: $bg-color-dark;
+          }
         }
       }
     }
-  }
 
-  // Scollable tables
-  &.table-scroll {
-    display: block;
-    overflow-x: auto;
-    padding-bottom: .75rem;
-    white-space: nowrap;
-  }
+    &.table-hover {
+      tbody {
+        tr {
+          &:hover {
+            background: $bg-color-dark;
+          }
+        }
+      }
+    }
 
-  td,
-  th {
-    border: $border-width solid $border-color;
-    padding: $unit-3 $unit-2;
-  }
-  th {
-    border-bottom-width: $border-width-lg;
+    // Scollable tables
+    &.table-scroll {
+      display: block;
+      overflow-x: auto;
+      padding-bottom: .75rem;
+      white-space: nowrap;
+    }
+
+    td,
+    th {
+      border: $border-width solid $border-color;
+      padding: $unit-3 $unit-2;
+    }
+    th {
+      border-bottom-width: $border-width-lg;
+    }
   }
 }
 
@@ -217,6 +200,10 @@ pre {
 
 p {
   margin: 0 0 $line-height / 1.5;
+}
+
+html, body {
+  height:100%;
 }
 </style>
 

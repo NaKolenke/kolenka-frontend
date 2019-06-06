@@ -1,39 +1,31 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div id="content" class="column col-9">
-        <profile-view v-if="user.username" :user="user" :can-edit="canEdit"></profile-view>
+  <div>
+    <profile-view :user="user" :can-edit="canEdit"></profile-view>
 
-        <div v-if="blogs.length > 0">
-          <h3>Блоги пользователя</h3>
-          <div class="columns blogs">
-            <div class="column col-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
-              <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
-            </div>
-          </div>
+    <template v-if="blogs.length > 0">
+      <h3>Блоги пользователя</h3>
+      <div class="columns blogs">
+        <div class="column col-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
+          <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
         </div>
-
-        <div class="bottom-padd"></div>
       </div>
+    </template>
 
-      <div id="sidebar" class="column col-3 hide-md">
-        <the-sidebar></the-sidebar>
-      </div>
-    </div>
+    <div class="bottom-padd"></div>
   </div>
 </template>
 
 <script>
 import ProfileView from '@/components/ProfileView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
 import BlogCardSmall from '@/components/cards/BlogCardSmall.vue'
-import UserService from '@/services/user'
 
 export default {
   data: function () {
     return {
-      user: {},
-      blogs: []
+      ...this.mapData({
+        blogs: 'blogs/user'
+      }),
+      user: {}
     }
   },
   created: function () {
@@ -44,31 +36,29 @@ export default {
     next()
   },
   methods: {
-    refreshUser: function (route) {
-      UserService.getUser(route.params.user).then(data => {
-        this.user = data.user
-      }).then(() => {
-        return UserService.getUserBlogs(this.user.username)
-      }).then(data => {
-        this.blogs = data.blogs
-      }).catch(err => {
+    refreshUser (route) {
+      this.$users
+      .getUser(route.params.user)
+      .then(user => {
+        this.user = user
+      })
+      .then(() => this.$blogs.getUserBlogs(route.params.user, { page: 1 }))
+      .catch(err => {
         console.log(err)
-
         this.$router.push({ path: '/404' })
       })
     }
   },
   computed: {
-    canEdit: function () {
-      if (!this.$meta.data.user) {
+    canEdit () {
+      if (!this.$auth.data.user) {
         return false
       }
-      return this.user.id === this.$meta.data.user.id
+      return this.user.id === this.$auth.data.user.id
     }
   },
   components: {
     ProfileView,
-    TheSidebar,
     BlogCardSmall
   }
 }

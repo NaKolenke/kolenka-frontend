@@ -3,17 +3,18 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto">
         <h1>Войти</h1>
-        <form method="POST" @submit.prevent="login">
+        <form method="POST" @submit.prevent="login" :class="{ 'has-error': !validation.username.success || !validation.password.success }">
           <div class="form-group">
             <label class="form-label" for="username">Имя пользователя</label>
             <input 
               class="form-input" 
-              v-model="username" 
+              v-model="username"
+              v-validate="validation.username"
               name="username" 
               id="username"
               required
             >
-            <div class="toast toast-error" v-if="usernameError">{{ usernameError }}</div>
+            <div class="form-input-hint" v-if="!validation.username.success && validation.showErrors">Неверное имя пользователя</div>
           </div>
 
           <div class="form-group">
@@ -21,95 +22,67 @@
             <input
               class="form-input"
               v-model="password"
+              v-validate="validation.password"
               name="password"
               type="password"
               id="password"
               required
             >
-            <div class="toast toast-error" v-if="passwordError">{{ passwordError }}</div>
+            <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Неверный пароль</div>
           </div>
 
           <input type="submit" id="login-btn" class="btn primary">
         </form>
         
         <br>
-        <br>
-        <p>
-          Еще нет учетной записи?
-          <router-link to="/register">Зарегистрироваться</router-link>
-        </p>
+        <p>Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link></p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import UserService from '@/services/user'
-
 export default {
   data () {
     return {
+      ...this.mapData({
+        auth: 'auth/data'
+      }),
       username: '',
       password: '',
-      usernameError: null,
-      passwordError: null
+      validation: {
+        username: {
+          length: () => this.username.length >= 3
+        },
+        password: {
+          length: () => this.password.length >= 4
+        },
+        showErrors: false
+      }
     }
   },
   mounted () {
-    UserService
-      .getSelf()
-      .then(data => {
-        if (data.success === 1) {
-          this.$router.replace({ path: '/' })
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (this.auth.user != null) {
+      this.$router.replace({ path: '/' })
+    }
   },
   methods: {
     login () {
-      if (this.username.length === 0) {
-        this.usernameError = 'Введите имя пользователя'
+      if (!this.validation.username.success ||
+          !this.validation.password.success) {
+            this.validation.showErrors = true
+            return
       } else {
-        this.usernameError = null
+        this.validation.showErrors = false
       }
 
-      if (this.password.length === 0) {
-        this.passwordError = 'Введите пароль'
-      } else {
-        this.passwordError = null
-      }
-
-      if (this.usernameError || this.passwordError) {
-        return
-      }
-
-      UserService
-        .login(this.username, this.password)
-        .then(data => {
-          if (data.success === 1) {
-            this.$parent.refreshUser()
-
-            this.$toast.show('Успешно авторизовался')
-
-            this.$router.replace({ path: '/' })
-          } else {
-            this.usernameError = 'Ошибка авторизации'
-          }
-        })
-        .catch(err => {
-          console.log(err)
-
-          this.usernameError = 'Ошибка авторизации'
-        })
+      this.$auth.login(this.username, this.password).then(() => {
+        this.$toast.show('Успешно авторизовался')
+        this.$router.replace({ path: '/' })
+      }).catch(() => {
+        this.$toast.error('Ошибка авторизации')
+      })
     }
   }
 }
 </script>
-
-<style scoped>
-.toast {
-  position: relative;
-}
-</style>

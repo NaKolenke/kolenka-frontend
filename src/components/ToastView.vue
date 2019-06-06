@@ -1,8 +1,10 @@
 <template>
-  <div class="toast" :class="toastClass" v-bind:style="{ bottom: y + 'px' }">
-    <button class="btn btn-clear float-right" v-on:click="close()"></button>
-    <slot/>
-  </div>
+  <transition name="fade">
+    <div class="toast" :class="toastClass" :style="{ bottom: y + 'px' }">
+      <button class="btn btn-clear float-right" @click="close()"></button>
+      <slot/>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -13,7 +15,7 @@ export default {
   },
   methods: {
     close () {
-      this.$Toast.hide(this)
+      this.$toast.hide(this)
     }
   },
   computed: {
@@ -34,5 +36,23 @@ export default {
   width: 300px;
   margin: 24px;
   padding: 8px;
+  transition: all 1s linear;
+  animation: 0.2s ease-out 0s 1 slideInFromLeft;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 </style>

@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { throttle } from 'throttle-debounce'
 
 const WEB_URL = process.env.VUE_APP_URL
@@ -74,7 +73,7 @@ export default {
   mounted() {
     this.visibleSource = this.node.attrs.src
     
-    this.throttled = throttle(1000, false, (src) => {
+    this.throttled = throttle(1000, false, src => {
       this.checkUrl(src)
     })
 
@@ -90,8 +89,9 @@ export default {
   },
   methods: {
     checkUrl(src) {      
-      axios
-      .head(src)
+      fetch(src, {
+        method: 'HEAD'
+      })
       .then(res => {
         const headers = res.headers
 

@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column">
         
-        <h2>Новый блог</h2>
+        <h2>{{ $route.params.edit ? 'Редактировать блог' : 'Новый блог' }}</h2>
         <div class="form-horizontal">
           
           <div class="form-group">
@@ -16,6 +16,7 @@
                 type="text" 
                 id="title"
                 v-model="model.title"
+                v-validate="validation.title"
                 required
               />
               <p class="form-input-hint">/blogs/{{ slug }}</p>
@@ -67,21 +68,32 @@
 </template>
 
 <script>
-import BlogService from '@/services/blog'
 import slugify from 'speakingurl'
 
 export default {
   data() {
     return {
+      ...this.mapData({
+        auth: 'auth/data'
+      }),
       model: {
         title: '',
         description: '',
         type: 1
       },
+      validation: {
+        title: {
+          length: () => this.model.title.length >= 3
+        }
+      },
       isLoading: false
     }
   },
   mounted() {
+    if (!this.auth.user) {
+      this.$router.replace({ path: '/' })
+    }
+    
     if (this.$route.params.edit) {
       this.model.title = this.$route.params.edit.title
       this.model.description = this.$route.params.edit.description
@@ -91,13 +103,13 @@ export default {
   methods: {
     send() {
       let method = this.$route.params.edit ?
-      BlogService.editBlog(
+      this.$blogs.editBlog(
         this.$route.params.edit.url,
         this.model.title,
         this.model.description,
         this.model.type
       ) :
-      BlogService.createBlog(
+      this.$blogs.createBlog(
         this.model.type,
         this.model.title,
         this.model.description,
@@ -106,7 +118,7 @@ export default {
 
       method.then(data => {
         this.$toast.show('Блог был успешно отредактирован')
-        this.$router.replace({ name: 'blog', params: { name: data.blog.url } })
+        this.$router.replace({ name: 'blog', params: { name: data.url } })
       })
     }
   },
@@ -115,7 +127,7 @@ export default {
       return slugify(this.model.title, { lang: 'ru' })
     },
     isValid() {
-      return this.model.title.length > 3
+      return this.validation.title.success
     }
   }
 }

@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div class="container col-9 col-mx-auto">
-      <div class="columns">
-        <div v-if="isAdmin" class="column col-12">
-          <feedback-list-view :list="feedbacks"></feedback-list-view>
-        </div>
-        <div class="column col-12">
-          <feedback-prompt></feedback-prompt>
-        </div>
+  <div class="container col-9 col-mx-auto">
+    <div class="columns">
+      <div v-if="isAdmin" class="column col-12">
+        <feedback-list-view :list="feedbacks"></feedback-list-view>
+      </div>
+      <div class="column col-12">
+        <feedback-prompt></feedback-prompt>
       </div>
     </div>
   </div>
@@ -16,11 +14,13 @@
 <script>
 import FeedbackListView from '@/components/FeedbackListView.vue'
 import FeedbackPrompt from '@/components/FeedbackPrompt.vue'
-import FeedbackService from '@/services/feedback'
 
 export default {
   data () {
     return {
+      ...this.mapData({
+        auth: 'auth/data'
+      }),
       feedbacks: []
     }
   },
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     refreshFeedbacks () {
-      FeedbackService.getList().then(data => {
+      this.$feedback.getList().then(data => {
         this.feedbacks = data
       }).catch(err => {
         console.log(err)
@@ -49,10 +49,10 @@ export default {
   },
   computed: {
     isAdmin () {
-      if (!this.$meta.data.user) {
+      if (!this.auth.user) {
         return false
       }
-      return this.$meta.data.user.is_admin
+      return this.auth.user.is_admin
     }
   }
 }

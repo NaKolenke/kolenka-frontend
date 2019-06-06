@@ -12,7 +12,7 @@ export default {
     "list"
   ],
   methods: {
-    resolved: function (id) {
+    resolved (id) {
       this.$parent.resolved(id)
     }
   },

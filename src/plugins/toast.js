@@ -33,7 +33,7 @@ const Toast = {
         this.toasts.push(instance)
 
         setTimeout(() => {
-          this.hide(instance)
+          instance.close()
         }, 3000)
       },
       error (msg) {

@@ -242,7 +242,7 @@
 
         <modal :open="showHelp" :closed="closeHelp" title="Помощь по редактору текста" size="lg" :hideButtons="true">
           <h4>Общее</h4>
-          <p>Для добавления переноса на новую строку используйте <code>Ctrl/Shift+Return</code></p>
+          <p>Для добавления переноса на новую строку используйте <kbd>Ctrl/Shift+Return</kbd></p>
           <p>Редактор поддерживает некоторые правила Markdown</p>
           <h4>Embed</h4>
           <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
@@ -351,7 +351,6 @@ import Limit from '@/editor/extensions/Limit'
 import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
-import ContentService from '@/services/content'
 
 export default {
   props: {
@@ -491,6 +490,9 @@ export default {
     },
     setContent(body) {
       this.editor.setContent(body)
+      this.store.html = this.editor.getHTML()
+      this.store.text = this.editor.state.doc.textContent
+      this.store.length = this.store.text.length
     },
     chooseImage(command) {
       if (this.imageModal.url.length > 0) {
@@ -504,8 +506,9 @@ export default {
     uploadImage(command) {
       this.imageModal.uploadError = null
       this.imageUploadLoading = true
-      ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
-        let url = 'https://beta.kolenka.net/content/' + data.file.id
+
+      this.$content.uploadFile(new FormData(this.$refs.image)).then(file => {
+        let url = 'https://beta.kolenka.net/content/' + file.id
         this.imageUploadLoading = false
         command({ src: url })
         this.imageModalClose()

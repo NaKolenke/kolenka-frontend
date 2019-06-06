@@ -1,18 +1,12 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div v-if="isLoading" class="column col-9">
-        <loading-view></loading-view>
-      </div>
-      <div v-else id="content" class="column col-9">
-        <h3>Записи пользователя <router-link :to="{ name: 'profile', params: { user: $route.params.user } }">{{ $route.params.user }}</router-link></h3>
-        <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
-        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-      </div>
-
-      <div id="sidebar" class="column col-3 hide-md">
-        <the-sidebar></the-sidebar>
-      </div>
+  <div>
+    <div v-if="isLoading" class="column col-9">
+      <loading-view></loading-view>
+    </div>
+    <div v-else id="content" class="column col-9">
+      <h3>Записи пользователя <router-link :to="{ name: 'profile', params: { user: $route.params.user } }">{{ $route.params.user }}</router-link></h3>
+      <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+      <pagination-view :page="page" :page-count="pageCount"></pagination-view>
     </div>
   </div>
 </template>
@@ -20,14 +14,14 @@
 <script>
 import PostView from '@/components/PostView.vue'
 import LoadingView from '@/components/LoadingView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
-import UserService from '@/services/user'
 
 export default {
   data () {
     return {
-      posts: [],
+      ...this.mapData({
+        posts: 'posts/my'
+      }),
       page: 1,
       pageCount: 0,
       isLoading: true
@@ -45,11 +39,15 @@ export default {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      UserService.getUserPosts(route.params.user, this.page).then(data => {
-        this.posts = data.posts
-        this.pageCount = data.meta.page_count
+      this.$posts.groups.my.indexes = []
+
+      this.$posts
+      .getUserPosts(route.params.user, this.page)
+      .then(pages => {
+        this.pageCount = pages
         this.isLoading = false
-      }).catch(err => {
+      })
+      .catch(err => {
         this.isLoading = false
         console.log(err)
 
@@ -65,7 +63,6 @@ export default {
   },
   components: {
     PostView,
-    TheSidebar,
     PaginationView,
     LoadingView
   }

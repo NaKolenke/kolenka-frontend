@@ -14,7 +14,7 @@
             <button v-if="blog.blog_type === 1 && !contains" class="btn btn-sm" @click="joinBlog">Присоединиться</button>
             <button v-if="contains" class="btn btn-sm" disabled>Вы присоединились</button>
             <router-link
-              v-if="$meta.data.user && blog.creator.id === $meta.data.user.id"
+              v-if="auth.user && blog.creator.id === auth.user.id"
               :to="{ name: 'edit-blog', params: { edit: blog } }"
               class="btn btn-sm"
             >Редактировать</router-link>
@@ -51,7 +51,6 @@
 
 <script>
 import Avatar from '@/components/elements/Avatar.vue'
-import BlogService from '@/services/blog'
 
 export default {
   props: {
@@ -64,37 +63,39 @@ export default {
   data() {
     return {
       ...this.mapData({
-        blogs: 'userBlogs/everything'
+        blogs: 'blogs/my',
+        auth: 'auth/data'
       }),
       posts: []
     }
   },
   mounted () {    
     if (this.preview)
-      this.refresh()
+      this.refresh()      
   },
   methods: {
     refresh () {
       if (!this.blog.url)
         return
       
-      BlogService.getBlogPosts(this.blog.url).then(data => {
-        this.posts = data.posts.length > 2 ? data.posts.slice(0, 2) : data.posts
+      this.$posts.getBlogPosts(this.blog.url, { limit: 2 }).then(posts => {
+        this.posts = posts.data
       }).catch(err => {
         console.log(err)
       })
     },
     joinBlog () {
-      BlogService.joinBlog(this.blog.url).then(data => {
+      this.$blogs.joinBlog(this.blog.url).then(() => {
         this.$toast.show(`Успешно присоединились к блогу "${this.blog.title}"`)
-        this.$userBlogs.collect(this.blog, 'everything')
+        this.$blogs.collect(this.blog, 'my')
       }).catch(err => {
         console.log(err)
+        this.$toast.error('Произошла ошибка')
       })
     }
   },
   computed: {
-    contains () {
+    contains () {      
       for (let item of this.blogs) {
         if (item.id === this.blog.id) {
           return true
@@ -111,7 +112,6 @@ export default {
 
 <style>
 .card-body p img {
-  width: 100%;
   height: auto;
 }
 </style>
