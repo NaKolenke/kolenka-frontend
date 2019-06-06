@@ -39,19 +39,17 @@ import EndpointView from '@/components/doc/EndpointView.vue'
 import DocService from '@/services/doc'
 
 export default {
-  data: function () {
-    this.endpoints = []
-
+  data () {
     return {
-      endpoints: this.endpoints
+      endpoints: []
     }
   },
-  created: function () {
-    DocService
-      .getEndpoints()
-      .then(data => {
-        this.endpoints = data.endpoints
-      })
+  created () {
+    this.$docs
+    .getEndpoints()
+    .then(data => {
+      this.endpoints = data
+    })
   },
   components: {
     EndpointView

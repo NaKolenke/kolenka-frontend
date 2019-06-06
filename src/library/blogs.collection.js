@@ -18,11 +18,25 @@ export default {
     getReaders(request, url) {
       return request.get(`blogs/${url}/readers/`)
     },
-    createBlog(request) {
-      // ...
+    createBlog(request, type, description, title, url, token) {
+      return request.post('blogs/', {
+        blog_type: type,
+        description,
+        image: null,
+        title,
+        url
+      }, {
+        'Authorization': token
+      })
     },
-    editBlog(request) {
-      // ...
+    editBlog(request, url, title, description, type, token) {
+      return request.put(`blogs/${url}/`, {
+        title,
+        description,
+        blog_type: type
+      }, {
+        'Authorization': token
+      })
     }
   },
   actions: {
@@ -74,6 +88,26 @@ export default {
         }
 
         return res.readers
+      })
+    },
+    createBlog({ routes, auth, blogs }, type, description, title, url) {
+      return routes.createBlog(type, description, title, url, auth.accessToken.token).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject(res.error)
+        }
+
+        blogs.collect(res.blog, 'my')
+
+        return res.blog
+      })
+    },
+    editBlog({ routes, auth }, url, title, description, type) {
+      return routes.editBlog(url, title, description, type, auth.accessToken.token).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject(res.error)
+        }
+
+        return res.blog
       })
     }
   }

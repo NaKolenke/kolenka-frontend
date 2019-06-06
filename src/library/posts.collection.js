@@ -1,19 +1,17 @@
-import { getAccessToken } from '@/library/utils'
-
 export default {
-  groups: [ 'everything', 'home', 'temp' ],
+  groups: [ 'everything', 'home', 'temp', 'drafts', 'my', 'tag' ],
   data: {
     pages: 0
   },
   routes: {
     getAll (request, { page, limit }) {
-      return request.get(`/posts/?page=${page || 1}&limit=${limit || 20}`)
+      return request.get(`posts/?page=${page || 1}&limit=${limit || 20}`)
     },
     getPost (request, url) { 
-      return request.get(`/posts/${url}/`)
+      return request.get(`posts/${url}/`)
     },
-    postPost (request, title, text, url, draft, blogId) {
-      return request.post('/posts/', {
+    postPost (request, title, text, url, draft, blogId, token) {
+      return request.post('posts/', {
         blog: blogId,
         cut_name: null,
         is_draft: draft || false,
@@ -21,28 +19,32 @@ export default {
         title,
         url
       }, {
-        headers: {
-          'Authorization': getAccessToken()
-        }
+        'Authorization': token
       })
     },
-    editPost (request, url, title, text, draft, blogId) {
-      return request.put(`/posts/${url}/`, {
+    editPost (request, url, title, text, draft, blogId, token) {
+      return request.put(`posts/${url}/`, {
         blog: blogId,
         is_draft: draft || false,
         text,
         title
       }, {
-        headers: {
-          'Authorization': getAccessToken()
-        }
+        'Authorization': token
       })
     },
     getPostsByTag (request, tag, { page, limit }) {
-      return request.get(`/tags/${tag}/?page=${page || 1}&limit=${limit || 20}`)
+      return request.get(`tags/${tag}/?page=${page || 1}&limit=${limit || 20}`)
     },
     getBlogPosts(request, url, { page, limit }) {
-      return request.get(`/blogs/${url}/posts/?page=${page || 1}&limit=${limit || 20}`)
+      return request.get(`blogs/${url}/posts/?page=${page || 1}&limit=${limit || 20}`)
+    },
+    getUserDrafts(request, token, { page, limit }) {
+      return request.get(`users/drafts/?page=${page || 1}&limit=${limit || 20}`, {
+        'Authorization': token
+      })
+    },
+    getUserPosts(request, username, { page, limit }) {
+      return request.get(`/users/${username}/posts/?page=${page || 1}&limit=${limit || 20}`)
     }
   },
   actions: {
@@ -92,8 +94,8 @@ export default {
         }
       })
     },
-    postPosts({ routes }, title, text, url, draft, blogId) {
-      return routes.postPost(title, text, url, draft, blogId).then(res => {
+    postPosts({ routes, auth }, title, text, url, draft, blogId) {
+      return routes.postPost(title, text, url, draft, blogId, auth.accessToken.token).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }
@@ -101,13 +103,45 @@ export default {
         return res.post
       })
     },
-    editPost({ routes }, url, title, text, draft, blogId) {
-      return routes.editPost(url, title, text, draft, blogId).then(res => {
+    editPost({ routes, auth }, url, title, text, draft, blogId) {
+      return routes.editPost(url, title, text, draft, blogId, auth.accessToken.token).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }
 
         return res.post
+      })
+    },
+    getUserDrafts({ routes, auth, posts }, page) {
+      return routes.getUserDrafts(auth.accessToken.token, { page }).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        posts.collect(res.posts, 'drafts')
+
+        return res.meta.page_count
+      })
+    },
+    getUserPosts({ routes, posts }, username, page) {
+      return routes.getUserPosts(username, { page }).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        posts.collect(res.posts, 'my')
+
+        return res.meta.page_count
+      })
+    },
+    getPostsByTag({ routes, posts }, tag, page) {
+      return routes.getPostsByTag(tag, { page }).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        posts.collect(res.posts, 'tag')
+
       })
     }
   }

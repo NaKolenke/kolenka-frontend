@@ -21,22 +21,21 @@
 
 <script>
 import Avatar from '@/components/elements/Avatar.vue'
-import FeedbackService from '@/services/feedback'
 
 export default {
   props: ['feedback'],
   methods: {
     send () {
-      FeedbackService
-        .resolve(this.feedback.id)
-        .then(data => {
-          this.$parent.resolved(this.feedback.id)
-          this.$toast.show('Готово!')
-        })
-        .catch(err => {
-          console.log(err)
-          this.$toast.show('Произошла ошибка при отправке запроса, напишите об этом одному из разработчиков')
-        })
+      this.$feedback
+      .resolve(this.feedback.id)
+      .then(data => {
+        this.$parent.resolved(this.feedback.id)
+        this.$toast.show('Готово!')
+      })
+      .catch(err => {
+        console.log(err)
+        this.$toast.show('Произошла ошибка при отправке запроса, напишите об этом одному из разработчиков')
+      })        
     }
   },
   components: {

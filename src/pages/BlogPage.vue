@@ -40,7 +40,7 @@ export default {
       pageCount: 0
     }
   },
-  created: function () {
+  created () {
     this.refreshPage(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
@@ -48,7 +48,7 @@ export default {
     next()
   },
   methods: {
-    refreshPage: function (route) {
+    refreshPage (route) {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
@@ -74,10 +74,10 @@ export default {
         this.$router.push({ path: '/404' })
       })
     },
-    paginateRelative: function (offset) {
+    paginateRelative (offset) {
       this.$router.push({ name: 'blog', query: { page: this.page + offset } })
     },
-    paginateTo: function (page) {
+    paginateTo (page) {
       this.$router.push({ name: 'blog', query: { page: page } })
     }
   },

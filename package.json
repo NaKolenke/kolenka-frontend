@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@caohenghu/vue-colorpicker": "^1.1.1",
-    "axios": "^0.18.0",
     "highlight.js": "^9.15.6",
     "moment": "^2.24.0",
     "prosemirror-state": "^1.2.3",

@@ -5,6 +5,9 @@ import blogs from './blogs.collection'
 import auth  from './auth.collection'
 import users from './users.collection'
 import content from './content.collection'
+import feedback from './feedback.collection'
+import docs from './docs.collection'
+import tags from './tags.collection'
 
 const store = new Pulse.Library({
   request: {
@@ -19,7 +22,10 @@ const store = new Pulse.Library({
     comments,
     blogs,
     posts,
-    content
+    content,
+    feedback,
+    docs,
+    tags
   }
 })
 

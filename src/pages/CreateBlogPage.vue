@@ -104,13 +104,13 @@ export default {
   methods: {
     send() {
       let method = this.$route.params.edit ?
-      BlogService.editBlog(
+      this.$blogs.editBlog(
         this.$route.params.edit.url,
         this.model.title,
         this.model.description,
         this.model.type
       ) :
-      BlogService.createBlog(
+      this.$blogs.createBlog(
         this.model.type,
         this.model.title,
         this.model.description,
@@ -119,7 +119,7 @@ export default {
 
       method.then(data => {
         this.$toast.show('Блог был успешно отредактирован')
-        this.$router.replace({ name: 'blog', params: { name: data.blog.url } })
+        this.$router.replace({ name: 'blog', params: { name: data.url } })
       })
     }
   },

@@ -9,34 +9,32 @@
       <span v-for="tag in tags" :key="tag.id">
         <router-link :to="{ name: 'tag', params: { title: tag.title }}" class="text-primary"> {{tag.title}} </router-link>
       </span>
-
     </div>
   </div>
 </template>
 
 <script>
-import TagService from '@/services/tag'
-
 export default {
-  data: function () {
+  data () {
     return {
-      tags: [],
+      ...this.mapData({
+        tags: 'tags/everything'
+      }),
       isLoading: true
     }
   },
-  created: function () {
+  created () {
     this.isLoading = true
-      TagService.getTags().then(data => {
-        this.tags = data.tags.filter( t => t.title.length > 0)
-        this.isLoading = false
-      }).catch(err => {
-        this.isLoading = false
-        console.log(err)
-      })
+
+    this.$tags.getAll().then(data => {
+      this.isLoading = false
+    }).catch(err => {
+      this.isLoading = false
+      console.log(err)
+    })
   },
 }
 </script>
-
 
 <style scoped>
 h4 {

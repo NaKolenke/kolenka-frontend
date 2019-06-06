@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import FeedbackService from '@/services/feedback'
-
 export default {
   data: function () {
     return {
@@ -22,16 +20,16 @@ export default {
   },
   methods: {
     send () {
-      FeedbackService
-        .send(this.feedback)
-        .then(data => {
-          this.$router.replace({ path: '/' })
-          this.$toast.show('Ваш отзыв отправлен')
-        })
-        .catch(err => {
-          console.log(err)
-          this.$toast.show('Произошла ошибка при отправке отзыва, напишите об этом одному из разработчиков')
-        })
+      this.$feedback
+      .send(this.feedback)
+      .then(data => {
+        this.$router.replace({ path: '/' })
+        this.$toast.show('Ваш отзыв отправлен')
+      })
+      .catch(err => {
+        console.log(err)
+        this.$toast.show('Произошла ошибка при отправке отзыва, напишите об этом одному из разработчиков')
+      })
     }
   }
 }
