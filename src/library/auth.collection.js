@@ -42,29 +42,29 @@ export default {
   },
   actions: {
     login({ data, routes, actions }, username, password) {
-      return new Promise((resolve, reject) => {
+      //return new Promise((resolve, reject) => {
         if (data.accessToken != null && data.accessToken != undefined) {
-          routes
+          return routes
           .getSelf(data.accessToken.token)
           .then(res => {
             if (res.success !== 1) {
-              reject()
+              //reject()
               return
             }
             
             data.user = res.user
-            resolve()
+            //resolve()
           })
           .catch(err => {
             console.log(err)
-            reject()
+            //reject()
           })
         } else {
-          routes
+          return routes
           .login(username, password)
           .then(res => {
             if (res.success !== 1) {
-              reject()
+              //reject()
               return
             }
             
@@ -73,14 +73,14 @@ export default {
           })
           .then(() => actions.login())
           .then(() => {
-            resolve()
+            //resolve()
           })
           .catch(err => {
             console.log(err)
-            reject()
+            //reject()
           })
         }
-      })
+      //})
     },
     register({ routes }, username, email, name, password) {
       return routes.register(username, email, name, password).then(res => {

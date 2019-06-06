@@ -1,47 +1,33 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div v-if="isLoading" class="column col-9">
-        <loading-view></loading-view>
+  <div>
+    <div class="card">
+      <div class="card-body">
+        <blog-card v-if="blog" :blog="blog" :preview="false"></blog-card>
       </div>
-      <div v-else id="content" class="column col-9">
-        <div class="card">
-          <div class="card-body">
-            <blog-card v-if="blog" :blog="blog" :preview="false"></blog-card>
-          </div>
-          <div v-if="readers.length > 0" class="card-footer">
-            <div class="card-subtitle">
-              <span class="text-gray mx-1">Подписчики </span>
-              <avatar
-                v-for="reader in readers"
-                :key="reader.id"
-                :user="reader"
-                :card="false"
-                class="mx-1 tooltip"
-                :data-tooltip="reader.name || reader.username"
-              />
-            </div>
-          </div>
+      <div v-if="readers.length > 0" class="card-footer">
+        <div class="card-subtitle">
+          <span class="text-gray mx-1">Подписчики </span>
+          <avatar
+            v-for="reader in readers"
+            :key="reader.id"
+            :user="reader"
+            :card="false"
+            class="mx-1 tooltip"
+            :data-tooltip="reader.name || reader.username"
+          />
         </div>
-        <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
-        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-      </div>
-
-      <div id="sidebar" class="column col-3 hide-md">
-        <the-sidebar></the-sidebar>
       </div>
     </div>
+    <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+    <pagination-view :page="page" :page-count="pageCount"></pagination-view>
   </div>
 </template>
 
 <script>
 import PostView from '@/components/PostView.vue'
-import LoadingView from '@/components/LoadingView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import BlogCard from '@/components/cards/BlogCard.vue'
 import Avatar from '@/components/elements/Avatar.vue'
-import BlogService from '@/services/blog'
 
 export default {
   data() {
@@ -50,7 +36,8 @@ export default {
       posts: [],
       readers: [],
       page: 1,
-      isLoading: true
+      isLoading: true,
+      pageCount: 0
     }
   },
   created: function () {
@@ -65,24 +52,20 @@ export default {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      BlogService
+      this.$blogs
       .getBlog(route.params.name)
-      .then(data => {
-        this.blog = data.blog
-        
-        return BlogService
+      .then(blog => {
+        this.blog = blog
       })
-      .then(service => service.getBlogPosts(route.params.name, this.page))
-      .then(data => {
-        this.posts = data.posts
-        this.pageCount = data.meta.page_count
+      .then(() => this.$posts.getBlogPosts(route.params.name, { page: this.page }))
+      .then(posts => {
+        this.posts = posts.data
+        this.pageCount = posts.pages
         this.isLoading = false
-
-        return BlogService
       })
-      .then(service => service.getReaders(route.params.name))
-      .then(data => {
-        this.readers = data.readers
+      .then(() => this.$blogs.getReaders(route.params.name))
+      .then(readers => {
+        this.readers = readers
       })
       .catch(err => {
         this.isLoading = false
@@ -100,8 +83,6 @@ export default {
   },
   components: {
     PostView,
-    LoadingView,
-    TheSidebar,
     PaginationView,
     BlogCard,
     Avatar

@@ -1,43 +1,57 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div v-if="isLoading" class="column col-9">
-        <loading-view></loading-view>
-      </div>
-      <div v-else id="content" class="users columns column col-8 mx-2 px-2">
-        <div class="column col-8">Пользователь</div>
-        <div class="column col-4 col-mr-auto">Последний раз был на сайте</div>
-        <profile-list-item v-for="user in users" :key="user.id" :user="user"></profile-list-item>
+  <div>
+    <template v-if="isLoading">
+      <user-skeleton v-for="i in 20" :key="i" />
+    </template>
 
-        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-      </div>
+    <table v-else class="table">
+      <thead>
+        <tr>
+          <th>Пользователь</th>
+          <th>Последний раз был на сайте</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in users" :key="user.id">
+          <td>
+            <div class="columns">
+              <div class="column col-2">
+                <avatar :user="user" :size="'lg'" :card="false" />
+              </div>
+              <div class="column col-10">
+                <router-link :to="{ name: 'profile', params: { user: user.username }}">{{user.username}}</router-link>
+                <div>{{user.name}}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            {{user.last_active_date | moment }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <div id="sidebar" class="column col-3 hide-md">
-        <the-sidebar></the-sidebar>
-      </div>
-    </div>
+    <pagination-view :page="page" :page-count="pageCount"></pagination-view>
   </div>
 </template>
 
 <script>
-import ProfileListItem from '@/components/ProfileListItem.vue'
-import LoadingView from '@/components/LoadingView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
-import UserService from '@/services/user'
+import Avatar from '@/components/elements/Avatar.vue'
+import UserSkeleton from '@/components/skeletons/UserListItem.vue'
 
 export default {
-  data: function () {
-    this.users = []
-
+  data () {
     return {
-      users: this.users,
+      ...this.mapData({
+        users: 'users/everything'
+      }),
       page: 1,
       pageCount: 0,
       isLoading: true
     }
   },
-  created: function () {
+  created () {
     this.refreshPage(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
@@ -45,12 +59,13 @@ export default {
     next()
   },
   methods: {
-    refreshPage: function (route) {
+    refreshPage (route) {
+      this.$users.purge()
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
-      UserService.getUsers(this.page).then(data => {
-        this.users = data.users
-        this.pageCount = data.meta.page_count
+
+      this.$users.getAll({ page: this.page }).then(pages => {
+        this.pageCount = pages
         this.isLoading = false
       }).catch(err => {
         this.isLoading = false
@@ -59,28 +74,17 @@ export default {
         this.$router.push({ path: '/404' })
       })
     },
-    paginateRelative: function (offset) {
+    paginateRelative (offset) {
       this.$router.push({ name: 'users', query: { page: this.page + offset } })
     },
-    paginateTo: function (page) {
+    paginateTo (page) {
       this.$router.push({ name: 'users', query: { page: page } })
     }
   },
   components: {
-    ProfileListItem,
-    TheSidebar,
     PaginationView,
-    LoadingView
+    Avatar,
+    UserSkeleton
   }
 }
 </script>
-
-<style scoped>
-.users {
-  background: #ffffff;
-}
-
-.user {
-  border-bottom: 1px solid #cecece;
-}
-</style>

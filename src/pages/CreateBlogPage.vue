@@ -3,7 +3,7 @@
     <div class="columns">
       <div class="column">
         
-        <h2>Новый блог</h2>
+        <h2>{{ $route.params.edit ? 'Редактировать блог' : 'Новый блог' }}</h2>
         <div class="form-horizontal">
           
           <div class="form-group">
@@ -90,12 +90,11 @@ export default {
       isLoading: false
     }
   },
-  created() {
+  mounted() {
     if (!this.auth.user) {
       this.$router.replace({ path: '/' })
     }
-  },
-  mounted() {
+    
     if (this.$route.params.edit) {
       this.model.title = this.$route.params.edit.title
       this.model.description = this.$route.params.edit.description

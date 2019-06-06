@@ -1,4 +1,5 @@
 export default {
+  groups: [ 'everything' ],
   routes: {
     getUser(request, username) {
       return request.get(`users/${username}/`)
@@ -14,6 +15,9 @@ export default {
       }, {
         'Authorization': token
       })
+    },
+    getAll(request, { page, limit }) {
+      return request.get(`/users/?page=${page || 1}&limit=${limit || 20}`)
     }
   },
   actions: {
@@ -50,6 +54,17 @@ export default {
         }
 
         return auth.data.user = res.user
+      })
+    },
+    getAll({ users, routes }, { page, limit }) {
+      return routes.getAll({ page, limit }).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject(res.error)
+        }
+
+        users.collect(res.users, 'everything')
+
+        return res.meta.page_count
       })
     }
   }

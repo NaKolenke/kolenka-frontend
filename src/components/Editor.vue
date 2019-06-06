@@ -351,7 +351,6 @@ import Limit from '@/editor/extensions/Limit'
 import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
-import ContentService from '@/services/content'
 
 export default {
   props: {
@@ -507,8 +506,9 @@ export default {
     uploadImage(command) {
       this.imageModal.uploadError = null
       this.imageUploadLoading = true
-      ContentService.uploadFile(new FormData(this.$refs.image)).then(data => {
-        let url = 'https://beta.kolenka.net/content/' + data.file.id
+
+      this.$content.uploadFile(new FormData(this.$refs.image)).then(file => {
+        let url = 'https://beta.kolenka.net/content/' + file.id
         this.imageUploadLoading = false
         command({ src: url })
         this.imageModalClose()

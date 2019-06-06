@@ -63,7 +63,6 @@
 
 <script>
 import Editor from '@/components/Editor.vue'
-import PostService from '@/services/post'
 import slugify from 'speakingurl'
 
 export default {
@@ -71,7 +70,7 @@ export default {
     return {
       ...this.mapData({
         auth: 'auth/data',
-        blogs: 'userBlogs/everything'
+        blogs: 'blogs/my'
       }),
       model: {
         title: localStorage.getItem('post-title') || '',
@@ -105,14 +104,14 @@ export default {
       this.isSending = true
 
       let method = this.$route.params.edit ?
-      PostService.editPost(
+      this.$posts.editPost(
         this.$route.params.edit.url,
         this.model.title,
         this.store.html,
         draft,
         this.model.blog
       ) :
-      PostService.createPost(
+      this.$posts.createPost(
         this.model.title,
         this.store.html,
         draft,
@@ -122,9 +121,9 @@ export default {
       method.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
-        this.$posts.delete(data.post.id)
+        this.$posts.delete(data.id)
         this.isSending = false
-        this.$router.replace({ name: 'post', params: { post: data.post.url } })
+        this.$router.replace({ name: 'post', params: { post: data.url } })
       }).catch(err => {
         console.log(err)
       })

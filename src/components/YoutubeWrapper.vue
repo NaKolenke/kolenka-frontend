@@ -45,6 +45,7 @@ export default {
   height: 360px;
 
   img {
+    width: 100%;
     cursor: pointer;
   }
 }

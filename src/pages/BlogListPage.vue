@@ -1,38 +1,33 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div v-if="isLoading" class="column col-9">
-        <loading-view></loading-view>
-      </div>
-      <div v-else id="content" class="columns column col-8 mx-2 px-2">
-        <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
-        <pagination-view :page="page" :page-count="pageCount"></pagination-view>
-      </div>
+  <div>
+    <template v-if="isLoading">
+      <blog-skeleton v-for="i in 10" :key="i" />
+    </template>
 
-      <div id="sidebar" class="column col-3 hide-md">
-        <the-sidebar></the-sidebar>
-      </div>
+    <div v-else id="content" >
+      <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
+      <pagination-view :page="page" :page-count="pageCount"></pagination-view>
     </div>
   </div>
 </template>
 
 <script>
-import LoadingView from '@/components/LoadingView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import BlogCard from '@/components/cards/BlogCard.vue'
-import BlogService from '@/services/blog'
+import BlogSkeleton from '@/components/skeletons/BlogCard.vue'
 
 export default {
-  data: function () {
+  data () {
     return {
-      users: [],
+      ...this.mapData({
+        blogs: 'blogs/everything'
+      }),
       page: 1,
       pageCount: 0,
       isLoading: true
     }
   },
-  created: function () {
+  created () {
     this.refreshPage(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
@@ -40,12 +35,14 @@ export default {
     next()
   },
   methods: {
-    refreshPage: function (route) {
+    refreshPage (route) {
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
-      BlogService.getBlogs(this.page).then(data => {
-        this.blogs = data.blogs
-        this.pageCount = data.meta.page_count
+
+      this.$blogs.indexes.everything = []
+
+      this.$blogs.getAll({ page: this.page }).then(pages => {
+        this.pageCount = pages
         this.isLoading = false
       }).catch(err => {
         this.isLoading = false
@@ -54,22 +51,17 @@ export default {
         this.$router.push({ path: '/404' })
       })
     },
-    paginateRelative: function (offset) {
+    paginateRelative (offset) {
       this.$router.push({ name: 'blogs', query: { page: this.page + offset } })
     },
-    paginateTo: function (page) {
+    paginateTo (page) {
       this.$router.push({ name: 'blogs', query: { page: page } })
     }
   },
   components: {
-    TheSidebar,
     PaginationView,
-    LoadingView,
-    BlogCard
+    BlogCard,
+    BlogSkeleton
   }
 }
 </script>
-
-<style scoped>
-
-</style>

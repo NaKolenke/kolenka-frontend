@@ -20,6 +20,12 @@
         <br>
         <pre><code>{{JSON.stringify(endpoint.response, null, 2)}}</code></pre>
       </div>
+
+      <div v-if="endpoint.error_response">
+        <b>Error</b>
+        <br>
+        <pre><code>{{JSON.stringify(endpoint.error_response, null, 2)}}</code></pre>
+      </div>
     </div>
   </div>
 </template>

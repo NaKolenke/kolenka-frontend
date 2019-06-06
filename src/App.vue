@@ -57,33 +57,18 @@ export default {
       this.$Progress.finish()
     })
 
-    this.$auth.login().then(() => {
-      this.loadingData = false
-    }).catch(() => {
+    this.$auth
+    .login()
+    .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
+    .then(pages => {
+      // ...
+    })
+    .then(() => {
       this.loadingData = false
     })
-  },
-  methods: {
-    loadBlogs(username) {
-      /*UserService.getUserBlogs(username).then(res => {
-        this.$userBlogs.collect(res.blogs, 'everything')
-
-        if (res.meta.page_count > 1) {
-          for (let i = 2; i < res.meta.page_count; i++) {
-            this.loadBlogPage(username, i)
-          }
-        }
-      }).catch(err => {
-        console.log(err)
-      })*/
-    },
-    loadBlogPage(username, page) {
-      /*UserService.getUserBlogs(username, page).then(res => {
-        this.$userBlogs.collect(res.blogs, 'everything')
-      }).catch(err => {
-        console.log(err)
-      })*/
-    }
+    .catch(() => {
+      this.loadingData = false
+    })
   },
   computed: {
     showSidebar() {
@@ -128,61 +113,63 @@ img {
 
 @import '../node_modules/spectre.css/src/_variables.scss';
 
-// Tables override (so we don't need to specify .table every time)
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  @if $rtl == true {
-    text-align: right;
-  } @else {
-    text-align: left;
-  }
-
-  &.table-striped {
-    tbody {
-      tr:nth-of-type(odd) {
-        background: $bg-color;
-      }
+// Tables override for editor (so we don't need to specify .table every time)
+.form-group {
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    @if $rtl == true {
+      text-align: right;
+    } @else {
+      text-align: left;
     }
-  }
 
-  &,
-  &.table-striped {
-    tbody {
-      tr {
-        &.active {
-          background: $bg-color-dark;
+    &.table-striped {
+      tbody {
+        tr:nth-of-type(odd) {
+          background: $bg-color;
         }
       }
     }
-  }
 
-  &.table-hover {
-    tbody {
-      tr {
-        &:hover {
-          background: $bg-color-dark;
+    &,
+    &.table-striped {
+      tbody {
+        tr {
+          &.active {
+            background: $bg-color-dark;
+          }
         }
       }
     }
-  }
 
-  // Scollable tables
-  &.table-scroll {
-    display: block;
-    overflow-x: auto;
-    padding-bottom: .75rem;
-    white-space: nowrap;
-  }
+    &.table-hover {
+      tbody {
+        tr {
+          &:hover {
+            background: $bg-color-dark;
+          }
+        }
+      }
+    }
 
-  td,
-  th {
-    border: $border-width solid $border-color;
-    padding: $unit-3 $unit-2;
-  }
-  th {
-    border-bottom-width: $border-width-lg;
+    // Scollable tables
+    &.table-scroll {
+      display: block;
+      overflow-x: auto;
+      padding-bottom: .75rem;
+      white-space: nowrap;
+    }
+
+    td,
+    th {
+      border: $border-width solid $border-color;
+      padding: $unit-3 $unit-2;
+    }
+    th {
+      border-bottom-width: $border-width-lg;
+    }
   }
 }
 

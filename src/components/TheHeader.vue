@@ -76,12 +76,11 @@ export default {
   props: {
     version: String,
   },
-  mounted: function () {
-    //this.$watch('user', this.refreshFeedbackTooltip)
-    console.log(this.user)
+  created() {
+    this.refreshFeedbackTooltip()
   },
   methods: {
-    refreshFeedbackTooltip: function () {
+    refreshFeedbackTooltip () {
       if (this.isAdmin) {
         FeedbackService.getList().then(data => {
           let newFeedbackCount = data.filter(f => !f.is_resolved).length

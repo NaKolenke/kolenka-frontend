@@ -1,7 +1,7 @@
 import { getAccessToken } from '@/library/utils'
 
 export default {
-  groups: [ 'everything', 'home' ],
+  groups: [ 'everything', 'home', 'temp' ],
   data: {
     pages: 0
   },
@@ -40,6 +40,9 @@ export default {
     },
     getPostsByTag (request, tag, { page, limit }) {
       return request.get(`/tags/${tag}/?page=${page || 1}&limit=${limit || 20}`)
+    },
+    getBlogPosts(request, url, { page, limit }) {
+      return request.get(`/blogs/${url}/posts/?page=${page || 1}&limit=${limit || 20}`)
     }
   },
   actions: {
@@ -76,6 +79,36 @@ export default {
           console.log(err)
         })
       }
+    },
+    getBlogPosts({ routes }, url, { page, limit }) {      
+      return routes.getBlogPosts(url, { page, limit }).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        return {
+          pages: res.meta.page_count,
+          data: res.posts
+        }
+      })
+    },
+    postPosts({ routes }, title, text, url, draft, blogId) {
+      return routes.postPost(title, text, url, draft, blogId).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        return res.post
+      })
+    },
+    editPost({ routes }, url, title, text, draft, blogId) {
+      return routes.editPost(url, title, text, draft, blogId).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        return res.post
+      })
     }
   }
 }
