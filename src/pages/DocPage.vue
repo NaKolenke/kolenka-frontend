@@ -36,7 +36,6 @@
 
 <script>
 import EndpointView from '@/components/doc/EndpointView.vue'
-import DocService from '@/services/doc'
 
 export default {
   data () {

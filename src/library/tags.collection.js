@@ -12,7 +12,7 @@ export default {
           return Promise.reject()
         }
 
-        tags.collect(res.tags, 'everything')
+        tags.collect(res.tags.filter(x => x.title.length > 0), 'everything')
       })
     }
   }

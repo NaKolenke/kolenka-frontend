@@ -14,7 +14,6 @@
 import PostView from '@/components/PostView.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import PaginationView from '@/components/PaginationView.vue'
-import PostService from '@/services/post'
 
 export default {
   data () {

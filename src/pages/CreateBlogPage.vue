@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import BlogService from '@/services/blog'
 import slugify from 'speakingurl'
 
 export default {

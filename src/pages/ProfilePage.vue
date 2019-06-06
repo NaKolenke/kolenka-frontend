@@ -17,7 +17,6 @@
 
 <script>
 import ProfileView from '@/components/ProfileView.vue'
-import TheSidebar from '@/components/TheSidebar.vue'
 import BlogCardSmall from '@/components/cards/BlogCardSmall.vue'
 
 export default {
@@ -60,7 +59,6 @@ export default {
   },
   components: {
     ProfileView,
-    TheSidebar,
     BlogCardSmall
   }
 }

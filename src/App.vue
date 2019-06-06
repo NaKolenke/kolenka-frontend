@@ -22,7 +22,6 @@
 import Vue from 'vue'
 import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
-import UserService from '@/services/user'
 import ToastPlugin from '@/plugins/toast'
 import store from '@/library/index'
 import ScrollTo from 'vue-scrollto'

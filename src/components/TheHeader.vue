@@ -62,7 +62,6 @@
 
 <script>
 import Avatar from '@/components/elements/Avatar.vue'
-import FeedbackService from '@/services/feedback'
 
 export default {
   data: function () {
@@ -82,7 +81,7 @@ export default {
   methods: {
     refreshFeedbackTooltip () {
       if (this.isAdmin) {
-        FeedbackService.getList().then(data => {
+        this.$feedback.getList().then(data => {
           let newFeedbackCount = data.filter(f => !f.is_resolved).length
           if (newFeedbackCount > 0) {
             this.feedbackTooltip = 'Есть ' + newFeedbackCount + ' новых отзывов'

@@ -4,7 +4,6 @@
 
 <script>
 import ProfileEditView from '@/components/ProfileEditView.vue'
-import UserService from '@/services/user'
 
 export default {
   data () {

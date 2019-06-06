@@ -4,10 +4,10 @@
     <div v-if="isLoading">
         Загружаем
     </div>
-    <div v-else class="side-block">
+    <div v-else class="side-block bg-gray">
       <h4>ТЕГИ</h4>
       <span v-for="tag in tags" :key="tag.id">
-        <router-link :to="{ name: 'tag', params: { title: tag.title }}" class="text-primary"> {{tag.title}} </router-link>
+        <router-link :to="{ name: 'tag', params: { title: tag.title }}"> {{tag.title}} </router-link>
       </span>
     </div>
   </div>
