@@ -1,3 +1,4 @@
+import 'core-js/stable'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -14,6 +15,5 @@ Vue.filter('moment', function (timestamp) {
 
 new Vue({
   render: h => h(App),
-  router,
-  components: { App }
+  router
 }).$mount('#app')
