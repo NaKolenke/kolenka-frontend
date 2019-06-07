@@ -2,7 +2,7 @@
   <div id="app" v-if="!loadingData">
     <header-component :version="version" />
 
-    <div class="container col-9 col-mx-auto">
+    <div class="container col-9 col-mx-auto col-xl-11">
       <div class="columns">
         <div :class="['column', { 'col-9': showSidebar }, { 'col-12': !showSidebar }]">
           <router-view />
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     showSidebar() {
-      return !this.$route.matched[0].props.sidebar
+      return !this.$route.matched[0].props.sidebar || !this.$route.matched[0].props.sidebar.hide
     }
   },
   components: {

@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <slot></slot>
-    <div v-if="isLoading">
-        Загружаем
-    </div>
-    <div v-else class="side-block bg-gray">
-      <h4>ТЕГИ</h4>
-      <span v-for="tag in tags" :key="tag.id">
-        <router-link :to="{ name: 'tag', params: { title: tag.title }}"> {{tag.title}} </router-link>
-      </span>
+  <div ref="container">
+    <div :style="{ 'margin-top': marginTop + 'px' }">
+      <slot></slot>
+      <div v-if="isLoading">
+          Загружаем
+      </div>
+      <div v-else class="side-block bg-gray">
+        <h4>ТЕГИ</h4>
+        <span v-for="tag in tags" :key="tag.id">
+          <router-link :to="{ name: 'tag', params: { title: tag.title }}"> {{tag.title}} </router-link>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -20,7 +22,9 @@ export default {
       ...this.mapData({
         tags: 'tags/everything'
       }),
-      isLoading: true
+      isLoading: true,
+      marginTop: 0,
+      onScroll: null
     }
   },
   created () {
@@ -33,6 +37,49 @@ export default {
       console.log(err)
     })
   },
+  mounted () {
+    this.$nextTick(() => {      
+      if (this.$route.matched[0].props.sidebar &&
+          this.$route.matched[0].props.sidebar.sticky === true) {
+        this.runSticky()
+      }
+    })
+  },
+  beforeDestroy() {
+    if (this.onScroll) {
+      window.removeEventListener('scroll', this.onScroll)
+    }
+  },
+  methods: {
+    runSticky() {
+      let container = this.$refs.container
+      let offset = container.offsetTop
+
+      this.onScroll = e => {
+        let scroll = window.pageYOffset || document.documentElement.scrollTop
+        let height = container.offsetHeight
+
+        if (scroll <= offset) {
+          this.marginTop = 0
+          return
+        }
+
+        if (scroll + window.innerHeight >= document.documentElement.scrollHeight) { // TODO: doesn't really work
+          return
+        }
+
+        if (scroll + window.innerHeight > height + offset) {
+          if (height > window.innerHeight) {
+           this.marginTop = scroll - offset - (height - window.innerHeight)
+          } else {
+            this.marginTop = scroll - offset
+          }        
+        }
+      }
+      
+      window.addEventListener('scroll', this.onScroll)
+    }
+  }
 }
 </script>
 

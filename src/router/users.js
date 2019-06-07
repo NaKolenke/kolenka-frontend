@@ -15,7 +15,9 @@ export default [
       sidebar: DefaultSidebar
     },
     props: {
-      sidebar: true
+      sidebar: {
+        hide: true
+      }
     }
   },
   {
@@ -25,7 +27,9 @@ export default [
       sidebar: DefaultSidebar
     },
     props: {
-      sidebar: true
+      sidebar: {
+        hide: true
+      }
     }
   },
   {
@@ -44,7 +48,9 @@ export default [
       sidebar: DefaultSidebar
     },
     props: {
-      sidebar: true
+      sidebar: {
+        hide: true
+      }
     }
   },
   {

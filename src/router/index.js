@@ -9,6 +9,7 @@ import FeedbackPage from '@/pages/FeedbackPage'
 import TagPage from '@/pages/TagPage'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
+import DocsSidebar from '@/pages/sidebar/DocsView.vue'
 
 import blogs from './blogs'
 import posts from './posts'
@@ -47,7 +48,12 @@ const routes = [
     path: '/doc',
     components: {
       default: DocPage,
-      sidebar: DefaultSidebar
+      sidebar: DocsSidebar
+    },
+    props: {
+      sidebar: {
+        sticky: true
+      }
     }
   },
   {
