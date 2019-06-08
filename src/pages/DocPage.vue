@@ -1,10 +1,11 @@
 <template>
   <div class="container">
     <h2>Документация API</h2>
+    
     <div id="postman" class="accordion panel">
       <input type="checkbox" id="accordion-1" name="accordion-checkbox" hidden>
       <label class="accordion-header label panel-header" for="accordion-1">> Коллекция Postman</label>
-      <div class="accordion-body panel-body">
+      <div class="accordion-body panel-body" style="margin-bottom:0">
         <br>
         <p>
           Коллекция Postman:
@@ -25,11 +26,13 @@
 }</code></pre>
       </div>
     </div>
+
     <br><br>
+
     <endpoint-view
       v-for="endpoint in endpoints"
-      v-bind:key="endpoint.description"
-      v-bind:endpoint="endpoint"
+      :key="endpoint.description"
+      :endpoint="endpoint"
     ></endpoint-view>
   </div>
 </template>
@@ -40,15 +43,14 @@ import EndpointView from '@/components/doc/EndpointView.vue'
 export default {
   data () {
     return {
-      endpoints: []
+      ...this.mapData({
+        endpoints: 'docs/endpoints'
+      })
     }
   },
   created () {
     this.$docs
     .getEndpoints()
-    .then(data => {
-      this.endpoints = data
-    })
   },
   components: {
     EndpointView

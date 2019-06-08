@@ -1,5 +1,5 @@
 <template>
-  <div class="endpoint card">
+  <div class="endpoint card" :id="endpoint.method + endpoint.url">
     <div class="card-header">
       <b class="card-title">{{endpoint.method}} {{endpoint.url}}</b>
       <div v-if="endpoint.status != 'Available'" class="card-subtitle">
@@ -36,9 +36,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './node_modules/spectre.css/src/_variables.scss';
+
 .endpoint {
   margin-bottom: 26px;
   padding: 8px;
+}
+
+:target {
+   background: $secondary-color;
 }
 </style>
