@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import Editor from '@/components/Editor.vue'
+import Editor from '@/components/editor/Editor.vue'
 import slugify from 'speakingurl'
 
 export default {

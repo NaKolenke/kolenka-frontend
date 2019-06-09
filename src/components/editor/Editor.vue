@@ -547,8 +547,12 @@ export default {
       }
     },
     onScroll(e) {
-      if (window.pageYOffset > this.$refs.editorWrapper.offsetTop) {
-        this.menuBarOffsetLeft = this.$refs.editorWrapper.offsetLeft + 'px'
+      let wrapper = this.$refs.editorWrapper
+      let scroll = window.pageYOffset || document.documentElement.scrollTop
+      let clientRect = wrapper.getBoundingClientRect()
+      
+      if (scroll > clientRect.top + scroll) {
+        this.menuBarOffsetLeft = clientRect.left + 1 + 'px'
         this.menuBarFloats = true
       } else {
         this.menuBarFloats = false
@@ -582,7 +586,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './node_modules/spectre.css/src/_variables.scss';
+
 .editor {
   height: auto;
 }
@@ -603,7 +609,9 @@ export default {
 
 .menu-bar .button:hover,
 .menu-bar .button.is-active {
-  background: #cecece;
+  //background: #cecece;
+  background: $primary-color;
+  color: $secondary-color;
 }
 
 .menu-bar .span {
