@@ -74,11 +74,22 @@ export default {
       const dt = e.dataTransfer
       const files = dt.files
 
-      this.files = this.files.concat(
-        this
-        .fileListToArray(files)
-        .filter(x => x.type.startsWith('image'))
-      )
+      if (this.files.length > 0 && !this.multiple) {
+        let file = this
+          .fileListToArray(files)
+          .filter(x => x.type.startsWith('image'))[0]
+
+        if (file) {
+          this.files = [ file ]
+        }        
+      } else {
+        this.files = this.files.concat(
+          this
+          .fileListToArray(files)
+          .filter(x => x.type.startsWith('image'))
+        )
+      }
+      
       this.highlightDrag = false
       this.resolvePreview()
     },
@@ -129,7 +140,7 @@ export default {
         .then(() => this.$content.uploadFile(data))
         .then(file => {
           previewItem.uploading = false
-          this.files.splice(index, 1)
+          this.removeImage(index)
           output.push(file)
         })
         .catch(err => {

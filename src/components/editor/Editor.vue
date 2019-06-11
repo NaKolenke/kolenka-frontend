@@ -168,7 +168,7 @@
           <span class="icon-image"></span>
         </button>
 
-        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
+        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image_ex)">
           <ul class="tab tab-block">
             <li v-if="isActive.image()" :class="['tab-item', {'active': imageModal.tab === -1}]">
               <a href="#" @click.prevent="imageModal.tab = -1">Редактировать</a>
@@ -194,7 +194,7 @@
           </div>
 
           <div v-if="imageModal.tab === 1">
-            <image-upload @complete="imageUploaded($event, commands.image)" />
+            <image-upload @complete="imageUploaded($event, commands.image_ex)" :multiple="true" />
           </div>
         </modal>
 
@@ -354,6 +354,7 @@ import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
+import ImageExView from '@/editor/node/ImageView.vue'
 
 export default {
   props: {
@@ -406,6 +407,13 @@ export default {
   mounted() {
     const self = this
 
+    const imageEx = new Image()
+    Object.defineProperty(imageEx, 'view', {
+      get() {
+        return ImageExView
+      }
+    })
+
     const options = {
       extensions: [
         new Bold(),
@@ -423,7 +431,7 @@ export default {
         new Blockquote(),
         new Code(),
         new CodeBlock(),
-        new Image(),
+        imageEx,
         new CBExtended(),
         new Iframe()
       ],

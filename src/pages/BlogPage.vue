@@ -18,7 +18,14 @@
         </div>
       </div>
     </div>
-    <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+    
+    <div v-if="isLoading">
+      <post-skeleton v-for="i in 10" :key="i" />
+    </div>
+    <div v-else>
+      <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+    </div>
+    
     <pagination-view :page="page" :page-count="pageCount"></pagination-view>
   </div>
 </template>
@@ -28,6 +35,7 @@ import PostView from '@/components/PostView.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import BlogCard from '@/components/cards/BlogCard.vue'
 import Avatar from '@/components/elements/Avatar.vue'
+import PostSkeleton from '@/components/skeletons/Post.vue'
 
 export default {
   data() {
@@ -85,7 +93,8 @@ export default {
     PostView,
     PaginationView,
     BlogCard,
-    Avatar
+    Avatar,
+    PostSkeleton
   }
 }
 </script>

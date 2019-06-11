@@ -43,6 +43,7 @@ import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
+import resizeTweet from '@/utils/resizeTweet'
 
 export default {
   name: 'comment-card',
@@ -61,6 +62,7 @@ export default {
     if (this.$el.querySelectorAll) {
       wrapCode(this.$el)
       wrapYoutube(this.$el, this)
+      resizeTweet(this.$el)
     }
   },
   methods: {
