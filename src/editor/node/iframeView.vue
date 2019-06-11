@@ -171,8 +171,4 @@ iframe[src*="youtube.com"] {
   width: 100%;
   height: 100%;
 }
-
-iframe[src*="twitter.com"] {
-  height: 210px;
-}
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-if="isLoading" class="column col-9">
-      <loading-view></loading-view>
+    <h3>Черновики</h3>
+    <div v-if="isLoading">
+      <post-skeleton v-for="i in 5" :key="i" />
     </div>
-    <div v-else id="content" class="column col-9">
-      <h3>Черновики</h3>
+    <div v-else>
       <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
       <pagination-view :page="page" :page-count="pageCount"></pagination-view>
     </div>
@@ -13,7 +13,7 @@
 
 <script>
 import PostView from '@/components/PostView.vue'
-import LoadingView from '@/components/LoadingView.vue'
+import PostSkeleton from '@/components/skeletons/Post.vue'
 import PaginationView from '@/components/PaginationView.vue'
 
 export default {
@@ -61,7 +61,7 @@ export default {
   components: {
     PostView,
     PaginationView,
-    LoadingView
+    PostSkeleton
   }
 }
 </script>

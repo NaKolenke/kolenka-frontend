@@ -168,8 +168,11 @@
           <span class="icon-image"></span>
         </button>
 
-        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
+        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image_ex)">
           <ul class="tab tab-block">
+            <li v-if="isActive.image()" :class="['tab-item', {'active': imageModal.tab === -1}]">
+              <a href="#" @click.prevent="imageModal.tab = -1">Редактировать</a>
+            </li>
             <li :class="['tab-item', {'active': imageModal.tab === 0}]">
               <a href="#" @click.prevent="imageModal.tab = 0">По ссылке</a>
             </li>
@@ -178,21 +181,20 @@
             </li>
           </ul>
           <br>
+
+          <div v-if="imageModal.tab === -1">
+
+          </div>
+
           <div v-if="imageModal.tab === 0">
             <div :class="['form-group', {'has-error': imageModal.urlError}]">
               <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url" autofocus />
               <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
             </div>
           </div>
+
           <div v-if="imageModal.tab === 1">
-            <form ref="image" @submit.prevent="" :class="['form-group', {'has-error': imageModal.uploadError}]">
-              <div class="input-group" style="margin: 0 auto">
-                <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange">
-                <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ fileInputLabel }}</label>
-                <button :class="['btn', 'input-group-btn', { 'loading': imageUploadLoading }]" @click="uploadImage(commands.image)" :disabled="fileInputEmpty">Загрузить</button>
-              </div>
-              <p v-if="imageModal.uploadError" class="form-input-hint">{{ imageModal.uploadError }}</p>
-            </form>
+            <image-upload @complete="imageUploaded($event, commands.image_ex)" :multiple="true" />
           </div>
         </modal>
 
@@ -350,7 +352,9 @@ import CBExtended from '@/editor/extensions/CodeBlockExtended'
 import Limit from '@/editor/extensions/Limit'
 import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
+import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
+import ImageExView from '@/editor/node/ImageView.vue'
 
 export default {
   props: {
@@ -394,10 +398,7 @@ export default {
         url: ''
       },
       color: '#3b4351',
-      fileInputLabel: 'Выберите файл...',
-      fileInputEmpty: true,
       isFocused: false,
-      imageUploadLoading: false,
       menuBarFloats: false,
       menuBarOffsetLeft: '0px',
       showHelp: false
@@ -405,6 +406,13 @@ export default {
   },
   mounted() {
     const self = this
+
+    const imageEx = new Image()
+    Object.defineProperty(imageEx, 'view', {
+      get() {
+        return ImageExView
+      }
+    })
 
     const options = {
       extensions: [
@@ -423,7 +431,7 @@ export default {
         new Blockquote(),
         new Code(),
         new CodeBlock(),
-        new Image(),
+        imageEx,
         new CBExtended(),
         new Iframe()
       ],
@@ -503,27 +511,12 @@ export default {
         this.imageModal.urlError = true
       }
     },
-    uploadImage(command) {
-      this.imageModal.uploadError = null
-      this.imageUploadLoading = true
-
-      this.$content.uploadFile(new FormData(this.$refs.image)).then(file => {
-        let url = 'https://beta.kolenka.net/content/' + file.id
-        this.imageUploadLoading = false
-        command({ src: url })
-        this.imageModalClose()
-      }).catch(err => {
-        this.imageModal.uploadError = err
+    imageUploaded(images, command) {
+      images.forEach(i => {
+        command({ src: `https://beta.kolenka.net/content/${i.id}` })
       })
-    },
-    fileInputChange(e) {
-      if (e.target.value.length > 0) {
-        this.fileInputLabel = e.target.value.split( '\\' ).pop()
-        this.fileInputEmpty = false
-      } else {
-        this.fileInputLabel = 'Выберите файл...'
-        this.fileInputEmpty = true
-      }
+
+      this.imageModal.show = false
     },
     chooseEmbed(command) {
       if (this.embedModal.url.length > 0) {
@@ -547,8 +540,12 @@ export default {
       }
     },
     onScroll(e) {
-      if (window.pageYOffset > this.$refs.editorWrapper.offsetTop) {
-        this.menuBarOffsetLeft = this.$refs.editorWrapper.offsetLeft + 'px'
+      let wrapper = this.$refs.editorWrapper
+      let scroll = window.pageYOffset || document.documentElement.scrollTop
+      let clientRect = wrapper.getBoundingClientRect()
+      
+      if (scroll > clientRect.top + scroll) {
+        this.menuBarOffsetLeft = clientRect.left + 1 + 'px'
         this.menuBarFloats = true
       } else {
         this.menuBarFloats = false
@@ -577,12 +574,15 @@ export default {
     EditorContent,
     EditorMenuBar,
     Modal,
-    ColorPicker
+    ColorPicker,
+    ImageUpload
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './node_modules/spectre.css/src/_variables.scss';
+
 .editor {
   height: auto;
 }
@@ -603,7 +603,9 @@ export default {
 
 .menu-bar .button:hover,
 .menu-bar .button.is-active {
-  background: #cecece;
+  //background: #cecece;
+  background: $primary-color;
+  color: $secondary-color;
 }
 
 .menu-bar .span {

@@ -10,7 +10,7 @@ export default {
     getPost (request, url) { 
       return request.get(`posts/${url}/`)
     },
-    postPost (request, title, text, url, draft, blogId, token) {
+    createPost (request, title, text, url, draft, blogId, token) {
       return request.post('posts/', {
         blog: blogId,
         cut_name: null,
@@ -94,8 +94,8 @@ export default {
         }
       })
     },
-    postPosts({ routes, auth }, title, text, url, draft, blogId) {
-      return routes.postPost(title, text, url, draft, blogId, auth.accessToken.token).then(res => {
+    createPosts({ routes, auth }, title, text, url, draft, blogId) {
+      return routes.createPost(title, text, url, draft, blogId, auth.accessToken.token).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }
