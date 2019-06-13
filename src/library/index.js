@@ -1,4 +1,4 @@
-import Pulse from 'pulse-framework'
+import Pulse from 'pulse-framework/lib'
 import comments from './comments.collection'
 import posts from './posts.collection'
 import blogs from './blogs.collection'

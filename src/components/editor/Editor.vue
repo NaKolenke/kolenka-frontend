@@ -354,7 +354,7 @@ import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
-import ImageExView from '@/editor/node/ImageView.vue'
+import ImageExtended from '@/editor/node/ImageExtended'
 
 export default {
   props: {
@@ -407,13 +407,6 @@ export default {
   mounted() {
     const self = this
 
-    const imageEx = new Image()
-    Object.defineProperty(imageEx, 'view', {
-      get() {
-        return ImageExView
-      }
-    })
-
     const options = {
       extensions: [
         new Bold(),
@@ -431,7 +424,7 @@ export default {
         new Blockquote(),
         new Code(),
         new CodeBlock(),
-        imageEx,
+        ImageExtended(),
         new CBExtended(),
         new Iframe()
       ],

@@ -27,7 +27,7 @@ export default {
           }
         })
 
-        comments.collect(res.comments.reverse(), 'everything')
+        comments.collect(res.comments.filter(x => x.parent === null).reverse(), 'everything')
 
         return res.comments.length
       })

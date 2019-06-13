@@ -20,5 +20,8 @@ module.exports = {
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       //new BundleAnalyzerPlugin()
     ]
-  }
+  },
+  transpileDependencies: [ 
+    'pulse-framework'
+  ]
 }
