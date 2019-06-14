@@ -23,12 +23,14 @@ export default {
     currentPos: null,
     width: 0,
     height: 0,
-    ratio: 0
+    ratio: 0,
+    originalWidth: 0,
+    originalHeight: 0
   }),
   mounted() {
     getImageSize(this.src).then(size => {
-      this.width = size.width
-      this.height = size.height
+      this.width = this.originalWidth = size.width
+      this.height = this.originalHeight = size.height
       this.ratio = size.width / size.height
     })
     

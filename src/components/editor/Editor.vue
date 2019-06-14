@@ -3,41 +3,22 @@
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }" :class="{ 'floating': menuBarFloats }" :style="[{ 'left': menuBarOffsetLeft }]">
       <div class="menu-bar">
 
-        <button
-          :class="[{ 'is-active': isActive.bold() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.bold"
-          data-tooltip="Жирный"
-        >
+        <editor-button name="Жирный" :active="isActive.bold()" :command="commands.bold" :floats="menuBarFloats">
           <span class="icon-bold"></span>
-        </button>
-        <button
-          :class="[{ 'is-active': isActive.italic() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.italic"
-          data-tooltip="Наклонный"
-        >
+        </editor-button>
+        <editor-button name="Наклонный" :active="isActive.italic()" :command="commands.italic" :floats="menuBarFloats">
           <span class="icon-italic"></span>
-        </button>
-        <button
-          :class="[{ 'is-active': isActive.underline() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.underline"
-          data-tooltip="Подчёркнутый"
-        >
+        </editor-button>
+        <editor-button name="Подчёркнутый" :active="isActive.underline()" :command="commands.underline" :floats="menuBarFloats">
           <span class="icon-underline"></span>
-        </button>
-        <button
-          :class="[{ 'is-active': isActive.strike() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.strike"
-          data-tooltip="Зачёркнутый"
-        >
+        </editor-button>
+        <editor-button name="Зачёркнутый" :active="isActive.strike()" :command="commands.strike" :floats="menuBarFloats">
           <span class="icon-strikethrough"></span>
-        </button>
-        <button
-          :class="[{ 'is-active': isActive.paragraph() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.paragraph"
-          data-tooltip="Параграф"
-        >
+        </editor-button>
+        <editor-button name="Параграф" :active="isActive.paragraph()" :command="commands.paragraph" :floats="menuBarFloats">
           <span class="icon-pilcrow"></span>
-        </button>
+        </editor-button>
+
         <div class="dropdown">
           <button
             :class="[{ 'is-active': isActive.color() && color !== '#3b4351' }, 'button', 'tooltip', 'dropdown-toggle', { 'tooltip-bottom': menuBarFloats }]"
@@ -122,44 +103,25 @@
 
         <span class="span"></span>
 
-        <button
-          :class="[{ 'is-active': isActive.bullet_list() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.bullet_list" 
-          data-tooltip="Список"
-        >
+        <editor-button name="Список" :active="isActive.bullet_list()" :command="commands.bullet_list" :floats="menuBarFloats">
           <span class="icon-list2"></span>
-        </button>
-        <button 
-          :class="[{ 'is-active': isActive.ordered_list() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.ordered_list" 
-          data-tooltip="Нумерованный список"
-        >
+        </editor-button>
+        <editor-button name="Нумерованный список" :active="isActive.ordered_list()" :command="commands.ordered_list" :floats="menuBarFloats">
           <span class="icon-list-numbered"></span>
-        </button>
+        </editor-button>
 
         <span class="span"></span>
 
-        <button
-          :class="[{ 'is-active': isActive.blockquote() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.blockquote" 
-          data-tooltip="Цитата"
-        >
+        <editor-button name="Цитата" :active="isActive.blockquote()" :command="commands.blockquote" :floats="menuBarFloats">
           <span class="icon-quotes-right"></span>
-        </button>
-        <button 
-          :class="[{ 'is-active': isActive.code() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.code" 
-          data-tooltip="Код"
-        >
+        </editor-button>
+        <editor-button name="Код" :active="isActive.code()" :command="commands.code" :floats="menuBarFloats">
           <span class="icon-embed"></span>
-        </button>
-        <button 
-          :class="[{ 'is-active': isActive.code_block() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.code_block" 
-          data-tooltip="Блок кода"
-        >
+        </editor-button>
+        <editor-button name="Блок кода" :active="isActive.code_block()" :command="commands.code_block" :floats="menuBarFloats">
           <span class="icon-embed2"></span>
-        </button>
+        </editor-button>
+
         <button 
           :class="[{ 'is-active': isActive.image() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
           @click="imageModal.show = true" 
@@ -355,6 +317,7 @@ import Modal from '@/components/elements/Modal.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
 import ImageExtended from '@/editor/node/ImageExtended'
+import EditorButton from '@/components/editor/EditorButton.vue'
 
 export default {
   props: {
@@ -566,6 +529,7 @@ export default {
   components: {
     EditorContent,
     EditorMenuBar,
+    EditorButton,
     Modal,
     ColorPicker,
     ImageUpload
@@ -619,19 +583,9 @@ export default {
   width: 100%;
   text-align: left;
 }
-
-.file-input {
-  width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-
 </style>
 
-<style lang="scss">
+<style>
 .hu-color-picker.light {
   box-shadow: none;
   background: none;
