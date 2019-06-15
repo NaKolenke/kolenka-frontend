@@ -8,8 +8,10 @@ export default {
     getAll (request, { page, limit }) {
       return request.get(`posts/?page=${page || 1}&limit=${limit || 20}`)
     },
-    getPost (request, url) { 
-      return request.get(`posts/${url}/`)
+    getPost (request, url, token) { 
+      return request.get(`posts/${url}/`, {
+        'Authorization': token
+      })
     },
     createPost (request, title, text, url, draft, blogId, token) {
       return request.post('posts/', {
@@ -69,14 +71,14 @@ export default {
         return actions.getPosts(page)
       }
     },
-    getPostByUrl({ posts, routes, data }, url) {
+    getPostByUrl({ posts, routes, data, auth }, url) {
       let post = posts.everything.filter(x => x.url === url)[0]
 
       if (post) {
         data.current = post
         return Promise.resolve(post)
       } else {
-        return routes.getPost(url).then(res => {
+        return routes.getPost(url, auth.accessToken.token).then(res => {
           data.current = post
           posts.collect(res.post, 'everything')
           return res.post
@@ -97,7 +99,7 @@ export default {
         }
       })
     },
-    createPosts({ routes, auth }, title, text, url, draft, blogId) {
+    createPost({ routes, auth }, title, text, url, draft, blogId) {
       return routes.createPost(title, text, url, draft, blogId, auth.accessToken.token).then(res => {
         if (res.success !== 1) {
           return Promise.reject()

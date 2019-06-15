@@ -53,6 +53,8 @@ export default {
         e.preventDefault()
         e.stopPropagation()
 
+        this.updateAttrs({ width: this.width, height: this.height })
+
         this.isDragging = false
         document.removeEventListener('mouseup', this.onMouseUp)
         document.removeEventListener('mousemove', this.onMouseMove)

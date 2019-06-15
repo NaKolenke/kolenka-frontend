@@ -10,5 +10,22 @@ export default function ImageExtended() {
     }
   })
 
+  let schema = Object.assign({}, image.schema)
+
+  Object.assign(schema.attrs, {
+    width: {
+      default: null
+    },
+    height: {
+      default: null
+    }
+  })
+
+  Object.defineProperty(image, 'schema', {
+    get() {
+      return schema
+    }
+  })
+
   return image
 }

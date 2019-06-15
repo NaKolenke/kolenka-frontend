@@ -8,7 +8,7 @@
       <router-link 
         v-if="auth.user && auth.user.id === post.creator.id"
         :to="{ name: 'edit-post', params: { edit: post } }" 
-        class="btn btn-sm tooltip tooltip-right"
+        class="btn btn-sm btn-link tooltip tooltip-right"
         data-tooltip="Редактировать запись"
       ><i class="icon icon-edit"></i></router-link>
       <router-link :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }}">
