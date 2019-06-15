@@ -2,10 +2,10 @@ export default {
   groups: [ 'everything' ],
   routes: {
     getComments (request, url, { page, limit }) { 
-      return request.get(`/posts/${url}/comments/?page=${page || 1}&limit=${limit || 20}`)
+      return request.get(`posts/${url}/comments/?page=${page || 1}&limit=${limit || 20}`)
     },
     postComment (request, url, text, parent, token) {
-      return request.post(`/posts/${url}/comments/`, {
+      return request.post(`posts/${url}/comments/`, {
         text,
         parent: parent || 0
       }, {

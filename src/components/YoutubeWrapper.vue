@@ -3,7 +3,7 @@
     <i v-if="!show" class="icon-youtube" @click="click"></i>
     <img v-if="!show" :src="imgUrl" alt="cover" @click="click" />
     <div v-if="loading" class="loading loading-lg"></div>
-    <iframe v-if="show" :src="url" width="100%" height="100%" :style="{ 'visibility': visibility }" @load="loaded" frameborder="0" allowfullscreen></iframe>
+    <iframe v-if="show" :src="source" width="100%" height="100%" :style="{ 'visibility': visibility }" @load="loaded" frameborder="0" allowfullscreen></iframe>
   </div>
 </template>
 
@@ -31,6 +31,9 @@ export default {
     imgUrl() {
       let id = this.url.match(/embed\/([a-zA-Z0-9_]+)/)[1]
       return `https://img.youtube.com/vi/${id}/hqdefault.jpg`
+    },
+    source() {
+      return this.url.indexOf('?') > 0 ? `${this.url}&autoplay=1` : `${this.url}?autoplay=1`
     }
   }
 }
