@@ -1,7 +1,8 @@
 export default {
   groups: [ 'everything', 'home', 'temp', 'drafts', 'my', 'tag' ],
   data: {
-    pages: 0
+    pages: 0,
+    current: null
   },
   routes: {
     getAll (request, { page, limit }) {
@@ -68,13 +69,15 @@ export default {
         return actions.getPosts(page)
       }
     },
-    getPostByUrl({ posts, routes }, url) {
+    getPostByUrl({ posts, routes, data }, url) {
       let post = posts.everything.filter(x => x.url === url)[0]
 
       if (post) {
+        data.current = post
         return Promise.resolve(post)
       } else {
         return routes.getPost(url).then(res => {
+          data.current = post
           posts.collect(res.post, 'everything')
           return res.post
         }).catch(err => {

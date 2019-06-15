@@ -1,13 +1,15 @@
 <template>
   <span
     style="position: relative; display: inline-block;"
+    @dragstart="dragStart"
   >
     <img :src="src" :alt="alt" :title="title" :class="{ 'active': selected }" :width="width" :height="height" />
     <div v-if="selected" class="controls">
-      <div class="point top left" style="cursor: nw-resize" @click="onMouseDown('topLeft')"></div>
-      <div class="point top right" style="cursor: ne-resize" @click="onMouseDown('topRight')"></div>
-      <div class="point bottom left" style="cursor: sw-resize" @click="onMouseDown('bottomLeft')"></div>
-      <div class="point bottom right" style="cursor: se-resize" @click="onMouseDown('bottomRight')"></div>
+      <div class="point top left" style="cursor: nw-resize" @mousedown.prevent.stop="onMouseDown" ></div>
+      <div class="point top right" style="cursor: ne-resize" @mousedown.prevent.stop="onMouseDown" ></div>
+      <div class="point bottom left" style="cursor: sw-resize" @mousedown.prevent.stop="onMouseDown" ></div>
+      <div class="point bottom right" style="cursor: se-resize" @mousedown.prevent.stop="onMouseDown" ></div>
+      <div v-if="width !== originalWidth || height !== originalHeight" class="btn btn-secondary btn-sm reset" @click="reset">Сбросить</div>
     </div>
   </span>
 </template>
@@ -25,7 +27,9 @@ export default {
     height: 0,
     ratio: 0,
     originalWidth: 0,
-    originalHeight: 0
+    originalHeight: 0,
+    onMouseUp: null,
+    onMouseMove: null
   }),
   mounted() {
     getImageSize(this.src).then(size => {
@@ -33,45 +37,66 @@ export default {
       this.height = this.originalHeight = size.height
       this.ratio = size.width / size.height
     })
-    
-    window.addEventListener('mousemove', this.onMouseMove.bind(this))
-    window.addEventListener('mouseup', this.onMouseUp.bind(this))
-    // TODO: press ctrl to use original aspect ratio
-  },
-  beforeDestroy() {
-    window.removeEventListener('mousemove', this.onMouseMove)
-    window.removeEventListener('mouseup', this.onMouseUp)
   },
   methods: {
-    onMouseDown(position) {
-      this.currentPos = position
+    onMouseDown(mde) {
       this.isDragging = true
+
+      let classes = mde.target.classList.value
+      let isTopLeft = classes.indexOf('top') >= 0 && classes.indexOf('left') >= 0
+      let isTopRight = classes.indexOf('top') >= 0 && classes.indexOf('right') >= 0
+      let isBottomLeft = classes.indexOf('bottom') >= 0 && classes.indexOf('left') >= 0
+      let isBottomRight = classes.indexOf('bottom') >= 0 && classes.indexOf('right') >= 0
+      let isShiftPressed = mde.shiftKey
+
+      document.addEventListener('mouseup', this.onMouseUp = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        this.isDragging = false
+        document.removeEventListener('mouseup', this.onMouseUp)
+        document.removeEventListener('mousemove', this.onMouseMove)
+      })
+
+      document.addEventListener('mousemove', this.onMouseMove = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (isTopLeft) {
+          this.width -= e.movementX
+          if (!isShiftPressed) {
+            this.height -= e.movementY
+          }          
+        } else if (isTopRight) {
+          this.width += e.movementX
+          if (!isShiftPressed) {
+            this.height -= e.movementY
+          }   
+        } else if (isBottomLeft) {
+          this.width -= e.movementX
+          if (!isShiftPressed) {
+            this.height += e.movementY
+          }   
+        } else if (isBottomRight) {
+          this.width += e.movementX
+          if (!isShiftPressed) {
+            this.height += e.movementY
+          }   
+        }
+        
+        if (isShiftPressed) {
+          this.height = this.width / this.ratio
+        }
+      })
     },
-    onMouseUp(e) {
-      this.isDragging = false
-    },
-    onMouseMove(e) {
-      if (!this.isDragging || this.currentPos == null)
-        return
-      
-      switch(this.currentPos) {
-        case 'topLeft': {
-          this.width += e.movementX
-          this.height += e.movementY
-        } break
-        case 'topRight': {
-          this.width += e.movementX
-          this.height += e.movementY
-        } break
-        case 'bottomLeft': {
-          this.width += e.movementX
-          this.height += e.movementY
-        } break
-        case 'bottomRight': {
-          this.width += e.movementX
-          this.height += e.movementY
-        } break
+    dragStart(e) {
+      if (this.isDragging) {
+        e.preventDefault()
       }
+    },
+    reset() {
+      this.width = this.originalWidth
+      this.height = this.originalHeight
     }
   },
   computed: {
@@ -134,5 +159,11 @@ export default {
 
 .right {
   right: 0;
+}
+
+.controls .reset {
+  position: absolute;
+  right: 8px;
+  bottom: 16px;
 }
 </style>
