@@ -51,7 +51,7 @@ export default {
     refreshPost (route) {
       this.$posts
       .getPostByUrl(route.params.post)
-      .then(post => {
+      .then(post => {        
         this.post = post
         this.loading.post = false
       })
@@ -66,6 +66,8 @@ export default {
       this.$comments.getComments(route.params.post).then(count => {
         this.commentsCount = count
         this.loading.comments = false
+      }).catch(err => {
+        console.log(err)
       })
     },
     addComment(id) {

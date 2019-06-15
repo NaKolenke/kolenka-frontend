@@ -114,6 +114,7 @@ export default {
       this.$posts.createPost(
         this.model.title,
         this.store.html,
+        this.slug,
         draft,
         this.model.blog
       )
@@ -121,7 +122,6 @@ export default {
       method.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
-        this.$posts.delete(data.id)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.url } })
       }).catch(err => {

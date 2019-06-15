@@ -1,6 +1,11 @@
 <template>
   <the-sidebar>
     <div class="columns">
+      <div v-if="data.current" class="column">
+        <sidebar-block>
+          
+        </sidebar-block>
+      </div>
       <div class="column">
         <sidebar-block>
           <h4>Еще записи пользователя<br><i v-if="user">{{ user.name || user.username }}</i></h4>
@@ -37,6 +42,9 @@ import SidebarBlock from '@/components/elements/SidebarBlock.vue'
 export default {
   data() {
     return {
+      ...this.mapData({
+        data: 'posts/data'
+      }),
       user: null,
       blog: null
     }
@@ -46,6 +54,11 @@ export default {
     this.blog = this.$route.params.blog
 
     // ... TODO
+  },
+  computed: {
+    outline() {
+      // TODO: regex parsing post text
+    }
   },
   components: {
     TheSidebar,
