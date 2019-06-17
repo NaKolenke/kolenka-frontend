@@ -1,12 +1,10 @@
 <template>
-  <div class="container col-9 col-mx-auto">
-    <div class="columns">
-      <div v-if="isAdmin" class="column col-12">
-        <feedback-list-view :list="feedbacks"></feedback-list-view>
-      </div>
-      <div class="column col-12">
-        <feedback-prompt></feedback-prompt>
-      </div>
+  <div>
+    <div v-if="isAdmin">
+      <feedback-list-view :list="feedbacks"></feedback-list-view>
+    </div>
+    <div>
+      <feedback-prompt></feedback-prompt>
     </div>
   </div>
 </template>
