@@ -1,11 +1,11 @@
 {
   "name": "kolenka-frontend",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "serve:prod": "vue-cli-service serve --mode production",
-    "build": "vue-cli-service build && npm version patch",
+    "build": "vue-cli-service build && npm version patch --no-git-tag-version",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
