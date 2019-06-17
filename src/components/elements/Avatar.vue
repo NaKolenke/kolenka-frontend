@@ -1,7 +1,7 @@
 <template>
   <div class="popover popover-right">
     <router-link :to="{ name: 'profile', params: { user: user ? user.username : null }}">
-      <figure class="avatar" v-bind:class="{  'avatar-lg' : isLarge, 'avatar-sm' : isSmall }">
+      <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'badge': badge, 'av-badge': true }">
         <img
           v-if="user && user.avatar"
           :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'"
@@ -29,15 +29,27 @@ export default {
     card: {
       type: Boolean,
       default: true
-    }
+    },
+    badge: Boolean
   },
   computed: {
-    isSmall: function () {
+    isSmall () {
       return this.size === 'sm'
     },
-    isLarge: function () {
+    isLarge () {
       return this.size === 'lg'
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '../../../node_modules/spectre.css/src/_variables.scss';
+
+.av-badge[data-badge]::after,
+.av-badge:not([data-badge])::after {
+  box-shadow: 0 0 0 0.1rem #323A45;
+  background: $secondary-color;
+}
+</style>
+

@@ -65,8 +65,17 @@ export default {
     .then(() => {
       this.loadingData = false
     })
-    .catch(() => {
+    .catch((err) => {
       this.loadingData = false
+      console.log(err)
+    })
+
+    this.$notifications
+    .getAll({ page: 1, limit: 10 }).then(pages => {
+      // ...
+    })
+    .catch(err => {
+      console.log(err)
     })
   },
   computed: {

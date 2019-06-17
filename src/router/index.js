@@ -7,6 +7,7 @@ import AuthErrorPage from '@/pages/401'
 import NotFoundPage from '@/pages/404'
 import FeedbackPage from '@/pages/FeedbackPage'
 import TagPage from '@/pages/TagPage'
+import NotificationsPage from '@/pages/NotificationsPage'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import DocsSidebar from '@/pages/sidebar/DocsView.vue'
@@ -34,6 +35,14 @@ const routes = [
     name: 'tag',
     components: {
       default: TagPage,
+      sidebar: DefaultSidebar
+    }
+  },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    components: {
+      default: NotificationsPage,
       sidebar: DefaultSidebar
     }
   },
