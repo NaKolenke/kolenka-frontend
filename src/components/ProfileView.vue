@@ -1,25 +1,31 @@
 <template>
-  <div class="column col-12 py-2">
-    <div class="columns">
-      <div class="column col-10">
-        <profile-list-item :user="user"></profile-list-item>
-      </div>
-      <div class="column col-2">
-        <router-link v-if="canEdit" :to="{ name: 'editProfile'}" class="btn"><i class="icon icon-edit"></i> Редактировать</router-link>
-      </div>
+  <div>
+    <div class="text-center">
+      <avatar :user="user" size="xl" :card="false" :badge="user.is_admin ? 'Администратор' : false" />
+      <h4 class="mt-2" style="margin-bottom: 0">
+        <router-link :to="{ name: 'profile', params: { user: user.username }}">{{ user.username }}</router-link>
+      </h4>
+      <div>{{user.name}}</div>
+      <router-link v-if="canEdit" :to="{ name: 'editProfile'}" class="btn btn-primary"><i class="icon icon-edit"></i> Редактировать</router-link>
+      <br v-if="canEdit">
+      <br>
+      <span class="label label-rounded label-secondary">Заходил последний раз: {{ user.last_active_date | moment }}</span>
+      <br>
+    </div>
 
-      <div class="description column col-12 my-2 p-2" v-if="user.about" v-html="user.about"></div>
+    <div v-if="user.about" class="card description mt-2">
+      <div class="card-body" v-html="user.about"></div>
     </div>
   </div>
 </template>
 
 <script>
-import ProfileListItem from '@/components/ProfileListItem.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 
 export default {
   props: ['user', 'canEdit'],
   components: {
-    ProfileListItem
+    Avatar
   }
 }
 </script>
@@ -27,5 +33,6 @@ export default {
 <style scoped>
 .description {
   background: #ffe;
+  border: none;
 }
 </style>

@@ -59,6 +59,11 @@ export default [
     components: {
       default: ProfilePage,
       sidebar: DefaultSidebar
+    },
+    props: {
+      sidebar: {
+        hide: true
+      }
     }
   },
   {

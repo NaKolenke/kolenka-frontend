@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <profile-view :user="user" :can-edit="canEdit"></profile-view>
+  <div class="columns">
 
-    <template v-if="blogs.length > 0">
-      <h3>Блоги пользователя</h3>
-      <div class="columns blogs">
-        <div class="column col-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
-          <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
+    <div class="column col-6 col-xl-12">
+      <profile-view :user="user" :can-edit="canEdit"></profile-view>
+    </div>
+    
+    <div class="column col-6 col-xl-12">
+      <template v-if="blogs.length > 0">
+        <h3>Блоги пользователя</h3>
+        <div class="columns blogs">
+          <div class="column col-6 col-xl-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
+            <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
+          </div>
         </div>
-      </div>
-    </template>
-
-    <div class="bottom-padd"></div>
+      </template>
+    </div>
+    
   </div>
 </template>
 
@@ -36,13 +40,15 @@ export default {
     next()
   },
   methods: {
-    refreshUser (route) {
+    refreshUser (route) {      
+      this.$blogs.indexes.user = []
+      
       this.$users
       .getUser(route.params.user)
       .then(user => {
         this.user = user
       })
-      .then(() => this.$blogs.getUserBlogs(route.params.user, { page: 1 }))
+      .then(() => this.$blogs.getUserBlogs(route.params.user, { page: 1 }, false))
       .catch(err => {
         console.log(err)
         this.$router.push({ path: '/404' })
