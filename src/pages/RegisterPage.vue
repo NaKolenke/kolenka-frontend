@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div class="column col-6 col-mx-auto">
+      <div class="column col-6 col-mx-auto col-md-12">
         <h1>Регистрация</h1>
         <form method="POST" @submit.prevent="register" :class="{ 'has-error': !isValid && validation.showErrors }">
           <div class="form-group">

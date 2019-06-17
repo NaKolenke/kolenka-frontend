@@ -15,10 +15,10 @@
         <tr v-for="user in users" :key="user.id">
           <td>
             <div class="columns">
-              <div class="column col-2">
+              <div class="column col-2 col-md-4">
                 <avatar :user="user" :size="'lg'" :card="false" />
               </div>
-              <div class="column col-10">
+              <div class="column col-10 col-md-8">
                 <router-link :to="{ name: 'profile', params: { user: user.username }}">{{user.username}}</router-link>
                 <div>{{user.name}}</div>
               </div>

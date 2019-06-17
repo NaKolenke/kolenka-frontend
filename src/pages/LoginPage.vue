@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div id="login" class="column col-6 col-mx-auto">
+      <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Войти</h1>
         <form method="POST" @submit.prevent="login" :class="{ 'has-error': !validation.username.success || !validation.password.success }">
           <div class="form-group">
@@ -31,7 +31,7 @@
             <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Неверный пароль</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn primary">
+          <input type="submit" id="login-btn" class="btn primary" value="Войти">
         </form>
         
         <br>
