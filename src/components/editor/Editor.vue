@@ -398,7 +398,7 @@ export default {
       onBlur() {
         self.isFocused = false
       },
-      onUpdate() {
+      onUpdate(state) {
         self.store.html = self.editor.getHTML()
         self.store.text = self.editor.state.doc.textContent
         self.store.length = self.store.text.length
@@ -521,7 +521,7 @@ export default {
   },
   computed: {
     isBasic() {
-      return this.type == null || this.type === 'basic'
+      return this.type !== 'extended'
     },
     isExtended() {
       return this.type === 'extended'

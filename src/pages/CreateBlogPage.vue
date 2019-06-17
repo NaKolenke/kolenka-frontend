@@ -124,7 +124,7 @@ export default {
     }
   },
   methods: {
-    send() {
+    send() {      
       let method = this.$route.params.edit ?
       this.$blogs.editBlog(
         this.$route.params.edit.url,
@@ -140,8 +140,16 @@ export default {
       )
 
       method.then(data => {
-        this.$toast.show('Блог был успешно отредактирован')
+        if (this.$route.params.edit) {
+          this.$toast.show('Блог был успешно отредактирован')
+        } else {
+          this.$toast.show('Блог был успешно создан')
+        }
+        
         this.$router.replace({ name: 'blog', params: { name: data.url } })
+      })
+      .catch(err => {
+        this.$toast.error(err)
       })
     },
     changeSlug() {

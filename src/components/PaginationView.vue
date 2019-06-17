@@ -2,16 +2,16 @@
   <div class="pagination columns">
     <div class="columns column col-12">
       <div class="page-item" :class="{disabled: !canPaginateBack}">
-        <a :href="this.page - 1" @click.prevent="paginateRelative(-1)">назад</a>
+        <a :href="paginationPage(page - 1)" @click.prevent="paginateRelative(-1)">назад</a>
       </div>
       <div class="page-item" :class="{disabled: !canPaginateForward}">
-        <a :href="this.page + 1" @click.prevent="paginateRelative(1)">вперед</a>
+        <a :href="paginationPage(page + 1)" @click.prevent="paginateRelative(1)">вперед</a>
       </div>
     </div>
     <div class="columns column col-12">
-      <div class="page-item" :class="{active: page == n}" v-for="n in paginationPages" :key="n">
-        <span v-if="n == '...'">{{n}}</span>
-        <a v-else :href="n" @click.prevent="paginateTo(n)">{{ n }}</a>
+      <div class="page-item" :class="{ active: page == n }" v-for="n in paginationPages" :key="n">
+        <span v-if="n == '...'">{{ n }}</span>
+        <a v-else :href="paginationPage(n)" @click.prevent="paginateTo(n)">{{ n }}</a>
       </div>
     </div>
   </div>
@@ -22,10 +22,22 @@ export default {
   props: ['page', 'pageCount'],
   methods: {
     paginateRelative (offset) {
-      this.$parent.paginateRelative(offset)
+      if (this.$parent.paginateRelative)
+        this.$parent.paginateRelative(offset)
     },
     paginateTo (offset) {
-      this.$parent.paginateTo(offset)
+      if (this.$parent.paginateTo)
+        this.$parent.paginateTo(offset)
+    },
+    paginationPage(index) {
+      const fullPath = this.$route.fullPath
+      let page = fullPath.match(/page=([0-9]+)/)
+      
+      if (!page) {
+        return fullPath + `?page=${index}`
+      }
+
+      return fullPath.replace(`page=${page[1]}`, `page=${index}`)
     }
   },
   computed: {

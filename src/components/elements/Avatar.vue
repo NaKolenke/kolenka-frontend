@@ -1,7 +1,7 @@
 <template>
   <div class="popover popover-right">
     <router-link :to="{ name: 'profile', params: { user: user ? user.username : null }}">
-      <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'badge': badge, 'av-badge': true }">
+      <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'avatar-xl': isXl, 'badge': badge, 'av-badge': header }" :data-badge="badge">
         <img
           v-if="user && user.avatar"
           :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'"
@@ -30,7 +30,8 @@ export default {
       type: Boolean,
       default: true
     },
-    badge: Boolean
+    badge: {},
+    header: Boolean
   },
   computed: {
     isSmall () {
@@ -38,6 +39,9 @@ export default {
     },
     isLarge () {
       return this.size === 'lg'
+    },
+    isXl () {
+      return this.size === 'xl'
     }
   }
 }
