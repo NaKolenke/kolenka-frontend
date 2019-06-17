@@ -112,6 +112,7 @@ export default {
   mounted() {
     if (!this.auth.user) {
       this.$router.replace({ path: '/' })
+      return
     }
 
     const edit = this.$route.params.edit

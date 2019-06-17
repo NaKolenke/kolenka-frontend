@@ -23,6 +23,11 @@ export default {
     }
   },
   created () {
+    if (!this.auth.user) {
+      this.$router.replace({ path: '/' })
+      return
+    }
+    
     if (this.isAdmin) {
       this.refreshFeedbacks()
     }

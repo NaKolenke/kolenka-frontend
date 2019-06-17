@@ -20,11 +20,18 @@ export default {
   data () {
     return {
       ...this.mapData({
-        posts: 'posts/drafts'
+        posts: 'posts/drafts',
+        auth: 'auth/data'
       }),
       page: 1,
       pageCount: 0,
       isLoading: true
+    }
+  },
+  created() {
+    if (!this.auth.user) {
+      this.$router.replace({ path: '/' })
+      return
     }
   },
   mounted () {

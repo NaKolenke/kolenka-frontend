@@ -14,8 +14,9 @@ export default {
     }
   },
   created () {
-    if (this.auth.user == null) {
-      this.$router.replace({ path: '/401' })
+    if (!this.auth.user) {
+      this.$router.replace({ path: '/' })
+      return
     }
   },
   methods: {
