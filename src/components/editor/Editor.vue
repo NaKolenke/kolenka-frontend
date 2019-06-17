@@ -156,7 +156,7 @@
           </div>
 
           <div v-if="imageModal.tab === 1">
-            <image-upload @complete="imageUploaded($event, commands.image_ex)" :multiple="true" />
+            <image-upload @complete="imageUploaded($event, commands.image)" :multiple="true" />
           </div>
         </modal>
 

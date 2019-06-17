@@ -140,7 +140,8 @@ export default {
         .then(() => this.$content.uploadFile(data))
         .then(file => {
           previewItem.uploading = false
-          this.removeImage(index)
+          let fileIndex = this.files.indexOf(item)
+          this.removeImage(fileIndex)
           output.push(file)
         })
         .catch(err => {
