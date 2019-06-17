@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "serve:prod": "vue-cli-service serve --mode production",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && npm version patch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
