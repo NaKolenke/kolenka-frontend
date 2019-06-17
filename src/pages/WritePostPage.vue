@@ -16,9 +16,21 @@
                 type="text" 
                 id="title" 
                 v-model="model.title"
+                v-validate="validation.title"
                 required
               />
-              <p class="form-input-hint">/posts/{{ slug }}</p>
+              <p class="form-input-hint">/posts/
+                <span v-if="!isChangingSlug" @click="changeSlug">{{ slugChanged ? newSlug : slug }}</span>
+                <input v-else 
+                  type="text" 
+                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']" 
+                  v-model="newSlug" 
+                  v-validate="validation.slug"
+                  @blur="isChangingSlug = false" 
+                  @keyup="if ($event.keyCode === 27) isChangingSlug = false"
+                  autofocus 
+                />
+              </p>
             </div>
           </div>
 
@@ -29,6 +41,7 @@
             :store="store"
             storageKey="post-text"
             storageType="local"
+            v-validate="validation.body"
           ></editor>
 
           <div class="form-group">
@@ -36,7 +49,7 @@
               <label class="form-label" for="blog">В блог</label>
             </div>
             <div class="col-9 col-sm-12">
-              <select class="form-select" id="blog" v-model="model.blog">
+              <select class="form-select" id="blog" v-model="model.blog" v-validate="validation.blog">
                 <option :value="null" selected>Нет</option>
                 <option v-for="blog in blogs" :key="blog.id" :value="blog.id">{{ blog.title }} (Создатель: {{ blog.creator.username }})</option>
               </select>
@@ -80,7 +93,23 @@ export default {
         html: '',
         length: 0
       },
-      isSending: false
+      validation: {
+        title: {
+          length: () => this.model.title.length >= 3
+        },
+        blog: {
+          notNull: () => this.model.blog != null
+        },
+        body: {
+          length: () => this.store.length >= 10
+        },
+        slug: {
+          isUrl: () => /^[A-Za-z0-9-_]+$/.test(this.newSlug)
+        }
+      },
+      isSending: false,
+      isChangingSlug: false,
+      newSlug: ''
     }
   },
   created() {    
@@ -114,7 +143,7 @@ export default {
       this.$posts.createPost(
         this.model.title,
         this.store.html,
-        this.slug,
+        (this.slugChanged ? this.newSlug : this.slug),
         draft,
         this.model.blog
       )
@@ -127,16 +156,27 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    changeSlug() {
+      this.isChangingSlug = true
+
+      if (!this.slugChanged) {
+        this.newSlug = this.slug
+      }
     }
   },
   computed: {
     slug() {
       return slugify(this.model.title, { lang: 'ru' })
     },
+    slugChanged() {
+      return this.newSlug !== '' && this.newSlug !== this.slug
+    },
     isValid() {
-      return this.model.title.length > 3 &&
-        this.store.length > 10 &&
-        this.model.blog != null
+      return this.validation.title.success &&
+             this.validation.body.success &&
+             this.validation.blog.success &&
+             (this.slugChanged ? this.validation.slug.success : true)
     }
   },
   components: {
@@ -146,6 +186,11 @@ export default {
 </script>
 
 <style>
+.slug-input {
+  display: inline-block;
+  width: auto;
+}
+
 .post-editor .ProseMirror {
   min-height: 300px;
 }

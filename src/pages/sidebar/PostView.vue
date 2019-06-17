@@ -1,36 +1,33 @@
 <template>
   <the-sidebar>
     <div class="columns">
-      <div v-if="data.current" class="column">
+
+      <div class="column" v-if="data.current">
         <sidebar-block>
-          
-        </sidebar-block>
-      </div>
-      <div class="column">
-        <sidebar-block>
-          <h4>Еще записи пользователя<br><i v-if="user">{{ user.name || user.username }}</i></h4>
-          <!--<ul class="relevant">
-            <li v-for="item in latestUserPosts.slice(0, 4).filter(x => !x.is_draft)" :key="item.id">
+          <h4>Еще записи пользователя<br><i>{{ data.current.creator.name || data.current.creator.username }}</i></h4>
+          <ul class="relevant">
+            <li v-for="item in lPosts" :key="item.id">
               <small class="label">{{ item.created_date | moment }}</small>
               <br>
               <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
             </li>
-          </ul>-->
+          </ul>
         </sidebar-block>
       </div>
 
-      <div class="column">
+      <div class="column" v-if="data.current">
         <sidebar-block>
-          <h4>Еще записи из блога<br><i v-if="blog">{{ blog.title }}</i></h4>
-          <!--<ul class="relevant">
-            <li v-for="item in latestBlogPosts.slice(0, 4)" :key="item.id">
+          <h4>Еще записи из блога<br><i>{{ data.current.blog.title }}</i></h4>
+          <ul class="relevant">
+            <li v-for="item in bPosts" :key="item.id">
               <small class="label">{{ item.created_date | moment }}</small>
               <br>
               <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
             </li>
-          </ul>-->
+          </ul>
         </sidebar-block>
       </div>
+
     </div>
   </the-sidebar>
 </template>
@@ -45,19 +42,29 @@ export default {
       ...this.mapData({
         data: 'posts/data'
       }),
-      user: null,
-      blog: null
+      lPosts: [],
+      bPosts: []
     }
   },
-  created() {
-    this.user = this.$route.params.user
-    this.blog = this.$route.params.blog
-
-    // ... TODO
+  mounted() {
+    if (!this.data.current)
+      return
+    
+    this.$posts.getOtherUserPosts(this.data.current.creator.username, 5, 1).then(posts => {
+      this.lPosts = posts
+    })
+    this.$posts.getBlogPosts(this.data.current.blog.url, { limit: 5, page: 1 }).then(posts => {
+      this.bPosts = posts.data
+    })
   },
-  computed: {
-    outline() {
-      // TODO: regex parsing post text
+  watch: {
+    'data.current'() {
+      this.$posts.getOtherUserPosts(this.data.current.creator.username, 5, 1).then(posts => {
+        this.lPosts = posts
+      })
+      this.$posts.getBlogPosts(this.data.current.blog.url, { limit: 5, page: 1 }).then(posts => {
+        this.bPosts = posts.data
+      })
     }
   },
   components: {
@@ -67,3 +74,10 @@ export default {
 }
 </script>
 
+<style scoped>
+.relevant {
+  list-style: none;
+  margin-left: 0;
+  margin-bottom: 0;
+}
+</style>

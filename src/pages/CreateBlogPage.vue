@@ -19,7 +19,18 @@
                 v-validate="validation.title"
                 required
               />
-              <p class="form-input-hint">/blogs/{{ slug }}</p>
+              <p class="form-input-hint">/blogs/
+                <span v-if="!isChangingSlug" @click="changeSlug">{{ slugChanged ? newSlug : slug }}</span>
+                <input v-else 
+                  type="text" 
+                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']" 
+                  v-model="newSlug" 
+                  v-validate="validation.slug"
+                  @blur="isChangingSlug = false" 
+                  @keyup="if ($event.keyCode === 27) isChangingSlug = false"
+                  autofocus 
+                />
+              </p>
             </div>
           </div>
 
@@ -34,6 +45,7 @@
                 id="description"
                 maxlength="250"
                 v-model="model.description"
+                v-validate="validation.description"
               ></textarea>
             </div>
           </div>
@@ -84,20 +96,30 @@ export default {
       validation: {
         title: {
           length: () => this.model.title.length >= 3
+        },
+        description: {
+          length: () => this.model.description.length <= 512
+        },
+        slug: {
+          isUrl: () => /^[A-Za-z0-9-_]+$/.test(this.newSlug)
         }
       },
-      isLoading: false
+      isLoading: false,
+      isChangingSlug: false,
+      newSlug: ''
     }
   },
   mounted() {
     if (!this.auth.user) {
       this.$router.replace({ path: '/' })
     }
+
+    const edit = this.$route.params.edit
     
-    if (this.$route.params.edit) {
-      this.model.title = this.$route.params.edit.title
-      this.model.description = this.$route.params.edit.description
-      this.model.type = this.$route.params.edit.blog_type
+    if (edit) {
+      this.model.title = edit.title
+      this.model.description = edit.description
+      this.model.type = edit.blog_type
     }
   },
   methods: {
@@ -113,21 +135,33 @@ export default {
         this.model.type,
         this.model.title,
         this.model.description,
-        this.slug
+        (this.slugChanged ? this.newSlug : this.slug)
       )
 
       method.then(data => {
         this.$toast.show('Блог был успешно отредактирован')
         this.$router.replace({ name: 'blog', params: { name: data.url } })
       })
+    },
+    changeSlug() {
+      this.isChangingSlug = true
+
+      if (!this.slugChanged) {
+        this.newSlug = this.slug
+      }
     }
   },
   computed: {
     slug() {
       return slugify(this.model.title, { lang: 'ru' })
     },
+    slugChanged() {
+      return this.newSlug !== '' && this.newSlug !== this.slug
+    },
     isValid() {
-      return this.validation.title.success
+      return this.validation.title.success &&
+             this.validation.description.success &&
+             (this.slugChanged ? this.validation.slug.success : true)
     }
   }
 }

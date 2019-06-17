@@ -29,7 +29,7 @@ export default {
   data: function () {
     return {
       ...this.mapData({
-        comments: 'comments/everything',
+        comments: 'comments/root',
         auth: 'auth/data'
       }),
       post: {},

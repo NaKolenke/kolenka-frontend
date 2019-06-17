@@ -2,10 +2,10 @@ export default {
   groups: [ 'everything' ],
   routes: {
     getComments (request, url, { page, limit }) { 
-      return request.get(`/posts/${url}/comments/?page=${page || 1}&limit=${limit || 20}`)
+      return request.get(`posts/${url}/comments/?page=${page || 1}&limit=${limit || 20}`)
     },
     postComment (request, url, text, parent, token) {
-      return request.post(`/posts/${url}/comments/`, {
+      return request.post(`posts/${url}/comments/`, {
         text,
         parent: parent || 0
       }, {
@@ -23,11 +23,11 @@ export default {
             if (!parent.children)
               parent.children = []
 
-            parent.children = [ ...parent.children, item ]
+            parent.children = [ ...parent.children, item.id ]
           }
         })
 
-        comments.collect(res.comments.filter(x => x.parent === null).reverse(), 'everything')
+        comments.collect(res.comments.reverse(), 'everything')
 
         return res.comments.length
       })
@@ -44,14 +44,15 @@ export default {
               if (!found.children)
                 found.children = []
 
-              found.children = [ ...found.children, res.comment ]
+              found.children = [ ...found.children, res.comment.id ]
+
               break
             }
           }
-        } else {
-          context.collect(res.comment, 'everything')
         }
-
+        
+        context.collect(res.comment, 'everything')
+        
         return res.comment
       })
     },
@@ -67,6 +68,11 @@ export default {
             return found
         }
       }
+    }
+  },
+  filters: {
+    root({ groups }) {
+      return groups.everything.filter(x => x.parent == null)
     }
   }
 }
