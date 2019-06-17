@@ -29,7 +29,7 @@
       <div v-if="comment.children" style="padding-left: .4rem">
         <comment-card
           v-for="item in comment.children"
-          :key="item.id" :comment="item" 
+          :key="item" :comment="$comments.findById(item)" 
           :parent-id="comment.id" 
           :post-url="postUrl"
         />
