@@ -40,8 +40,7 @@ export default {
       this.$comments.sendComment(this.postUrl, this.store.html, this.parentId).then(comment => {
         this.isSending = false
         this.$refs.editor.setContent('')
-        if (this.action)
-          this.action(comment.id)
+        this.$emit('sent')
       })
     }
   },

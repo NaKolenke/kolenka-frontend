@@ -59,14 +59,13 @@ export default {
     this.$auth
     .login()
     .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
-    .then(pages => {
-      // ...
-    })
     .then(() => {
       this.loadingData = false
     })
-    .catch(() => {
+    .then(() => this.$notifications.getAll({ page: 1, limit: 10 }))
+    .catch((err) => {
       this.loadingData = false
+      console.log(err)
     })
   },
   computed: {

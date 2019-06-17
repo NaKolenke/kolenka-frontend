@@ -11,6 +11,7 @@
         <router-link to="/blogs">Блоги</router-link>
         <router-link to="/users">Люди</router-link>
         <router-link to="/stream">Активность</router-link>
+        <router-link to="/search">Поиск</router-link>
       </section>
 
       <section class="navbar-section">
@@ -28,7 +29,7 @@
           <div class="dropdown">
             <div class="btn-group">
               <router-link :to="{ name: 'profile', params: { user: auth.user.username }}" class="btn btn-link text-secondary">
-                <avatar :user="auth.user" size="sm" :card="false" />
+                <avatar :user="auth.user" size="sm" :card="false" :badge="notifications.length > 0" />
                 {{ auth.user.name || auth.user.username }}
               </router-link>
 
@@ -38,6 +39,11 @@
 
               <ul class="menu">
                 <li class="menu-item"><router-link :to="{ name: 'profile', params: { user: auth.user.username }}"><i class="icon icon-people"></i> Профиль</router-link></li>
+                <li class="menu-item">
+                  <router-link :to="{ name: 'notifications' }">
+                    <i class="icon icon-flag"></i><span :class="{'badge' : notifications.length > 0 }"> Уведомления </span>
+                  </router-link>
+                </li>
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/new/post"><i class="icon icon-edit"></i> Написать пост</router-link></li>
                 <li class="menu-item"><router-link :to="{ name: 'userPosts', params: { user: auth.user.username } }"><i class="icon icon-copy"></i> Посты</router-link></li>
@@ -67,7 +73,8 @@ export default {
   data: function () {
     return {
       ...this.mapData({
-        auth: 'auth/data'
+        auth: 'auth/data',
+        notifications: 'notifications/everything'
       }),
       feedbackTooltip: ''
     }

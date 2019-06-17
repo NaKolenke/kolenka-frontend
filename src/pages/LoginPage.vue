@@ -76,10 +76,14 @@ export default {
         this.validation.showErrors = false
       }
 
-      this.$auth.login(this.username, this.password).then(() => {
+      this.$auth
+      .login(this.username, this.password)
+      .then(() => {
         this.$toast.show('Успешно авторизовался')
         this.$router.replace({ path: '/' })
-      }).catch(() => {
+      })
+      .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
+      .catch(() => {
         this.$toast.error('Ошибка авторизации')
       })
     }

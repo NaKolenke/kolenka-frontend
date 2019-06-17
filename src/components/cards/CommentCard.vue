@@ -20,7 +20,7 @@
           </small>
           <div class="panel mt-2 mb-2" v-if="isReplying">
             <div class="panel-header h6">Ответ <button class="btn btn-link btn-sm float-right tooltip" @click="cancelReply" data-tooltip="Отменить"><i class="icon icon-cross"></i></button></div>
-            <div class="panel-body" style="overflow:visible"><comment-form :post-url="postUrl" :parent-id="comment.id"></comment-form></div>
+            <div class="panel-body" style="overflow:visible"><comment-form :post-url="postUrl" :parent-id="comment.id" @sent="commentSent"></comment-form></div>
             <div class="panel-footer"></div>
           </div>
         </div>
@@ -70,6 +70,9 @@ export default {
       this.isReplying = true
     },
     cancelReply () {
+      this.isReplying = false
+    },
+    commentSent() {
       this.isReplying = false
     }
   },

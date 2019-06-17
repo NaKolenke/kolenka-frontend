@@ -1,4 +1,4 @@
-import Pulse from 'pulse-framework/lib'
+import Pulse from 'pulse-framework/lib' // Importing source so we can transpile it with babel and get it work in Edge
 import comments from './comments.collection'
 import posts from './posts.collection'
 import blogs from './blogs.collection'
@@ -8,6 +8,7 @@ import content from './content.collection'
 import feedback from './feedback.collection'
 import docs from './docs.collection'
 import tags from './tags.collection'
+import notifications from './notifications.collection'
 
 const store = new Pulse.Library({
   request: {
@@ -25,7 +26,8 @@ const store = new Pulse.Library({
     content,
     feedback,
     docs,
-    tags
+    tags,
+    notifications
   }
 })
 

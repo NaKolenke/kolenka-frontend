@@ -42,45 +42,29 @@ export default {
   },
   actions: {
     login({ data, routes, actions }, username, password) {
-      //return new Promise((resolve, reject) => {
-        if (data.accessToken != null && data.accessToken != undefined) {
-          return routes
-          .getSelf(data.accessToken.token)
-          .then(res => {
-            if (res.success !== 1) {
-              //reject()
-              return
-            }
-            
-            data.user = res.user
-            //resolve()
-          })
-          .catch(err => {
-            console.log(err)
-            //reject()
-          })
-        } else {
-          return routes
-          .login(username, password)
-          .then(res => {
-            if (res.success !== 1) {
-              //reject()
-              return
-            }
-            
-            data.accessToken = res.access_token
-            data.refreshToken = res.refresh_token
-          })
-          .then(() => actions.login())
-          .then(() => {
-            //resolve()
-          })
-          .catch(err => {
-            console.log(err)
-            //reject()
-          })
-        }
-      //})
+      if (data.accessToken != null && data.accessToken != undefined) {
+        return routes
+        .getSelf(data.accessToken.token)
+        .then(res => {
+          if (res.success !== 1) {
+            return Promise.reject(res.error)
+          }
+          
+          data.user = res.user
+        })
+      } else {
+        return routes
+        .login(username, password)
+        .then(res => {
+          if (res.success !== 1) {
+            return Promise.reject(res.error)
+          }
+          
+          data.accessToken = res.access_token
+          data.refreshToken = res.refresh_token
+        })
+        .then(() => actions.login())
+      }
     },
     register({ routes }, username, email, name, password) {
       return routes.register(username, email, name, password).then(res => {
