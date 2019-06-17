@@ -18,7 +18,7 @@ export default {
     getReaders(request, url) {
       return request.get(`blogs/${url}/readers/`)
     },
-    createBlog(request, type, description, title, url, token) {
+    createBlog(request, type, title, description, url, token) {
       return request.post('blogs/', {
         blog_type: type,
         description,

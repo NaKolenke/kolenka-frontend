@@ -62,7 +62,7 @@ export default {
     .then(() => {
       this.loadingData = false
     })
-    .then(() => this.$notifications.getAll({ page: 1, limit: 10 }))
+    .then(() => this.$notifications.getAll({ page: 1, limit: 1 }))
     .catch((err) => {
       this.loadingData = false
       console.log(err)
