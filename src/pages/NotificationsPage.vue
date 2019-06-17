@@ -1,25 +1,32 @@
 <template>
   <div v-if="notifications.length > 0">
-    <button class="btn btn-link" style="float: right" @click="markAllAsRead">Отметить все как прочитанные</button>
+    <button class="btn btn-link" style="float: right" @click="markAllAsRead" :disabled="unread.length === 0">Отметить все как прочитанные</button>
     <div class="clearfix"></div>
+    
     <transition-group name="list" tag="div" appear>      
-      <div v-for="item in notifications" :key="item.id" class="tile tile-centered mb-2 mt-2 list-item">
+      <div v-for="item in notifications.slice((page - 1) * perPage, perPage * page)" :key="item.id" class="tile tile-centered mb-2 mt-2 list-item">
         <div class="tile-icon">
           <div class="btn btn-link">
-            <i class="icon icon-flag centered"></i>
+            <i v-if="item.is_new" class="icon icon-flag centered"></i>
+            <span v-else class="tooltip tooltip-right" data-tooltip="Прочитанное">
+              <i class="icon icon-check centered"></i>
+            </span>
           </div>
         </div>
         <div class="tile-content">
           <div class="tile-title">{{ item.text }}</div>
           <small class="tile-subtitle text-gray">{{ item.created_date | moment }}</small>
         </div>
-        <div class="tile-action">
+        <div v-if="item.is_new" class="tile-action">
           <button class="btn btn-link tooltip tooltip-left" @click="markAsRead(item.id)" data-tooltip="Отметить как прочитанное">
             <i class="icon icon-check"></i>
           </button>
         </div>
       </div>
     </transition-group>
+
+    <pagination-view :page="page" :page-count="pageCount"></pagination-view>
+
   </div>
   <div v-else class="empty">
     <div class="empty-icon">
@@ -30,13 +37,19 @@
 </template>
 
 <script>
+import PaginationView from '@/components/PaginationView.vue'
+
 export default {
   data() {
     return {
       ...this.mapData({
         notifications: 'notifications/everything',
+        unread: 'notifications/unread',
         auth: 'auth/data'
-      })
+      }),
+      page: 1,
+      pageCount: 1,
+      perPage: 10
     }
   },
   created() {
@@ -44,8 +57,28 @@ export default {
       this.$router.replace({ path: '/' })
       return
     }
+
+    this.refreshPage(this.$route)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.refreshPage(to)
+    next()
+  },
+  beforeDestroy() {
+    if (this.unread.length === 0) {
+      this.$notifications.purge()
+    }
   },
   methods: {
+    refreshPage(route) {
+      this.page = parseInt(route.query.page) || this.page
+
+      this.$notifications.getAll({ page: this.page, limit: this.perPage }).then(pages => {
+        this.pageCount = pages
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     markAsRead(id) {
       this.$notifications.markAsRead([ id ]).then(() => {
         // ...
@@ -59,7 +92,16 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    paginateRelative (offset) {
+      this.$router.push({ name: 'notifications', query: { page: this.page + offset } })
+    },
+    paginateTo (page) {
+      this.$router.push({ name: 'notifications', query: { page: page } })
     }
+  },
+  components: {
+    PaginationView
   }
 }
 </script>

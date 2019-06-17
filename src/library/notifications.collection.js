@@ -32,8 +32,14 @@ export default {
           return Promise.reject()
         }
 
-        ids.map(x => notifications.delete(x))
+        ids.map(x => notifications.findById(x).is_new = false)
+        notifications.forceUpdate('unread')
       })
+    }
+  },
+  filters: {
+    unread({ groups }) {
+      return groups.everything.filter(x => x.is_new)
     }
   }
 }

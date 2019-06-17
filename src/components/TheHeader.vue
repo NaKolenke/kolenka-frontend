@@ -74,7 +74,7 @@ export default {
     return {
       ...this.mapData({
         auth: 'auth/data',
-        notifications: 'notifications/everything'
+        notifications: 'notifications/unread'
       }),
       feedbackTooltip: ''
     }
