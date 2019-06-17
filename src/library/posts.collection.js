@@ -79,7 +79,7 @@ export default {
         return Promise.resolve(post)
       } else {
         return routes.getPost(url, auth.accessToken.token).then(res => {
-          data.current = post
+          data.current = res.post
           posts.collect(res.post, 'everything')
           return res.post
         }).catch(err => {
@@ -137,6 +137,15 @@ export default {
         posts.collect(res.posts, 'my')
 
         return res.meta.page_count
+      })
+    },
+    getOtherUserPosts({ routes }, username, limit, page) {
+      return routes.getUserPosts(username, { page, limit }).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+
+        return res.posts
       })
     },
     getPostsByTag({ routes, posts }, tag, page) {
