@@ -130,7 +130,7 @@
           <span class="icon-image"></span>
         </button>
 
-        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image_ex)">
+        <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
           <ul class="tab tab-block">
             <li v-if="isActive.image()" :class="['tab-item', {'active': imageModal.tab === -1}]">
               <a href="#" @click.prevent="imageModal.tab = -1">Редактировать</a>
@@ -317,7 +317,7 @@ import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
-import ImageExtended from '@/editor/node/ImageExtended'
+import { ImageExtended } from '@/editor/node/ImageExtended'
 import EditorButton from '@/components/editor/EditorButton.vue'
 
 export default {
@@ -388,7 +388,7 @@ export default {
         new Blockquote(),
         new Code(),
         new CodeBlock(),
-        ImageExtended(),
+        new ImageExtended(),
         new CBExtended(),
         new Iframe()
       ],

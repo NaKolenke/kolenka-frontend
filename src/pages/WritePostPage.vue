@@ -119,10 +119,12 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.params.edit) {
-      this.model.title = this.$route.params.edit.title
-      this.model.blog = this.$route.params.edit.blog.id
-      this.$refs.editor.setContent(this.$route.params.edit.text)
+    const edit = this.$route.params.edit
+    
+    if (edit) {
+      this.model.title = edit.title
+      this.model.blog = edit.blog.id
+      this.$refs.editor.setContent(edit.text)
     }
   },
   beforeDestroy() {

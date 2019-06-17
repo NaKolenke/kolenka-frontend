@@ -2,6 +2,7 @@
   <span
     style="position: relative; display: inline-block;"
     @dragstart="dragStart"
+    :style="{ width: width + 'px', height: height + 'px' }"
   >
     <img :src="src" :alt="alt" :title="title" :class="{ 'active': selected }" :width="width" :height="height" />
     <div v-if="selected" class="controls">
@@ -32,11 +33,22 @@ export default {
     onMouseMove: null
   }),
   mounted() {
-    getImageSize(this.src).then(size => {
-      this.width = this.originalWidth = size.width
-      this.height = this.originalHeight = size.height
-      this.ratio = size.width / size.height
-    })
+    if (this.node.attrs.height && this.node.attrs.width) {
+      this.width = parseInt(this.node.attrs.width)
+      this.height = parseInt(this.node.attrs.height)
+      
+      getImageSize(this.src).then(size => {
+        this.originalWidth = size.width
+        this.originalHeight = size.height
+        this.ratio = size.width / size.height
+      })
+    } else {
+      getImageSize(this.src).then(size => {
+        this.width = this.originalWidth = size.width
+        this.height = this.originalHeight = size.height
+        this.ratio = size.width / size.height
+      })
+    }
   },
   methods: {
     onMouseDown(mde) {
