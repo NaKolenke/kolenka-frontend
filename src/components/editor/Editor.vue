@@ -19,14 +19,9 @@
           <span class="icon-pilcrow"></span>
         </editor-button>
 
-        <div class="dropdown">
-          <button
-            :class="[{ 'is-active': isActive.color() && color !== '#3b4351' }, 'button', 'tooltip', 'dropdown-toggle', { 'tooltip-bottom': menuBarFloats }]"
-            data-tooltip="Цвет текста"
-          >
-            <span class="icon-eyedropper"></span>
-          </button>
-          <div class="menu">
+        <editor-button name="Цвет текста" :active="isActive.color() && color !== '#3b4351'" :floats="menuBarFloats" :dropdown="true">
+          <span class="icon-eyedropper"></span>
+          <template v-slot:dropdown>
             <color-picker
               theme="light"
               :color="color"
@@ -37,21 +32,14 @@
                                 '#00BEFF', '#2E81FF', '#5D61FF', '#FF89CF',
                                 '#FC3CAD', '#BF3DCE', '#8E00A7', '#3b4351']"
             />
-          </div>
-        </div>
+          </template>
+        </editor-button>
 
         <span v-if="isExtended" class="span"></span>
 
-        <div v-if="isExtended" class="dropdown">
-          <button
-            :class="[{ 'is-active': isActive.heading() }, 'button', 'tooltip', 'dropdown-toggle', { 'tooltip-bottom': menuBarFloats }]"
-            tabindex="0"
-            data-tooltip="Заголовок"
-          >
-            <span class="icon-font-size"></span>
-          </button>
-          <!-- menu component -->
-          <div class="menu">
+        <editor-button v-if="isExtended" name="Заголовок" :active="isActive.heading()" :floats="menuBarFloats" :dropdown="true">
+          <span class="icon-font-size"></span>
+          <template v-slot:dropdown>
             <button
               v-for="i in (1, 6)"
               :key="i"
@@ -65,8 +53,8 @@
               <h5 v-if="i == 5">Заголовок {{ i }}</h5>
               <h6 v-if="i == 6">Заголовок {{ i }}</h6>
             </button>
-          </div>
-        </div>
+          </template>
+        </editor-button>
 
         <button
           v-if="isExtended"
@@ -577,12 +565,6 @@ export default {
   top: 0;
   z-index: 999;
   background: #fff;
-}
-
-.dropdown .button {
-  border-radius: 0;
-  width: 100%;
-  text-align: left;
 }
 </style>
 
