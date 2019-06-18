@@ -2,13 +2,13 @@
   <div id="app" v-if="!loadingData">
     <header-component :version="version" />
 
-    <div class="container col-9 col-mx-auto col-xl-11">
+    <div class="container col-9 col-mx-auto col-xl-11 col-md-12">
       <div class="columns">
-        <div :class="['column', { 'col-9': showSidebar }, { 'col-12': !showSidebar }]">
+        <div :class="['column', { 'col-9': showSidebar }, { 'col-12': !showSidebar }, 'col-md-12']">
           <router-view />
         </div>
 
-        <div v-if="showSidebar" id="sidebar" class="column col-3 hide-md">
+        <div v-if="showSidebar" id="sidebar" class="column col-3 col-md-12">
           <router-view name="sidebar" />
         </div>
       </div>

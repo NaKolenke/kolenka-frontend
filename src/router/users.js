@@ -1,9 +1,10 @@
-import LoginPage from '@/pages/LoginPage'
-import RegisterPage from '@/pages/RegisterPage'
-import ProfilePage from '@/pages/ProfilePage'
-import ProfileEditPage from '@/pages/ProfileEditPage'
-import ProfilesListPage from '@/pages/ProfilesListPage'
-import UserPostsPage from '@/pages/UserPostsPage'
+import LoginPage from '@/pages/LoginPage.vue'
+import RegisterPage from '@/pages/RegisterPage.vue'
+import RestorePasswordPage from '@/pages/RestorePassword.vue'
+import ProfilePage from '@/pages/ProfilePage.vue'
+import ProfileEditPage from '@/pages/ProfileEditPage.vue'
+import ProfilesListPage from '@/pages/ProfilesListPage.vue'
+import UserPostsPage from '@/pages/UserPostsPage.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 
@@ -24,6 +25,18 @@ export default [
     path: '/register',
     components: {
       default: RegisterPage,
+      sidebar: DefaultSidebar
+    },
+    props: {
+      sidebar: {
+        hide: true
+      }
+    }
+  },
+  {
+    path: '/restore',
+    components: {
+      default: RestorePasswordPage,
       sidebar: DefaultSidebar
     },
     props: {

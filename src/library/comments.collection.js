@@ -32,13 +32,13 @@ export default {
         return res.comments.length
       })
     },
-    sendComment(context, post, message, parent) {
-      context.throttle(1000)
+    sendComment({ throttle, routes, auth, groups, actions, comments }, post, message, parent) {
+      throttle(1000)
 
-      return context.routes.postComment(post, message, parent, context.auth.accessToken.token).then(res => {
+      return routes.postComment(post, message, parent, auth.accessToken.token).then(res => {
         if (parent) {
-          for (let item of context.getGroup('everything')) {
-            let found = context.actions.findParent(item, parent)
+          for (let item of groups.everything) {
+            let found = actions.findParent(item, parent)
 
             if (found) {
               if (!found.children)
@@ -51,7 +51,7 @@ export default {
           }
         }
         
-        context.collect(res.comment, 'everything')
+        comments.collect(res.comment, 'everything')
         
         return res.comment
       })

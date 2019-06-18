@@ -1,10 +1,10 @@
 <template>
   <div class="container columns">
-    <div class="column col-1">
+    <div class="column col-1 col-md-2">
       <avatar :user="blog.creator" :size="'lg'" />
     </div>
 
-    <div class="column col-11">
+    <div class="column col-11 col-md-10">
       <h3>
         <div v-if="blog.url" class="columns">
           <div class="column col-10">
@@ -26,7 +26,7 @@
       <p v-html="blog.description"></p>
 
       <div v-if="preview && posts.length > 0" class="columns">
-        <div class="column col-6" v-for="item in posts" :key="item.id">
+        <div class="column col-6 col-md-12" v-for="item in posts" :key="item.id">
           <div class="card my-1">
             <div class="card-header">
               <div class="card-title h5">

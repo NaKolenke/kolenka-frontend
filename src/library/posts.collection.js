@@ -78,7 +78,7 @@ export default {
         data.current = post
         return Promise.resolve(post)
       } else {
-        return routes.getPost(url, auth.accessToken.token).then(res => {
+        return routes.getPost(url, auth.accessToken ? auth.accessToken.token : null).then(res => {
           data.current = res.post
           posts.collect(res.post, 'everything')
           return res.post

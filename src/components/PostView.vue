@@ -33,7 +33,7 @@
       <div class="column col-lg-auto">
         <avatar :user="post.creator" :size="'sm'" />
         <span class="chip">
-          {{ post.creator.name || post.creator.username }}
+          <router-link :to="{ name: 'profile', params: { user: post.creator.username }}">{{ post.creator.name || post.creator.username }}</router-link>
         </span>
         <router-link :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }, hash: '#comments' }" title="Комментарии">
           <span class="chip">

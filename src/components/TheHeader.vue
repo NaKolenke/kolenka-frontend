@@ -1,6 +1,6 @@
 <template>
   <div id="header">
-    <header class="navbar column col-9 col-mx-auto">
+    <header class="navbar column col-9 col-mx-auto col-md-12">
       <section class="navbar-section">
         <router-link to="/" id="brand">
           <img id="logo" src="../assets/logo.png">
@@ -14,7 +14,7 @@
         <router-link to="/search">Поиск</router-link>
       </section>
 
-      <section class="navbar-section">
+      <section class="navbar-section py-2">
         <router-link to="/page/about">О сайте</router-link>
         <template v-if="auth.user">
           <router-link to="/feedback" class="tooltip tooltip-bottom" :data-tooltip="feedbackTooltip">

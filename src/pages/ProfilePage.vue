@@ -9,7 +9,22 @@
       <template v-if="blogs.length > 0">
         <h3>Блоги пользователя</h3>
         <div class="columns blogs">
-          <div class="column col-6 col-xl-4" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
+          
+          <div v-if="auth.user && user.id !== auth.user.id" class="column col-6 col-xl-4 col-md-6" style="margin-bottom: 10px">
+            <router-link :to="{ name: 'invite-blog' }">
+              <div class="card my-1 text-center">
+                <div class="card-header">
+                  <div class="card-title h5">
+                    <i class="icon icon-3x icon-plus"></i>
+                  </div>
+                </div>
+                
+                <div class="card-body"><p>Пригласить в блог</p></div>
+              </div>
+            </router-link>
+          </div>
+
+          <div class="column col-6 col-xl-4 col-md-6" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
             <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
           </div>
         </div>
@@ -27,7 +42,8 @@ export default {
   data: function () {
     return {
       ...this.mapData({
-        blogs: 'blogs/user'
+        blogs: 'blogs/user',
+        auth: 'auth/data'
       }),
       user: {}
     }

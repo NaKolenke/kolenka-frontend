@@ -7,7 +7,7 @@
 
     <div id="comments_container" v-if="!post.is_draft">
       <h3 id="comments">Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
-      <comment-form v-if="auth.user" :post-url="post.url" :action="addComment"></comment-form>
+      <comment-form v-if="auth.user" :post-url="post.url" @sent="addComment"></comment-form>
       <div v-if="auth.user" class="mt-2"></div>
       <template v-if="loading.comments">
         <comment-skeleton />
