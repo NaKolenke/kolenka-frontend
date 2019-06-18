@@ -376,6 +376,7 @@ export default {
         new Blockquote(),
         new Code(),
         new CodeBlock(),
+        new Image(),
         new ImageExtended(),
         new CBExtended(),
         new Iframe()
@@ -391,7 +392,7 @@ export default {
         self.store.text = self.editor.state.doc.textContent
         self.store.length = self.store.text.length
       },
-      content: this.storageValue() || ''
+      content: this.storageValue() || '<p></p>'
     }
 
     if (this.limit > 0) {
@@ -422,7 +423,8 @@ export default {
       window.addEventListener('scroll', this.onScroll)
   },
   beforeDestroy() {
-    this.editor.destroy()
+    if (this.editor)
+      this.editor.destroy()
 
     window.removeEventListener('keydown', this.onKeyDown)
     if (this.isExtended)
@@ -478,7 +480,7 @@ export default {
       command({ color: `rgb(${r}, ${g}, ${b})` })
     },
     onKeyDown(e) {
-      if (e.keyCode === 9 &&
+      if (e.keyCode === 9 && // TAB
           this.isFocused &&
           this.editor.isActive.code_block()) {
         e.preventDefault()
