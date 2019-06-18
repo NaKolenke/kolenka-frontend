@@ -8,7 +8,7 @@
         
         <div class="tile-content p-relative">
           <div class="tile-title text-bold">
-            {{ comment.creator.name || comment.creator.username }}
+            <router-link :to="{ name: 'profile', params: { user: comment.creator.username }}" class="text-dark">{{ comment.creator.name || comment.creator.username }}</router-link>
             <br>
             <small class="text-gray">{{ comment.created_date | moment}} <a :href="'#' + commentId" title="Ссылка на комментарий">#</a></small>
           </div>
