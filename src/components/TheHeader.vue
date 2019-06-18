@@ -1,6 +1,6 @@
 <template>
   <div id="header">
-    <header class="navbar column col-9 col-mx-auto col-md-12">
+    <header class="navbar column col-9 col-mx-auto col-md-12 col-xl-12">
       <section class="navbar-section">
         <router-link to="/" id="brand">
           <img id="logo" src="../assets/logo.png">
