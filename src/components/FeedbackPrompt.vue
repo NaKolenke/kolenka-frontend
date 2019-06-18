@@ -1,9 +1,10 @@
 <template>
   <div class="column col-12 py-2">
-    <form method="POST" @submit.prevent="send">
+    <form method="POST" @submit.prevent="send" :class="{ 'has-error': showErrors }">
       <div class="form-group">
         <label class="form-label" for="feedback">Отзыв</label>
-        <textarea  class="form-input" v-model="feedback" name="feedback"></textarea>
+        <textarea  class="form-input" v-model="feedback" v-validate="validation" name="feedback"></textarea>
+        <div class="form-input-hint" v-if="!validation.success && showErrors">Введите текст отзыва</div>
       </div>
 
       <input type="submit" id="send-btn" class="btn primary">
@@ -13,13 +14,24 @@
 
 <script>
 export default {
-  data: function () {
+  data () {
     return {
-      feedback: ''
+      feedback: '',
+      validation: {
+        length: () => this.feedback.length >= 10
+      },
+      showErrors: false
     }
   },
   methods: {
     send () {
+      if (!this.validation.success) {
+        this.showErrors = true
+        return
+      } else {
+        this.showErrors = false
+      }
+      
       this.$feedback
       .send(this.feedback)
       .then(data => {
