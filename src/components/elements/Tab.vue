@@ -1,7 +1,9 @@
 <template>
-  <div :class="{ 'd-none': !isActive }">
-    <slot />
-  </div>
+  <transition name="fade">
+    <div v-if="isActive">
+      <slot />
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -17,3 +19,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.3s;
+}
+.fade-leave-active {
+  position: absolute;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>

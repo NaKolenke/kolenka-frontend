@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tabs">
     <ul class="tab tab-block">
       <li v-for="item in tabs" :key="item.index" :class="['tab-item', {'active': active === item.index}]">
         <a href="#" @click.prevent="active = item.index">{{ item.title }}</a>
@@ -69,3 +69,8 @@ export default {
 }
 </script>
 
+<style scoped>
+.tabs {
+  position: relative;
+}
+</style>

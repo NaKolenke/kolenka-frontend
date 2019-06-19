@@ -50,6 +50,9 @@
                 <li class="menu-item"><router-link to="/drafts"><i class="icon icon-time"></i> Черновики</router-link></li>
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/new/blog"><i class="icon icon-plus"></i> Создать блог</router-link></li>
+                <li v-if="isLocal" class="divider"></li>
+                <li v-if="isLocal" class="menu-item"><router-link to="/dashboard"><i class="icon icon-apps"></i> Управление</router-link></li>
+                <li v-if="isLocal" class="menu-item"><router-link to="/doc">Документация</router-link></li>
                 <li class="divider"></li>
                 <li class="menu-item"><a href="/logout" @click.prevent="$auth.logout(); $router.go()">Выйти</a></li>
               </ul>
@@ -110,6 +113,9 @@ export default {
         return false
       }
       return this.user.is_admin
+    },
+    isLocal() {
+      return window.location.hostname === 'localhost'
     }
   },
   components: {
