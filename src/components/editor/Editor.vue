@@ -119,33 +119,27 @@
         </button>
 
         <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
-          <ul class="tab tab-block">
-            <li v-if="isActive.image()" :class="['tab-item', {'active': imageModal.tab === -1}]">
-              <a href="#" @click.prevent="imageModal.tab = -1">Редактировать</a>
-            </li>
-            <li :class="['tab-item', {'active': imageModal.tab === 0}]">
-              <a href="#" @click.prevent="imageModal.tab = 0">По ссылке</a>
-            </li>
-            <li :class="['tab-item', {'active': imageModal.tab === 1}]">
-              <a href="#" @click.prevent="imageModal.tab = 1">Загрузить</a>
-            </li>
-          </ul>
-          <br>
-
-          <div v-if="imageModal.tab === -1">
-
-          </div>
-
-          <div v-if="imageModal.tab === 0">
-            <div :class="['form-group', {'has-error': imageModal.urlError}]">
-              <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url" autofocus />
-              <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
-            </div>
-          </div>
-
-          <div v-if="imageModal.tab === 1">
-            <image-upload @complete="imageUploaded($event, commands.image)" :multiple="true" />
-          </div>
+          <tabs>
+            <tab title="По ссылке">
+              <div :class="['form-group', {'has-error': imageModal.urlError}, 'mt-2']">
+                <input class="form-input" type="url" placeholder="Ссылка на изображение" v-model="imageModal.url" autofocus />
+                <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
+              </div>
+            </tab>
+            <tab title="Загрузить">
+              <image-upload @complete="imageUploaded($event, commands.image)" :multiple="true" class="mt-2" />
+            </tab>
+            <tab title="История загрузок">
+              <div class="columns mt-2">
+                <div v-for="item in myFiles.slice((page - 1) * 20, 20 * page)" :key="item.id" class="column col-3">
+                  <a href="#" @click.prevent="commands.image({ src: $content.getUrlById(item.id) }); imageModal.show = false">
+                    <img :src="$content.getUrlById(item.id)" width="100%" height="auto" />
+                  </a>
+                </div>
+              </div>
+              <pagination-view :page="page" :page-count="pageCount" @paginate-relative="paginateRelative" @paginate-to="paginateTo"></pagination-view>
+            </tab>
+          </tabs>
         </modal>
 
         <button 
@@ -307,6 +301,9 @@ import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import ColorPicker from '@caohenghu/vue-colorpicker'
 import { ImageExtended } from '@/editor/node/ImageExtended'
 import EditorButton from '@/components/editor/EditorButton.vue'
+import Tabs from '@/components/elements/Tabs.vue'
+import Tab from '@/components/elements/Tab.vue'
+import PaginationView from '@/components/PaginationView.vue'
 
 export default {
   props: {
@@ -337,11 +334,13 @@ export default {
   },
   data() {
     return {
+      ...this.mapData({
+        myFiles: 'content/my'
+      }),
       editor: null,
       imageModal: {
         show: false,
         url: '',
-        tab: 0,
         urlError: false,
         uploadError: null
       },
@@ -353,7 +352,9 @@ export default {
       isFocused: false,
       menuBarFloats: false,
       menuBarOffsetLeft: '0px',
-      showHelp: false
+      showHelp: false,
+      page: 1,
+      pageCount: 1
     }
   },
   mounted() {
@@ -421,6 +422,8 @@ export default {
     window.addEventListener('keydown', this.onKeyDown)
     if (this.isExtended)
       window.addEventListener('scroll', this.onScroll)
+
+    this.refreshMyFiles(1)
   },
   beforeDestroy() {
     if (this.editor)
@@ -507,6 +510,23 @@ export default {
       } else {
         return sessionStorage.getItem(this.storageKey)
       }
+    },
+    paginateRelative (offset) {
+      this.page += offset
+
+      this.refreshMyFiles(this.page)
+    },
+    paginateTo (offset) {
+      this.page = offset
+
+      this.refreshMyFiles(this.page)
+    },
+    refreshMyFiles(page) {
+      this.$content.getOwned({ page }).then(pages => {
+        this.pageCount = pages
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   computed: {
@@ -523,7 +543,10 @@ export default {
     EditorButton,
     Modal,
     ColorPicker,
-    ImageUpload
+    ImageUpload,
+    Tabs,
+    Tab,
+    PaginationView
   }
 }
 </script>

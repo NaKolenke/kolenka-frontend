@@ -3,7 +3,7 @@
     <side-block title="ENDPOINTS">
       <ul style="list-style: none;margin: 0">
         <li v-for="item in endpoints" :key="item.method + item.url">
-          <b>{{item.method}} </b><a :href="'#' + item.method + item.url">{{item.url}}</a>
+          <b>{{ item.method.join(', ') }} </b><a :href="'#' + item.method + item.url">{{item.url}}</a>
         </li>
       </ul>
     </side-block>

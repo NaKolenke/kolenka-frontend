@@ -1,7 +1,7 @@
 <template>
   <div class="endpoint card" :id="endpoint.method + endpoint.url">
     <div class="card-header">
-      <b class="card-title">{{endpoint.method}} {{endpoint.url}}</b>
+      <b class="card-title">{{ endpoint.method.join(', ') }} {{ endpoint.url }}</b>
       <div v-if="endpoint.status != 'Available'" class="card-subtitle">
         <span class="label label-warning">{{endpoint.status}}</span>
       </div>

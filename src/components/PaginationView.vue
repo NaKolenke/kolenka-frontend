@@ -24,10 +24,14 @@ export default {
     paginateRelative (offset) {
       if (this.$parent.paginateRelative)
         this.$parent.paginateRelative(offset)
+
+      this.$emit('paginate-relative', offset)
     },
     paginateTo (offset) {
       if (this.$parent.paginateTo)
         this.$parent.paginateTo(offset)
+
+      this.$emit('paginate-to', offset)
     },
     paginationPage(index) {
       const fullPath = this.$route.fullPath
