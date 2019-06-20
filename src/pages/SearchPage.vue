@@ -61,7 +61,7 @@
     </div>
 
     
-    <div v-if=" queryAvailable && model.type === 'post' || model.type === 'full'">
+    <div v-if=" queryAvailable && (model.type === 'post' || model.type === 'full')">
       <h4 v-if="queryAvailable">Посты</h4>
       <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
 
@@ -73,8 +73,8 @@
     <div v-if="queryAvailable && model.type === 'blog'">
       <h4 v-if="queryAvailable">Блоги</h4>
       <div class="columns">
-        <div v-for="item in blogs" :key="item.id" class="column col-4">
-          <blog-card-small :blog="item"></blog-card-small>
+        <div v-for="item in blogs" :key="item.id" class="column col-4 mb-2">
+          <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
         </div>
       </div>
     </div>
@@ -122,11 +122,14 @@ export default {
   },
   methods: {
     send() {
-      this.$router.push({ name: 'search', query: { type: this.model.type, q: this.model.query } })
+      this.$router.push({ name: 'search', query: { type: this.model.type, q: this.model.query, page: 1 } })
     },
     refresh(route) {
-      this.model.query = route.query.q || ''
       const type = route.query.type
+
+      this.model.type = type || 'full'
+      this.model.query = route.query.q || ''
+      this.page = route.query.page || 1
 
       if (this.model.query.length === 0)
         return
@@ -145,10 +148,7 @@ export default {
         this.queryAvailable = true
       } else {
         this.$router.replace('/search')
-        return
-      }
-
-      this.model.type = type
+      }      
     },
     fullRefresh() {
       this.refreshUsers()
@@ -157,6 +157,9 @@ export default {
     },
     refreshUsers() {
       this.$search.findUsers(this.model.query, { page: this.page }).then(res => {
+        if (this.model.type !== 'full') {
+          this.pageCount = res.meta.page_count
+        }
         this.users = res.result
       }).catch(err => {
         console.log(err)
@@ -164,6 +167,9 @@ export default {
     },
     refreshBlogs() {
       this.$search.findBlogs(this.model.query, { page: this.page }).then(res => {
+        if (this.model.type !== 'full') {
+          this.pageCount = res.meta.page_count
+        }
         this.blogs = res.result
       }).catch(err => {
         console.log(err)
@@ -172,9 +178,16 @@ export default {
     refreshPosts() {
       this.$search.findPosts(this.model.query, { page: this.page }).then(res => {
         this.posts = res.result
+        this.pageCount = res.meta.page_count
       }).catch(err => {
         console.log(err)
       })
+    },
+    paginateRelative (offset) {
+      this.$router.push({ name: 'search', query: { page: this.page + offset, type: this.model.type, q: this.model.query } })
+    },
+    paginateTo (page) {
+      this.$router.push({ name: 'search', query: { page: page, type: this.model.type, q: this.model.query } })
     }
   },
   components: {
