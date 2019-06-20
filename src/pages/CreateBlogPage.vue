@@ -83,6 +83,11 @@
 import slugify from 'speakingurl'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Создать блог'
+    }
+  },
   data() {
     return {
       ...this.mapData({

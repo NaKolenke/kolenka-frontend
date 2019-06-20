@@ -6,6 +6,11 @@
 import ProfileEditView from '@/components/ProfileEditView.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Редактирование профиля'
+    }
+  },
   data () {
     return {
       ...this.mapData({

@@ -41,6 +41,11 @@
 import EndpointView from '@/components/doc/EndpointView.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Документация'
+    }
+  },
   data () {
     return {
       ...this.mapData({

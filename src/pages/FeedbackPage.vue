@@ -14,6 +14,11 @@ import FeedbackListView from '@/components/FeedbackListView.vue'
 import FeedbackPrompt from '@/components/FeedbackPrompt.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Обратная связь'
+    }
+  },
   data () {
     return {
       ...this.mapData({

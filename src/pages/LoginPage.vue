@@ -48,6 +48,11 @@
 
 <script>
 export default {
+  metaInfo() {
+    return {
+      title: 'Вход'
+    }
+  },
   data () {
     return {
       ...this.mapData({

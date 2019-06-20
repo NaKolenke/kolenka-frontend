@@ -41,6 +41,11 @@ import Avatar from '@/components/elements/Avatar.vue'
 import UserSkeleton from '@/components/skeletons/UserListItem.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Пользователи'
+    }
+  },
   data () {
     return {
       ...this.mapData({

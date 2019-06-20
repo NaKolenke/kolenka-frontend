@@ -3,7 +3,7 @@
     <h2>Поиск</h2>
     <form @submit.prevent="send" class="panel mb-2">
       <div class="panel-header">
-        <input class="form-input" type="text" placeholder="Введите запрос" v-model="model.query" />
+        <input class="form-input" type="text" placeholder="Введите запрос" v-model="model.query" autofocus />
       </div>
       
       <div class="panel-body mb-2">
@@ -99,6 +99,11 @@ import BlogCardSmall from '@/components/cards/BlogCardSmall.vue'
 import Avatar from '@/components/elements/Avatar.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Поиск'
+    }
+  },
   data() {
     return {
       users: [],

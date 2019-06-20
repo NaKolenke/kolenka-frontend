@@ -39,6 +39,11 @@ import ProfileView from '@/components/ProfileView.vue'
 import BlogCardSmall from '@/components/cards/BlogCardSmall.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Профиль'
+    }
+  },
   data: function () {
     return {
       ...this.mapData({
