@@ -9,7 +9,7 @@
     <div v-if="noFileSelected" class="empty-icon">
       <i class="icon icon-3x icon-photo"></i>
     </div>
-    <p v-if="noFileSelected" class="empty-title h5">Перетащите или выберите изображения</p>
+    <p v-if="noFileSelected" class="empty-title h5">Перетащите или выберите {{ multiple ? 'изображения' : 'изображение' }}</p>
     <div v-if="!noFileSelected">
       <div v-for="(item, index) in preview" :key="index" class="tile">
         <div class="tile-icon">
