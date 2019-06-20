@@ -11,6 +11,10 @@
           <div class="column col-lg-auto">
             <div class="form-group">
               <label class="form-radio form-inline">
+                <input type="radio" name="type" value="full" v-model="model.type" checked>
+                <i class="form-icon"></i> Везде
+              </label>
+              <label class="form-radio form-inline">
                 <input type="radio" name="type" value="post" v-model="model.type">
                 <i class="form-icon"></i> Посты
               </label>
@@ -39,7 +43,10 @@
               <avatar :user="item" size="sm"></avatar><router-link :to="{ name: 'profile', params: { user: item.username } }"> {{ item.name || item.username }}</router-link>
             </li>
           </ul>
-          <a v-if="users.length > 5" href="#">Найти еще пользователей</a>
+          <router-link
+            v-if="users.length > 5"
+            :to="{ name: 'search', query: { type: 'user', q: model.query } }"
+          >Найти еще пользователей</router-link>
         </div>
 
         <div v-else class="empty">
@@ -51,7 +58,10 @@
 
         <div v-if="blogs.length > 0">
           <blog-card-small v-for="item in blogs.slice(0, 2)" :key="item.id" :blog="item"></blog-card-small>
-          <a v-if="blogs.length > 2" href="#">Найти еще блоги</a>
+          <router-link
+            v-if="blogs.length > 2" 
+            :to="{ name: 'search', query: { type: 'blog', q: model.query } }"
+          >Найти еще блоги</router-link>
         </div>
 
         <div v-else class="empty">

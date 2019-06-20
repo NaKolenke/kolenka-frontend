@@ -33,15 +33,6 @@ export default {
 
         this.$toast.error('Не удалось')
       })
-    },
-    editAvatar (formData) {
-      this.$users.editAvatar(formData).then(res => {
-        this.$router.replace({ name: 'profile', params: { user: this.auth.user.username } })
-      }).catch(err => {
-        console.log(err)
-
-        this.$toast.error('Не удалось')
-      })
     }
   },
   components: {

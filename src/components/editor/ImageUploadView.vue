@@ -7,7 +7,8 @@
     @drop.prevent.stop="onDrop($event)"
   >
     <div v-if="noFileSelected" class="empty-icon">
-      <i class="icon icon-3x icon-photo"></i>
+      <i v-if="!$slots.default" class="icon icon-3x icon-photo"></i>
+      <slot></slot>
     </div>
     <p v-if="noFileSelected" class="empty-title h5">Перетащите или выберите {{ multiple ? 'изображения' : 'изображение' }}</p>
     <div v-if="!noFileSelected">
@@ -51,7 +52,7 @@
 export default {
   props: {
     multiple: Boolean, // If true multiple file uploading enabled
-    max: Number // Maximum file count for multiple file uploading
+    max: Number, // Maximum file count for multiple file uploading
   },
   data: () => ({
     hasError: null,

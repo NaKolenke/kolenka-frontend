@@ -1,7 +1,9 @@
 <template>
-  <div class="user column col-12 py-2">
+  <div class="user py-2">    
     <div class="columns">
       <div class="column col-8">
+        <h4>Основная информация</h4>
+        
         <div class="form-group">
           <label class="form-label" for="name">Имя пользователя</label>
           <input
@@ -45,16 +47,18 @@
           ></editor>
         </div>
 
-        <button id="edit-btn" class="btn" v-on:click="edit()" :disabled="!isValid">Изменить</button>
+        <button id="edit-btn" class="btn btn-primary" @click="edit" :disabled="!isValid">Изменить</button>
       </div>
 
       <div class="column col-4">
-        <form class="form-group" ref="avatar">
-          <label class="form-label" for="avatar">Аватар</label>
-          <img :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />
-          <input class="form-input" type="file" name="file" id="avatar">
-        </form>
-        <button id="edit-avatar-btn" class="btn" v-on:click="editAvatar()">Обновить аватар</button>
+        <div class="form-group">
+          
+          <!--<img :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />-->
+          <image-upload @complete="imageUploaded">
+            <h4>Изменить аватар</h4>
+            <avatar :user="user" size="xl" :card="false" />
+          </image-upload>
+        </div>
       </div>
     </div>
   </div>
@@ -64,6 +68,8 @@
 import Moment from 'moment'
 import 'moment/locale/ru'
 import Editor from '@/components/editor/Editor.vue'
+import ImageUpload from '@/components/editor/ImageUploadView.vue'
+import Avatar from '@/components/elements/Avatar.vue'
 
 Moment.locale('ru')
 
@@ -90,29 +96,42 @@ export default {
   },
   computed: {
     birthday: {
-      get: function () {
+      get () {
         return Moment(this.user.birthday).format(Moment.HTML5_FMT.DATE)
       },
-      set: function (date) {
+      set (date) {
         this.user.birthday = date
       }
     },
     isValid() {
       return this.validation.username.success &&
-        this.validation.email.success
+             this.validation.email.success
     }
   },
   methods: {
-    edit: function () {
+    edit () {
       this.user.about = this.store.html
       this.$parent.editUser(this.user)
     },
-    editAvatar: function () {
-      this.$parent.editAvatar(new FormData(this.$refs.avatar))
+    imageUploaded(images) {
+      const avatar = images[0]
+
+      this.$users.routes.editAvatar(avatar.id, this.$auth.data.accessToken.token).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject(res.error)
+        }
+
+        this.$auth.data.user = res.user
+      }).catch(err => {
+        this.$toast.show('Не удалось изменить аватар')
+        console.log(err)
+      })
     }
   },
   components: {
-    Editor
+    Editor,
+    ImageUpload,
+    Avatar
   }
 }
 </script>
