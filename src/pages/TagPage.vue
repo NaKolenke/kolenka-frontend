@@ -16,6 +16,11 @@ import LoadingView from '@/components/LoadingView.vue'
 import PaginationView from '@/components/PaginationView.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Тег'
+    }
+  },
   data () {
     return {
       ...this.mapData({

@@ -1,5 +1,5 @@
 <template>
-  <div class="card my-1">
+  <div class="card my-2">
     <div class="card-header">
       <div class="card-title h5">
         <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>

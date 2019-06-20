@@ -34,6 +34,11 @@
 
 <script>
 export default {
+  metaInfo() {
+    return {
+      title: 'Восстановление доступа'
+    }
+  },
   data () {
     return {
       ...this.mapData({

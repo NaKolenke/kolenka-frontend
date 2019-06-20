@@ -65,10 +65,6 @@ export default {
 
 .youtube-video:hover i {
   color: #FF0000;
-  text-shadow: -1px -1px 0 #000,
-               1px -1px 0 #000,
-               -1px 1px 0 #000,
-               1px 1px 0 #000;
   transition: all 0.2s ease-in-out;
 }
 

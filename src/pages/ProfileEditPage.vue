@@ -6,6 +6,11 @@
 import ProfileEditView from '@/components/ProfileEditView.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Редактирование профиля'
+    }
+  },
   data () {
     return {
       ...this.mapData({
@@ -22,15 +27,6 @@ export default {
   methods: {
     editUser (user) {
       this.$users.editSelf(user).then(data => {
-        this.$router.replace({ name: 'profile', params: { user: this.auth.user.username } })
-      }).catch(err => {
-        console.log(err)
-
-        this.$toast.error('Не удалось')
-      })
-    },
-    editAvatar (formData) {
-      this.$users.editAvatar(formData).then(res => {
         this.$router.replace({ name: 'profile', params: { user: this.auth.user.username } })
       }).catch(err => {
         console.log(err)

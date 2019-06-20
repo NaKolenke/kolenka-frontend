@@ -79,6 +79,11 @@ import Editor from '@/components/editor/Editor.vue'
 import slugify from 'speakingurl'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Написать запись'
+    }
+  },
   data() {
     return {
       ...this.mapData({

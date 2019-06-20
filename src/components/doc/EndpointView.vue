@@ -3,12 +3,12 @@
     <div class="card-header">
       <b class="card-title">{{ endpoint.method.join(', ') }} {{ endpoint.url }}</b>
       <div v-if="endpoint.status != 'Available'" class="card-subtitle">
-        <span class="label label-warning">{{endpoint.status}}</span>
+        <span class="label label-warning">{{ endpoint.status }}</span>
       </div>
     </div>
 
     <div class="card-body">
-      {{endpoint.description}}
+      {{ endpoint.description }}
       <div v-if="endpoint.body">
         <b>Request</b>
         <br>

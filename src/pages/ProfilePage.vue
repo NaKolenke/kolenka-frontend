@@ -5,12 +5,12 @@
       <profile-view :user="user" :can-edit="canEdit"></profile-view>
     </div>
     
-    <div class="column col-6 col-xl-12">
+    <div class="column col-6 col-xl-12 mt-2">
       <template v-if="blogs.length > 0">
         <h3>Блоги пользователя</h3>
         <div class="columns blogs">
           
-          <div v-if="auth.user && user.id !== auth.user.id" class="column col-6 col-xl-4 col-md-6" style="margin-bottom: 10px">
+          <div v-if="auth.user && user.id !== auth.user.id" class="column col-6 col-xl-4 col-md-6 col-xs-12 mb-2">
             <router-link :to="{ name: 'invite-blog' }">
               <div class="card my-1 text-center">
                 <div class="card-header">
@@ -24,7 +24,7 @@
             </router-link>
           </div>
 
-          <div class="column col-6 col-xl-4 col-md-6" v-for="item in blogs" :key="item.id" style="margin-bottom: 10px">
+          <div class="column col-6 col-xl-4 col-md-6 col-xs-12 mb-2" v-for="item in blogs" :key="item.id">
             <blog-card-small :blog="item" style="height: 100%"></blog-card-small>
           </div>
         </div>
@@ -39,6 +39,11 @@ import ProfileView from '@/components/ProfileView.vue'
 import BlogCardSmall from '@/components/cards/BlogCardSmall.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Профиль'
+    }
+  },
   data: function () {
     return {
       ...this.mapData({

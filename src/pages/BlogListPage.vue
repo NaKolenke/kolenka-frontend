@@ -17,6 +17,11 @@ import BlogCard from '@/components/cards/BlogCard.vue'
 import BlogSkeleton from '@/components/skeletons/BlogCard.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Блоги'
+    }
+  },
   data () {
     return {
       ...this.mapData({

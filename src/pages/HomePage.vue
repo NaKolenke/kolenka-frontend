@@ -14,6 +14,11 @@ import PaginationView from '@/components/PaginationView.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Главная'
+    }
+  },
   data () {
     return {
       ...this.mapData({

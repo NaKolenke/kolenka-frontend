@@ -38,6 +38,11 @@ import Avatar from '@/components/elements/Avatar.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Блог'
+    }
+  },
   data() {
     return {
       blog: null,

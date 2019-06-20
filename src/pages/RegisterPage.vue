@@ -77,6 +77,11 @@
 
 <script>
 export default {
+  metaInfo() {
+    return {
+      title: 'Регистрация'
+    }
+  },
   data () {
     return {
       ...this.mapData({

@@ -26,6 +26,11 @@ import PostSkeleton from '@/components/skeletons/Post.vue'
 import CommentSkeleton from '@/components/skeletons/Comment.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Запись'
+    }
+  },
   data: function () {
     return {
       ...this.mapData({

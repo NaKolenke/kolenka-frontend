@@ -15,10 +15,10 @@
         <tr v-for="user in users" :key="user.id">
           <td>
             <div class="columns">
-              <div class="column col-2 col-md-4">
+              <div class="column col-2 col-md-4 col-lg-3">
                 <avatar :user="user" :size="'lg'" :card="false" />
               </div>
-              <div class="column col-10 col-md-8">
+              <div class="column col-10 col-md-8 col-lg-9">
                 <router-link :to="{ name: 'profile', params: { user: user.username }}">{{user.username}}</router-link>
                 <div>{{user.name}}</div>
               </div>
@@ -41,6 +41,11 @@ import Avatar from '@/components/elements/Avatar.vue'
 import UserSkeleton from '@/components/skeletons/UserListItem.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Пользователи'
+    }
+  },
   data () {
     return {
       ...this.mapData({

@@ -40,6 +40,11 @@
 import PaginationView from '@/components/PaginationView.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Уведомления'
+    }
+  },
   data() {
     return {
       ...this.mapData({

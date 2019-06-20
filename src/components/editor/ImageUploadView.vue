@@ -7,9 +7,10 @@
     @drop.prevent.stop="onDrop($event)"
   >
     <div v-if="noFileSelected" class="empty-icon">
-      <i class="icon icon-3x icon-photo"></i>
+      <i v-if="!$slots.default" class="icon icon-3x icon-photo"></i>
+      <slot></slot>
     </div>
-    <p v-if="noFileSelected" class="empty-title h5">Перетащите или выберите изображения</p>
+    <p v-if="noFileSelected" class="empty-title h5">Перетащите или выберите {{ multiple ? 'изображения' : 'изображение' }}</p>
     <div v-if="!noFileSelected">
       <div v-for="(item, index) in preview" :key="index" class="tile">
         <div class="tile-icon">
@@ -33,7 +34,7 @@
       <form @submit.prevent :class="['form-group', {'has-error': hasError }]">
         <div class="input-group p-centered">
           <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange" :multiple="multiple">
-          <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-photo"></i> {{ files.map(x => x.name).join(", ") || 'Выберите файл...' }}</label>
+          <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-upload"></i> {{ files.map(x => x.name).join(", ") || 'Выберите файл...' }}</label>
           <button :class="['btn', 'input-group-btn', { 'loading': inProgress }]" @click.prevent="upload" :disabled="inProgress || noFileSelected">Загрузить</button>
         </div>
         <p v-if="hasError" class="form-input-hint">{{ hasError }}</p>
@@ -51,7 +52,7 @@
 export default {
   props: {
     multiple: Boolean, // If true multiple file uploading enabled
-    max: Number // Maximum file count for multiple file uploading
+    max: Number, // Maximum file count for multiple file uploading
   },
   data: () => ({
     hasError: null,

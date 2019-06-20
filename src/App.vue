@@ -25,17 +25,26 @@ import HeaderComponent from '@/components/TheHeader.vue'
 import ToastPlugin from '@/plugins/toast'
 import store from '@/library/index'
 import ScrollTo from 'vue-scrollto'
+import VueMeta from 'vue-meta'
 import '@/directives/validate'
 
 Vue.use(ScrollTo)
 Vue.use(ProgressBar)
 Vue.use(ToastPlugin)
+Vue.use(VueMeta, {
+  refreshOnceOnNavigation: true
+})
 
 Vue.use(store)
 
 export default {
   name: 'App',
-  data: function () {
+  metaInfo() {
+    return {
+      titleTemplate: '%s - На коленке'
+    }
+  },
+  data () {
     return {
       ...this.mapData({
         auth: 'auth/data'
@@ -44,7 +53,7 @@ export default {
       loadingData: true
     }
   },
-  created() {
+  created () {
     this.$Progress.start()
 
     this.$router.beforeEach((to, from, next) => {

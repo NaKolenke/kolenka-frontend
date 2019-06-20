@@ -17,6 +17,11 @@ import PaginationView from '@/components/PaginationView.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
 
 export default {
+  metaInfo() {
+    return {
+      title: 'Записи пользователя'
+    }
+  },
   data () {
     return {
       ...this.mapData({

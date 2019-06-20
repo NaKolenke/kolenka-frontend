@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import HomePage from '@/pages/HomePage'
-import DocPage from '@/pages/DocPage'
-import AuthErrorPage from '@/pages/401'
-import NotFoundPage from '@/pages/404'
-import FeedbackPage from '@/pages/FeedbackPage'
-import TagPage from '@/pages/TagPage'
-import NotificationsPage from '@/pages/NotificationsPage'
+import HomePage from '@/pages/HomePage.vue'
+import DocPage from '@/pages/DocPage.vue'
+import AuthErrorPage from '@/pages/401.vue'
+import NotFoundPage from '@/pages/404.vue'
+import FeedbackPage from '@/pages/FeedbackPage.vue'
+import TagPage from '@/pages/TagPage.vue'
+import NotificationsPage from '@/pages/NotificationsPage.vue'
+import SearchPage from '@/pages/SearchPage.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import DocsSidebar from '@/pages/sidebar/DocsView.vue'
@@ -63,6 +64,14 @@ const routes = [
       sidebar: {
         sticky: true
       }
+    }
+  },
+  {
+    path: '/search',
+    name: 'search',
+    components: {
+      default: SearchPage,
+      sidebar: DefaultSidebar
     }
   },
   {
