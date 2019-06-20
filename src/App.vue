@@ -89,7 +89,12 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../node_modules/spectre.css/dist/spectre.css";
+
+// colors should be overriden before any spectre import
+$primary-color: #0D93B0;
+$secondary-color: lighten($primary-color, 58%);
+
+@import "../node_modules/spectre.css/src/spectre.scss";
 @import "../node_modules/spectre.css/dist/spectre-icons.css";
 @import "./assets/icon-font/style.css";
 
@@ -208,6 +213,10 @@ pre {
 
 p {
   margin: 0 0 $line-height / 1.5;
+}
+
+a:focus, a:hover, a:visited {
+  color: $primary-color;
 }
 
 html, body {

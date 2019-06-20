@@ -6,26 +6,26 @@
         <form method="POST" @submit.prevent="register" :class="{ 'has-error': !isValid && validation.showErrors }">
           <div class="form-group">
             <label class="form-label" for="username">Имя пользователя</label>
-            <input 
-              class="form-input" 
+            <input
+              class="form-input"
               v-model="username"
               v-validate="validation.username"
-              name="username" 
-              id="username" 
+              name="username"
+              id="username"
               v-on:keyup.enter="register"
               required
             >
             <div class="form-input-hint" v-if="!validation.username.success && validation.showErrors">Неверное имя пользователя</div>
           </div>
-          
+
           <div class="form-group">
             <label class="form-label" for="email">Адрес электронной почты</label>
-            <input 
-              class="form-input" 
-              v-model="email" 
+            <input
+              class="form-input"
+              v-model="email"
               v-validate="validation.email"
-              name="email" 
-              id="email" 
+              name="email"
+              id="email"
               v-on:keyup.enter="register"
               required
             >
@@ -34,12 +34,12 @@
 
           <div class="form-group">
             <label class="form-label" for="name">Отображаемое имя</label>
-            <input 
-              class="form-input" 
-              v-model="name" 
+            <input
+              class="form-input"
+              v-model="name"
               v-validate="validation.name"
-              name="name" 
-              id="name" 
+              name="name"
+              id="name"
               v-on:keyup.enter="register"
               required
             >
@@ -126,7 +126,7 @@ export default {
       this.$auth
       .register(this.username, this.name, this.email, this.password)
       .then(() => {
-        this.$toast.show('Успешно зарегистрировался')
+        this.$toast.show('Регистрация успешна')
         this.$router.replace({ path: '/' })
       })
       .catch(err => {

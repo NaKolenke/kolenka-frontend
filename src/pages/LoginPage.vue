@@ -6,12 +6,12 @@
         <form method="POST" @submit.prevent="login" :class="{ 'has-error': !isValid && validation.showErrors }">
           <div class="form-group">
             <label class="form-label" for="username">Имя пользователя</label>
-            <input 
+            <input
               type="text"
-              class="form-input" 
+              class="form-input"
               v-model="username"
               v-validate="validation.username"
-              name="username" 
+              name="username"
               id="username"
               required
             >
@@ -34,7 +34,7 @@
 
           <input type="submit" id="login-btn" class="btn primary" value="Войти">
         </form>
-        
+
         <br>
         <p>
           Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link>
@@ -88,7 +88,7 @@ export default {
       this.$auth
       .login(this.username, this.password)
       .then(() => {
-        this.$toast.show('Успешно авторизовался')
+        this.$toast.show('Авторизация успешна')
         this.$router.replace({ path: '/' })
       })
       .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
