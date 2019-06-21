@@ -1,12 +1,12 @@
 <template>
   <div class="columns">
 
-    <div class="column col-6 col-xl-12">
+    <div class="column col-xl-12" :class="{ 'col-12': blogs.length === 0, 'col-6': blogs.length > 0 }">
       <profile-view :user="user" :can-edit="canEdit"></profile-view>
     </div>
     
-    <div class="column col-6 col-xl-12 mt-2">
-      <template v-if="blogs.length > 0">
+    <div v-if="blogs.length > 0" class="column col-6 col-xl-12 mt-2">
+      <template>
         <h3>Блоги пользователя</h3>
         <div class="columns blogs">
           

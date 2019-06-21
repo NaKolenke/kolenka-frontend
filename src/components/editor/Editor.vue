@@ -3,19 +3,19 @@
     <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }" :class="{ 'floating': menuBarFloats }" :style="[{ 'left': menuBarOffsetLeft }]">
       <div class="menu-bar">
 
-        <editor-button name="Жирный" :active="isActive.bold()" :command="commands.bold" :floats="menuBarFloats">
+        <editor-button name="Жирный" :active="isActive.bold()" @command="commands.bold" :floats="menuBarFloats">
           <span class="icon-bold"></span>
         </editor-button>
-        <editor-button name="Наклонный" :active="isActive.italic()" :command="commands.italic" :floats="menuBarFloats">
+        <editor-button name="Наклонный" :active="isActive.italic()" @command="commands.italic" :floats="menuBarFloats">
           <span class="icon-italic"></span>
         </editor-button>
-        <editor-button name="Подчёркнутый" :active="isActive.underline()" :command="commands.underline" :floats="menuBarFloats">
+        <editor-button name="Подчёркнутый" :active="isActive.underline()" @command="commands.underline" :floats="menuBarFloats">
           <span class="icon-underline"></span>
         </editor-button>
-        <editor-button name="Зачёркнутый" :active="isActive.strike()" :command="commands.strike" :floats="menuBarFloats">
+        <editor-button name="Зачёркнутый" :active="isActive.strike()" @command="commands.strike" :floats="menuBarFloats">
           <span class="icon-strikethrough"></span>
         </editor-button>
-        <editor-button name="Параграф" :active="isActive.paragraph()" :command="commands.paragraph" :floats="menuBarFloats">
+        <editor-button name="Параграф" :active="isActive.paragraph()" @command="commands.paragraph" :floats="menuBarFloats">
           <span class="icon-pilcrow"></span>
         </editor-button>
 
@@ -56,67 +56,63 @@
           </template>
         </editor-button>
 
-        <button
-          v-if="isExtended"
-          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'left' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]"
-          @click="commands.alignment({ textAlign: 'left' })" 
-          data-tooltip="Выравнивание по левому краю"
+        <editor-button v-if="isExtended"
+          name="Выравнивание по левому краю"
+          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'left'"
+          @command="commands.alignment({ textAlign: 'left' })"
+          :floats="menuBarFloats"
         >
           <span class="icon-paragraph-left"></span>
-        </button>
-        <button
-          v-if="isExtended"
-          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'center' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.alignment({ textAlign: 'center' })" 
-          data-tooltip="Выравнивание по центру"
+        </editor-button>
+        <editor-button v-if="isExtended"
+          name="Выравнивание по центру"
+          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'center'"
+          @command="commands.alignment({ textAlign: 'center' })"
+          :floats="menuBarFloats"
         >
           <span class="icon-paragraph-center"></span>
-        </button>
-        <button
-          v-if="isExtended"
-          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.alignment({ textAlign: 'right' })" 
-          data-tooltip="Выравнивание по правому краю"
+        </editor-button>
+        <editor-button v-if="isExtended"
+          name="Выравнивание по правому краю"
+          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right'"
+          @command="commands.alignment({ textAlign: 'right' })"
+          :floats="menuBarFloats"
         >
           <span class="icon-paragraph-right"></span>
-        </button>
-        <button
-          v-if="isExtended"
-          :class="[{ 'is-active': isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify' }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.alignment({ textAlign: 'justify' })" 
-          data-tooltip="Выравнивание по ширине"
+        </editor-button>
+        <editor-button v-if="isExtended"
+          name="Выравнивание по ширине"
+          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify'"
+          @command="commands.alignment({ textAlign: 'justify' })"
+          :floats="menuBarFloats"
         >
           <span class="icon-paragraph-justify"></span>
-        </button>
+        </editor-button>
 
         <span class="span"></span>
 
-        <editor-button name="Список" :active="isActive.bullet_list()" :command="commands.bullet_list" :floats="menuBarFloats">
+        <editor-button name="Список" :active="isActive.bullet_list()" @command="commands.bullet_list" :floats="menuBarFloats">
           <span class="icon-list2"></span>
         </editor-button>
-        <editor-button name="Нумерованный список" :active="isActive.ordered_list()" :command="commands.ordered_list" :floats="menuBarFloats">
+        <editor-button name="Нумерованный список" :active="isActive.ordered_list()" @command="commands.ordered_list" :floats="menuBarFloats">
           <span class="icon-list-numbered"></span>
         </editor-button>
 
         <span class="span"></span>
 
-        <editor-button name="Цитата" :active="isActive.blockquote()" :command="commands.blockquote" :floats="menuBarFloats">
+        <editor-button name="Цитата" :active="isActive.blockquote()" @command="commands.blockquote" :floats="menuBarFloats">
           <span class="icon-quotes-right"></span>
         </editor-button>
-        <editor-button name="Код" :active="isActive.code()" :command="commands.code" :floats="menuBarFloats">
+        <editor-button name="Код" :active="isActive.code()" @command="commands.code" :floats="menuBarFloats">
           <span class="icon-embed"></span>
         </editor-button>
-        <editor-button name="Блок кода" :active="isActive.code_block()" :command="commands.code_block" :floats="menuBarFloats">
+        <editor-button name="Блок кода" :active="isActive.code_block()" @command="commands.code_block" :floats="menuBarFloats">
           <span class="icon-embed2"></span>
         </editor-button>
 
-        <button 
-          :class="[{ 'is-active': isActive.image() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="imageModal.show = true" 
-          data-tooltip="Изображение"
-        >
+        <editor-button name="Изображение" :active="isActive.image()" @command="imageModal.show = true" :floats="menuBarFloats">
           <span class="icon-image"></span>
-        </button>
+        </editor-button>
 
         <modal :open="imageModal.show" :closed="imageModalClose" title="Вставить изображение" @ok="chooseImage(commands.image)">
           <tabs>
@@ -142,13 +138,9 @@
           </tabs>
         </modal>
 
-        <button 
-          :class="[{ 'is-active': isActive.iframe() }, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="embedModal.show = true"
-          data-tooltip="Embed (youtube, etc)"
-        >
+        <editor-button name="Embed (youtube, etc)" :active="isActive.iframe()" @command="embedModal.show = true" :floats="menuBarFloats">
           <span class="icon-new-tab"></span>
-        </button>
+        </editor-button>
 
         <modal :open="embedModal.show" :closed="embedModalClose" title="Embed" @ok="chooseEmbed(commands.iframe)">
           <input class="form-input" type="url" placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)" v-model="embedModal.url" autofocus />
@@ -156,35 +148,26 @@
 
         <span v-if="isExtended" class="span"></span>
 
-        <button 
-          v-if="isExtended" 
-          :class="['button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.horizontal_rule" 
-          data-tooltip="Горизонтальная линия"
-        >
+        <editor-button name="Горизонтальная линия" @command="commands.horizontal_rule" :floats="menuBarFloats">
           <span class="icon-page-break"></span>
-        </button>
+        </editor-button>
 
         <span v-if="isExtended" class="span"></span>
 
-        <button 
-          v-if="isExtended" 
-          :class="[{'is-active': isActive.table()}, 'button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })" 
-          data-tooltip="Таблица"
+        <editor-button v-if="isExtended"
+          name="Таблица"
+          :active="isActive.table()"
+          @command="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
+          :floats="menuBarFloats"
         >
           <span class="icon-table2"></span>
-        </button>
+        </editor-button>
 
         <span class="span"></span>
 
-        <button
-          :class="['button', 'tooltip', { 'tooltip-bottom': menuBarFloats }]" 
-          @click="showHelp = true" 
-          data-tooltip="Помощь"
-        >
+        <editor-button name="Помощь" @command="showHelp = true" :floats="menuBarFloats">
           ?
-        </button>
+        </editor-button>
 
         <modal :open="showHelp" :closed="closeHelp" title="Помощь по редактору текста" size="lg" :hideButtons="true">
           <h4>Общее</h4>

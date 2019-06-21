@@ -9,6 +9,7 @@ import FeedbackPage from '@/pages/FeedbackPage.vue'
 import TagPage from '@/pages/TagPage.vue'
 import NotificationsPage from '@/pages/NotificationsPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
+import DashboardPage from '@/pages/Dashboard.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import DocsSidebar from '@/pages/sidebar/DocsView.vue'
@@ -72,6 +73,18 @@ const routes = [
     components: {
       default: SearchPage,
       sidebar: DefaultSidebar
+    }
+  },
+  {
+    path: '/dashboard',
+    components: {
+      default: DashboardPage,
+      sidebar: DefaultSidebar
+    },
+    props: {
+      sidebar: {
+        hide: true
+      }
     }
   },
   {

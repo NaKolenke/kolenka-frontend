@@ -10,9 +10,8 @@
               class="form-input"
               v-model="username"
               v-validate="validation.username"
-              name="username"
+              name="username" 
               id="username"
-              v-on:keyup.enter="register"
               required
             >
             <div class="form-input-hint" v-if="!validation.username.success && validation.showErrors">Неверное имя пользователя</div>
@@ -24,9 +23,9 @@
               class="form-input"
               v-model="email"
               v-validate="validation.email"
-              name="email"
-              id="email"
-              v-on:keyup.enter="register"
+              name="email" 
+              id="email" 
+              inputmode="email"
               required
             >
             <div class="form-input-hint" v-if="!validation.email.success && validation.showErrors">Неверный адрес электронной почты</div>
@@ -38,9 +37,8 @@
               class="form-input"
               v-model="name"
               v-validate="validation.name"
-              name="name"
-              id="name"
-              v-on:keyup.enter="register"
+              name="name" 
+              id="name" 
               required
             >
             <div class="form-input-hint" v-if="!validation.name.success && validation.showErrors">Неверное имя</div>
@@ -55,20 +53,16 @@
               name="password"
               type="password"
               id="password"
-              v-on:keyup.enter="register"
               required
             >
             <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Неверный пароль</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn btn-primary" v-on:click="register()" value="Зарегистрироваться">
+          <input type="submit" id="login-btn" class="btn btn-primary" value="Зарегистрироваться">
 
           <br>
           <br>
-          <p>
-            Уже есть учетная запись?
-            <router-link to="/login">Войти</router-link>
-          </p>
+          <p>Уже есть учетная запись? <router-link to="/login">Войти</router-link></p>
         </form>
       </div>
     </div>

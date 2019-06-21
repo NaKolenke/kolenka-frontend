@@ -76,6 +76,9 @@ export default {
     logout({ data }) {
       data.accessToken = null
       data.refreshToken = null
+    },
+    getAccessToken({ data }) {
+      return data.accessToken ? data.accessToken.token : null
     }
   }
 }
