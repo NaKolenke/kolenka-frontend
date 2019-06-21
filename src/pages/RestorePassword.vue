@@ -13,6 +13,7 @@
               v-validate="validation.email"
               name="email" 
               id="email"
+              inputmode="email"
               required
             >
             <div class="form-input-hint" v-if="!validation.email.success && validation.showErrors">Неверный адрес электронной почты</div>

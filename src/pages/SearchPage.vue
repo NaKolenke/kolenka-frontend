@@ -39,7 +39,7 @@
         
         <div v-if="users.length > 0">
           <ul style="list-style:none;margin-left:2px">
-            <li v-for="item in users" :key="item.id">
+            <li v-for="item in users.slice(0, 6)" :key="item.id">
               <avatar :user="item" size="sm"></avatar><router-link :to="{ name: 'profile', params: { user: item.username } }"> {{ item.name || item.username }}</router-link>
             </li>
           </ul>
@@ -92,7 +92,7 @@
     <div v-if="queryAvailable && model.type === 'user'">
       <h4 v-if="queryAvailable">Пользователи</h4>
       <div class="columns">
-        <div v-for="item in users" :key="item.id" class="column col-3">
+        <div v-for="item in users" :key="item.id" class="column col-3 my-2">
           <avatar :user="item" size="sm"></avatar><router-link :to="{ name: 'profile', params: { user: item.username } }"> {{ item.name || item.username }}</router-link>
         </div>
       </div>

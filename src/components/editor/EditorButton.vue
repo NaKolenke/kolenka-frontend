@@ -1,7 +1,7 @@
 <template>
   <button v-if="!dropdown"
     :class="[{ 'is-active': active }, 'button', { 'tooltip': name }, { 'tooltip-bottom': floats && name }]"
-    @click="command"
+    @click="$emit('command')"
     :data-tooltip="name"
   >
     <slot />
@@ -21,10 +21,13 @@
 </template>
 
 <script>
+/*
+  Events: @command
+*/
+
 export default {
   props: {
     name: String,
-    command: Function,
     active: Boolean,
     floats: Boolean,
     dropdown: Boolean

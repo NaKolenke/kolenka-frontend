@@ -17,7 +17,7 @@ export default {
       return request.post('posts/', {
         blog: blogId,
         cut_name: null,
-        is_draft: draft || false,
+        is_draft: draft,
         text,
         title,
         url
@@ -28,7 +28,7 @@ export default {
     editPost (request, url, title, text, draft, blogId, token) {
       return request.put(`posts/${url}/`, {
         blog: blogId,
-        is_draft: draft || false,
+        is_draft: draft,
         text,
         title
       }, {
@@ -78,7 +78,7 @@ export default {
         data.current = post
         return Promise.resolve(post)
       } else {
-        return routes.getPost(url, auth.accessToken ? auth.accessToken.token : null).then(res => {
+        return routes.getPost(url, auth.getAccessToken()).then(res => {
           data.current = res.post
           posts.collect(res.post, 'everything')
           return res.post
@@ -100,16 +100,18 @@ export default {
       })
     },
     createPost({ routes, auth }, title, text, url, draft, blogId) {
-      return routes.createPost(title, text, url, draft, blogId, auth.accessToken.token).then(res => {
+      return routes.createPost(title, text, url, draft, blogId, auth.getAccessToken()).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }
+
+        posts.collect(res.post, [ 'everything', 'home' ])
 
         return res.post
       })
     },
     editPost({ routes, auth }, url, title, text, draft, blogId) {
-      return routes.editPost(url, title, text, draft, blogId, auth.accessToken.token).then(res => {
+      return routes.editPost(url, title, text, draft, blogId, auth.getAccessToken()).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }
@@ -118,7 +120,7 @@ export default {
       })
     },
     getUserDrafts({ routes, auth, posts }, page) {
-      return routes.getUserDrafts(auth.accessToken.token, { page }).then(res => {
+      return routes.getUserDrafts(auth.getAccessToken(), { page }).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }
