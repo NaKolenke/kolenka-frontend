@@ -7,6 +7,12 @@
           :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'"
           :alt="user.name"
         >
+        <!-- yak -->
+        <img
+          v-else
+          :src="'https://beta.kolenka.net/content/4037/'"
+          :alt="user.name"
+        >
       </figure>
     </router-link>
     <div v-if="user && card" class="popover-container">
