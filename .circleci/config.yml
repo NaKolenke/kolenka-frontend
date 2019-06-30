@@ -54,7 +54,7 @@ workflows:
               only:  master
   build-and-prod-deploy:
     jobs:
-      - build
+      - build:
           filters:
             tags:
               only: /^v.*/
