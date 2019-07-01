@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import ToastView from '@/components/ToastView.vue'
 
-let ToastClass = Vue.extend(ToastView)
+const ToastClass = Vue.extend(ToastView)
 
 const Toast = {
   install (Vue, options) {

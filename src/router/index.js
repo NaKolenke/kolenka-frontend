@@ -13,6 +13,7 @@ import DashboardPage from '@/pages/Dashboard.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import DocsSidebar from '@/pages/sidebar/DocsView.vue'
+import TestingPage from '@/pages/TestingPage.vue'
 
 import blogs from './blogs'
 import posts from './posts'
@@ -106,6 +107,16 @@ const routes = [
     redirect: '/404'
   }
 ]
+
+if (process.env.NODE_ENV !== 'production') {
+  routes.push({
+    path: '/testing',
+    components: {
+      default: TestingPage,
+      sidebar: DefaultSidebar
+    }
+  })
+}
 
 export default new Router({
   mode: 'history',
