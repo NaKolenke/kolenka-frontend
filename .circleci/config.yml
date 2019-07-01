@@ -52,3 +52,19 @@ workflows:
           filters:
             branches:
               only:  master
+  build-and-prod-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - deploy-prod:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
