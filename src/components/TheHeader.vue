@@ -51,10 +51,11 @@
                 <li class="divider"></li>
                 <li class="menu-item"><router-link to="/new/blog"><i class="icon icon-plus"></i> Создать блог</router-link></li>
                 <li v-if="isLocal" class="divider"></li>
-                <li v-if="isLocal" class="menu-item"><router-link to="/dashboard"><i class="icon icon-apps"></i> Управление</router-link></li>
+                <li v-if="isAdmin" class="menu-item"><router-link to="/dashboard"><i class="icon icon-apps"></i> Управление</router-link></li>
                 <li v-if="isLocal" class="menu-item"><router-link to="/doc">Документация</router-link></li>
+                <li v-if="isLocal" class="menu-item"><router-link to="/testing">Тестирование</router-link></li>
                 <li class="divider"></li>
-                <li class="menu-item"><a href="/logout" @click.prevent="$auth.logout(); $router.go()">Выйти</a></li>
+                <li class="menu-item"><a href="/logout" @click.prevent="logout">Выйти</a></li>
               </ul>
             </div>
           </div>          
@@ -86,6 +87,8 @@ export default {
     version: String,
   },
   created() {
+    //if (this.$route)
+    
     this.refreshFeedbackTooltip()
   },
   methods: {
@@ -105,6 +108,10 @@ export default {
       } else {
         this.feedbackTooltip = 'Тут вы можете оставить комменатрий по работе сайта'
       }
+    },
+    logout() {
+      this.$auth.logout()
+      this.$router.go()
     }
   },
   computed: {
