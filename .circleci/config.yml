@@ -103,7 +103,7 @@ workflows:
               ignore: /.*/
       - deploy-prod:
           requires:
-            - build
+            - build-prod
           filters:
             tags:
               only: /^v.*/
