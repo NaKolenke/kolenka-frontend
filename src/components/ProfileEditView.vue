@@ -1,9 +1,9 @@
 <template>
-  <div class="user py-2">    
+  <div class="user py-2">
     <div class="columns">
       <div class="column col-8">
         <h4>Основная информация</h4>
-        
+
         <div class="form-group">
           <label class="form-label" for="name">Имя пользователя</label>
           <input
@@ -52,8 +52,8 @@
 
       <div class="column col-4">
         <div class="form-group">
-          
-          <!--<img :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />-->
+
+          <!--<img :src="process.env.VUE_APP_CONTENT_URL + `/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />-->
           <image-upload @complete="imageUploaded">
             <h4>Изменить аватар</h4>
             <avatar :user="user" size="xl" :card="false" />

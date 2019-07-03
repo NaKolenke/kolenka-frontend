@@ -2,33 +2,33 @@
   <div class="container col-9 col-mx-auto">
     <div class="columns">
       <div class="column">
-        
+
         <h2>Новая запись</h2>
         <div class="form-horizontal">
-          
+
           <div class="form-group">
             <div class="col-3 col-sm-12">
               <label class="form-label" for="title">Название</label>
             </div>
             <div class="col-9 col-sm-12">
-              <input 
-                class="form-input" 
-                type="text" 
-                id="title" 
+              <input
+                class="form-input"
+                type="text"
+                id="title"
                 v-model="model.title"
                 v-validate="validation.title"
                 required
               />
               <p class="form-input-hint">/posts/
                 <span v-if="!isChangingSlug" @click="changeSlug">{{ slugChanged ? newSlug : slug }}</span>
-                <input v-else 
-                  type="text" 
-                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']" 
-                  v-model="newSlug" 
+                <input v-else
+                  type="text"
+                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']"
+                  v-model="newSlug"
                   v-validate="validation.slug"
-                  @blur="isChangingSlug = false" 
+                  @blur="isChangingSlug = false"
                   @keyup="if ($event.keyCode === 27) isChangingSlug = false"
-                  autofocus 
+                  autofocus
                 />
               </p>
             </div>
@@ -117,7 +117,7 @@ export default {
       newSlug: ''
     }
   },
-  created() {    
+  created() {
     if (!this.auth.user) {
       this.$router.replace({ path: '/' })
       return
@@ -125,7 +125,7 @@ export default {
   },
   mounted() {
     const edit = this.$route.params.edit
-    
+
     if (edit) {
       this.model.title = edit.title
       this.model.blog = edit.blog.id
@@ -154,7 +154,7 @@ export default {
         draft,
         this.model.blog
       )
-      
+
       method.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
