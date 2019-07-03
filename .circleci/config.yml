@@ -18,7 +18,7 @@ jobs:
 
       - run: npm install @vue/cli
       - run: npm install
-      - run: npm run build --mode=staging
+      - run: npm run build --mode staging
       - run: tar czf build.tar.gz dist/
 
       - save_cache:
