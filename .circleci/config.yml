@@ -18,7 +18,7 @@ jobs:
 
       - run: npm install @vue/cli
       - run: npm install
-      - run: npm run build
+      - run: npm run build --mode=staging
       - run: tar czf build.tar.gz dist/
 
       - save_cache:
@@ -41,6 +41,47 @@ jobs:
           command: |
             ssh $SSH_USER@$SSH_HOST "./deploy-frontend.sh $CIRCLE_BUILD_NUM"
 
+  build-prod:
+    docker:
+      - image: circleci/node:9.9
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v2-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v2-dependencies-
+
+      - run: npm install @vue/cli
+      - run: npm install
+      - run: npm run build
+      - run: tar czf build.tar.gz dist/
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
+      - store_artifacts:
+          path: build.tar.gz
+          destination: build.tar.gz
+
+  deploy-prod:
+    machine:
+      enabled: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "62:72:3a:58:97:e4:92:5e:9b:b4:ca:ee:2d:19:ef:65"
+      - deploy:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "./deploy-frontend.sh $CIRCLE_BUILD_NUM prod"
+
 workflows:
   version: 2
   build-and-deploy:
@@ -54,7 +95,7 @@ workflows:
               only:  master
   build-and-prod-deploy:
     jobs:
-      - build:
+      - build-prod:
           filters:
             tags:
               only: /^v.*/
