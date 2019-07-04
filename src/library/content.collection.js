@@ -13,7 +13,7 @@ export default {
   },
   actions: {
     getUrlById(context, id) {
-      return `https://beta.kolenka.net/content/${id}/`
+      return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
     },
     uploadFile({ auth }, data) {
       return fetch(process.env.VUE_APP_API_URL + '/content/', {
@@ -36,7 +36,7 @@ export default {
       if (data.pages.includes(page)) { // Check if we already loaded the page
         return Promise.resolve(data.pageCount)
       }
-      
+
       return routes.getOwned(auth.accessToken.token, { page, limit }).then(res => {
         if (res.success !== 1) {
           return Promise.reject(res.error)

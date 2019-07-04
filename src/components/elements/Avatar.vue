@@ -4,13 +4,13 @@
       <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'avatar-xl': isXl, 'badge': badge, 'av-badge': header }" :data-badge="badge">
         <img
           v-if="user && user.avatar"
-          :src="'https://beta.kolenka.net/content/' + user.avatar.id + '/'"
+          :src="contentUrl"
           :alt="user.name"
         >
         <!-- yak -->
         <img
           v-else
-          :src="'https://beta.kolenka.net/content/4037/'"
+          :src="stubUrl"
           :alt="user.name"
         >
       </figure>
@@ -48,6 +48,12 @@ export default {
     },
     isXl () {
       return this.size === 'xl'
+    },
+    contentUrl() {
+      return process.env.VUE_APP_CONTENT_URL + '/' + this.user.avatar.id + '/'
+    },
+    stubUrl() {
+      return process.env.VUE_APP_API_URL + '/stickers/yak/'
     }
   }
 }
