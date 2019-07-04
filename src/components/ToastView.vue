@@ -1,8 +1,10 @@
 <template>
-  <transition name="fade">
-    <div class="toast" :class="toastClass" :style="{ bottom: y + 'px' }">
-      <button class="btn btn-clear float-right" @click="close()"></button>
-      <slot/>
+  <transition name="fade" @leave="animationLeave">
+    <div class="container" :style="{ bottom: y + 'px' }" v-if="!isClosing">
+      <div class="toast" :class="toastClass">
+        <button class="btn btn-clear float-right" @click="close()"></button>
+        <slot/>
+      </div>
     </div>
   </transition>
 </template>
@@ -13,35 +15,41 @@ export default {
     y: Number,
     isError: Boolean
   },
+  data: () => ({
+    isClosing: false
+  }),
   methods: {
     close () {
+      this.isClosing = true
+    },
+    animationLeave(el, done) {
       this.$toast.hide(this)
     }
   },
   computed: {
-    toastClass  () {
-      if (this.isError) {
-        return "toast-error"
-      }
-      return "toast-success"
+    toastClass () {
+      return this.isError ? "toast-error" : "toast-success"
     }
   }
 }
 </script>
 
 <style scoped>
-.toast {
+.container {
   position: fixed;
   right: 0;
-  width: 300px;
-  margin: 24px;
-  padding: 8px;
-  transition: all 1s linear;
+  max-width: 300px;
+  transition: all 0.5s linear;
   animation: 0.2s ease-out 0s 1 slideInFromLeft;
 }
 
+.toast {
+  margin-bottom: 16px;
+  padding: 8px;
+}
+
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: all .5s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
