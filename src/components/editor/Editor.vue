@@ -19,12 +19,11 @@
           <span class="icon-pilcrow"></span>
         </editor-button>
 
-        <!-- <editor-button name="Цвет текста" :active="isActive.color() && color !== '#3b4351'" :floats="menuBarFloats" :dropdown="true">
+        <editor-button name="Цвет текста" :active="isActive.color() && color !== '#3b4351'" :floats="menuBarFloats" :dropdown="true">
           <span class="icon-eyedropper"></span>
           <template v-slot:dropdown>
             <color-picker
               theme="light"
-              :color="color"
               :sucker-hide="true"
               @changeColor="colorChanged($event, commands.color)"
               :colors-default="['#000000', '#FFFFFF', '#FF1900', '#F47365',
@@ -33,7 +32,7 @@
                                 '#FC3CAD', '#BF3DCE', '#8E00A7', '#3b4351']"
             />
           </template>
-        </editor-button> -->
+        </editor-button>
 
         <span v-if="isExtended" class="span"></span>
 
@@ -462,6 +461,8 @@ export default {
       this.embedModal.show = false
     },
     colorChanged(color, command) {
+      this.color = color.rgba.toHexString()
+      
       let { rgba: { r, g, b } } = color
       command({ color: `rgb(${r}, ${g}, ${b})` })
     },
@@ -525,7 +526,7 @@ export default {
     EditorMenuBar,
     EditorButton,
     Modal,
-    // ColorPicker,
+    ColorPicker,
     ImageUpload,
     Tabs,
     Tab,

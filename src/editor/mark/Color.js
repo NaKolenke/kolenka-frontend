@@ -33,7 +33,7 @@ export default class Color extends Mark {
       ],
       toDOM: node => {
         return ['span', {
-          style: `color:${node.attrs.color};`
+          style: `color:${node.attrs.color} !important;`
         }, 0]
       }
     }
