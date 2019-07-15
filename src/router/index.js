@@ -35,6 +35,7 @@ const routes = [
   },
   {
     path: '/tags/:title',
+    alias: '/tag/:title',
     name: 'tag',
     components: {
       default: TagPage,
