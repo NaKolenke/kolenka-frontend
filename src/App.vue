@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="!loadingData">
+  <div id="app">
     <header-component :version="version" />
 
     <div class="container col-9 col-mx-auto col-xl-11 col-md-12">
@@ -23,14 +23,17 @@ import Vue from 'vue'
 import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
 import ToastPlugin from '@/plugins/toast'
+import LogPlugin from '@/plugins/log'
 import store from '@/library/index'
 import ScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import '@/directives/validate'
+import df from '@/mixins/dataFetch'
 
 Vue.use(ScrollTo)
 Vue.use(ProgressBar)
 Vue.use(ToastPlugin)
+Vue.use(LogPlugin)
 Vue.use(VueMeta, {
   refreshOnceOnNavigation: true
 })
@@ -39,18 +42,15 @@ Vue.use(store)
 
 export default {
   name: 'App',
-  metaInfo() {
-    return {
-      titleTemplate: '%s - На коленке'
-    }
-  },
+  metaInfo: () => ({
+    titleTemplate: '%s - На коленке'
+  }),
   data () {
     return {
       ...this.mapData({
         auth: 'auth/data'
       }),
-      version: process.env.VUE_APP_VERSION,
-      loadingData: true
+      version: process.env.VUE_APP_VERSION
     }
   },
   created () {
@@ -61,20 +61,19 @@ export default {
       next()
     })
 
-    this.$router.afterEach((to, from) => {
+    this.$router.afterEach(() => {
       this.$Progress.finish()
     })
 
-    this.$auth
+    this.$Progress.finish()
+  },
+  dataFetch() {
+    return this.$auth
     .login()
     .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
-    .then(() => {
-      this.loadingData = false
-    })
     .then(() => this.$notifications.getAll({ page: 1, limit: 1 }))
-    .catch((err) => {
-      this.loadingData = false
-      console.log(err)
+    .catch(err => {
+      this.$log.error(err)
     })
   },
   computed: {
@@ -85,6 +84,7 @@ export default {
   components: {
     HeaderComponent
   },
+  mixins: [ df ]
 }
 </script>
 
