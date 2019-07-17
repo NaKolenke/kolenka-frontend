@@ -20,7 +20,7 @@ export default {
         method: 'POST',
         body: data,
         headers: {
-          'Authorization': auth.data.accessToken.token
+          'Authorization': auth.getAccessToken()
         }
       })
       .then(res => res.json())
@@ -37,7 +37,7 @@ export default {
         return Promise.resolve(data.pageCount)
       }
 
-      return routes.getOwned(auth.accessToken.token, { page, limit }).then(res => {
+      return routes.getOwned(auth.getAccessToken(), { page, limit }).then(res => {
         if (res.success !== 1) {
           return Promise.reject(res.error)
         }

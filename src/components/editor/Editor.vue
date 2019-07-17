@@ -406,22 +406,20 @@ export default {
       window.addEventListener('scroll', this.onScroll)
 
     this.refreshMyFiles(1)
+
+    window.addEventListener('beforeunload', () => {
+      this.saveContentsToStorage()
+    })
   },
   beforeDestroy() {
+    this.saveContentsToStorage()
+    
     if (this.editor)
       this.editor.destroy()
 
     window.removeEventListener('keydown', this.onKeyDown)
     if (this.isExtended)
       window.removeEventListener('scroll', this.onScroll)
-
-    if (this.storageKey) {
-      if (this.storageType === 'session') {
-        sessionStorage.setItem(this.storageKey, this.store.html)
-      } else {
-        localStorage.setItem(this.storageKey, this.store.html)
-      }
-    }
   },
   methods: {
     imageModalClose() {
@@ -511,6 +509,16 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    saveContentsToStorage() {
+      if (!this.storageKey)
+        return
+
+      if (this.storageType === 'session') {
+        sessionStorage.setItem(this.storageKey, this.store.html)
+      } else {
+        localStorage.setItem(this.storageKey, this.store.html)
+      }
     }
   },
   computed: {

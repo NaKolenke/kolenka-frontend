@@ -99,7 +99,7 @@ export default {
         }
       })
     },
-    createPost({ routes, auth }, title, text, url, draft, blogId) {
+    createPost({ routes, auth, posts }, title, text, url, draft, blogId) {
       return routes.createPost(title, text, url, draft, blogId, auth.getAccessToken()).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
@@ -157,7 +157,6 @@ export default {
         }
 
         posts.collect(res.posts, 'tag')
-
       })
     }
   }
