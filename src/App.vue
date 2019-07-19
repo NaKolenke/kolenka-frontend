@@ -8,13 +8,16 @@
           <router-view />
         </div>
 
-        <div v-if="showSidebar" id="sidebar" class="column col-3 col-md-12">
-          <router-view name="sidebar" />
+        <div v-if="showSidebar" id="sidebar" class="column col-3 col-md-12" style="position: relative">
+          <transition name="sidebar-fade" mode="in-out">
+            <router-view name="sidebar" />
+          </transition>
         </div>
       </div>
     </div>
 
     <vue-progress-bar />
+    <footer-component />
   </div>
 </template>
 
@@ -22,6 +25,7 @@
 import Vue from 'vue'
 import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
+import FooterComponent from '@/components/TheFooter.vue'
 import ToastPlugin from '@/plugins/toast'
 import LogPlugin from '@/plugins/log'
 import store from '@/library/index'
@@ -31,7 +35,9 @@ import '@/directives/validate'
 import df from '@/mixins/dataFetch'
 
 Vue.use(ScrollTo)
-Vue.use(ProgressBar)
+Vue.use(ProgressBar, {
+  color: '#fff'
+})
 Vue.use(ToastPlugin)
 Vue.use(LogPlugin)
 Vue.use(VueMeta, {
@@ -82,11 +88,30 @@ export default {
     }
   },
   components: {
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   },
   mixins: [ df ]
 }
 </script>
+
+<style scoped>
+.sidebar-fade-enter-active,
+.sidebar-fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: all;
+  transition-timing-function: ease;
+}
+
+.sidebar-fade-enter,
+.sidebar-fade-leave-active {
+  opacity: 0;
+}
+
+.sidebar-fade-leave-active {
+  position: absolute;
+}
+</style>
 
 <style lang="scss">
 
@@ -220,7 +245,13 @@ a:focus, a:hover, a:visited {
 }
 
 html, body {
-  height:100%;
+  height: 100%;
+}
+
+#app {
+  min-height: 100%;
+  position: relative;
+  padding-bottom: 32px;
 }
 </style>
 

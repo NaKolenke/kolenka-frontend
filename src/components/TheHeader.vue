@@ -10,7 +10,7 @@
         </router-link>
         <router-link to="/blogs">Блоги</router-link>
         <router-link to="/users">Люди</router-link>
-        <router-link to="/stream">Активность</router-link>
+        <router-link v-if="false" to="/stream">Активность</router-link>
         <router-link to="/search">Поиск</router-link>
       </section>
 

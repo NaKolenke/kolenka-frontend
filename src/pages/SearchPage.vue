@@ -1,37 +1,49 @@
 <template>
-  <div>
-    <h2>Поиск</h2>
-    <form @submit.prevent="send" class="panel mb-2">
-      <div class="panel-header">
-        <input class="form-input" type="text" placeholder="Введите запрос" v-model="model.query" autofocus />
-      </div>
-      
-      <div class="panel-body mb-2">
-        <div class="columns mt-2">
-          <div class="column col-lg-auto">
-            <div class="form-group">
-              <label class="form-radio form-inline">
-                <input type="radio" name="type" value="full" v-model="model.type" checked>
-                <i class="form-icon"></i> Везде
-              </label>
-              <label class="form-radio form-inline">
-                <input type="radio" name="type" value="post" v-model="model.type">
-                <i class="form-icon"></i> Посты
-              </label>
-              <label class="form-radio form-inline">
-                <input type="radio" name="type" value="blog" v-model="model.type">
-                <i class="form-icon"></i> Блоги
-              </label>
-              <label class="form-radio form-inline">
-                <input type="radio" name="type" value="user" v-model="model.type">
-                <i class="form-icon"></i> Пользователи
-              </label>
-            </div>
+  <div class="mt-2">
+    <div class="columns">
+      <form @submit.prevent="send" class="p-centered col-10 mb-2">
+        <div class="columns">
+
+          <div class="column col-auto">
+            <h2>Поиск</h2>
           </div>
-          <input class="btn btn-primary column col-2 mx-2" type="submit" value="Найти" />
+        
+          <div class="column col">
+            <div class="panel-header">
+              <input class="form-input input-lg" type="text" placeholder="Введите запрос" v-model="model.query" autofocus />
+            </div>
+            
+            <div class="panel-body mb-2">
+              <div class="columns mt-2">
+                <div class="column col-lg-auto">
+                  <div class="form-group">
+                    <label class="form-radio form-inline">
+                      <input type="radio" name="type" value="full" v-model="model.type" checked>
+                      <i class="form-icon"></i> Везде
+                    </label>
+                    <label class="form-radio form-inline">
+                      <input type="radio" name="type" value="post" v-model="model.type">
+                      <i class="form-icon"></i> Посты
+                    </label>
+                    <label class="form-radio form-inline">
+                      <input type="radio" name="type" value="blog" v-model="model.type">
+                      <i class="form-icon"></i> Блоги
+                    </label>
+                    <label class="form-radio form-inline">
+                      <input type="radio" name="type" value="user" v-model="model.type">
+                      <i class="form-icon"></i> Пользователи
+                    </label>
+                  </div>
+                </div>
+                <input class="btn btn-primary column col-2 mx-2" type="submit" value="Найти" />
+              </div>
+            </div>
+
+          </div>
+          
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
 
     <div v-if="model.type === 'full' && queryAvailable" class="columns col-12 mt-2">
       <div class="column col-6">
