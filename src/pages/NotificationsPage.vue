@@ -1,10 +1,18 @@
 <template>
-  <div v-if="notifications.length > 0">
-    <button class="btn btn-link" style="float: right" @click="markAllAsRead" :disabled="unread.length === 0">Отметить все как прочитанные</button>
-    <div class="clearfix"></div>
+  <div v-if="hasNotifications">
+    
+    <div class="columns">
+      <div class="column col-auto">
+        <h2 class="float-left">Уведомления</h2>
+      </div>
+      <div class="column col">
+        <button class="btn btn-link float-right" @click="markAllAsRead" :disabled="unread.length === 0">Отметить все как прочитанные</button>
+        <div class="clearfix"></div>
+      </div>
+    </div>
     
     <transition-group name="list" tag="div" appear>      
-      <div v-for="item in notifications.slice((page - 1) * perPage, perPage * page)" :key="item.id" class="tile tile-centered mb-2 mt-2 list-item">
+      <div v-for="item in notifications" :key="item.id" class="tile tile-centered mb-2 mt-2 list-item">
         <div class="tile-icon">
           <div class="btn btn-link">
             <i v-if="item.is_new" class="icon icon-flag centered"></i>
@@ -38,6 +46,7 @@
 
 <script>
 import PaginationView from '@/components/PaginationView.vue'
+import df from '@/mixins/dataFetch'
 
 export default {
   metaInfo() {
@@ -48,22 +57,26 @@ export default {
   data() {
     return {
       ...this.mapData({
-        notifications: 'notifications/everything',
+        notificationsSource: 'notifications/everything',
         unread: 'notifications/unread',
         auth: 'auth/data'
       }),
+      notifications: [],
       page: 1,
       pageCount: 1,
       perPage: 10
     }
   },
-  created() {
+  dataFetch() {
+    this.$Progress.start()
+    
     if (!this.auth.user) {
       this.$router.replace({ path: '/' })
-      return
+      this.$Progress.finish()
+      return Promise.resolve()
     }
-
-    this.refreshPage(this.$route)
+    
+    return this.refreshPage(this.$route).then(() => this.$Progress.finish())
   },
   beforeRouteUpdate (to, from, next) {
     this.refreshPage(to)
@@ -77,25 +90,27 @@ export default {
   methods: {
     refreshPage(route) {
       this.page = parseInt(route.query.page) || this.page
-
-      this.$notifications.getAll({ page: this.page, limit: this.perPage }).then(pages => {
+      this.$notifications.purge()
+      
+      return this.$notifications.getAll({ page: this.page, limit: this.perPage }).then(pages => {
         this.pageCount = pages
+        this.notifications = this.notificationsSource
       }).catch(err => {
-        console.log(err)
+        this.$log.error(err)
       })
     },
     markAsRead(id) {
-      this.$notifications.markAsRead([ id ]).then(() => {
-        // ...
-      }).catch(err => {
-        console.log(err)
+      this.$notifications
+      .markAsRead([ id ])
+      .catch(err => {
+        this.$log.error(err)
       })
     },
     markAllAsRead() {
-      this.$notifications.markAsRead(this.notifications.map(x => x.id)).then(() => {
-        // ...
-      }).catch(err => {
-        console.log(err)
+      this.$notifications
+      .markAsRead(this.notifications.map(x => x.id))
+      .catch(err => {
+        this.$log.error(err)
       })
     },
     paginateRelative (offset) {
@@ -105,9 +120,15 @@ export default {
       this.$router.push({ name: 'notifications', query: { page: page } })
     }
   },
+  computed: {
+    hasNotifications() {
+      return this.notifications.length > 0
+    }
+  },
   components: {
     PaginationView
-  }
+  },
+  mixins: [ df ]
 }
 </script>
 

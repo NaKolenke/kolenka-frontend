@@ -75,6 +75,11 @@ const routes = [
     components: {
       default: SearchPage,
       sidebar: DefaultSidebar
+    },
+    props: {
+      sidebar: {
+        hide: true
+      }
     }
   },
   {

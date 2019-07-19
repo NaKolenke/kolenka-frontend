@@ -1,10 +1,14 @@
 <template>
-  <div v-if="isLoading">
-    <post-skeleton v-for="i in 10" :key="i" />
-  </div>
-  <div v-else>
-    <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
-    <pagination-view :page="page" :page-count="pageCount"></pagination-view>
+  <div>
+    <transition name="fade">
+      <div v-if="isLoading">
+        <post-skeleton v-for="i in 10" :key="i" />
+      </div>
+    </transition>
+    <div v-if="!isLoading">
+      <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
+      <pagination-view :page="page" :page-count="pageCount"></pagination-view>
+    </div>
   </div>
 </template>
 
@@ -12,6 +16,7 @@
 import PostView from '@/components/PostView.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
+import df from '@/mixins/dataFetch'
 
 export default {
   metaInfo() {
@@ -29,7 +34,7 @@ export default {
       isLoading: true
     }
   },
-  mounted () {
+  created () {
     this.refreshPage(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
@@ -60,6 +65,11 @@ export default {
     PostView,
     PaginationView,
     PostSkeleton
-  }
+  },
+  mixins: [ df ]
 }
 </script>
+
+<style lang="scss" scoped>
+@import './../assets/transitions';
+</style>

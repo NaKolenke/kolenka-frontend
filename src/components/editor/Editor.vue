@@ -147,7 +147,7 @@
 
         <span v-if="isExtended" class="span"></span>
 
-        <editor-button name="Горизонтальная линия" @command="commands.horizontal_rule" :floats="menuBarFloats">
+        <editor-button v-if="isExtended" name="Горизонтальная линия" @command="commands.horizontal_rule" :floats="menuBarFloats">
           <span class="icon-page-break"></span>
         </editor-button>
 
