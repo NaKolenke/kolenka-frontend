@@ -118,7 +118,7 @@ export default {
       }
 
       this.$auth
-      .register(this.username, this.name, this.email, this.password)
+      .register(this.username, this.email, this.name, this.password)
       .then(() => {
         this.$toast.show('Регистрация успешна')
         this.$router.replace({ path: '/' })

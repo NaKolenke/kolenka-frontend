@@ -20,6 +20,11 @@ export default {
         password
       })
     },
+    recover(request, email) {
+      return request.post('users/recover-password/', {
+        email
+      })
+    },
     isTokenValid(request, token) {
       return request.post('tokens/validate/', {
         token
@@ -68,6 +73,13 @@ export default {
     },
     register({ routes }, username, email, name, password) {
       return routes.register(username, email, name, password).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+      })
+    },
+    recover({ routes }, email) {
+      return routes.recover(email).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }

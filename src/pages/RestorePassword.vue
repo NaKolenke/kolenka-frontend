@@ -64,7 +64,16 @@ export default {
         this.validation.showErrors = false
       }
       
-      this.$toast.show('Эта функция находится в разработке!')
+      this.$auth
+      .recover(this.email)
+      .then(() => {
+        this.$toast.show('Ссылка для восстановления пароля отправлена на указанную почту')
+        this.$router.replace({ path: '/' })
+      })
+      .catch(err => {
+        console.log(err)
+        this.$toast.error('Ошибка восстановления пароля')
+      })
     }
   },
   computed: {
