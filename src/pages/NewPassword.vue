@@ -3,23 +3,34 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Восстановление пароля</h1>
-        <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !validation.email.success }">
+        <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !validation.password.success }">
           <div class="form-group">
-            <label class="form-label" for="email">Адрес электронной почты</label>
+            <label class="form-label" for="password">Новый пароль</label>
             <input
-              type="email"
+              type="password"
               class="form-input"
-              v-model="email"
-              v-validate="validation.email"
-              name="email"
-              id="email"
-              inputmode="email"
+              v-model="password"
+              v-validate="validation.password"
+              name="password"
+              id="password"
               required
             >
-            <div class="form-input-hint" v-if="!validation.email.success && validation.showErrors">Неверный адрес электронной почты</div>
+            <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Ошибка валидации пароля</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn primary" value="Отправить">
+           <div class="form-group">
+            <label class="form-label" for="password_repeat">Повторите новый пароль</label>
+            <input
+              type="password"
+              class="form-input"
+              v-model="password_repeat"
+              name="password_repeat"
+              id="password_repeat"
+              required
+            >
+          </div>
+
+          <input type="submit" id="login-btn" class="btn primary" value="Установить новый пароль">
         </form>
 
         <br>
@@ -45,11 +56,13 @@ export default {
       ...this.mapData({
         auth: 'auth/data'
       }),
-      email: '',
+      password: '',
+      password_repeat: '',
       validation: {
-        email: {
-          length: () => this.email.length >= 5,
-          isEmail: () => /\S+@\S+\.\S+/.test(this.email)
+        password: {
+          length: () => this.password.length >= 8,
+          sameAsRepeated: () => this.password == this.password_repeat,
+          strong: () => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.password)
         },
         showErrors: false
       }
