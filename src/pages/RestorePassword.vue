@@ -1,17 +1,17 @@
 <template>
-  <div class="container" style="margin-top: 20%;">
+  <div class="container" style="margin-top: 5%;">
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Восстановление пароля</h1>
         <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !validation.email.success }">
           <div class="form-group">
             <label class="form-label" for="email">Адрес электронной почты</label>
-            <input 
+            <input
               type="email"
-              class="form-input" 
+              class="form-input"
               v-model="email"
               v-validate="validation.email"
-              name="email" 
+              name="email"
               id="email"
               inputmode="email"
               required
@@ -21,7 +21,7 @@
 
           <input type="submit" id="login-btn" class="btn primary" value="Отправить">
         </form>
-        
+
         <br>
         <p>
           Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link>
@@ -63,8 +63,17 @@ export default {
       } else {
         this.validation.showErrors = false
       }
-      
-      this.$toast.show('Эта функция находится в разработке!')
+
+      this.$auth
+      .recover(this.email)
+      .then(() => {
+        this.$toast.show('Ссылка для восстановления пароля отправлена на указанную почту')
+        this.$router.replace({ path: '/' })
+      })
+      .catch(err => {
+        console.log(err)
+        this.$toast.error('Ошибка восстановления пароля')
+      })
     }
   },
   computed: {

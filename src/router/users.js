@@ -1,6 +1,7 @@
 import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import RestorePasswordPage from '@/pages/RestorePassword.vue'
+import NewPasswordPage from '@/pages/NewPassword.vue'
 import ProfilePage from '@/pages/ProfilePage.vue'
 import ProfileEditPage from '@/pages/ProfileEditPage.vue'
 import ProfilesListPage from '@/pages/ProfilesListPage.vue'
@@ -37,6 +38,18 @@ export default [
     path: '/restore',
     components: {
       default: RestorePasswordPage,
+      sidebar: DefaultSidebar
+    },
+    props: {
+      sidebar: {
+        hide: true
+      }
+    }
+  },
+  {
+    path: '/recover-pass',
+    components: {
+      default: NewPasswordPage,
       sidebar: DefaultSidebar
     },
     props: {
