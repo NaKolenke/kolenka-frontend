@@ -25,6 +25,12 @@ export default {
         email
       })
     },
+    setPassword(request, password, token) {
+      return request.post('users/new-password/', {
+        password,
+        token
+      })
+    },
     isTokenValid(request, token) {
       return request.post('tokens/validate/', {
         token
@@ -80,6 +86,13 @@ export default {
     },
     recover({ routes }, email) {
       return routes.recover(email).then(res => {
+        if (res.success !== 1) {
+          return Promise.reject()
+        }
+      })
+    },
+    setPassword({ routes }, password, token) {
+      return routes.setPassword(password, token).then(res => {
         if (res.success !== 1) {
           return Promise.reject()
         }

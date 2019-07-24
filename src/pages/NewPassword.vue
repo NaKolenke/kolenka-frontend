@@ -3,7 +3,10 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Восстановление пароля</h1>
-        <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !validation.password.success }">
+        <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !isValid }">
+          <p>Пароль должен отвечать следующим требованиям: <br>
+            * Длина пароля должна быть не менее 8 символов.<br>
+            * Пароль должен состоять из букв латинского алфавита (A-z) и арабских цифр (0-9).</p>
           <div class="form-group">
             <label class="form-label" for="password">Новый пароль</label>
             <input
@@ -19,15 +22,17 @@
           </div>
 
            <div class="form-group">
-            <label class="form-label" for="password_repeat">Повторите новый пароль</label>
+            <label class="form-label" for="repeat">Повторите новый пароль</label>
             <input
               type="password"
               class="form-input"
-              v-model="password_repeat"
-              name="password_repeat"
-              id="password_repeat"
+              v-model="repeat"
+              v-validate="validation.repeat"
+              name="repeat"
+              id="repeat"
               required
             >
+            <div class="form-input-hint" v-if="!validation.repeat.success && validation.showErrors">Пароли не совпадают</div>
           </div>
 
           <input type="submit" id="login-btn" class="btn primary" value="Установить новый пароль">
@@ -57,12 +62,14 @@ export default {
         auth: 'auth/data'
       }),
       password: '',
-      password_repeat: '',
+      repeat: '',
       validation: {
         password: {
           length: () => this.password.length >= 8,
-          sameAsRepeated: () => this.password == this.password_repeat,
           strong: () => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.password)
+        },
+        repeat: {
+          sameAsRepeated: () => this.password == this.repeat
         },
         showErrors: false
       }
@@ -76,22 +83,22 @@ export default {
       } else {
         this.validation.showErrors = false
       }
-
+      
       this.$auth
-      .recover(this.email)
+      .setPassword(this.password, this.$route.query.token)
       .then(() => {
-        this.$toast.show('Ссылка для восстановления пароля отправлена на указанную почту')
+        this.$toast.show('Ваш пароль успешно изменен')
         this.$router.replace({ path: '/' })
       })
       .catch(err => {
         console.log(err)
-        this.$toast.error('Ошибка восстановления пароля')
+        this.$toast.error('Ошибка при изменении пароля')
       })
     }
   },
   computed: {
     isValid() {
-      return this.validation.email.success
+      return this.validation.password.success && this.validation.repeat.success
     }
   }
 }
