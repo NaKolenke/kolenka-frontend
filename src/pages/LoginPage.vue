@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-top: 20%;">
+  <div class="container" style="margin-top: 5%;">
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Войти</h1>

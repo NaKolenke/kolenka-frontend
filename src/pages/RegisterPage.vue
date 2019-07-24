@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-top: 15%;">
+  <div class="container" style="margin-top: 5%;">
     <div class="columns">
       <div class="column col-6 col-mx-auto col-md-12">
         <h1>Регистрация</h1>
@@ -118,7 +118,7 @@ export default {
       }
 
       this.$auth
-      .register(this.username, this.name, this.email, this.password)
+      .register(this.username, this.email, this.name, this.password)
       .then(() => {
         this.$toast.show('Регистрация успешна')
         this.$router.replace({ path: '/' })
