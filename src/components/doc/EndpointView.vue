@@ -32,7 +32,9 @@
 
 <script>
 export default {
-  props: ['endpoint']
+  props: {
+    endpoint: Object
+  }
 }
 </script>
 

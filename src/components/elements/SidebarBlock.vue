@@ -13,8 +13,8 @@
 <script>
 export default {
   props: {
-    title: String,
-    highlight: Boolean
+    title: String, // Title of the block
+    highlight: Boolean // Hightlight block with a border
   }
 }
 </script>

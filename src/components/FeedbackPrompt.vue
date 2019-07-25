@@ -39,7 +39,7 @@ export default {
         this.$toast.show('Ваш отзыв отправлен')
       })
       .catch(err => {
-        console.log(err)
+        this.$log.error(err)
         this.$toast.show('Произошла ошибка при отправке отзыва, напишите об этом одному из разработчиков')
       })
     }

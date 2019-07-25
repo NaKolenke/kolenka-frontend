@@ -9,8 +9,8 @@
 <script>
 export default {
   props: {
-    title: String,
-    active: Boolean
+    title: String, // Tab title
+    active: Boolean // If tab is active
   },
   data() {
     return {

@@ -30,14 +30,14 @@
 <script>
 export default {
   props: {
-    user: Object,
-    size: String,
+    user: Object, // User object
+    size: String, // Size of image: sm, lg, xl
     card: {
       type: Boolean,
-      default: true
+      default: true // Show user info card
     },
-    badge: [ String, Number, Boolean ],
-    header: Boolean
+    badge: [ String, Number, Boolean ], // Show small badge
+    header: Boolean // If we are inside the header
   },
   computed: {
     isSmall () {

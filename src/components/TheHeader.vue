@@ -86,9 +86,7 @@ export default {
   props: {
     version: String,
   },
-  created() {
-    //if (this.$route)
-    
+  created() {    
     this.refreshFeedbackTooltip()
   },
   methods: {
@@ -102,7 +100,7 @@ export default {
             this.feedbackTooltip = 'Нет новых отзывов'
           }
         }).catch(err => {
-          console.log(err)
+          this.$log.error(err)
           this.feedbackTooltip = 'Не удалось получить список отзывов'
         })
       } else {

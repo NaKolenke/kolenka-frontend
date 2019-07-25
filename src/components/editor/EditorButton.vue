@@ -22,7 +22,8 @@
 
 <script>
 /*
-  Events: @command
+  Events:
+    @command
 */
 
 export default {
@@ -49,7 +50,6 @@ export default {
 
 .button:hover,
 .button.is-active {
-  //background: #cecece;
   background: $primary-color;
   color: $secondary-color;
 }

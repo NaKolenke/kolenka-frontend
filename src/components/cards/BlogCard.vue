@@ -69,39 +69,34 @@ export default {
       posts: []
     }
   },
-  mounted () {    
+  mounted() {
     if (this.preview)
-      this.refresh()      
+      this.refresh()
   },
   methods: {
-    refresh () {
+    refresh() {
       if (!this.blog.url)
         return
       
       this.$posts.getBlogPosts(this.blog.url, { limit: 2 }).then(posts => {
         this.posts = posts.data
       }).catch(err => {
-        console.log(err)
+        this.$log.error(err)
       })
     },
-    joinBlog () {
+    joinBlog() {
       this.$blogs.joinBlog(this.blog.url).then(() => {
         this.$toast.show(`Успешно присоединились к блогу "${this.blog.title}"`)
         this.$blogs.collect(this.blog, 'my')
       }).catch(err => {
-        console.log(err)
+        this.$log.error(err)
         this.$toast.error('Произошла ошибка')
       })
     }
   },
   computed: {
-    contains () {      
-      for (let item of this.blogs) {
-        if (item.id === this.blog.id) {
-          return true
-        }
-      }
-      return false
+    contains() {      
+      return !!this.blogs.find(x => x.id === this.blog.id)
     }
   },
   components: {

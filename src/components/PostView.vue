@@ -56,7 +56,10 @@ import wrapYoutube from '@/utils/wrapYoutube'
 import resizeTweet from '@/utils/resizeTweet'
 
 export default {
-  props: ['post', 'cut'],
+  props: {
+    post: Object, // Post object
+    cut: Boolean // Show cut
+  },
   data() {
     return {
       ...this.mapData({
