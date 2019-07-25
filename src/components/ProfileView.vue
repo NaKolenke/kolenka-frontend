@@ -23,7 +23,10 @@
 import Avatar from '@/components/elements/Avatar.vue'
 
 export default {
-  props: ['user', 'canEdit'],
+  props: {
+    user: Object, // User object
+    canEdit: Boolean // If current user can edit the profile
+  },
   components: {
     Avatar
   }

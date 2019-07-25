@@ -286,6 +286,7 @@ import EditorButton from '@/components/editor/EditorButton.vue'
 import Tabs from '@/components/elements/Tabs.vue'
 import Tab from '@/components/elements/Tab.vue'
 import PaginationView from '@/components/PaginationView.vue'
+import Stickers from '@/editor/node/Stickers'
 
 export default {
   props: {
@@ -362,7 +363,15 @@ export default {
         new Image(),
         new ImageExtended(),
         new CBExtended(),
-        new Iframe()
+        new Iframe(),
+        new Stickers({
+          items: () => [
+            { id: 1, name: 'Philipp Kühn' },
+            { id: 2, name: 'Hans Pagel' },
+            { id: 3, name: 'Kris Siepert' },
+            { id: 4, name: 'Justin Schueler' }
+          ]
+        })
       ],
       onFocus() {
         self.isFocused = true
@@ -375,7 +384,7 @@ export default {
         self.store.text = self.editor.state.doc.textContent
         self.store.length = self.store.text.length
       },
-      content: this.storageValue() || '<p></p>'
+      content: this.storageValue() || ''
     }
 
     if (this.limit > 0) {

@@ -46,7 +46,7 @@
 <script>
 /**
  * Events:
- *  complete - when all files were uploaded. Gets uploaded file array
+ *  @complete - when all files were uploaded. Gets uploaded file array
  */
 
 export default {
@@ -146,7 +146,7 @@ export default {
           output.push(file)
         })
         .catch(err => {
-          console.log(err)
+          this.$log.error(err)
           previewItem.uploading = false
         })
       })
@@ -175,4 +175,3 @@ export default {
 	z-index: -1;
 }
 </style>
-

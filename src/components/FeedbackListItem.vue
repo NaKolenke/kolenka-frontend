@@ -33,7 +33,7 @@ export default {
         this.$toast.show('Готово!')
       })
       .catch(err => {
-        console.log(err)
+        this.$log.error(err)
         this.$toast.show('Произошла ошибка при отправке запроса, напишите об этом одному из разработчиков')
       })        
     }

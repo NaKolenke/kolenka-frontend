@@ -1,7 +1,7 @@
 <template>
   <div class="popover popover-right">
     <router-link :to="{ name: 'profile', params: { user: user ? user.username : null }}">
-      <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'avatar-xl': isXl, 'badge': badge, 'av-badge': header }" :data-badge="badge">
+      <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'avatar-xl': isXl, 'badge': !!badge, 'av-badge': header }" :data-badge="badge">
         <img
           v-if="user && user.avatar"
           :src="contentUrl"
@@ -30,14 +30,14 @@
 <script>
 export default {
   props: {
-    user: Object,
-    size: String,
+    user: Object, // User object
+    size: String, // Size of image: sm, lg, xl
     card: {
       type: Boolean,
-      default: true
+      default: true // Show user info card
     },
-    badge: {},
-    header: Boolean
+    badge: [ String, Number, Boolean ], // Show small badge
+    header: Boolean // If we are inside the header
   },
   computed: {
     isSmall () {
@@ -61,6 +61,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../../node_modules/spectre.css/src/_variables.scss';
+
+.av-badge[data-badge]::after {
+  color: $dark-color;
+  font-size: $unit-3;
+  font-weight: bold;
+}
 
 .av-badge[data-badge]::after,
 .av-badge:not([data-badge])::after {

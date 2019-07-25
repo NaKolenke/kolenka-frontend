@@ -18,6 +18,11 @@
 </template>
 
 <script>
+/*
+  Events:
+    @paginate-relative
+    @paginate-to
+*/
 export default {
   props: ['page', 'pageCount'],
   methods: {

@@ -1,37 +1,52 @@
 <template>
   <span
-    style="position: relative; display: inline-block;"
+    class="container"
     @dragstart="dragStart"
     :style="{ width: width + 'px', height: height + 'px' }"
   >
     <img :src="src" :alt="alt" :title="title" :class="{ 'active': selected }" :width="width" :height="height" />
     <div v-if="selected" class="controls">
-      <div class="point top left" style="cursor: nw-resize" @mousedown.prevent.stop="onMouseDown" ></div>
-      <div class="point top right" style="cursor: ne-resize" @mousedown.prevent.stop="onMouseDown" ></div>
-      <div class="point bottom left" style="cursor: sw-resize" @mousedown.prevent.stop="onMouseDown" ></div>
-      <div class="point bottom right" style="cursor: se-resize" @mousedown.prevent.stop="onMouseDown" ></div>
-      <div v-if="width !== originalWidth || height !== originalHeight" class="btn btn-secondary btn-sm reset" @click="reset">Сбросить</div>
+      <div class="point top left" style="cursor: nw-resize" @mousedown.prevent.stop="onMouseDown"></div>
+      <div class="point top right" style="cursor: ne-resize" @mousedown.prevent.stop="onMouseDown"></div>
+      <div class="point bottom left" style="cursor: sw-resize" @mousedown.prevent.stop="onMouseDown"></div>
+      <div class="point bottom right" style="cursor: se-resize" @mousedown.prevent.stop="onMouseDown"></div>
+      <div class="buttons btn-group">
+        <button class="btn btn-secondary btn-sm tooltip" @click="openInfoModal" data-tooltip="Редактировать инфо"><i class="icon icon-edit"></i></button>
+        <button v-if="width !== originalWidth || height !== originalHeight" class="btn btn-secondary btn-sm tooltip" @click="reset" data-tooltip="Сбросить размер"><i class="icon icon-cross"></i></button>
+      </div>
     </div>
+    <modal title="Информация об изображении" ref="infoModal" @ok="$refs.infoModal.close()">
+      <div class="form-group">
+        <label class="form-label" for="input-1">Название</label>
+        <input class="form-input" type="text" id="input-1" v-model="title">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="input-2">Альтернативный текст</label>
+        <input class="form-input" type="text" id="input-2" v-model="alt">
+      </div>
+    </modal>
   </span>
 </template>
 
 <script>
 import { getImageSize } from '@/utils/vanilla'
+import Modal from '@/components/elements/Modal.vue'
 
 export default {
   props: ['node', 'updateAttrs', 'editable', 'selected'],
-  data: () => ({
-    imageRef: null,
-    isDragging: false,
-    currentPos: null,
-    width: 0,
-    height: 0,
-    ratio: 0,
-    originalWidth: 0,
-    originalHeight: 0,
-    onMouseUp: null,
-    onMouseMove: null
-  }),
+  data () {
+    return {
+      isDragging: false,
+      currentPos: null,
+      width: 0,
+      height: 0,
+      ratio: 0,
+      originalWidth: 0,
+      originalHeight: 0,
+      onMouseUp: null,
+      onMouseMove: null
+    }
+  },
   mounted() {
     if (this.node.attrs.height && this.node.attrs.width) {
       this.width = parseInt(this.node.attrs.width)
@@ -111,6 +126,9 @@ export default {
     reset() {
       this.width = this.originalWidth
       this.height = this.originalHeight
+    },
+    openInfoModal() {
+      this.$refs.infoModal.openModal()
     }
   },
   computed: {
@@ -119,7 +137,7 @@ export default {
         return this.node.attrs.src
       },
       set(src) {
-        return this.updateAttrs({ src })
+        this.updateAttrs({ src })
       }
     },
     alt: {
@@ -127,7 +145,7 @@ export default {
         return this.node.attrs.alt
       },
       set(alt) {
-        return this.updateAttrs({ alt })
+        this.updateAttrs({ alt })
       }
     },
     title: {
@@ -135,20 +153,24 @@ export default {
         return this.node.attrs.title
       },
       set(title) {
-        return this.updateAttrs({ title })
+        this.updateAttrs({ title })
       }
     }
+  },
+  components: {
+    Modal
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.active {
-  border: 1px dashed blueviolet;
+.container {
+  position: relative;
+  display: inline-block;
 }
 
-.controls {
- 
+.active {
+  border: 1px dashed blueviolet;
 }
 
 .point {
@@ -175,9 +197,9 @@ export default {
   right: 0;
 }
 
-.controls .reset {
+.controls .buttons {
   position: absolute;
-  right: 8px;
+  right: 16px;
   bottom: 16px;
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <!-- Если это нигде не юзается, надо убрать -->
   <div class="empty">
     <p class="empty-title h5">Загружаем</p>
     <p class="empty-subtitle">Скоро будет готово</p>

@@ -40,9 +40,9 @@ export default {
   methods: {
     refreshFeedbacks () {
       this.$feedback.getList().then(data => {
-        this.feedbacks = data
+        this.feedbacks = data.feedback
       }).catch(err => {
-        console.log(err)
+        this.$log.error(err)
 
         this.$router.replace({ path: '/401' })
       })

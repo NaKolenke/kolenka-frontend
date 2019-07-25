@@ -6,11 +6,13 @@
         <a class="btn btn-clear float-right" aria-label="Close" @click.prevent="close"></a>
         <div class="modal-title h5" v-if="title">{{ title }}</div>
       </div>
+
       <div class="modal-body">
         <div class="content">
           <slot></slot>
         </div>
       </div>
+
       <div class="modal-footer">
         <div v-if="!hideButtons" class="btn-group">
           <button class="btn btn-primary" @click="onOk">OK</button>
@@ -22,13 +24,21 @@
 </template>
 
 <script>
+/*
+  Events:
+    @ok
+    @cancel
+  Methods:
+    openModal()
+    close()
+*/
 export default {
   props: {
-    open: Boolean,
-    closed: Function,
-    title: String,
-    size: String,
-    hideButtons: Boolean
+    open: Boolean, // To open or close modal
+    closed: Function, // Called when modal is closed
+    title: String, // Title of the modal
+    size: String, // Size: sm, lg
+    hideButtons: Boolean // Hide "ok" and "cancel" buttons
   },
   data() {
     return {
@@ -38,7 +48,7 @@ export default {
   methods: {
     close() {
       this.isOpen = false
-      if (this.closed) {
+      if (typeof this.closed === 'function') {
         this.closed()
       }
     },
@@ -48,6 +58,9 @@ export default {
     onCancel() {
       this.$emit('cancel')
       this.close()
+    },
+    openModal() {
+      this.isOpen = true
     }
   },
   watch: {

@@ -12,15 +12,22 @@
             <br>
             <small class="text-gray">{{ comment.created_date | moment}} <a :href="'#' + commentId" title="Ссылка на комментарий">#</a></small>
           </div>
-          <div class="tile-subtitle mt-1 comment-body" v-html="comment.text"></div>
-          <small class="p-absolute" style="right: 0;bottom: 0" v-if="!isReplying">
-            <button class="reply tooltip" data-tooltip="Ответить" @click="reply">
-              <span class="icon-bubble2"></span>
-            </button>
-          </small>
+
+          <div class="tile-subtitle">
+            <div class="mt-1 comment-body" v-html="comment.text"></div>
+            <small class="float-right" v-if="!isReplying">
+              <button class="reply tooltip" data-tooltip="Ответить" @click="reply">
+                <span class="icon-bubble2"></span>
+              </button>
+            </small>
+            <div class="clearfix"></div>
+          </div>
+
           <div class="panel mt-2 mb-2" v-if="isReplying">
             <div class="panel-header h6">Ответ <button class="btn btn-link btn-sm float-right tooltip" @click="cancelReply" data-tooltip="Отменить"><i class="icon icon-cross"></i></button></div>
-            <div class="panel-body" style="overflow:visible"><comment-form :post-url="postUrl" :parent-id="comment.id" @sent="commentSent"></comment-form></div>
+            <div class="panel-body" style="overflow:visible">
+              <comment-form :post-url="postUrl" :parent-id="comment.id" @sent="commentSent" />
+            </div>
             <div class="panel-footer"></div>
           </div>
         </div>
@@ -108,7 +115,6 @@ export default {
 }
 
 .comment-body img {
-  width: auto !important;
   max-width: 100%;
 }
 

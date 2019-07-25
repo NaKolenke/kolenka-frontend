@@ -29,7 +29,7 @@
           <div class="dropdown">
             <div class="btn-group">
               <router-link :to="{ name: 'profile', params: { user: auth.user.username }}" class="btn btn-link text-secondary">
-                <avatar :user="auth.user" size="sm" :card="false" :badge="notifications.length > 0" :header="true" />
+                <avatar :user="auth.user" size="sm" :card="false" :badge="notifications.length" :header="true" />
                 {{ auth.user.name || auth.user.username }}
               </router-link>
 
@@ -86,9 +86,7 @@ export default {
   props: {
     version: String,
   },
-  created() {
-    //if (this.$route)
-    
+  created() {    
     this.refreshFeedbackTooltip()
   },
   methods: {
@@ -102,7 +100,7 @@ export default {
             this.feedbackTooltip = 'Нет новых отзывов'
           }
         }).catch(err => {
-          console.log(err)
+          this.$log.error(err)
           this.feedbackTooltip = 'Не удалось получить список отзывов'
         })
       } else {

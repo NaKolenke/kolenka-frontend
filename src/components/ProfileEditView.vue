@@ -86,7 +86,7 @@ export default {
         },
         email: {
           length: () => this.user.email.length >= 5,
-          isEmail: () => /\S+@\S+\.\S+/.test(this.user.email)
+          isEmail: () => /\S+@\S+\.\S+/.test(this.user.email) // Broad check
         }
       }
     }
@@ -123,8 +123,8 @@ export default {
 
         this.$auth.data.user = res.user
       }).catch(err => {
+        this.$log.error(err)
         this.$toast.show('Не удалось изменить аватар')
-        console.log(err)
       })
     }
   },

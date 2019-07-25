@@ -19,12 +19,16 @@
 <script>
 import Editor from '@/components/editor/Editor.vue'
 
+/*
+  Events:
+    @sent - called when a comment is sent
+*/
+
 export default {
-  props: [ 
-    'postUrl', 
-    'action', 
-    'parentId' 
-  ],
+  props: {
+    postUrl: String, // Url of the post the comment in
+    parentId: Number // Parent comment id
+  },
   data() {
     return {
       isSending: false,
@@ -37,10 +41,15 @@ export default {
   methods: {
     send() {
       this.isSending = true
-      this.$comments.sendComment(this.postUrl, this.store.html, this.parentId).then(comment => {
+      this.$comments
+      .sendComment(this.postUrl, this.store.html, this.parentId)
+      .then(comment => {
         this.isSending = false
         this.$refs.editor.setContent('')
         this.$emit('sent', comment.id)
+      })
+      .catch(err => {
+        this.$log.error(err)
       })
     }
   },
