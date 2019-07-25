@@ -29,7 +29,7 @@
           <div class="dropdown">
             <div class="btn-group">
               <router-link :to="{ name: 'profile', params: { user: auth.user.username }}" class="btn btn-link text-secondary">
-                <avatar :user="auth.user" size="sm" :card="false" :badge="notifications.length > 0" :header="true" />
+                <avatar :user="auth.user" size="sm" :card="false" :badge="notifications.length" :header="true" />
                 {{ auth.user.name || auth.user.username }}
               </router-link>
 

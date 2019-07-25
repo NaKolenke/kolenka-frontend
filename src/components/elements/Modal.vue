@@ -22,6 +22,14 @@
 </template>
 
 <script>
+/*
+  Events:
+    @ok
+    @cancel
+  Methods:
+    openModal()
+    close()
+*/
 export default {
   props: {
     open: Boolean,
@@ -38,7 +46,7 @@ export default {
   methods: {
     close() {
       this.isOpen = false
-      if (this.closed) {
+      if (typeof this.closed === 'function') {
         this.closed()
       }
     },
@@ -48,6 +56,9 @@ export default {
     onCancel() {
       this.$emit('cancel')
       this.close()
+    },
+    openModal() {
+      this.isOpen = true
     }
   },
   watch: {

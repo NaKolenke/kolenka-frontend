@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="tile-content">
-          <div class="tile-title">{{ item.text }}</div>
+          <div class="tile-title" v-html="item.text"></div>
           <small class="tile-subtitle text-gray">{{ item.created_date | moment }}</small>
         </div>
         <div v-if="item.is_new" class="tile-action">

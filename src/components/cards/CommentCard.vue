@@ -108,7 +108,6 @@ export default {
 }
 
 .comment-body img {
-  width: auto !important;
   max-width: 100%;
 }
 

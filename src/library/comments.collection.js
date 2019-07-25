@@ -35,7 +35,7 @@ export default {
     sendComment({ throttle, routes, auth, groups, actions, comments }, post, message, parent) {
       throttle(1000)
 
-      return routes.postComment(post, message, parent, auth.accessToken.token).then(res => {
+      return routes.postComment(post, message, parent, auth.getAccessToken()).then(res => {
         if (parent) {
           for (let item of groups.everything) {
             let found = actions.findParent(item, parent)

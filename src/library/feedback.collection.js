@@ -38,7 +38,7 @@ export default {
       })
     },
     getList({ routes, auth }) {
-      routes.getList(auth.accessToken.token).then(res => {
+      return routes.getList(auth.accessToken.token).then(res => {
         if (res.success !== 1) {
           return Promise.reject(res.error)
         }
