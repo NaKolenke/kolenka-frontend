@@ -157,6 +157,7 @@ export default {
         }
 
         posts.collect(res.posts, 'tag')
+        return res
       })
     }
   }

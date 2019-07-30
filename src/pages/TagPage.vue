@@ -44,8 +44,8 @@ export default {
       this.page = parseInt(route.query.page) || this.page
 
       this.$posts
-      .getPostsByTag(route.params.title, this.page).then(pages => {
-        this.pageCount = pages
+      .getPostsByTag(route.params.title, this.page).then(posts => {
+        this.pageCount = posts.meta.page_count
         this.isLoading = false
       })
       .catch(err => {
