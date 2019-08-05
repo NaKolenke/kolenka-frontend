@@ -33,8 +33,9 @@ npm run lint
 
 ### Релиз
 ```
-TYPE=patch MESSAGE="Описание релиза" npm run release
+./release.sh patch "Описание релиза"
 ```
+Вместо patch может быть major и minor. См [semver](https://semver.org/)
 
 ### Customize configuration
 Для получения детальной информации о том, что тут происходит, смотри [Configuration Reference](https://cli.vuejs.org/config/).
