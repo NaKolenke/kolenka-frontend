@@ -1,3 +1,5 @@
 #!/bin/sh
 
-TYPE=$1 MESSAGE=$2 npm run release
+vue-cli-service build
+npm version $1 -m "$2" 
+git push && git push --tags
