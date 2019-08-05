@@ -31,6 +31,14 @@ npm run test
 npm run lint
 ```
 
+### Релиз
+```
+npm run release-patch
+npm version [ major | minor | patch ] -m "Сообщение релиза"
+
+git push --follow-tags
+```
+
 ### Customize configuration
 Для получения детальной информации о том, что тут происходит, смотри [Configuration Reference](https://cli.vuejs.org/config/).
 
