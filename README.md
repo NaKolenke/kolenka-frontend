@@ -33,10 +33,7 @@ npm run lint
 
 ### Релиз
 ```
-npm run release-patch
-npm version [ major | minor | patch ] -m "Сообщение релиза"
-
-git push --follow-tags
+TYPE=patch MESSAGE="Описание релиза" npm run release
 ```
 
 ### Customize configuration

@@ -7,8 +7,7 @@
     "serve:prod": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build --mode staging && npm version patch --no-git-tag-version",
     "build-prod": "vue-cli-service build && npm version patch --no-git-tag-version",
-    "release-patch": "vue-cli-service build && npm version patch -m $MESSAGE && git push --tags",
-    "release": "npm version $TYPE -m \"$MESSAGE\" && git push --tags",
+    "release": "vue-cli-service build && npm version $TYPE -m \"$MESSAGE\" && git push && git push --tags",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
