@@ -11,6 +11,7 @@ import tags from './tags.collection'
 import notifications from './notifications.collection'
 import search from './search.collection'
 import stickers from './stickers.collection'
+import admin from './admin.collection'
 
 const store = new Pulse.Library({
   request: {
@@ -31,7 +32,8 @@ const store = new Pulse.Library({
     tags,
     notifications,
     search,
-    stickers
+    stickers,
+    admin
   }
 })
 

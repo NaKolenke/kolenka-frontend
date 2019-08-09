@@ -26,7 +26,7 @@
         </template>
 
         <template v-if="auth.user">
-          <div class="dropdown">
+          <div class="dropdown dropdown-right">
             <div class="btn-group">
               <router-link :to="{ name: 'profile', params: { user: auth.user.username }}" class="btn btn-link text-secondary">
                 <avatar :user="auth.user" size="sm" :card="false" :badge="notifications.length" :header="true" />
@@ -114,10 +114,10 @@ export default {
   },
   computed: {
     isAdmin: function () {
-      if (!this.user) {
+      if (!this.auth.user) {
         return false
       }
-      return this.user.is_admin
+      return this.auth.user.is_admin
     },
     isLocal() {
       return window.location.hostname === 'localhost'
@@ -164,5 +164,9 @@ header a {
 
 .icon {
   margin-right: 4px;
+}
+
+.menu {
+  min-width: 240px;
 }
 </style>
