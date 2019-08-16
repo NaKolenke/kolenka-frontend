@@ -11,12 +11,20 @@
     <hr/>
     <div class="columns">
       <div class="column col-8 col-md-2">
-        <sticker v-for="s in stickers" :key="s.id" :id="s.id" :name="s.name"></sticker>
+        <sticker v-for="s in stickers" :key="s.id" :id="s.id" :fileId="s.file.id" :name="s.name" :showName="true"></sticker>
       </div>
       <div class="column col-4 col-md-2">
-        <image-upload @complete="imageUploaded">
-          <p>Добавить стикер</p>
-          <!-- <avatar :user="user" size="xl" :card="false" /> -->
+        <h4>Добавить стикер</h4>
+          <div class="form-group">
+          <label class="form-label" for="sticker-name">Имя стикера</label>
+          <input
+            class="form-input"
+            v-model="stickerName"
+            name="sticker-name"
+            id="sticker-name"
+          />
+        </div>
+        <image-upload @complete="stickerUploaded">
         </image-upload>
       </div>
     </div>
@@ -37,7 +45,8 @@ export default {
       }),
       totalUsers: 0,
       activeUsers: 0,
-      stickers: []
+      stickers: [],
+      stickerName: ''
     }
   },
   created() {
@@ -61,24 +70,31 @@ export default {
 
   },
   methods: {
-    imageUploaded(images) {
+    stickerUploaded(images) {
       const sticker = images[0]
-      this.stickers.push({
-        'id': 0,
-        'name': 'asdasd'
-      })
-
+      
+      stickersApi
+        .addSticker(this.stickerName, sticker.id)
+        .then(data => {
+          console.log(data)
+          this.$toast.show('Стикер добавлен')
+          this.stickers.push(data.sticker)
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toast.error('Ошибка при загрузке стикера: ' + err)
+        })
       // TODO replace code that lies below
-      this.$users.routes.editAvatar(avatar.id, this.$auth.data.accessToken.token).then(res => {
-        if (res.success !== 1) {
-          return Promise.reject(res.error)
-        }
+      // this.$users.routes.editAvatar(avatar.id, this.$auth.data.accessToken.token).then(res => {
+      //   if (res.success !== 1) {
+      //     return Promise.reject(res.error)
+      //   }
 
-        this.$auth.data.user = res.user
-      }).catch(err => {
-        this.$log.error(err)
-        this.$toast.show('Не удалось изменить аватар')
-      })
+      //   this.$auth.data.user = res.user
+      // }).catch(err => {
+      //   this.$log.error(err)
+      //   this.$toast.show('Не удалось изменить аватар')
+      // })
     }
   },
   computed: {

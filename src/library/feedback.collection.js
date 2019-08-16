@@ -13,7 +13,7 @@ export default {
       })
     },
     getList(request, token) {
-      return request.get('/feedback/', {
+      return request.get('feedback/', {
           'Authorization': token
       })
     }
