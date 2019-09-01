@@ -53,29 +53,17 @@ export default {
   },
   actions: {
     login({ data, routes, actions }, username, password) {
-      if (data.accessToken != null && data.accessToken != undefined) {
-        return routes
-        .getSelf(data.accessToken.token)
-        .then(res => {
-          if (res.success !== 1) {
-            return Promise.reject(res.error)
-          }
-          
-          data.user = res.user
-        })
-      } else {
-        return routes
-        .login(username, password)
-        .then(res => {
-          if (res.success !== 1) {
-            return Promise.reject(res.error)
-          }
-          
-          data.accessToken = res.access_token
-          data.refreshToken = res.refresh_token
-        })
-        .then(() => actions.login())
-      }
+      return routes
+      .login(username, password)
+      .then(res => {
+        if (res.success !== 1) {
+          return Promise.reject(res.error)
+        }
+
+        data.accessToken = res.access_token
+        data.refreshToken = res.refresh_token
+      })
+      .then(() => actions.login())
     },
     register({ routes }, username, email, name, password) {
       return routes.register(username, email, name, password).then(res => {
