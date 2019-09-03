@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import store from '@/store'
+
 export default {
   metaInfo() {
     return {
@@ -55,9 +57,6 @@ export default {
   },
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       username: '',
       password: '',
       validation: {
@@ -72,21 +71,23 @@ export default {
     }
   },
   mounted () {
-    if (this.auth.user != null) {
+    if (this.user != null) {
       this.$router.replace({ path: '/' })
     }
   },
   methods: {
+    ...store.mapActions('auth', {
+      requestLogin: 'login'
+    }),
     login () {
       if (!this.isValid) {
-        this.validation.showErrors = true
-        return
+        return this.validation.showErrors = true
       } else {
         this.validation.showErrors = false
       }
 
-      this.$auth
-      .login(this.username, this.password)
+      this
+      .requestLogin(this.username, this.password)
       .then(() => {
         this.$toast.show('Авторизация успешна')
         this.$router.replace({ path: '/' })
@@ -98,6 +99,7 @@ export default {
     }
   },
   computed: {
+    ...store.mapData('auth', ['user']),
     isValid() {
       return this.validation.username.success &&
              this.validation.password.success

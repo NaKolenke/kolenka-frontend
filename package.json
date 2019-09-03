@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@caohenghu/vue-colorpicker": "^1.1.1",
+    "@romgerman/bucket-store": "git+https://github.com/romgerman/bucket-store.git",
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.1.4",
     "highlight.js": "^9.15.8",
