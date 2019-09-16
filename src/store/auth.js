@@ -1,61 +1,107 @@
-import { Bucket, data, action } from '@romgerman/bucket-store'
-import authRoutes from '@/store/routes/auth'
+import api from '@/api/auth'
+import request from '@/utils/request'
 
-const bucket = new Bucket(
-  ...authRoutes,
-  data({
-    user: null,
-    accessToken: null,
-    refreshToken: null
-  }),
-  action('login', ({ routes, data }, username, password) => {
-    return routes.login({
-      username,
-      password
-    }).then(res => {
+const state = {
+  accessToken: null,
+  refreshToken: null
+}
+
+const getters = {
+  accessToken: state => {
+    if (state.accessToken != null) {
+      return state.accessToken.token
+    }
+    return null
+  }
+}
+
+const actions = {
+  login ({ commit }, { username, password }) {
+    return api.login(username, password).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
 
-      data.accessToken = res.access_token
-      data.refreshToken = res.refresh_token
-    })
-  }),
-  action('register', ({ routes }, username, email, name, password) => {
-    return routes.register({
-      username,
-      email,
-      name,
-      password
-    }).then(res => {
-      if (res.success !== 1) {
-        return Promise.reject()
-      }
-    })
-  }),
-  action('recover', ({ routes }, email) => {
-    return routes.recover({
-      email
-    }).then(res => {
-      if (res.success !== 1) {
-        return Promise.reject()
-      }
-    })
-  }),
-  action('setPassword', ({ routes }, password, token) => {
-    return routes.setPassword({
-      password,
-      token
-    }).then(res => {
-      if (res.success !== 1) {
-        return Promise.reject()
-      }
-    })
-  }),
-  action('logout', ({ data }) => {
-    data.accessToken = null
-    data.refreshToken = null
-  })
-)
+      commit('storeTokens', res.access_token, res.refresh_token)
 
-export default bucket
+      request.setAuth(res.access_token.token, res.refresh_token)
+
+      localStorage.setItem('token', JSON.stringify(res.access_token))
+      localStorage.setItem('refresh_token', JSON.stringify(res.refresh_token))
+
+      return res
+    })
+  },
+  register ({ commit }, { username, password, name, email }) {
+    return api.register(username, password, name, email).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
+
+      commit('storeTokens', res.access_token, res.refresh_token)
+
+      request.setAuth(res.access_token.token, res.refresh_token)
+
+      localStorage.setItem('token', JSON.stringify(res.access_token))
+      localStorage.setItem('refresh_token', JSON.stringify(res.refresh_token))
+
+      return res
+    })
+  },
+  logout ({ dispatch, commit }) {
+    request.setAuth(null, null)
+    commit('invalidateTokens')
+    dispatch('users/invalidateUser')
+  },
+  restoreToken ({ commit }) {
+    var t = localStorage.getItem('token')
+    if (t != null) {
+      var refresh = JSON.parse(localStorage.getItem('refresh_token'))
+      return api.refreshToken(refresh.token).then(res => {
+        commit('storeTokens', res.access_token, res.refresh_token)
+
+        request.setAuth(res.access_token.token, res.refresh_token)
+
+        localStorage.setItem('token', JSON.stringify(res.access_token))
+        localStorage.setItem('refresh_token', JSON.stringify(res.refresh_token))
+
+        return res
+      })
+    }
+  },
+  recover (_context, { email }) {
+    return api.recover(email).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
+      return res
+    })
+  },
+  setPassword (_context, { password, token }) {
+    return api.setPassword(password, token).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
+      return res
+    })
+  },
+}
+
+const mutations = {
+  storeTokens (state, accessToken, refreshToken) {
+    state.accessToken = accessToken
+    state.refreshToken = refreshToken
+  },
+  invalidateTokens (state) {
+    state.accessToken = null
+    state.refreshToken = null
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
+}
