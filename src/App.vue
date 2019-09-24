@@ -8,11 +8,16 @@
           <router-view />
         </div>
 
-        <!-- <div v-if="showSidebar" id="sidebar" class="column col-3 col-md-12" style="position: relative">
+        <div
+          v-if="showSidebar"
+          id="sidebar"
+          class="column col-3 col-md-12"
+          style="position: relative"
+        >
           <transition name="sidebar-fade" mode="in-out">
             <router-view name="sidebar" />
           </transition>
-        </div>-->
+        </div>
       </div>
     </div>
 
@@ -33,6 +38,7 @@ import ScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import '@/directives/validate'
 import df from '@/mixins/dataFetch'
+import Pagination from './models/pagination'
 
 
 Vue.use(ScrollTo)
@@ -74,10 +80,12 @@ export default {
       .then(_res => {
         return this.$store.dispatch('users/getSelf')
       })
-
-      // return this.$store.getSelf()
-      //   .then(() => this.$store.getUserBlogs(this.user.username, { limit: 100 }, true))
-      //   .then(() => this.$store.getAllNotifications({ page: 1, limit: 100 }))
+      .then(me => {
+        return this.$store.dispatch('blogs/getMyBlogs', { username: me.username, pagination: new Pagination(1) })
+      })
+      .then(_res => {
+        return this.$store.dispatch('notifications/getAll', { pagination: new Pagination(1, 100) })
+      })
       .catch(err => {
         this.$log.error(err)
       })

@@ -5,6 +5,9 @@ const state = {
 }
 
 const getters = {
+  unread: (state) => {
+    return state.my.filter(n => n.is_new == true)
+  },
 }
 
 const actions = {

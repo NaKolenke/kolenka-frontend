@@ -24,6 +24,7 @@
 
 <script>
 import Editor from '@/components/editor/Editor.vue'
+import errors from '@/utils/errors'
 
 /*
   Events:
@@ -47,15 +48,17 @@ export default {
   methods: {
     send () {
       this.isSending = true
-      this.$comments
-        .sendComment(this.postUrl, this.store.html, this.parentId)
+      this.$store
+        .dispatch('comments/postComment',
+          { url: this.postUrl, text: this.store.html, parent: this.parentId })
         .then(comment => {
           this.isSending = false
           this.$refs.editor.setContent('')
           this.$emit('sent', comment.id)
         })
-        .catch(err => {
-          this.$log.error(err)
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
         })
     }
   },

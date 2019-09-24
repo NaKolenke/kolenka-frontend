@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h3>Записи пользователя <router-link :to="{ name: 'profile', params: { user: $route.params.user } }">{{ $route.params.user }}</router-link></h3>
+    <h3>
+      Записи пользователя
+      <router-link
+        :to="{ name: 'user', params: { user: $route.params.user } }"
+      >{{ $route.params.user }}</router-link>
+    </h3>
     <div v-if="isLoading">
       <post-skeleton v-for="i in 10" :key="i" />
     </div>
@@ -17,7 +22,7 @@ import PaginationView from '@/components/PaginationView.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Записи пользователя'
     }
@@ -47,17 +52,17 @@ export default {
       this.$posts.groups.my.indexes = []
 
       this.$posts
-      .getUserPosts(route.params.user, this.page)
-      .then(pages => {
-        this.pageCount = pages
-        this.isLoading = false
-      })
-      .catch(err => {
-        this.isLoading = false
-        console.log(err)
+        .getUserPosts(route.params.user, this.page)
+        .then(pages => {
+          this.pageCount = pages
+          this.isLoading = false
+        })
+        .catch(err => {
+          this.isLoading = false
+          console.log(err)
 
-        this.$router.push({ path: '/404' })
-      })
+          this.$router.push({ path: '/404' })
+        })
     },
     paginateRelative (offset) {
       this.$router.push({ name: 'userPosts', query: { page: this.page + offset } })

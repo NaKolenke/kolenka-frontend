@@ -25,7 +25,7 @@ const actions = {
         return Promise.reject(res.error)
       }
 
-      return res.users
+      return res
     })
   },
   getUser (_context, { username }) {
@@ -46,17 +46,14 @@ const actions = {
       return res.user
     })
   },
-  editAvatar ({ dispatch }, { file }) {
-    return dispatch('content/uploadFile', file, { root: true })
-      .then(res => {
-        return api.editAvatar(res.file.id).then(res => {
-          if (res.success !== 1) {
-            return Promise.reject(res.error)
-          }
+  editAvatar (_context, { file }) {
+    return api.editAvatar(file.id).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
 
-          return res.user
-        })
-      })
+      return res.user
+    })
   },
   invalidateUser ({ commit }) {
     commit('invalidateSelf')

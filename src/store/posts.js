@@ -2,6 +2,7 @@ import api from '@/api/posts'
 
 const state = {
   my: [],
+  current: null
 }
 
 const getters = {
@@ -16,11 +17,12 @@ const actions = {
       return res
     })
   },
-  getPost (_context, { url }) {
+  getPost ({ commit }, { url }) {
     return api.getPost(url).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
+      commit('setCurrent', res.post)
       return res.post
     })
   },
@@ -78,6 +80,9 @@ const actions = {
 const mutations = {
   storeMyPosts (state, data) {
     state.my = data
+  },
+  setCurrent (state, data) {
+    state.current = data
   },
 }
 

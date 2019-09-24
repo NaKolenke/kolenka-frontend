@@ -5,7 +5,7 @@
     </template>
     <post-view v-else :post="post" :cut="false"></post-view>
 
-    <div id="comments_container" v-if="!post.is_draft">
+    <div id="comments_container" v-if="post && !post.is_draft">
       <h3 id="comments">
         Комментарии
         <small class="text-gray">{{ commentsCount }}</small>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import errors from '@/utils/errors'
 import Pagination from '@/models/pagination'
 import PostView from '@/components/PostView.vue'
@@ -45,9 +45,6 @@ export default {
   },
   data: function () {
     return {
-      post: {},
-      comments: [],
-      commentsCount: 0,
       loading: {
         comments: true,
         post: true
@@ -64,8 +61,7 @@ export default {
   methods: {
     refreshPost (route) {
       this.$store.dispatch('posts/getPost', { url: route.params.post })
-        .then(post => {
-          this.post = post
+        .then(_post => {
           this.loading.post = false
         })
         .then(() => this.refreshComments(route))
@@ -76,19 +72,14 @@ export default {
         })
     },
     refreshComments (route) {
-      this.comments = []
-
       return this.$store.dispatch('comments/getComments', { url: route.params.post, pagination: new Pagination(1) })
-        .then(res => {
-          this.comments = res
-          this.commentsCount = res.length
+        .then(_res => {
           this.loading.comments = false
         }).catch(err => {
           console.log(err)
         })
     },
     addComment (id) {
-      this.commentsCount++
       this.$nextTick(() => {
         this.$scrollTo('#comment_' + id, 1000, { cancelable: true })
       })
@@ -96,8 +87,13 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.users.me
+      user: state => state.users.me,
+      post: state => state.posts.current
     }),
+    ...mapGetters({
+      commentsCount: 'comments/commentsCount',
+      comments: 'comments/topLevelComments',
+    })
   },
   components: {
     PostView,

@@ -6,7 +6,7 @@ export default {
       .get(`posts/${url}/comments/?page=${page || 1}&limit=${limit || 20}`)
       .then(res => res.data)
   },
-  postComment: (type, url, text, parent) => {
+  postComment: (url, text, parent) => {
     return request
       .post(`posts/${url}/comments/`,
         {

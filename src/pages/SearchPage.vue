@@ -3,34 +3,39 @@
     <div class="columns">
       <form @submit.prevent="send" class="p-centered col-10 mb-2">
         <div class="columns">
-
           <div class="column col-auto">
             <h2>Поиск</h2>
           </div>
-        
+
           <div class="column col">
             <div class="panel-header">
-              <input class="form-input input-lg" type="text" placeholder="Введите запрос" v-model="model.query" autofocus />
+              <input
+                class="form-input input-lg"
+                type="text"
+                placeholder="Введите запрос"
+                v-model="model.query"
+                autofocus
+              />
             </div>
-            
+
             <div class="panel-body mb-2">
               <div class="columns mt-2">
                 <div class="column col-lg-auto">
                   <div class="form-group">
                     <label class="form-radio form-inline">
-                      <input type="radio" name="type" value="full" v-model="model.type" checked>
+                      <input type="radio" name="type" value="full" v-model="model.type" checked />
                       <i class="form-icon"></i> Везде
                     </label>
                     <label class="form-radio form-inline">
-                      <input type="radio" name="type" value="post" v-model="model.type">
+                      <input type="radio" name="type" value="post" v-model="model.type" />
                       <i class="form-icon"></i> Посты
                     </label>
                     <label class="form-radio form-inline">
-                      <input type="radio" name="type" value="blog" v-model="model.type">
+                      <input type="radio" name="type" value="blog" v-model="model.type" />
                       <i class="form-icon"></i> Блоги
                     </label>
                     <label class="form-radio form-inline">
-                      <input type="radio" name="type" value="user" v-model="model.type">
+                      <input type="radio" name="type" value="user" v-model="model.type" />
                       <i class="form-icon"></i> Пользователи
                     </label>
                   </div>
@@ -38,9 +43,7 @@
                 <input class="btn btn-primary column col-2 mx-2" type="submit" value="Найти" />
               </div>
             </div>
-
           </div>
-          
         </div>
       </form>
     </div>
@@ -48,11 +51,14 @@
     <div v-if="model.type === 'full' && queryAvailable" class="columns col-12 mt-2">
       <div class="column col-6">
         <h4>Пользователи</h4>
-        
+
         <div v-if="users.length > 0">
           <ul style="list-style:none;margin-left:2px">
             <li v-for="item in users.slice(0, 6)" :key="item.id">
-              <avatar :user="item" size="sm"></avatar><router-link :to="{ name: 'profile', params: { user: item.username } }"> {{ item.name || item.username }}</router-link>
+              <avatar :user="item" size="sm"></avatar>
+              <router-link
+                :to="{ name: 'user', params: { user: item.username } }"
+              >{{ item.name || item.username }}</router-link>
             </li>
           </ul>
           <router-link
@@ -71,7 +77,7 @@
         <div v-if="blogs.length > 0">
           <blog-card-small v-for="item in blogs.slice(0, 2)" :key="item.id" :blog="item"></blog-card-small>
           <router-link
-            v-if="blogs.length > 2" 
+            v-if="blogs.length > 2"
             :to="{ name: 'search', query: { type: 'blog', q: model.query } }"
           >Найти еще блоги</router-link>
         </div>
@@ -82,7 +88,6 @@
       </div>
     </div>
 
-    
     <div v-if=" queryAvailable && (model.type === 'post' || model.type === 'full')">
       <h4 v-if="queryAvailable">Посты</h4>
       <post-view v-for="post in posts" :key="post.id" :post="post" :cut="true"></post-view>
@@ -105,7 +110,10 @@
       <h4 v-if="queryAvailable">Пользователи</h4>
       <div class="columns">
         <div v-for="item in users" :key="item.id" class="column col-3 my-2">
-          <avatar :user="item" size="sm"></avatar><router-link :to="{ name: 'profile', params: { user: item.username } }"> {{ item.name || item.username }}</router-link>
+          <avatar :user="item" size="sm"></avatar>
+          <router-link
+            :to="{ name: 'user', params: { user: item.username } }"
+          >{{ item.name || item.username }}</router-link>
         </div>
       </div>
     </div>
@@ -119,14 +127,16 @@ import PostView from '@/components/PostView.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import BlogCardSmall from '@/components/cards/BlogCardSmall.vue'
 import Avatar from '@/components/elements/Avatar.vue'
+import Pagination from '@/models/pagination'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Поиск'
     }
   },
-  data() {
+  data () {
     return {
       users: [],
       blogs: [],
@@ -140,7 +150,7 @@ export default {
       queryAvailable: false
     }
   },
-  mounted() {
+  mounted () {
     if (this.$route.query)
       this.refresh(this.$route)
   },
@@ -148,10 +158,10 @@ export default {
     this.refresh(to)
   },
   methods: {
-    send() {
+    send () {
       this.$router.push({ name: 'search', query: { type: this.model.type, q: this.model.query, page: 1 } })
     },
-    refresh(route) {
+    refresh (route) {
       const type = route.query.type
 
       this.model.type = type || 'full'
@@ -160,7 +170,7 @@ export default {
 
       if (this.model.query.length === 0)
         return
-    
+
       if (type === 'full') {
         this.fullRefresh()
         this.queryAvailable = true
@@ -175,40 +185,46 @@ export default {
         this.queryAvailable = true
       } else {
         this.$router.replace('/search')
-      }      
+      }
     },
-    fullRefresh() {
+    fullRefresh () {
       this.refreshUsers()
       this.refreshBlogs()
       this.refreshPosts()
     },
-    refreshUsers() {
-      this.$search.findUsers(this.model.query, { page: this.page }).then(res => {
-        if (this.model.type !== 'full') {
-          this.pageCount = res.meta.page_count
-        }
-        this.users = res.result
-      }).catch(err => {
-        console.log(err)
-      })
+    refreshUsers () {
+      this.$store.dispatch('search/findUsers', { username: this.model.query, pagination: new Pagination(this.page) })
+        .then(res => {
+          if (this.model.type !== 'full') {
+            this.pageCount = res.meta.page_count
+          }
+          this.users = res.result
+        }).catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
-    refreshBlogs() {
-      this.$search.findBlogs(this.model.query, { page: this.page }).then(res => {
-        if (this.model.type !== 'full') {
-          this.pageCount = res.meta.page_count
-        }
-        this.blogs = res.result
-      }).catch(err => {
-        console.log(err)
-      })
+    refreshBlogs () {
+      this.$store.dispatch('search/findBlogs', { blog: this.model.query, pagination: new Pagination(this.page) })
+        .then(res => {
+          if (this.model.type !== 'full') {
+            this.pageCount = res.meta.page_count
+          }
+          this.blogs = res.result
+        }).catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
-    refreshPosts() {
-      this.$search.findPosts(this.model.query, { page: this.page }).then(res => {
-        this.posts = res.result
-        this.pageCount = res.meta.page_count
-      }).catch(err => {
-        console.log(err)
-      })
+    refreshPosts () {
+      this.$store.dispatch('search/findPosts', { post: this.model.query, pagination: new Pagination(this.page) })
+        .then(res => {
+          this.posts = res.result
+          this.pageCount = res.meta.page_count
+        }).catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     paginateRelative (offset) {
       this.$router.push({ name: 'search', query: { page: this.page + offset, type: this.model.type, q: this.model.query } })

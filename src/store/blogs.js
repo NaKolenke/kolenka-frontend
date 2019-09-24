@@ -13,7 +13,7 @@ const actions = {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
-      return res.blogs
+      return res
     })
   },
   getMyBlogs ({ commit }, { username, pagination }) {
@@ -23,7 +23,7 @@ const actions = {
       }
 
       commit('storeMyBlogs', res.blogs)
-      return res.blogs
+      return res
     })
   },
   getAllBlogs (_context, { pagination }) {
@@ -31,7 +31,7 @@ const actions = {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
-      return res.blogs
+      return res
     })
   },
   joinBlog (_context, { url }) {
@@ -51,11 +51,11 @@ const actions = {
     })
   },
   getReaders (_context, { url, pagination }) {
-    return api.getBlog(url, pagination.page, pagination.limit).then(res => {
+    return api.getReaders(url, pagination.page, pagination.limit).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
-      return res.readers
+      return res
     })
   },
   createBlog (_context, { title, description, type, url }) {

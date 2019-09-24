@@ -22,7 +22,7 @@ const actions = {
 
 const mutations = {
   storeTags (state, data) {
-    state.tags = data
+    state.tags = data.filter(t => t.title != null && t.title != "")
   },
 }
 

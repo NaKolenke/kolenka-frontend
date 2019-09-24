@@ -8,7 +8,7 @@ export default {
   },
   getUser: (username) => {
     return request
-      .get(`users/${username}`)
+      .get(`users/${username}/`)
       .then(res => res.data)
   },
   getSelf: () => {

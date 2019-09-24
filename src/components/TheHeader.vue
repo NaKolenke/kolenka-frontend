@@ -33,7 +33,7 @@
           <div class="dropdown">
             <div class="btn-group">
               <router-link
-                :to="{ name: 'profile', params: { user: user.username }}"
+                :to="{ name: 'user', params: { user: user.username }}"
                 class="btn btn-link text-secondary"
               >
                 <avatar
@@ -52,7 +52,7 @@
 
               <ul class="menu">
                 <li class="menu-item">
-                  <router-link :to="{ name: 'profile', params: { user: user.username }}">
+                  <router-link :to="{ name: 'user', params: { user: user.username }}">
                     <i class="icon icon-people"></i> Профиль
                   </router-link>
                 </li>
@@ -114,18 +114,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 
 export default {
   data: function () {
     return {
-      // ...this.mapData({
-      //   auth: 'auth/data',
-      //   notifications: 'notifications/unread'
-      // }),
-      feedbackTooltip: '',
-      notifications: []
+      feedbackTooltip: ''
     }
   },
   props: {
@@ -161,6 +156,9 @@ export default {
   computed: {
     ...mapState({
       user: state => state.users.me
+    }),
+    ...mapGetters({
+      notifications: 'notifications/unread'
     }),
     isAdmin: function () {
       if (!this.user) {

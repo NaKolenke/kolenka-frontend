@@ -38,7 +38,7 @@
         <avatar :user="post.creator" :size="'sm'" />
         <span class="chip">
           <router-link
-            :to="{ name: 'profile', params: { user: post.creator.username }}"
+            :to="{ name: 'user', params: { user: post.creator.username }}"
           >{{ post.creator.name || post.creator.username }}</router-link>
         </span>
         <router-link

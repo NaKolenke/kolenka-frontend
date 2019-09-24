@@ -4,7 +4,7 @@
       <blog-skeleton v-for="i in 10" :key="i" />
     </template>
 
-    <div v-else id="content" >
+    <div v-else id="content">
       <blog-card v-for="blog in blogs" :key="blog.id" :blog="blog"></blog-card>
       <pagination-view :page="page" :page-count="pageCount"></pagination-view>
     </div>
@@ -15,18 +15,18 @@
 import PaginationView from '@/components/PaginationView.vue'
 import BlogCard from '@/components/cards/BlogCard.vue'
 import BlogSkeleton from '@/components/skeletons/BlogCard.vue'
+import Pagination from '@/models/pagination'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Блоги'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        blogs: 'blogs/everything'
-      }),
+      blogs: [],
       page: 1,
       pageCount: 0,
       isLoading: true
@@ -41,20 +41,20 @@ export default {
   },
   methods: {
     refreshPage (route) {
+      this.blogs = []
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      this.$blogs.indexes.everything = []
-
-      this.$blogs.getAll({ page: this.page }).then(pages => {
-        this.pageCount = pages
-        this.isLoading = false
-      }).catch(err => {
-        this.isLoading = false
-        console.log(err)
-
-        this.$router.push({ path: '/404' })
-      })
+      this.$store.dispatch('blogs/getAllBlogs', { pagination: new Pagination(this.page) })
+        .then(res => {
+          this.blogs = res.blogs
+          this.pageCount = res.meta.page_count
+          this.isLoading = false
+        }).catch(error => {
+          this.isLoading = false
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     paginateRelative (offset) {
       this.$router.push({ name: 'blogs', query: { page: this.page + offset } })

@@ -9,6 +9,7 @@
         <div v-if="blog.url" class="columns">
           <div class="column col-10">
             <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
+            <span class="readers label m-2">Читатели: {{blog.readers}}</span>
           </div>
           <div class="column col-auto">
             <button
@@ -83,7 +84,7 @@ export default {
       if (!this.blog.url)
         return
 
-      this.store.dispatch('posts/getBlogPosts', { url: this.blog.url, pagination: new Pagination(1, 2) })
+      this.$store.dispatch('posts/getBlogPosts', { url: this.blog.url, pagination: new Pagination(1, 2) })
         .then(res => {
           this.posts = res.posts
         }).catch(err => {
@@ -91,7 +92,7 @@ export default {
         })
     },
     joinBlog () {
-      this.store.dispatch('blogs/joinBlog', { url: this.blog.url })
+      this.$store.dispatch('blogs/joinBlog', { url: this.blog.url })
         .then(() => {
           this.$toast.show(`Успешно присоединились к блогу "${this.blog.title}"`)
           // this.$blogs.collect(this.blog, 'my')
@@ -119,5 +120,9 @@ export default {
 <style scoped>
 .card-body p img {
   height: auto;
+}
+
+.readers {
+  font-size: 0.8rem;
 }
 </style>
