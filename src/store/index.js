@@ -10,6 +10,7 @@ import feedback from './feedback'
 import notifications from './notifications'
 import posts from './posts'
 import search from './search'
+import stickers from './stickers'
 import tags from './tags'
 import users from './users'
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     notifications,
     posts,
     search,
+    stickers,
     tags,
     users,
   },

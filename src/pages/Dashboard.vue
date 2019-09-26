@@ -32,20 +32,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Sticker from '@/components/elements/Sticker.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
-import stickersApi from '@/api/stickers'
+import errors from '@/utils/errors'
 
 export default {
   data() {
     return {
-      ...this.mapData({
-        auth: 'auth/data',
-        admin: 'admin/everything'
-      }),
       totalUsers: 0,
       activeUsers: 0,
-      stickers: [],
       stickerName: ''
     }
   },
@@ -54,47 +50,31 @@ export default {
       this.$router.push({ path: '/404' })
       return
     }
+    this.$store.dispatch('admin/getDashboard')
+      .then(data => {
+        this.totalUsers = data.users
+        this.activeUsers = data.active_users_7_days
+      }).catch(error => {
+        this.isLoading = false
 
-    this.$admin.getDashboard().then(data => {
-      this.totalUsers = data.users
-      this.activeUsers = data.active_users_7_days
-    }).catch(err => {
-      this.isLoading = false
-      console.log(err)
+        errors.handle(error)
+        this.$toast.error(errors.getText(error))
+      })
 
-      this.$router.push({ path: '/404' })
-    })
-    stickersApi
-      .getAllStickers()
-      .then(data => this.stickers = data.stickers)
-
+    this.$store.dispatch('stickers/getAll')
   },
   methods: {
     stickerUploaded(images) {
       const sticker = images[0]
-
-      stickersApi
-        .addSticker(this.stickerName, sticker.id)
+      this.$store.dispatch('stickers/add', {name: this.stickerName, file_id: sticker.id})
         .then(data => {
           console.log(data)
           this.$toast.show('Стикер добавлен')
-          this.stickers.push(data.sticker)
         })
-        .catch(err => {
-          console.log(err)
-          this.$toast.error('Ошибка при загрузке стикера: ' + err)
+        .catch(error=> {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
         })
-      // TODO replace code that lies below
-      // this.$users.routes.editAvatar(avatar.id, this.$auth.data.accessToken.token).then(res => {
-      //   if (res.success !== 1) {
-      //     return Promise.reject(res.error)
-      //   }
-
-      //   this.$auth.data.user = res.user
-      // }).catch(err => {
-      //   this.$log.error(err)
-      //   this.$toast.show('Не удалось изменить аватар')
-      // })
     }
   },
   computed: {
@@ -106,7 +86,11 @@ export default {
     },
     isLocal() {
       return window.location.hostname === 'localhost'
-    }
+    },
+    ...mapState({
+      user: state => state.users.me,
+      stickers: state => state.stickers.available
+    }),
   },
   components: {
     Sticker,

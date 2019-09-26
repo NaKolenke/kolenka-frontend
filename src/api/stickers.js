@@ -1,17 +1,14 @@
-import { api } from './instance'
+import request from '@/utils/request'
 
 export default {
-  getAllStickers () {
-    return api.get('/stickers/').then(res => res.data)
+  getAllStickers: () => {
+    return request
+      .get('/stickers/')
+      .then(res => res.data)
   },
-  addSticker(name, content) {
-    return api.post('/stickers/', {
-      name: name,
-      file: content
-    }, {
-      headers: {
-        'Authorization': JSON.parse(localStorage.getItem('_auth_accessToken')).token
-      }
-    }).then(res => res.data)
+  addSticker: (name, content) => {
+    return request
+      .post('/stickers/', { name: name, file: content })
+      .then(res => res.data)
   }
 }
