@@ -29,6 +29,15 @@ class Request {
     return this.instance.post(url, data)
   }
 
+  /**
+   *
+   * @param {string} url
+   * @param {any} data
+   */
+  put (url, data) {
+    return this.instance.put(url, data)
+  }
+
   setAuth (token, refreshToken) {
     if (token != null) {
       this.instance.defaults.headers.common['Authorization'] = token;

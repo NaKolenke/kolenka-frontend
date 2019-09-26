@@ -3,11 +3,11 @@
     <form method="POST" @submit.prevent="send" :class="{ 'has-error': showErrors }">
       <div class="form-group">
         <label class="form-label" for="feedback">Отзыв</label>
-        <textarea  class="form-input" v-model="feedback" v-validate="validation" name="feedback"></textarea>
+        <textarea class="form-input" v-model="feedback" v-validate="validation" name="feedback"></textarea>
         <div class="form-input-hint" v-if="!validation.success && showErrors">Введите текст отзыва</div>
       </div>
 
-      <input type="submit" id="send-btn" class="btn primary">
+      <input type="submit" id="send-btn" class="btn primary" />
     </form>
   </div>
 </template>
@@ -31,17 +31,8 @@ export default {
       } else {
         this.showErrors = false
       }
-      
-      this.$feedback
-      .send(this.feedback)
-      .then(data => {
-        this.$router.replace({ path: '/' })
-        this.$toast.show('Ваш отзыв отправлен')
-      })
-      .catch(err => {
-        this.$log.error(err)
-        this.$toast.show('Произошла ошибка при отправке отзыва, напишите об этом одному из разработчиков')
-      })
+
+      this.$parent.send(this.feedback)
     }
   }
 }

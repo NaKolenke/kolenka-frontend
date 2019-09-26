@@ -17,7 +17,7 @@ const actions = {
         return Promise.reject(res.error)
       }
       commit('storeNotifications', res.notifications)
-      return res.notifications
+      return res
     })
   },
   markAsRead ({ commit }, { ids }) {
@@ -29,7 +29,15 @@ const actions = {
       return res
     })
   },
+  test (_context) {
+    return api.test().then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
 
+      return res
+    })
+  },
 }
 
 const mutations = {
@@ -40,7 +48,7 @@ const mutations = {
     state.my =
       state.my
         .map(x => {
-          if (ids.includes(x)) {
+          if (ids.includes(x.id)) {
             x.is_new = false
           }
           return x

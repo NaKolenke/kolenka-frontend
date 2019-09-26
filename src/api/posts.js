@@ -26,7 +26,7 @@ export default {
   },
   editPost: (title, text, url, draft, blogId) => {
     return request
-      .put(`posts/${url}`,
+      .put(`posts/${url}/`,
         {
           blog: blogId,
           cut_name: null,

@@ -103,6 +103,7 @@
 import { mapState } from 'vuex'
 import Editor from '@/components/editor/Editor.vue'
 import slugify from 'speakingurl'
+import errors from '@/utils/errors'
 
 export default {
   metaInfo () {
@@ -148,7 +149,7 @@ export default {
   mounted () {
     const edit = this.$route.params.edit
 
-    if (edit) {
+    if (this.isInEditMode) {
       this.model.title = edit.title
       this.model.blog = edit.blog.id
       this.$refs.editor.setContent(edit.text)
@@ -161,29 +162,33 @@ export default {
     send (draft) {
       this.isSending = true
 
-      let method = this.$route.params.edit ?
-        this.$posts.editPost(
-          this.$route.params.edit.url,
-          this.model.title,
-          this.store.html,
-          draft,
-          this.model.blog
-        ) :
-        this.$posts.createPost(
-          this.model.title,
-          this.store.html,
-          (this.slugChanged ? this.newSlug : this.slug),
-          draft,
-          this.model.blog
-        )
+      let result = null
+      if (this.isInEditMode) {
+        result = this.$store.dispatch('posts/editPost', {
+          title: this.model.title,
+          text: this.store.html,
+          url: this.$route.params.edit.url,
+          draft: draft,
+          blogId: this.model.blog
+        })
+      } else {
+        result = this.$store.dispatch('posts/createPost', {
+          title: this.model.title,
+          text: this.store.html,
+          url: (this.slugChanged ? this.newSlug : this.slug),
+          draft: draft,
+          blogId: this.model.blog
+        })
+      }
 
-      method.then(data => {
+      result.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.url } })
-      }).catch(err => {
-        console.log(err)
+      }).catch(error => {
+        errors.handle(error)
+        this.$toast.error(errors.getText(error))
       })
     },
     changeSlug () {
@@ -206,6 +211,9 @@ export default {
         this.validation.body.success &&
         this.validation.blog.success &&
         (this.slugChanged ? this.validation.slug.success : true)
+    },
+    isInEditMode () {
+      return this.$route.params.edit
     },
     ...mapState({
       user: state => state.users.me,

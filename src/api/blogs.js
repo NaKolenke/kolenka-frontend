@@ -40,7 +40,7 @@ export default {
   },
   editBlog: (title, description, type, url) => {
     return request
-      .post(`blogs/${url}/`,
+      .put(`blogs/${url}/`,
         {
           blog_type: type,
           description,

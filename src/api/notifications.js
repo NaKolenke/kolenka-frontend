@@ -14,4 +14,9 @@ export default {
         })
       .then(res => res.data)
   },
+  test: () => {
+    return request
+      .get(`notifications/test`)
+      .then(res => res.data)
+  }
 }
