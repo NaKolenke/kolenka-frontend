@@ -1,8 +1,8 @@
 <template>
-  <div 
-    :class="['empty', { 'bg-primary': highlightDrag }]" 
-    @dragenter.prevent.stop="onDrag(true)" 
-    @dragover.prevent.stop 
+  <div
+    :class="['empty', { 'bg-primary': highlightDrag }]"
+    @dragenter.prevent.stop="onDrag(true)"
+    @dragover.prevent.stop
     @dragleave.prevent.stop="onDrag(false)"
     @drop.prevent.stop="onDrop($event)"
   >
@@ -10,7 +10,10 @@
       <i v-if="!$slots.default" class="icon icon-3x icon-photo"></i>
       <slot></slot>
     </div>
-    <p v-if="noFileSelected" class="empty-title h5">Перетащите или выберите {{ multiple ? 'изображения' : 'изображение' }}</p>
+    <p
+      v-if="noFileSelected"
+      class="empty-title h5"
+    >Перетащите или выберите {{ multiple ? 'изображения' : 'изображение' }}</p>
     <div v-if="!noFileSelected">
       <div v-for="(item, index) in preview" :key="index" class="tile">
         <div class="tile-icon">
@@ -19,12 +22,18 @@
         <div class="tile-content">
           <div class="tile-title text-left">
             <span v-if="item.uploading" class="loading" style="margin-right:16px;margin-left: 8px"></span>
-             {{ item.name }}
+            {{ item.name }}
           </div>
           <div class="tile-subtitle">
             <div v-if="!item.uploading" class="input-group">
               <!--<button class="btn input-group-btn btn-link tooltip" data-tooltip="Редактировать"><i class="icon icon-edit"></i></button>-->
-              <button class="btn input-group-btn btn-link tooltip" @click.prevent="removeImage(index)" data-tooltip="Убрать"><i class="icon icon-cross"></i></button>
+              <button
+                class="btn input-group-btn btn-link tooltip"
+                @click.prevent="removeImage(index)"
+                data-tooltip="Убрать"
+              >
+                <i class="icon icon-cross"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -33,9 +42,24 @@
     <div class="empty-action">
       <form @submit.prevent :class="['form-group', {'has-error': hasError }]">
         <div class="input-group p-centered">
-          <input class="file-input" type="file" name="file" id="file" accept=".jpg, .jpeg, .png, .gif" @change="fileInputChange" :multiple="multiple">
-          <label for="file" class="btn input-group-btn btn-primary"><i class="icon icon-upload"></i> {{ files.map(x => x.name).join(", ") || 'Выберите файл...' }}</label>
-          <button :class="['btn', 'input-group-btn', { 'loading': inProgress }]" @click.prevent="upload" :disabled="inProgress || noFileSelected">Загрузить</button>
+          <input
+            class="file-input"
+            type="file"
+            name="file"
+            id="file"
+            accept=".jpg, .jpeg, .png, .gif"
+            @change="fileInputChange"
+            :multiple="multiple"
+          />
+          <label for="file" class="btn input-group-btn btn-primary">
+            <i class="icon icon-upload"></i>
+            {{ files.map(x => x.name).join(", ") || 'Выберите файл...' }}
+          </label>
+          <button
+            :class="['btn', 'input-group-btn', { 'loading': inProgress }]"
+            @click.prevent="upload"
+            :disabled="inProgress || noFileSelected"
+          >Загрузить</button>
         </div>
         <p v-if="hasError" class="form-input-hint">{{ hasError }}</p>
       </form>
@@ -62,16 +86,16 @@ export default {
     highlightDrag: false
   }),
   methods: {
-    fileInputChange(e) {
+    fileInputChange (e) {
       if (e.target.files.length > 0) {
         this.files = this.fileListToArray(e.target.files)
         this.resolvePreview()
       }
     },
-    onDrag(isOver) {
+    onDrag (isOver) {
       this.highlightDrag = isOver
     },
-    onDrop(e) {
+    onDrop (e) {
       const dt = e.dataTransfer
       const files = dt.files
 
@@ -81,24 +105,24 @@ export default {
           .filter(x => x.type.startsWith('image'))[0]
 
         if (file) {
-          this.files = [ file ]
-        }        
+          this.files = [file]
+        }
       } else {
         this.files = this.files.concat(
           this
-          .fileListToArray(files)
-          .filter(x => x.type.startsWith('image'))
+            .fileListToArray(files)
+            .filter(x => x.type.startsWith('image'))
         )
       }
-      
+
       this.highlightDrag = false
       this.resolvePreview()
     },
-    removeImage(index) {
+    removeImage (index) {
       this.preview.splice(index, 1)
       this.files.splice(index, 1)
     },
-    fileListToArray(list) {
+    fileListToArray (list) {
       let files = []
 
       for (let i = 0; i < list.length; i++) {
@@ -107,9 +131,9 @@ export default {
 
       return files
     },
-    resolvePreview() {
+    resolvePreview () {
       let items = []
-      
+
       for (let i = 0; i < this.files.length; i++) {
         const file = this.files[i]
 
@@ -124,7 +148,7 @@ export default {
 
       this.preview = items
     },
-    upload() {
+    upload () {
       this.inProgress = true
 
       let output = []
@@ -138,17 +162,17 @@ export default {
         previewItem.uploading = true
 
         root = root
-        .then(() => this.$content.uploadFile(data))
-        .then(file => {
-          previewItem.uploading = false
-          let fileIndex = this.files.indexOf(item)
-          this.removeImage(fileIndex)
-          output.push(file)
-        })
-        .catch(err => {
-          this.$log.error(err)
-          previewItem.uploading = false
-        })
+          .then(() => this.$store.dispatch('content/uploadFile', { file: data }))
+          .then(file => {
+            previewItem.uploading = false
+            let fileIndex = this.files.indexOf(item)
+            this.removeImage(fileIndex)
+            output.push(file)
+          })
+          .catch(err => {
+            this.$log.error(err)
+            previewItem.uploading = false
+          })
       })
 
       root.then(() => {
@@ -158,7 +182,7 @@ export default {
     }
   },
   computed: {
-    noFileSelected() {
+    noFileSelected () {
       return this.files.length === 0
     }
   }
@@ -168,10 +192,10 @@ export default {
 <style scoped>
 .file-input {
   width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 </style>

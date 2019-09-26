@@ -19,9 +19,13 @@ module.exports = {
     plugins: [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       //new BundleAnalyzerPlugin()
-    ]
+    ],
+    // devtool: 'source-map'
   },
-  transpileDependencies: [ 
-    'pulse-framework'
+  transpileDependencies: [
+    'pulse-framework',
+    'tiptap',
+    'tiptap-commands',
+    'tiptap-extensions'
   ]
 }

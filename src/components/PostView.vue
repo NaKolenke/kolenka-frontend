@@ -1,41 +1,50 @@
 <template>
   <div class="article">
     <span class="subtitle">
-      <span v-if="post.blog"><router-link :to="{ name: 'blog',  params: { name: post.blog.url }}">{{ post.blog.title }}</router-link>, </span>
+      <span v-if="post.blog">
+        <router-link :to="{ name: 'blog',  params: { name: post.blog.url }}">{{ post.blog.title }}</router-link>,
+      </span>
       {{ post.created_date | moment }}
     </span>
     <h2>
-      <router-link 
-        v-if="auth.user && auth.user.id === post.creator.id"
-        :to="{ name: 'edit-post', params: { edit: post } }" 
+      <router-link
+        v-if="user && user.id === post.creator.id"
+        :to="{ name: 'edit-post', params: { edit: post } }"
         class="btn btn-sm btn-link tooltip tooltip-right"
         data-tooltip="Редактировать запись"
-      ><i class="icon icon-edit"></i></router-link>
-      <router-link :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }}">
+      >
+        <i class="icon icon-edit"></i>
+      </router-link>
+      <router-link
+        :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }}"
+      >
         <small v-if="post.is_draft" class="label label-secondary h6">черновик</small>
-        <br v-if="post.is_draft">
+        <br v-if="post.is_draft" />
         {{ post.title }}
       </router-link>
     </h2>
 
     <div v-if="cut" v-html="post.cut_text"></div>
-    <div v-else v-html="post.text" ></div>
+    <div v-else v-html="post.text"></div>
 
     <router-link
       v-if="cut && post.has_cut"
       :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }}"
       class="btn btn-sm"
-    >
-      {{ post.cut_name || 'Читать дальше' }}
-    </router-link>
+    >{{ post.cut_name || 'Читать дальше' }}</router-link>
 
     <div class="columns article-footer">
       <div class="column col-lg-auto">
         <avatar :user="post.creator" :size="'sm'" />
         <span class="chip">
-          <router-link :to="{ name: 'profile', params: { user: post.creator.username }}">{{ post.creator.name || post.creator.username }}</router-link>
+          <router-link
+            :to="{ name: 'user', params: { user: post.creator.username }}"
+          >{{ post.creator.name || post.creator.username }}</router-link>
         </span>
-        <router-link :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }, hash: '#comments' }" title="Комментарии">
+        <router-link
+          :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }, hash: '#comments' }"
+          title="Комментарии"
+        >
           <span class="chip">
             <span class="icon-bubble2"></span>
             <span style="padding-left:4px">{{ post.comments }}</span>
@@ -50,6 +59,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
@@ -60,19 +70,17 @@ export default {
     post: Object, // Post object
     cut: Boolean // Show cut
   },
-  data() {
-    return {
-      ...this.mapData({
-        auth: 'auth/data'
-      })
-    }
-  },
-  mounted() {
+  mounted () {
     if (this.$el.querySelectorAll) {
       wrapCode(this.$el)
       wrapYoutube(this.$el, this)
       resizeTweet(this.$el)
     }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.users.me
+    }),
   },
   components: {
     Avatar

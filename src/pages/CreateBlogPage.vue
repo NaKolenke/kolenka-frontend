@@ -2,33 +2,36 @@
   <div class="container col-9 col-mx-auto">
     <div class="columns">
       <div class="column">
-        
-        <h2>{{ $route.params.edit ? 'Редактировать блог' : 'Новый блог' }}</h2>
+        <h2>{{ isInEditMode ? 'Редактировать блог' : 'Новый блог' }}</h2>
         <div class="form-horizontal">
-          
           <div class="form-group">
             <div class="col-3 col-sm-12">
               <label class="form-label" for="title">Название</label>
             </div>
             <div class="col-9 col-sm-12">
-              <input 
-                class="form-input" 
-                type="text" 
+              <input
+                class="form-input"
+                type="text"
                 id="title"
                 v-model="model.title"
                 v-validate="validation.title"
                 required
               />
-              <p class="form-input-hint">/blogs/
-                <span v-if="!isChangingSlug" @click="changeSlug">{{ slugChanged ? newSlug : slug }}</span>
-                <input v-else 
-                  type="text" 
-                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']" 
-                  v-model="newSlug" 
+              <p class="form-input-hint">
+                /blogs/
+                <span
+                  v-if="!isChangingSlug"
+                  @click="changeSlug"
+                >{{ slugChanged ? newSlug : slug }}</span>
+                <input
+                  v-else
+                  type="text"
+                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']"
+                  v-model="newSlug"
                   v-validate="validation.slug"
-                  @blur="isChangingSlug = false" 
+                  @blur="isChangingSlug = false"
                   @keyup="if ($event.keyCode === 27) isChangingSlug = false"
-                  autofocus 
+                  autofocus
                 />
               </p>
             </div>
@@ -39,9 +42,9 @@
               <label class="form-label" for="description">Описание</label>
             </div>
             <div class="col-9 col-sm-12">
-              <textarea 
-                class="form-input" 
-                type="text" 
+              <textarea
+                class="form-input"
+                type="text"
                 id="description"
                 maxlength="250"
                 v-model="model.description"
@@ -66,12 +69,16 @@
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
               <div v-if="isLoading" class="loading" style="margin-right: 32px"></div>
-              <input type="submit" class="btn btn-primary" :value="$route.params.edit ? 'Изменить' : 'Создать'" @click="send()" :disabled="isLoading || !isValid">
+              <input
+                type="submit"
+                class="btn btn-primary"
+                :value="isInEditMode ? 'Изменить' : 'Создать'"
+                @click="send()"
+                :disabled="isLoading || !isValid"
+              />
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
 
@@ -80,19 +87,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import slugify from 'speakingurl'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Создать блог'
     }
   },
-  data() {
+  data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       model: {
         title: '',
         description: '',
@@ -114,50 +120,52 @@ export default {
       newSlug: ''
     }
   },
-  mounted() {
-    if (!this.auth.user) {
+  mounted () {
+    if (!this.user) {
       this.$router.replace({ path: '/' })
       return
     }
-
     const edit = this.$route.params.edit
-    
-    if (edit) {
+
+    if (this.isInEditMode) {
       this.model.title = edit.title
       this.model.description = edit.description
       this.model.type = edit.blog_type
     }
   },
   methods: {
-    send() {      
-      let method = this.$route.params.edit ?
-      this.$blogs.editBlog(
-        this.$route.params.edit.url,
-        this.model.title,
-        this.model.description,
-        this.model.type
-      ) :
-      this.$blogs.createBlog(
-        this.model.type,
-        this.model.title,
-        this.model.description,
-        (this.slugChanged ? this.newSlug : this.slug)
-      )
-
-      method.then(data => {
-        if (this.$route.params.edit) {
+    send () {
+      let result = null
+      if (this.isInEditMode) {
+        result = this.$store.dispatch('blogs/editBlog', {
+          title: this.model.title,
+          description: this.model.description,
+          type: this.model.type,
+          url: this.$route.params.edit.url
+        })
+      } else {
+        result = this.$store.dispatch('blogs/createBlog', {
+          title: this.model.title,
+          description: this.model.description,
+          type: this.model.type,
+          url: (this.slugChanged ? this.newSlug : this.slug)
+        })
+      }
+      result.then(data => {
+        if (this.isInEditMode) {
           this.$toast.show('Блог был успешно отредактирован')
         } else {
           this.$toast.show('Блог был успешно создан')
         }
-        
+
         this.$router.replace({ name: 'blog', params: { name: data.url } })
       })
-      .catch(err => {
-        this.$toast.error(err)
-      })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
-    changeSlug() {
+    changeSlug () {
       this.isChangingSlug = true
 
       if (!this.slugChanged) {
@@ -166,17 +174,23 @@ export default {
     }
   },
   computed: {
-    slug() {
+    slug () {
       return slugify(this.model.title, { lang: 'ru' })
     },
-    slugChanged() {
+    slugChanged () {
       return this.newSlug !== '' && this.newSlug !== this.slug
     },
-    isValid() {
+    isValid () {
       return this.validation.title.success &&
-             this.validation.description.success &&
-             (this.slugChanged ? this.validation.slug.success : true)
-    }
+        this.validation.description.success &&
+        (this.slugChanged ? this.validation.slug.success : true)
+    },
+    isInEditMode () {
+      return this.$route.params.edit
+    },
+    ...mapState({
+      user: state => state.users.me
+    }),
   }
 }
 </script>

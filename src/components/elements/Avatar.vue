@@ -1,6 +1,6 @@
 <template>
   <div class="popover popover-right">
-    <router-link :to="{ name: 'profile', params: { user: user ? user.username : null }}">
+    <router-link :to="{ name: 'user', params: { user: user ? user.username : null }}">
       <figure class="avatar" :class="{ 'avatar-lg' : isLarge, 'avatar-sm' : isSmall, 'avatar-xl': isXl, 'badge': !!badge, 'av-badge': header }" :data-badge="badge">
         <img
           v-if="user && user.avatar"

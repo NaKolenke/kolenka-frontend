@@ -17,18 +17,18 @@ import PostView from '@/components/PostView.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
 import df from '@/mixins/dataFetch'
+import Pagination from '@/models/pagination'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Главная'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        posts: 'posts/home'
-      }),
+      posts: [],
       page: 1,
       pageCount: 0,
       isLoading: true
@@ -38,26 +38,30 @@ export default {
     this.refreshPage(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
-    this.$posts.purge()
     this.refreshPage(to)
     next()
   },
   methods: {
     refreshPage (route) {
+      this.posts = []
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
-
-      this.$posts.getHomePage(this.page).then(pages => {
-        this.pageCount = pages
-        this.isLoading = false
-      })
+      this.$store.dispatch('posts/getAll', { pagination: new Pagination(this.page) })
+        .then(res => {
+          this.posts = res.posts
+          this.pageCount = res.meta.page_count
+          this.isLoading = false
+        })
+        .catch(error => {
+          this.isLoading = false
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     paginateRelative (offset) {
-      this.$posts.purge()
       this.$router.push({ name: 'home', query: { page: this.page + offset } })
     },
     paginateTo (page) {
-      this.$posts.purge()
       this.$router.push({ name: 'home', query: { page: page } })
     }
   },
@@ -66,10 +70,10 @@ export default {
     PaginationView,
     PostSkeleton
   },
-  mixins: [ df ]
+  mixins: [df]
 }
 </script>
 
 <style lang="scss" scoped>
-@import './../assets/transitions';
+@import "./../assets/transitions";
 </style>

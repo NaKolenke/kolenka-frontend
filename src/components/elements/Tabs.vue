@@ -1,7 +1,11 @@
 <template>
   <div class="tabs">
     <ul class="tab tab-block">
-      <li v-for="item in tabs" :key="item.index" :class="['tab-item', {'active': active === item.index}]">
+      <li
+        v-for="item in tabs"
+        :key="item.index"
+        :class="['tab-item', {'active': active === item.index}]"
+      >
         <a href="#" @click.prevent="active = item.index">{{ item.title }}</a>
       </li>
     </ul>
@@ -13,7 +17,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       active: 0,
       tabs: [],
@@ -21,7 +25,7 @@ export default {
       defaultActivated: false
     }
   },
-  mounted() {
+  mounted () {
     this.recalculateTabs()
 
     this.observer = new MutationObserver(mutations => {
@@ -32,37 +36,37 @@ export default {
       childList: true
     })
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.observer.disconnect()
   },
   methods: {
-    recalculateTabs() {
+    recalculateTabs () {
       this.tabs = this.$slots.default
-      .map((x, i) => {
-        if (!x.componentInstance) return x
+        .map((x, i) => {
+          if (!x.componentInstance) return x
 
-        if (!this.defaultActivated && x.componentInstance.$props.active) {
-          this.active = i
-          this.defaultActivated = true
-        }
+          if (!this.defaultActivated && x.componentInstance.$props.active) {
+            this.active = i
+            this.defaultActivated = true
+          }
 
-        return x
-      })
-      .map((x, i) => {
-        if (!x.componentInstance) return null
+          return x
+        })
+        .map((x, i) => {
+          if (!x.componentInstance) return null
 
-        x.componentInstance.$data.isActive = (i === this.active)
-        
-        return {
-          title: x.componentInstance.$props.title,
-          index: i
-        }
-      })
-      .filter(x => x != null)
+          x.componentInstance.$data.isActive = (i === this.active)
+
+          return {
+            title: x.componentInstance.$props.title,
+            index: i
+          }
+        })
+        .filter(x => x != null)
     }
   },
   watch: {
-    'active'(v) {
+    'active' (v) {
       this.recalculateTabs()
     }
   }

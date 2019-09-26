@@ -54,7 +54,7 @@ export default {
       this.$router.push({ path: '/404' })
       return
     }
-    
+
     this.$admin.getDashboard().then(data => {
       this.totalUsers = data.users
       this.activeUsers = data.active_users_7_days
@@ -72,7 +72,7 @@ export default {
   methods: {
     stickerUploaded(images) {
       const sticker = images[0]
-      
+
       stickersApi
         .addSticker(this.stickerName, sticker.id)
         .then(data => {
@@ -99,10 +99,10 @@ export default {
   },
   computed: {
     isAdmin: function () {
-      if (!this.auth.user) {
+      if (!this.user) {
         return false
       }
-      return this.auth.user.is_admin
+      return this.user.is_admin
     },
     isLocal() {
       return window.location.hostname === 'localhost'

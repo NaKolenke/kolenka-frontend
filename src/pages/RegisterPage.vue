@@ -10,7 +10,7 @@
               class="form-input"
               v-model="username"
               v-validate="validation.username"
-              name="username" 
+              name="username"
               id="username"
               required
             >
@@ -23,8 +23,8 @@
               class="form-input"
               v-model="email"
               v-validate="validation.email"
-              name="email" 
-              id="email" 
+              name="email"
+              id="email"
               inputmode="email"
               required
             >
@@ -37,8 +37,8 @@
               class="form-input"
               v-model="name"
               v-validate="validation.name"
-              name="name" 
-              id="name" 
+              name="name"
+              id="name"
               required
             >
             <div class="form-input-hint" v-if="!validation.name.success && validation.showErrors">Неверное имя</div>
@@ -70,6 +70,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import errors from '@/utils/errors'
+
 export default {
   metaInfo() {
     return {
@@ -78,9 +81,6 @@ export default {
   },
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       username: '',
       email: '',
       name: '',
@@ -104,7 +104,7 @@ export default {
     }
   },
   mounted () {
-    if (this.auth.user != null) {
+    if (this.user != null) {
       this.$router.replace({ path: '/' })
     }
   },
@@ -116,17 +116,15 @@ export default {
       } else {
         this.validation.showErrors = false
       }
-
-      this.$auth
-      .register(this.username, this.email, this.name, this.password)
-      .then(() => {
-        this.$toast.show('Регистрация успешна')
-        this.$router.replace({ path: '/' })
-      })
-      .catch(err => {
-        console.log(err)
-        this.$toast.error('Ошибка регистрации')
-      })
+      this.$store.dispatch('auth/register', { username: this.username, password: this.password, email: this.email, name: this.name })
+        .then(() => {
+          this.$toast.show('Регистрация успешна')
+          this.$router.replace({ path: '/' })
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     }
   },
   computed: {
@@ -135,7 +133,10 @@ export default {
         this.validation.email.success &&
         this.validation.name.success &&
         this.validation.password.success
-    }
+    },
+    ...mapState({
+      user: state => state.users.me
+    }),
   }
 }
 </script>

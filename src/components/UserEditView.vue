@@ -28,23 +28,12 @@
 
         <div class="form-group">
           <label class="form-label" for="birthday">День рождения</label>
-          <input
-            class="form-input"
-            v-model="birthday"
-            type="date"
-            name="birthday"
-            id="birthday"
-          />
+          <input class="form-input" v-model="birthday" type="date" name="birthday" id="birthday" />
         </div>
 
         <div class="form-group">
           <label class="form-label" for="about">О себе</label>
-          <editor
-            type="basic"
-            ref="editor"
-            editor-class="bio-editor"
-            :store="store"
-          ></editor>
+          <editor type="basic" ref="editor" editor-class="bio-editor" :store="store"></editor>
         </div>
 
         <button id="edit-btn" class="btn btn-primary" @click="edit" :disabled="!isValid">Изменить</button>
@@ -52,7 +41,6 @@
 
       <div class="column col-4">
         <div class="form-group">
-
           <!--<img :src="process.env.VUE_APP_CONTENT_URL + `/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />-->
           <image-upload @complete="imageUploaded">
             <h4>Изменить аватар</h4>
@@ -75,7 +63,7 @@ Moment.locale('ru')
 
 export default {
   props: ['user'],
-  data() {
+  data () {
     return {
       store: {
         html: ''
@@ -91,7 +79,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.$refs.editor.setContent(this.user.about)
   },
   computed: {
@@ -103,9 +91,9 @@ export default {
         this.user.birthday = date
       }
     },
-    isValid() {
+    isValid () {
       return this.validation.username.success &&
-             this.validation.email.success
+        this.validation.email.success
     }
   },
   methods: {
@@ -113,19 +101,9 @@ export default {
       this.user.about = this.store.html
       this.$parent.editUser(this.user)
     },
-    imageUploaded(images) {
+    imageUploaded (images) {
       const avatar = images[0]
-
-      this.$users.routes.editAvatar(avatar.id, this.$auth.data.accessToken.token).then(res => {
-        if (res.success !== 1) {
-          return Promise.reject(res.error)
-        }
-
-        this.$auth.data.user = res.user
-      }).catch(err => {
-        this.$log.error(err)
-        this.$toast.show('Не удалось изменить аватар')
-      })
+      this.$parent.editAvatar(avatar)
     }
   },
   components: {
