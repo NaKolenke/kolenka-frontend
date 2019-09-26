@@ -8,7 +8,12 @@
           <router-view />
         </div>
 
-        <div v-if="showSidebar" id="sidebar" class="column col-3 col-md-12" style="position: relative">
+        <div
+          v-if="showSidebar"
+          id="sidebar"
+          class="column col-3 col-md-12"
+          style="position: relative"
+        >
           <transition name="sidebar-fade" mode="in-out">
             <router-view name="sidebar" />
           </transition>
@@ -23,16 +28,18 @@
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
 import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
 import FooterComponent from '@/components/TheFooter.vue'
 import ToastPlugin from '@/plugins/toast'
 import LogPlugin from '@/plugins/log'
-import store from '@/library/index'
 import ScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 import '@/directives/validate'
 import df from '@/mixins/dataFetch'
+import Pagination from './models/pagination'
+
 
 Vue.use(ScrollTo)
 Vue.use(ProgressBar, {
@@ -44,8 +51,6 @@ Vue.use(VueMeta, {
   refreshOnceOnNavigation: true
 })
 
-Vue.use(store)
-
 export default {
   name: 'App',
   metaInfo: () => ({
@@ -53,9 +58,6 @@ export default {
   }),
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       version: process.env.VUE_APP_VERSION
     }
   },
@@ -73,17 +75,26 @@ export default {
 
     this.$Progress.finish()
   },
-  dataFetch() {
-    return this.$auth
-    .login()
-    .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
-    .then(() => this.$notifications.getAll({ page: 1, limit: 1 }))
-    .catch(err => {
-      this.$log.error(err)
-    })
+  dataFetch () {
+    return this.$store.dispatch('auth/restoreToken')
+      .then(_res => {
+        return this.$store.dispatch('users/getSelf')
+      })
+      .then(me => {
+        return this.$store.dispatch('blogs/getMyBlogs', { username: me.username, pagination: new Pagination(1) })
+      })
+      .then(_res => {
+        return this.$store.dispatch('notifications/getAll', { pagination: new Pagination(1, 100) })
+      })
+      .catch(err => {
+        this.$log.error(err)
+      })
   },
   computed: {
-    showSidebar() {
+    ...mapState({
+      user: state => state.users.me
+    }),
+    showSidebar () {
       return !this.$route.matched[0].props.sidebar || !this.$route.matched[0].props.sidebar.hide
     }
   },
@@ -91,7 +102,7 @@ export default {
     HeaderComponent,
     FooterComponent
   },
-  mixins: [ df ]
+  mixins: [df]
 }
 </script>
 
@@ -114,9 +125,8 @@ export default {
 </style>
 
 <style lang="scss">
-
 // colors should be overriden before any spectre import
-$primary-color: #0D93B0;
+$primary-color: #0d93b0;
 $secondary-color: lighten($primary-color, 58%);
 
 @import "../node_modules/spectre.css/src/spectre.scss";
@@ -129,7 +139,7 @@ ol li p:first-child {
 }
 
 img {
-  max-width:100%;
+  max-width: 100%;
 }
 
 .text-left {
@@ -148,7 +158,7 @@ img {
   margin-top: 20px;
 }
 
-@import '../node_modules/spectre.css/src/_variables.scss';
+@import "../node_modules/spectre.css/src/_variables.scss";
 
 // Tables override for editor (so we don't need to specify .table every time)
 .form-group {
@@ -195,7 +205,7 @@ img {
     &.table-scroll {
       display: block;
       overflow-x: auto;
-      padding-bottom: .75rem;
+      padding-bottom: 0.75rem;
       white-space: nowrap;
     }
 
@@ -228,7 +238,7 @@ pre code {
 
 pre {
   code {
-    @import '../node_modules/highlight.js/styles/a11y-light.css';
+    @import "../node_modules/highlight.js/styles/a11y-light.css";
   }
 }
 
@@ -240,11 +250,14 @@ p {
   margin: 0 0 $line-height / 1.5;
 }
 
-a:focus, a:hover, a:visited {
+a:focus,
+a:hover,
+a:visited {
   color: $primary-color;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 

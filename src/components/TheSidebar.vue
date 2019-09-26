@@ -2,26 +2,27 @@
   <div ref="container">
     <div :style="{ 'margin-top': marginTop + 'px' }">
       <slot></slot>
-      <div v-if="isLoading">
-          Загружаем
-      </div>
+      <div v-if="isLoading">Загружаем</div>
       <div v-else class="side-block bg-gray">
         <h4>ТЕГИ</h4>
-        <span v-for="tag in tags" :key="tag.id">
-          <router-link :to="{ name: 'tag', params: { title: tag.title }}"> {{tag.title}} </router-link>
-        </span>
+
+        <router-link
+          v-for="tag in tags"
+          :key="tag.id"
+          :to="{ name: 'tag', params: { title: tag.title }}"
+        >{{tag.title}}</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import errors from '@/utils/errors'
+
 export default {
   data () {
     return {
-      ...this.mapData({
-        tags: 'tags/everything'
-      }),
       isLoading: true,
       marginTop: 0,
       onScroll: null
@@ -30,32 +31,34 @@ export default {
   created () {
     this.isLoading = true
 
-    this.$tags.getAll().then(data => {
-      this.isLoading = false
-    }).catch(err => {
-      this.isLoading = false
-      console.log(err)
-    })
+    this.$store.dispatch('tags/getAll')
+      .then(_data => {
+        this.isLoading = false
+      }).catch(error => {
+        this.isLoading = false
+        errors.handle(error)
+        this.$toast.error(errors.getText(error))
+      })
   },
   mounted () {
-    this.$nextTick(() => {      
+    this.$nextTick(() => {
       if (this.$route.matched[0].props.sidebar &&
-          this.$route.matched[0].props.sidebar.sticky === true) {
+        this.$route.matched[0].props.sidebar.sticky === true) {
         this.runSticky()
       }
     })
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (this.onScroll) {
       window.removeEventListener('scroll', this.onScroll)
     }
   },
   methods: {
-    runSticky() {
+    runSticky () {
       let container = this.$refs.container
       let offset = container.offsetTop
 
-      this.onScroll = e => {
+      this.onScroll = _e => {
         let scroll = window.pageYOffset || document.documentElement.scrollTop
         let height = container.offsetHeight
 
@@ -70,16 +73,21 @@ export default {
 
         if (scroll + window.innerHeight > height + offset) {
           if (height > window.innerHeight) {
-           this.marginTop = scroll - offset - (height - window.innerHeight)
+            this.marginTop = scroll - offset - (height - window.innerHeight)
           } else {
             this.marginTop = scroll - offset
-          }        
+          }
         }
       }
-      
-      window.addEventListener('scroll', this.onScroll)
+
+      // window.addEventListener('scroll', this.onScroll)
     }
-  }
+  },
+  computed: {
+    ...mapState({
+      tags: state => state.tags.tags
+    }),
+  },
 }
 </script>
 
@@ -92,6 +100,7 @@ a {
   text-decoration: none;
   margin-left: 0px;
   margin-right: 6px;
+  float: left;
 }
 
 .side-block {
@@ -99,6 +108,7 @@ a {
   border-radius: 3px;
   background: #7db9e8;
   margin-bottom: 24px;
+  overflow: hidden;
 }
 </style>
 

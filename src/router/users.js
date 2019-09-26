@@ -2,9 +2,9 @@ import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 import RestorePasswordPage from '@/pages/RestorePassword.vue'
 import NewPasswordPage from '@/pages/NewPassword.vue'
-import ProfilePage from '@/pages/ProfilePage.vue'
-import ProfileEditPage from '@/pages/ProfileEditPage.vue'
-import ProfilesListPage from '@/pages/ProfilesListPage.vue'
+import UserPage from '@/pages/UserPage.vue'
+import UserEditPage from '@/pages/UserEditPage.vue'
+import UsersListPage from '@/pages/UsersListPage.vue'
 import UserPostsPage from '@/pages/UserPostsPage.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
@@ -62,15 +62,15 @@ export default [
     path: '/users/',
     name: 'users',
     components: {
-      default: ProfilesListPage,
+      default: UsersListPage,
       sidebar: DefaultSidebar
     }
   },
   {
     path: '/users/edit',
-    name: 'editProfile',
+    name: 'editUser',
     components: {
-      default: ProfileEditPage,
+      default: UserEditPage,
       sidebar: DefaultSidebar
     },
     props: {
@@ -81,9 +81,9 @@ export default [
   },
   {
     path: '/users/:user',
-    name: 'profile',
+    name: 'user',
     components: {
-      default: ProfilePage,
+      default: UserPage,
       sidebar: DefaultSidebar
     },
     props: {

@@ -13,7 +13,7 @@
           type="submit"
           value="Разрешить"
           @click="send"
-        >
+        />
       </div>
     </div>
   </div>
@@ -26,16 +26,7 @@ export default {
   props: ['feedback'],
   methods: {
     send () {
-      this.$feedback
-      .resolve(this.feedback.id)
-      .then(data => {
-        this.$parent.resolved(this.feedback.id)
-        this.$toast.show('Готово!')
-      })
-      .catch(err => {
-        this.$log.error(err)
-        this.$toast.show('Произошла ошибка при отправке запроса, напишите об этом одному из разработчиков')
-      })        
+      this.$parent.resolved(this.feedback.id)
     }
   },
   components: {

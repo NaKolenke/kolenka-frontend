@@ -10,45 +10,69 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import FeedbackListView from '@/components/FeedbackListView.vue'
 import FeedbackPrompt from '@/components/FeedbackPrompt.vue'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Обратная связь'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       feedbacks: []
     }
   },
   created () {
-    if (!this.auth.user) {
+    if (!this.user) {
       this.$router.replace({ path: '/' })
       return
     }
-    
+
     if (this.isAdmin) {
       this.refreshFeedbacks()
     }
   },
   methods: {
     refreshFeedbacks () {
-      this.$feedback.getList().then(data => {
-        this.feedbacks = data.feedback
-      }).catch(err => {
-        this.$log.error(err)
+      this.feedbacks = []
 
-        this.$router.replace({ path: '/401' })
-      })
+      this.$store.dispatch('feedback/getList')
+        .then(data => {
+          this.feedbacks = data.feedback
+        }).catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     resolved (id) {
-      this.feedbacks.filter(f => f.id == id)[0].is_resolved = true
+      this.$store.dispatch('feedback/resolve', { id: id })
+        .then(_data => {
+          this.feedbacks.filter(f => f.id == id)[0].is_resolved = true
+          this.$toast.show('Готово!')
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+
+          this.$toast.show('Произошла ошибка при отправке запроса, напишите об этом одному из разработчиков')
+        })
+    },
+    send (text) {
+      this.$store.dispatch('feedback/send', { text: text })
+        .then(_data => {
+          this.$router.replace({ path: '/' })
+          this.$toast.show('Ваш отзыв отправлен')
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+
+          this.$toast.show('Произошла ошибка при отправке отзыва, напишите об этом одному из разработчиков')
+        })
     }
   },
   components: {
@@ -57,11 +81,14 @@ export default {
   },
   computed: {
     isAdmin () {
-      if (!this.auth.user) {
+      if (!this.user) {
         return false
       }
-      return this.auth.user.is_admin
-    }
+      return this.user.is_admin
+    },
+    ...mapState({
+      user: state => state.users.me
+    }),
   }
 }
 </script>

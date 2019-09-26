@@ -19,14 +19,14 @@
                 <avatar :user="user" :size="'lg'" :card="false" />
               </div>
               <div class="column col-10 col-md-8 col-lg-9">
-                <router-link :to="{ name: 'profile', params: { user: user.username }}">{{user.username}}</router-link>
+                <router-link
+                  :to="{ name: 'user', params: { user: user.username }}"
+                >{{user.username}}</router-link>
                 <div>{{user.name}}</div>
               </div>
             </div>
           </td>
-          <td>
-            {{user.last_active_date | moment }}
-          </td>
+          <td>{{user.last_active_date | moment }}</td>
         </tr>
       </tbody>
     </table>
@@ -39,18 +39,18 @@
 import PaginationView from '@/components/PaginationView.vue'
 import Avatar from '@/components/elements/Avatar.vue'
 import UserSkeleton from '@/components/skeletons/UserListItem.vue'
+import Pagination from '@/models/pagination'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Пользователи'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        users: 'users/everything'
-      }),
+      users: [],
       page: 1,
       pageCount: 0,
       isLoading: true
@@ -65,19 +65,20 @@ export default {
   },
   methods: {
     refreshPage (route) {
-      this.$users.purge()
+      this.users = []
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      this.$users.getAll({ page: this.page }).then(pages => {
-        this.pageCount = pages
-        this.isLoading = false
-      }).catch(err => {
-        this.isLoading = false
-        console.log(err)
-
-        this.$router.push({ path: '/404' })
-      })
+      this.$store.dispatch('users/getAll', { pagination: new Pagination(this.page) })
+        .then(res => {
+          this.users = res.users
+          this.pageCount = res.meta.page_count
+          this.isLoading = false
+        }).catch(error => {
+          this.isLoading = false
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     paginateRelative (offset) {
       this.$router.push({ name: 'users', query: { page: this.page + offset } })

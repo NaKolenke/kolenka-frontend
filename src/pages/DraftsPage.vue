@@ -12,29 +12,29 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import PostView from '@/components/PostView.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
 import PaginationView from '@/components/PaginationView.vue'
+import Pagination from '@/models/pagination'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Черновики'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        posts: 'posts/drafts',
-        auth: 'auth/data'
-      }),
+      posts: [],
       page: 1,
       pageCount: 0,
       isLoading: true
     }
   },
-  created() {
-    if (!this.auth.user) {
+  created () {
+    if (!this.user) {
       this.$router.replace({ path: '/' })
       return
     }
@@ -48,20 +48,20 @@ export default {
   },
   methods: {
     refreshPage (route) {
+      this.posts = []
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      this.$posts.groups.drafts.indexes = []
-
-      this.$posts.getUserDrafts(this.page).then(pages => {
-        this.pageCount = pages
-        this.isLoading = false
-      }).catch(err => {
-        this.isLoading = false
-        console.log(err)
-
-        this.$router.push({ path: '/404' })
-      })
+      this.$store.dispatch('posts/getUserDrafts', { pagination: new Pagination(this.page) })
+        .then(res => {
+          this.posts = res.posts
+          this.pageCount = res.meta.page_count
+          this.isLoading = false
+        }).catch(error => {
+          this.isLoading = false
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     paginateRelative (offset) {
       this.$router.push({ name: 'userDrafts', query: { page: this.page + offset } })
@@ -69,6 +69,11 @@ export default {
     paginateTo (page) {
       this.$router.push({ name: 'userDrafts', query: { page: page } })
     }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.users.me
+    }),
   },
   components: {
     PostView,
