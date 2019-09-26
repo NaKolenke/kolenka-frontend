@@ -5,12 +5,21 @@
         <div class="tile-icon" style="position:relative">
           <avatar :user="comment.creator" :size="'sm'" />
         </div>
-        
+
         <div class="tile-content p-relative">
           <div class="tile-title text-bold">
-            <router-link :to="{ name: 'profile', params: { user: comment.creator.username }}" class="text-dark">{{ comment.creator.name || comment.creator.username }}</router-link>
-            <br>
-            <small class="text-gray">{{ comment.created_date | moment}} <a :href="'#' + commentId" title="Ссылка на комментарий">#</a></small>
+            <router-link
+              :to="{ name: 'user', params: { user: comment.creator.username }}"
+              class="text-dark"
+            >{{ comment.creator.name || comment.creator.username }}</router-link>
+            <br />
+            <small class="text-gray">
+              {{ comment.created_date | moment}}
+              <a
+                :href="'#' + commentId"
+                title="Ссылка на комментарий"
+              >#</a>
+            </small>
           </div>
 
           <div class="tile-subtitle">
@@ -24,7 +33,16 @@
           </div>
 
           <div class="panel mt-2 mb-2" v-if="isReplying">
-            <div class="panel-header h6">Ответ <button class="btn btn-link btn-sm float-right tooltip" @click="cancelReply" data-tooltip="Отменить"><i class="icon icon-cross"></i></button></div>
+            <div class="panel-header h6">
+              Ответ
+              <button
+                class="btn btn-link btn-sm float-right tooltip"
+                @click="cancelReply"
+                data-tooltip="Отменить"
+              >
+                <i class="icon icon-cross"></i>
+              </button>
+            </div>
             <div class="panel-body" style="overflow:visible">
               <comment-form :post-url="postUrl" :parent-id="comment.id" @sent="commentSent" />
             </div>
@@ -32,12 +50,12 @@
           </div>
         </div>
       </div>
-    
-      <div v-if="comment.children" style="padding-left: .4rem">
+
+      <div v-if="commentHasChilds(comment.id)" style="padding-left: .4rem">
         <comment-card
-          v-for="item in comment.children"
-          :key="item" :comment="$comments.findById(item)" 
-          :parent-id="comment.id" 
+          v-for="item in commentChilds(comment.id)"
+          :key="item.id"
+          :comment="item"
           :post-url="postUrl"
         />
       </div>
@@ -46,6 +64,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
 import wrapCode from '@/utils/wrapCode'
@@ -54,12 +73,12 @@ import resizeTweet from '@/utils/resizeTweet'
 
 export default {
   name: 'comment-card',
-  props: [ 
-    'comment', 
-    'parentId', 
-    'postUrl' 
+  props: [
+    'comment',
+    'parentId',
+    'postUrl'
   ],
-  data() {
+  data () {
     return {
       active: false,
       isReplying: false
@@ -79,14 +98,19 @@ export default {
     cancelReply () {
       this.isReplying = false
     },
-    commentSent() {
+    commentSent () {
       this.isReplying = false
     }
   },
   computed: {
     commentId () {
       return 'comment_' + this.comment.id
-    }
+    },
+    ...mapGetters({
+      commentById: 'comments/byId',
+      commentHasChilds: 'comments/hasChilds',
+      commentChilds: 'comments/getChilds',
+    })
   },
   components: {
     Avatar,

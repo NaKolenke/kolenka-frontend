@@ -9,7 +9,13 @@
       :storageKey="'comments/' + postUrl + '/' + parentId"
     />
     <div>
-      <input class="btn btn-primary float-left" type="submit" value="Отправить" @click="send" :disabled="isSending || !isValid" />
+      <input
+        class="btn btn-primary float-left"
+        type="submit"
+        value="Отправить"
+        @click="send"
+        :disabled="isSending || !isValid"
+      />
       <div v-if="isSending" class="loading float-left" style="margin-top: 10px; margin-left: 20px"></div>
       <div class="clearfix"></div>
     </div>
@@ -18,6 +24,7 @@
 
 <script>
 import Editor from '@/components/editor/Editor.vue'
+import errors from '@/utils/errors'
 
 /*
   Events:
@@ -29,7 +36,7 @@ export default {
     postUrl: String, // Url of the post the comment in
     parentId: Number // Parent comment id
   },
-  data() {
+  data () {
     return {
       isSending: false,
       store: {
@@ -39,22 +46,24 @@ export default {
     }
   },
   methods: {
-    send() {
+    send () {
       this.isSending = true
-      this.$comments
-      .sendComment(this.postUrl, this.store.html, this.parentId)
-      .then(comment => {
-        this.isSending = false
-        this.$refs.editor.setContent('')
-        this.$emit('sent', comment.id)
-      })
-      .catch(err => {
-        this.$log.error(err)
-      })
+      this.$store
+        .dispatch('comments/postComment',
+          { url: this.postUrl, text: this.store.html, parent: this.parentId })
+        .then(comment => {
+          this.isSending = false
+          this.$refs.editor.setContent('')
+          this.$emit('sent', comment.id)
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     }
   },
   computed: {
-    isValid() {
+    isValid () {
       return this.store.length > 3
     }
   },

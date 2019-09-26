@@ -3,7 +3,11 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Войти</h1>
-        <form method="POST" @submit.prevent="login" :class="{ 'has-error': !isValid && validation.showErrors }">
+        <form
+          method="POST"
+          @submit.prevent="login"
+          :class="{ 'has-error': !isValid && validation.showErrors }"
+        >
           <div class="form-group">
             <label class="form-label" for="username">Имя пользователя</label>
             <input
@@ -14,8 +18,11 @@
               name="username"
               id="username"
               required
-            >
-            <div class="form-input-hint" v-if="!validation.username.success && validation.showErrors">Неверное имя пользователя</div>
+            />
+            <div
+              class="form-input-hint"
+              v-if="!validation.username.success && validation.showErrors"
+            >Неверное имя пользователя</div>
           </div>
 
           <div class="form-group">
@@ -28,18 +35,22 @@
               type="password"
               id="password"
               required
-            >
-            <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Неверный пароль</div>
+            />
+            <div
+              class="form-input-hint"
+              v-if="!validation.password.success && validation.showErrors"
+            >Неверный пароль</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn primary" value="Войти">
+          <input type="submit" id="login-btn" class="btn primary" value="Войти" />
         </form>
 
-        <br>
+        <br />
         <p>
-          Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link>
-          <br>
-          Забыли пароль? <router-link to="/restore">Восстановить</router-link>
+          Еще нет учетной записи?
+          <router-link to="/register">Зарегистрироваться</router-link>
+          <br />Забыли пароль?
+          <router-link to="/restore">Восстановить</router-link>
         </p>
       </div>
     </div>
@@ -47,22 +58,22 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import errors from '@/utils/errors'
+
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Вход'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       username: '',
       password: '',
       validation: {
         username: {
-          length: () => this.username.length >= 3
+          length: () => this.username.length > 0
         },
         password: {
           length: () => this.password.length >= 4
@@ -72,35 +83,36 @@ export default {
     }
   },
   mounted () {
-    if (this.auth.user != null) {
+    if (this.user != null) {
       this.$router.replace({ path: '/' })
     }
   },
   methods: {
     login () {
       if (!this.isValid) {
-        this.validation.showErrors = true
-        return
+        return this.validation.showErrors = true
       } else {
         this.validation.showErrors = false
       }
 
-      this.$auth
-      .login(this.username, this.password)
-      .then(() => {
-        this.$toast.show('Авторизация успешна')
-        this.$router.replace({ path: '/' })
-      })
-      .then(() => this.$blogs.getUserBlogs(this.auth.user.username, { limit: 100 }, true))
-      .catch(() => {
-        this.$toast.error('Ошибка авторизации')
-      })
+      this.$store.dispatch('auth/login', { username: this.username, password: this.password })
+        .then(() => {
+          this.$toast.show('Авторизация успешна')
+          this.$router.replace({ path: '/' })
+        })
+        .catch((error) => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     }
   },
   computed: {
-    isValid() {
+    ...mapState({
+      user: state => state.users.me
+    }),
+    isValid () {
       return this.validation.username.success &&
-             this.validation.password.success
+        this.validation.password.success
     }
   }
 }

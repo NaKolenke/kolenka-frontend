@@ -3,10 +3,10 @@
     <div class="text-center">
       <avatar :user="user" size="xl" :card="false" :badge="user.is_admin ? 'Администратор' : false" />
       <h4 class="mt-2" style="margin-bottom: 0">
-        <router-link :to="{ name: 'profile', params: { user: user.username }}">{{ user.username }}</router-link>
+        <router-link :to="{ name: 'user', params: { user: user.username }}">{{ user.username }}</router-link>
       </h4>
       <div>{{user.name}}</div>
-      <router-link v-if="canEdit" :to="{ name: 'editProfile'}" class="btn btn-primary"><i class="icon icon-edit"></i> Редактировать</router-link>
+      <router-link v-if="canEdit" :to="{ name: 'editUser'}" class="btn btn-primary"><i class="icon icon-edit"></i> Редактировать</router-link>
       <br v-if="canEdit">
       <br>
       <span class="label label-rounded label-secondary">Заходил последний раз: {{ user.last_active_date | moment }}</span>

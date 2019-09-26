@@ -5,20 +5,32 @@
     </template>
     <post-view v-else :post="post" :cut="false"></post-view>
 
-    <div id="comments_container" v-if="!post.is_draft">
-      <h3 id="comments">Комментарии <small class="text-gray">{{ commentsCount }}</small></h3>
-      <comment-form v-if="auth.user" :post-url="post.url" @sent="addComment"></comment-form>
-      <div v-if="auth.user" class="mt-2"></div>
+    <div id="comments_container" v-if="post && !post.is_draft">
+      <h3 id="comments">
+        Комментарии
+        <small class="text-gray">{{ commentsCount }}</small>
+      </h3>
+      <comment-form v-if="user" :post-url="post.url" @sent="addComment"></comment-form>
+      <div v-if="user" class="mt-2"></div>
       <template v-if="loading.comments">
         <comment-skeleton />
       </template>
-      <comment-card v-else v-for="item in comments" :key="item.id" :comment="item" :post-url="post.url"></comment-card>
+      <comment-card
+        v-else
+        v-for="item in comments"
+        :key="item.id"
+        :comment="item"
+        :post-url="post.url"
+      ></comment-card>
       <div class="bottom-padd"></div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+import errors from '@/utils/errors'
+import Pagination from '@/models/pagination'
 import PostView from '@/components/PostView.vue'
 import CommentCard from '@/components/cards/CommentCard.vue'
 import CommentForm from '@/components/CommentForm.vue'
@@ -26,19 +38,13 @@ import PostSkeleton from '@/components/skeletons/Post.vue'
 import CommentSkeleton from '@/components/skeletons/Comment.vue'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Запись'
     }
   },
   data: function () {
     return {
-      ...this.mapData({
-        comments: 'comments/root',
-        auth: 'auth/data'
-      }),
-      post: {},
-      commentsCount: 0,
       loading: {
         comments: true,
         post: true
@@ -54,33 +60,40 @@ export default {
   },
   methods: {
     refreshPost (route) {
-      this.$posts
-      .getPostByUrl(route.params.post)
-      .then(post => {        
-        this.post = post
-        this.loading.post = false
-      })
-      .then(() => this.refreshComments(route))
-      .catch(err => {
-        this.$router.push({ path: '/404' })
-      })
+      this.$store.dispatch('posts/getPost', { url: route.params.post })
+        .then(_post => {
+          this.loading.post = false
+        })
+        .then(() => this.refreshComments(route))
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+          this.$router.push({ path: '/404' })
+        })
     },
-    refreshComments(route) {
-      this.$comments.purge()
-
-      this.$comments.getComments(route.params.post).then(count => {
-        this.commentsCount = count
-        this.loading.comments = false
-      }).catch(err => {
-        console.log(err)
-      })
+    refreshComments (route) {
+      return this.$store.dispatch('comments/getComments', { url: route.params.post, pagination: new Pagination(1) })
+        .then(_res => {
+          this.loading.comments = false
+        }).catch(err => {
+          console.log(err)
+        })
     },
-    addComment(id) {
-      this.commentsCount++
+    addComment (id) {
       this.$nextTick(() => {
         this.$scrollTo('#comment_' + id, 1000, { cancelable: true })
       })
     }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.users.me,
+      post: state => state.posts.current
+    }),
+    ...mapGetters({
+      commentsCount: 'comments/commentsCount',
+      comments: 'comments/topLevelComments',
+    })
   },
   components: {
     PostView,
@@ -100,7 +113,7 @@ export default {
 
 .relevant li {
   margin-top: 0;
-  margin-bottom: .4rem;
+  margin-bottom: 0.4rem;
 }
 </style>
 

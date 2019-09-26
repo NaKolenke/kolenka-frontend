@@ -14,18 +14,18 @@
 import PostView from '@/components/PostView.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import PaginationView from '@/components/PaginationView.vue'
+import Pagination from '@/models/pagination'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Тег'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        posts: 'posts/tag'
-      }),
+      posts: [],
       page: 1,
       pageCount: 0,
       isLoading: true
@@ -40,26 +40,29 @@ export default {
   },
   methods: {
     refreshPage (route) {
+      this.posts = []
       this.isLoading = true
       this.page = parseInt(route.query.page) || this.page
 
-      this.$posts
-      .getPostsByTag(route.params.title, this.page).then(posts => {
-        this.pageCount = posts.meta.page_count
-        this.isLoading = false
-      })
-      .catch(err => {
-        this.isLoading = false
-        console.log(err)
-
-        this.$router.push({ path: '/404' })
-      })
+      this.$store.dispatch(
+        'posts/getPostsByTag',
+        { tag: route.params.title, pagination: new Pagination(this.page) })
+        .then(res => {
+          this.posts = res.posts
+          this.pageCount = res.meta.page_count
+          this.isLoading = false
+        })
+        .catch(error => {
+          this.isLoading = false
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     },
     paginateRelative (offset) {
-      this.$router.push({ name: 'tag', params:{ title: this.$route.params.title }, query: { page: this.page + offset } })
+      this.$router.push({ name: 'tag', params: { title: this.$route.params.title }, query: { page: this.page + offset } })
     },
     paginateTo (page) {
-      this.$router.push({ name: 'tag', params:{ title: this.$route.params.title }, query: { page: page } })
+      this.$router.push({ name: 'tag', params: { title: this.$route.params.title }, query: { page: page } })
     }
   },
   components: {

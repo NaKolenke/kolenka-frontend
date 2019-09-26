@@ -2,10 +2,8 @@
   <div class="container col-9 col-mx-auto">
     <div class="columns">
       <div class="column">
-
         <h2>Новая запись</h2>
         <div class="form-horizontal">
-
           <div class="form-group">
             <div class="col-3 col-sm-12">
               <label class="form-label" for="title">Название</label>
@@ -19,9 +17,14 @@
                 v-validate="validation.title"
                 required
               />
-              <p class="form-input-hint">/posts/
-                <span v-if="!isChangingSlug" @click="changeSlug">{{ slugChanged ? newSlug : slug }}</span>
-                <input v-else
+              <p class="form-input-hint">
+                /posts/
+                <span
+                  v-if="!isChangingSlug"
+                  @click="changeSlug"
+                >{{ slugChanged ? newSlug : slug }}</span>
+                <input
+                  v-else
                   type="text"
                   :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']"
                   v-model="newSlug"
@@ -49,24 +52,46 @@
               <label class="form-label" for="blog">В блог</label>
             </div>
             <div class="col-9 col-sm-12">
-              <select class="form-select" id="blog" v-model="model.blog" v-validate="validation.blog">
+              <select
+                class="form-select"
+                id="blog"
+                v-model="model.blog"
+                v-validate="validation.blog"
+              >
                 <option :value="null" selected>Нет</option>
-                <option v-for="blog in blogs" :key="blog.id" :value="blog.id">{{ blog.title }} (Создатель: {{ blog.creator.username }})</option>
+                <option
+                  v-for="blog in blogs"
+                  :key="blog.id"
+                  :value="blog.id"
+                >{{ blog.title }} (Создатель: {{ blog.creator.username }})</option>
               </select>
-              <p class="form-input-hint" style="margin-bottom: 0">Чтобы опубликовать запись, выберите блог</p>
+              <p
+                class="form-input-hint"
+                style="margin-bottom: 0"
+              >Чтобы опубликовать запись, выберите блог</p>
             </div>
           </div>
 
           <div class="form-group float-right">
             <div class="btn-group btn-group-block" style="width:350px">
               <div v-if="isSending" class="loading" style="margin-right: 32px"></div>
-              <input type="submit" class="btn" value="Сохранить как черновик" @click="send(true)" :disabled="!isValid || isSending">
-              <input type="submit" class="btn btn-primary" value="Написать" @click="send(false)" :disabled="!isValid || isSending">
+              <input
+                type="submit"
+                class="btn"
+                value="Сохранить как черновик"
+                @click="send(true)"
+                :disabled="!isValid || isSending"
+              />
+              <input
+                type="submit"
+                class="btn btn-primary"
+                value="Написать"
+                @click="send(false)"
+                :disabled="!isValid || isSending"
+              />
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
 
@@ -75,21 +100,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Editor from '@/components/editor/Editor.vue'
 import slugify from 'speakingurl'
+import errors from '@/utils/errors'
 
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Написать запись'
     }
   },
-  data() {
+  data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data',
-        blogs: 'blogs/my'
-      }),
       model: {
         title: localStorage.getItem('post-title') || '',
         blog: null
@@ -117,54 +140,58 @@ export default {
       newSlug: ''
     }
   },
-  created() {
-    if (!this.auth.user) {
+  created () {
+    if (!this.user) {
       this.$router.replace({ path: '/' })
       return
     }
   },
-  mounted() {
+  mounted () {
     const edit = this.$route.params.edit
 
-    if (edit) {
+    if (this.isInEditMode) {
       this.model.title = edit.title
       this.model.blog = edit.blog.id
       this.$refs.editor.setContent(edit.text)
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     localStorage.setItem('post-title', this.model.title)
   },
   methods: {
-    send(draft) {
+    send (draft) {
       this.isSending = true
 
-      let method = this.$route.params.edit ?
-      this.$posts.editPost(
-        this.$route.params.edit.url,
-        this.model.title,
-        this.store.html,
-        draft,
-        this.model.blog
-      ) :
-      this.$posts.createPost(
-        this.model.title,
-        this.store.html,
-        (this.slugChanged ? this.newSlug : this.slug),
-        draft,
-        this.model.blog
-      )
+      let result = null
+      if (this.isInEditMode) {
+        result = this.$store.dispatch('posts/editPost', {
+          title: this.model.title,
+          text: this.store.html,
+          url: this.$route.params.edit.url,
+          draft: draft,
+          blogId: this.model.blog
+        })
+      } else {
+        result = this.$store.dispatch('posts/createPost', {
+          title: this.model.title,
+          text: this.store.html,
+          url: (this.slugChanged ? this.newSlug : this.slug),
+          draft: draft,
+          blogId: this.model.blog
+        })
+      }
 
-      method.then(data => {
+      result.then(data => {
         localStorage.setItem('post-text', null)
         localStorage.setItem('post-title', null)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.url } })
-      }).catch(err => {
-        console.log(err)
+      }).catch(error => {
+        errors.handle(error)
+        this.$toast.error(errors.getText(error))
       })
     },
-    changeSlug() {
+    changeSlug () {
       this.isChangingSlug = true
 
       if (!this.slugChanged) {
@@ -173,18 +200,26 @@ export default {
     }
   },
   computed: {
-    slug() {
+    slug () {
       return slugify(this.model.title, { lang: 'ru' })
     },
-    slugChanged() {
+    slugChanged () {
       return this.newSlug !== '' && this.newSlug !== this.slug
     },
-    isValid() {
+    isValid () {
       return this.validation.title.success &&
-             this.validation.body.success &&
-             this.validation.blog.success &&
-             (this.slugChanged ? this.validation.slug.success : true)
-    }
+        this.validation.body.success &&
+        this.validation.blog.success &&
+        (this.slugChanged ? this.validation.slug.success : true)
+    },
+    isInEditMode () {
+      return this.$route.params.edit
+    },
+    ...mapState({
+      user: state => state.users.me,
+      blogs: state => state.blogs.my
+    }),
+
   },
   components: {
     Editor
