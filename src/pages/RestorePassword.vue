@@ -3,7 +3,11 @@
     <div class="columns">
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Восстановление пароля</h1>
-        <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !validation.email.success }">
+        <form
+          method="POST"
+          @submit.prevent="restore"
+          :class="{ 'has-error': !validation.email.success }"
+        >
           <div class="form-group">
             <label class="form-label" for="email">Адрес электронной почты</label>
             <input
@@ -15,18 +19,22 @@
               id="email"
               inputmode="email"
               required
-            >
-            <div class="form-input-hint" v-if="!validation.email.success && validation.showErrors">Неверный адрес электронной почты</div>
+            />
+            <div
+              class="form-input-hint"
+              v-if="!validation.email.success && validation.showErrors"
+            >Неверный адрес электронной почты</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn primary" value="Отправить">
+          <input type="submit" id="login-btn" class="btn primary" value="Отправить" />
         </form>
 
-        <br>
+        <br />
         <p>
-          Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link>
-          <br>
-          Вспомнили пароль? <router-link to="/login">Войти</router-link>
+          Еще нет учетной записи?
+          <router-link to="/register">Зарегистрироваться</router-link>
+          <br />Вспомнили пароль?
+          <router-link to="/login">Войти</router-link>
         </p>
       </div>
     </div>
@@ -34,17 +42,16 @@
 </template>
 
 <script>
+import errors from '@/utils/errors'
+
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Восстановление доступа'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       email: '',
       validation: {
         email: {
@@ -56,7 +63,7 @@ export default {
     }
   },
   methods: {
-    restore() {
+    restore () {
       if (!this.isValid) {
         this.validation.showErrors = true
         return
@@ -64,20 +71,19 @@ export default {
         this.validation.showErrors = false
       }
 
-      this.$auth
-      .recover(this.email)
-      .then(() => {
-        this.$toast.show('Ссылка для восстановления пароля отправлена на указанную почту')
-        this.$router.replace({ path: '/' })
-      })
-      .catch(err => {
-        console.log(err)
-        this.$toast.error('Ошибка восстановления пароля')
-      })
+      this.$store.dispatch('auth/recover', { email: this.email })
+        .then(() => {
+          this.$toast.show('Ссылка для восстановления пароля отправлена на указанную почту')
+          this.$router.replace({ path: '/' })
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     }
   },
   computed: {
-    isValid() {
+    isValid () {
       return this.validation.email.success
     }
   }

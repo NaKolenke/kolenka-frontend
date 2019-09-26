@@ -50,12 +50,16 @@ const actions = {
   },
   logout ({ dispatch, commit }) {
     request.setAuth(null, null)
+
+    localStorage.setItem('token', null)
+    localStorage.setItem('refresh_token', null)
+
     commit('invalidateTokens')
-    dispatch('users/invalidateUser')
+    dispatch('users/invalidateUser', {}, { root: true })
   },
   restoreToken ({ commit }) {
-    var t = localStorage.getItem('token')
-    if (t != null) {
+    var t = JSON.parse(localStorage.getItem('token'))
+    if (t !== null) {
       var refresh = JSON.parse(localStorage.getItem('refresh_token'))
       return api.refreshToken(refresh.token).then(res => {
         commit('storeTokens', res.access_token, res.refresh_token)
