@@ -24,8 +24,8 @@
       </router-link>
     </h2>
 
-    <div v-if="cut" v-html="post.cut_text"></div>
-    <div v-else v-html="post.text"></div>
+    <div v-if="cut" v-html="cutText"></div>
+    <div v-else v-html="text"></div>
 
     <router-link
       v-if="cut && post.has_cut"
@@ -64,6 +64,7 @@ import Avatar from '@/components/elements/Avatar.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
 import resizeTweet from '@/utils/resizeTweet'
+import processStickers from '@/utils/stickers'
 
 export default {
   props: {
@@ -81,6 +82,12 @@ export default {
     ...mapState({
       user: state => state.users.me
     }),
+    cutText () {
+      return processStickers(this.post.cut_text)
+    },
+    text () {
+      return processStickers(this.post.text)
+    },
   },
   components: {
     Avatar

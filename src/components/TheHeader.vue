@@ -86,7 +86,7 @@
                 </li>
                 <li v-if="isLocal" class="divider"></li>
                 <li v-if="isAdmin" class="menu-item">
-                  <router-link to="/dashboard">
+                  <router-link :to="{name:'admin-activity'}">
                     <i class="icon icon-apps"></i> Управление
                   </router-link>
                 </li>

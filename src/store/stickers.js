@@ -25,6 +25,11 @@ const actions = {
       commit('addSticker', res.sticker)
       return res
     })
+  },
+  processHtml (_context, { html }) {
+    let r = html.replace(/:([a-z]*?):/gm, `<img src="${process.env.VUE_APP_API_URL}stickers/$1"/>`)
+    console.log(r)
+    return r
   }
 }
 

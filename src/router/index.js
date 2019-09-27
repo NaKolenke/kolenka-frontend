@@ -9,10 +9,12 @@ import FeedbackPage from '@/pages/FeedbackPage.vue'
 import TagPage from '@/pages/TagPage.vue'
 import NotificationsPage from '@/pages/NotificationsPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
-import DashboardPage from '@/pages/Dashboard.vue'
+import DashboardPage from '@/pages/admin/DashboardPage.vue'
+import StickersPage from '@/pages/admin/StickersPage.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import DocsSidebar from '@/pages/sidebar/DocsView.vue'
+import AdminSidebar from '@/pages/sidebar/AdminView.vue'
 import TestingPage from '@/pages/TestingPage.vue'
 
 import blogs from './blogs'
@@ -83,14 +85,28 @@ const routes = [
     }
   },
   {
-    path: '/dashboard',
+    path: '/admin/activity',
+    name: 'admin-activity',
     components: {
       default: DashboardPage,
-      sidebar: DefaultSidebar
+      sidebar: AdminSidebar
     },
     props: {
       sidebar: {
-        hide: true
+        hide: false
+      }
+    }
+  },
+  {
+    path: '/admin/stickers',
+    name: 'admin-stickers',
+    components: {
+      default: StickersPage,
+      sidebar: AdminSidebar
+    },
+    props: {
+      sidebar: {
+        hide: false
       }
     }
   },
