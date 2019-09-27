@@ -4,9 +4,11 @@
       <div id="login" class="column col-6 col-mx-auto col-md-12">
         <h1>Восстановление пароля</h1>
         <form method="POST" @submit.prevent="restore" :class="{ 'has-error': !isValid }">
-          <p>Пароль должен отвечать следующим требованиям: <br>
-            * Длина пароля должна быть не менее 8 символов.<br>
-            * Пароль должен состоять из букв латинского алфавита (A-z) и арабских цифр (0-9).</p>
+          <p>
+            Пароль должен отвечать следующим требованиям:
+            <br />* Длина пароля должна быть не менее 8 символов.
+            <br />* Пароль должен состоять из букв латинского алфавита (A-z) и арабских цифр (0-9).
+          </p>
           <div class="form-group">
             <label class="form-label" for="password">Новый пароль</label>
             <input
@@ -17,11 +19,14 @@
               name="password"
               id="password"
               required
-            >
-            <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Ошибка валидации пароля</div>
+            />
+            <div
+              class="form-input-hint"
+              v-if="!validation.password.success && validation.showErrors"
+            >Ошибка валидации пароля</div>
           </div>
 
-           <div class="form-group">
+          <div class="form-group">
             <label class="form-label" for="repeat">Повторите новый пароль</label>
             <input
               type="password"
@@ -31,18 +36,22 @@
               name="repeat"
               id="repeat"
               required
-            >
-            <div class="form-input-hint" v-if="!validation.repeat.success && validation.showErrors">Пароли не совпадают</div>
+            />
+            <div
+              class="form-input-hint"
+              v-if="!validation.repeat.success && validation.showErrors"
+            >Пароли не совпадают</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn primary" value="Установить новый пароль">
+          <input type="submit" id="login-btn" class="btn primary" value="Установить новый пароль" />
         </form>
 
-        <br>
+        <br />
         <p>
-          Еще нет учетной записи? <router-link to="/register">Зарегистрироваться</router-link>
-          <br>
-          Вспомнили пароль? <router-link to="/login">Войти</router-link>
+          Еще нет учетной записи?
+          <router-link to="/register">Зарегистрироваться</router-link>
+          <br />Вспомнили пароль?
+          <router-link to="/login">Войти</router-link>
         </p>
       </div>
     </div>
@@ -50,17 +59,16 @@
 </template>
 
 <script>
+import errors from '@/utils/errors'
+
 export default {
-  metaInfo() {
+  metaInfo () {
     return {
       title: 'Восстановление доступа'
     }
   },
   data () {
     return {
-      ...this.mapData({
-        auth: 'auth/data'
-      }),
       password: '',
       repeat: '',
       validation: {
@@ -76,28 +84,27 @@ export default {
     }
   },
   methods: {
-    restore() {
+    restore () {
       if (!this.isValid) {
         this.validation.showErrors = true
         return
       } else {
         this.validation.showErrors = false
       }
-      
-      this.$auth
-      .setPassword(this.password, this.$route.query.token)
-      .then(() => {
-        this.$toast.show('Ваш пароль успешно изменен')
-        this.$router.replace({ path: '/' })
-      })
-      .catch(err => {
-        console.log(err)
-        this.$toast.error('Ошибка при изменении пароля')
-      })
+
+      this.$store.dispatch('auth/setPassword', { password: this.password, token: this.$route.query.token })
+        .then(() => {
+          this.$toast.show('Ваш пароль успешно изменен')
+          this.$router.replace({ path: '/' })
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     }
   },
   computed: {
-    isValid() {
+    isValid () {
       return this.validation.password.success && this.validation.repeat.success
     }
   }

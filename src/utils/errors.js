@@ -48,8 +48,10 @@ export default {
     var code = getErrorCode(error)
     if (code !== null) {
       return errorCodes[code]
-    }
-    else {
+    } else if (_.has(error, 'silent')) {
+      // workaround
+      return null
+    } else {
       return "Что-то пошло не так"
     }
   },

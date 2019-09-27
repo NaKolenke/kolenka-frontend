@@ -16,6 +16,10 @@ const Toast = {
       toasts: [],
 
       show (msg, opts = {}) {
+        if (!msg) {
+          // workaround
+          return
+        }
         let y = this.toasts.map(i => {
           return i.$el.offsetHeight
         }).reduce((a, b) => a + b, 0)
@@ -41,7 +45,7 @@ const Toast = {
       error (msg) {
         this.show(msg, { isError: true })
       },
-      hide (toast) {        
+      hide (toast) {
         toast.$destroy()
         this.destroy(toast)
       },

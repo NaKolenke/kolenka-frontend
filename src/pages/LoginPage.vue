@@ -42,7 +42,8 @@
             >Неверный пароль</div>
           </div>
 
-          <input type="submit" id="login-btn" class="btn primary" value="Войти" />
+          <div v-if="isLoading" class="loading"></div>
+          <input v-else type="submit" id="login-btn" class="btn primary" value="Войти" />
         </form>
 
         <br />
@@ -79,7 +80,8 @@ export default {
           length: () => this.password.length >= 4
         },
         showErrors: false
-      }
+      },
+      isLoading: false
     }
   },
   mounted () {
@@ -95,12 +97,17 @@ export default {
         this.validation.showErrors = false
       }
 
+      this.isLoading = true
       this.$store.dispatch('auth/login', { username: this.username, password: this.password })
         .then(() => {
+          return this.$parent.refreshUserData()
+        }).then(() => {
           this.$toast.show('Авторизация успешна')
           this.$router.replace({ path: '/' })
-        })
-        .catch((error) => {
+          this.isLoading = false
+        }).catch((error) => {
+          this.isLoading = false
+
           errors.handle(error)
           this.$toast.error(errors.getText(error))
         })

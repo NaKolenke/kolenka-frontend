@@ -2,8 +2,8 @@
   <div ref="container">
     <div :style="{ 'margin-top': marginTop + 'px' }">
       <slot></slot>
-      <div v-if="isLoading">Загружаем</div>
-      <div v-else class="side-block bg-gray">
+      <div v-if="isLoading && showTags">Загружаем</div>
+      <div v-else-if="showTags" class="side-block bg-gray">
         <h4>ТЕГИ</h4>
 
         <router-link
@@ -21,6 +21,12 @@ import { mapState } from 'vuex'
 import errors from '@/utils/errors'
 
 export default {
+  props: {
+    showTags: {
+      type: Boolean,
+      default: true
+    }
+  },
   data () {
     return {
       isLoading: true,

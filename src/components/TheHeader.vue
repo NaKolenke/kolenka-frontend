@@ -30,7 +30,7 @@
         </template>
 
         <template v-if="user">
-          <div class="dropdown">
+          <div class="dropdown dropdown-right">
             <div class="btn-group">
               <router-link
                 :to="{ name: 'user', params: { user: user.username }}"
@@ -86,7 +86,7 @@
                 </li>
                 <li v-if="isLocal" class="divider"></li>
                 <li v-if="isAdmin" class="menu-item">
-                  <router-link to="/dashboard">
+                  <router-link :to="{name:'admin-activity'}">
                     <i class="icon icon-apps"></i> Управление
                   </router-link>
                 </li>
@@ -150,7 +150,14 @@ export default {
     },
     logout () {
       this.$store.dispatch('auth/logout')
-      this.$router.go()
+
+      if (this.$router.currentRoute.name == 'home') {
+        // this line causes full page refresh
+        this.$router.go()
+      } else {
+        // this is soft refresh
+        this.$router.push({ name: 'home' })
+      }
     }
   },
   computed: {
@@ -211,5 +218,9 @@ header a {
 
 .icon {
   margin-right: 4px;
+}
+
+.menu {
+  min-width: 240px;
 }
 </style>

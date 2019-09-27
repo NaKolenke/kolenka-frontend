@@ -39,7 +39,7 @@ import VueMeta from 'vue-meta'
 import '@/directives/validate'
 import df from '@/mixins/dataFetch'
 import Pagination from './models/pagination'
-
+import errors from '@/utils/errors'
 
 Vue.use(ScrollTo)
 Vue.use(ProgressBar, {
@@ -76,19 +76,7 @@ export default {
     this.$Progress.finish()
   },
   dataFetch () {
-    return this.$store.dispatch('auth/restoreToken')
-      .then(_res => {
-        return this.$store.dispatch('users/getSelf')
-      })
-      .then(me => {
-        return this.$store.dispatch('blogs/getMyBlogs', { username: me.username, pagination: new Pagination(1) })
-      })
-      .then(_res => {
-        return this.$store.dispatch('notifications/getAll', { pagination: new Pagination(1, 100) })
-      })
-      .catch(err => {
-        this.$log.error(err)
-      })
+    return this.refreshUserData()
   },
   computed: {
     ...mapState({
@@ -96,6 +84,30 @@ export default {
     }),
     showSidebar () {
       return !this.$route.matched[0].props.sidebar || !this.$route.matched[0].props.sidebar.hide
+    }
+  },
+  methods: {
+    refreshUserData () {
+      return this.$store.dispatch('auth/loadTokensFromStorage')
+        .then(tokens => {
+          if (tokens == null) {
+            return Promise.reject({ silent: true })
+          }
+          return this.$store.dispatch('auth/restoreToken')
+        })
+        .then(_res => {
+          return this.$store.dispatch('users/getSelf')
+        })
+        .then(me => {
+          return this.$store.dispatch('blogs/getMyBlogs', { username: me.username, pagination: new Pagination(1) })
+        })
+        .then(_res => {
+          return this.$store.dispatch('notifications/getAll', { pagination: new Pagination(1, 100) })
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
     }
   },
   components: {

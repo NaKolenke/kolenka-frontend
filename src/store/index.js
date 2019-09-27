@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import admin from './admin'
 import auth from './auth'
 import blogs from './blogs'
 import comments from './comments'
@@ -9,6 +10,7 @@ import feedback from './feedback'
 import notifications from './notifications'
 import posts from './posts'
 import search from './search'
+import stickers from './stickers'
 import tags from './tags'
 import users from './users'
 
@@ -18,6 +20,7 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
   modules: {
+    admin,
     auth,
     blogs,
     comments,
@@ -27,6 +30,7 @@ export default new Vuex.Store({
     notifications,
     posts,
     search,
+    stickers,
     tags,
     users,
   },
