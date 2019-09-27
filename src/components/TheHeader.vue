@@ -150,7 +150,14 @@ export default {
     },
     logout () {
       this.$store.dispatch('auth/logout')
-      this.$router.go()
+
+      if (this.$router.currentRoute.name == 'home') {
+        // this line causes full page refresh
+        this.$router.go()
+      } else {
+        // this is soft refresh
+        this.$router.push({ name: 'home' })
+      }
     }
   },
   computed: {

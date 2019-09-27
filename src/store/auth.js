@@ -73,6 +73,16 @@ const actions = {
       })
     }
   },
+  loadTokensFromStorage ({ commit }) {
+    var t = JSON.parse(localStorage.getItem('token'))
+    if (t !== null) {
+      var refresh = JSON.parse(localStorage.getItem('refresh_token'))
+
+      commit('storeTokens', t, refresh)
+      return { access: t, refresh: refresh }
+    }
+    return null
+  },
   recover (_context, { email }) {
     return api.recover(email).then(res => {
       if (res.success !== 1) {
