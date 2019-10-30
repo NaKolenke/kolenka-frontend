@@ -99,7 +99,7 @@ export default {
           return this.$store.dispatch('users/getSelf')
         })
         .then(me => {
-          return this.$store.dispatch('blogs/getMyBlogs', { username: me.username, pagination: new Pagination(1) })
+          return this.$store.dispatch('blogs/getMyBlogs', { username: me.username, pagination: new Pagination(1, 100) })
         })
         .then(_res => {
           return this.$store.dispatch('notifications/getAll', { pagination: new Pagination(1, 100) })

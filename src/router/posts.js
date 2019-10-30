@@ -25,6 +25,11 @@ export default [
     components: {
       default: WritePostPage,
       sidebar: DefaultSidebar
+    },
+    props: {
+      sidebar: {
+        hide: true
+      }
     }
   },
   {

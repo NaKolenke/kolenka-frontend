@@ -1,33 +1,32 @@
-import { toggleMark } from 'tiptap-commands'
-import { Mark }       from 'tiptap'
+import { toggleMark, updateMark, removeMark } from 'tiptap-commands'
+import { Mark } from 'tiptap'
 
 export default class Color extends Mark {
 
-  get name() {
+  get name () {
     return 'color'
   }
 
-  get defaultOptions() {
+  get defaultOptions () {
     return {
       color: null
     }
   }
 
-  get schema() {
+  get schema () {
     return {
       attrs: {
         color: {
-          default: '#3b4351'
+          default: 'rgb(59,67,81)'
         }
       },
-      content: 'inline*',
-      group: 'block',
+      inclusive: true,
       draggable: false,
       parseDOM: [
         {
           tag: 'span',
           getAttrs: node => ({
-            color: node.style.color || '#3b4351'
+            color: node.style.color
           })
         }
       ],
@@ -39,7 +38,13 @@ export default class Color extends Mark {
     }
   }
 
-  commands({ type }) {
-    return attrs => toggleMark(type, attrs)
+  commands ({ type, schema }) {
+    return attrs => {
+      console.log(attrs)
+      if (attrs && attrs.color != 'rgb(59,67,81)') {
+        return updateMark(type, { 'color': attrs.color })
+      }
+      return toggleMark(type)
+    }
   }
 }

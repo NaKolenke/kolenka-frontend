@@ -23,7 +23,7 @@
           </div>
 
           <div class="tile-subtitle">
-            <div class="mt-1 comment-body" v-html="text"></div>
+            <post-body class="mt-1 comment-body" :html="comment.text" />
             <small class="float-right" v-if="!isReplying">
               <button class="reply tooltip" data-tooltip="Ответить" @click="reply">
                 <span class="icon-bubble2"></span>
@@ -67,10 +67,10 @@
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
+import PostBody from '@/components/PostBody.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
 import resizeTweet from '@/utils/resizeTweet'
-import processStickers from '@/utils/stickers'
 
 export default {
   name: 'comment-card',
@@ -107,9 +107,6 @@ export default {
     commentId () {
       return 'comment_' + this.comment.id
     },
-    text () {
-      return processStickers(this.comment.text)
-    },
     ...mapGetters({
       commentById: 'comments/byId',
       commentHasChilds: 'comments/hasChilds',
@@ -118,7 +115,8 @@ export default {
   },
   components: {
     Avatar,
-    CommentForm
+    CommentForm,
+    PostBody
   }
 }
 </script>

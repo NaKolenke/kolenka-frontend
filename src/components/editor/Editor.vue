@@ -47,11 +47,13 @@
         >
           <span class="icon-pilcrow"></span>
         </editor-button>
-
+        <!-- с текстом довольно много проблем. Наиболее близкое решение: https://github.com/scrumpy/tiptap/issues/309 -->
+        <!--
         <editor-button
           name="Цвет текста"
-          :active="isActive.color() && color !== '#3b4351'"
+          :active="isActive.color()"
           :floats="menuBarFloats"
+          @command="commands.color"
           :dropdown="true"
         >
           <span class="icon-eyedropper"></span>
@@ -60,13 +62,13 @@
               theme="light"
               :sucker-hide="true"
               @changeColor="colorChanged($event, commands.color)"
-              :colors-default="['#000000', '#FFFFFF', '#FF1900', '#F47365',
+              :colors-default="['#3b4351', '#FFFFFF', '#FF1900', '#F47365',
                                 '#FFB243', '#FFE623', '#6EFF2A', '#1BC7B1',
                                 '#00BEFF', '#2E81FF', '#5D61FF', '#FF89CF',
-                                '#FC3CAD', '#BF3DCE', '#8E00A7', '#3b4351']"
+                                '#FC3CAD', '#BF3DCE', '#8E00A7', '#000000']"
             />
           </template>
-        </editor-button>
+        </editor-button>-->
 
         <span v-if="isExtended" class="span"></span>
 
@@ -408,7 +410,7 @@ import Limit from '@/editor/extensions/Limit'
 import Iframe from '@/editor/node/iframe'
 import Modal from '@/components/elements/Modal.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
-import ColorPicker from '@caohenghu/vue-colorpicker'
+// import ColorPicker from '@caohenghu/vue-colorpicker'
 import { ImageExtended } from '@/editor/node/ImageExtended'
 import EditorButton from '@/components/editor/EditorButton.vue'
 import Tabs from '@/components/elements/Tabs.vue'
@@ -504,7 +506,7 @@ export default {
       onBlur () {
         self.isFocused = false
       },
-      onUpdate (state) {
+      onUpdate (_state) {
         self.store.html = self.editor.getHTML()
         self.store.text = self.editor.state.doc.textContent
         self.store.length = self.store.text.length
@@ -593,10 +595,8 @@ export default {
       this.embedModal.show = false
     },
     colorChanged (color, command) {
-      this.color = color.rgba.toHexString()
-
-      let { rgba: { r, g, b } } = color
-      command({ color: `rgb(${r}, ${g}, ${b})` })
+      let c = color.rgba
+      command({ color: `rgb(${c.r}, ${c.g}, ${c.b})` })
     },
     onKeyDown (e) {
       if (e.keyCode === 9 && // TAB
@@ -605,7 +605,7 @@ export default {
         e.preventDefault()
       }
     },
-    onScroll (e) {
+    onScroll (_e) {
       let wrapper = this.$refs.editorWrapper
       let scroll = window.pageYOffset || document.documentElement.scrollTop
       let clientRect = wrapper.getBoundingClientRect()
@@ -638,9 +638,9 @@ export default {
       this.refreshMyFiles(this.page)
     },
     refreshMyFiles (page) {
-      this.$store.dispatch('content/getOwned', {pagination: new Pagination(page)})
-        .then(pages => {
-          this.pageCount = pages
+      this.$store.dispatch('content/getOwned', { pagination: new Pagination(page) })
+        .then(res => {
+          this.pageCount = res.meta.page_count
         }).catch(err => {
           console.log(err)
         })
@@ -656,7 +656,7 @@ export default {
       }
     },
     getUrlById (id) {
-      return this.$store.dispatch('content/getUrlById', { id: id })
+      return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
     }
   },
   computed: {
@@ -675,7 +675,7 @@ export default {
     EditorMenuBar,
     EditorButton,
     Modal,
-    ColorPicker,
+    // ColorPicker,
     ImageUpload,
     Tabs,
     Tab,
@@ -724,9 +724,7 @@ export default {
   z-index: 999;
   background: #fff;
 }
-</style>
 
-<style>
 .hu-color-picker.light {
   box-shadow: none;
   background: none;

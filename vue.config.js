@@ -3,6 +3,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const webpack = require('webpack');
 
 module.exports = {
+  runtimeCompiler: true,
   configureWebpack: {
     devServer: {
       proxy: {

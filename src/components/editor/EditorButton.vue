@@ -1,21 +1,25 @@
 <template>
-  <button v-if="!dropdown"
+  <button
+    v-if="!dropdown"
     :class="[{ 'is-active': active }, 'button', { 'tooltip': name }, { 'tooltip-bottom': floats && name }]"
     @click="$emit('command')"
     :data-tooltip="name"
   >
-    <slot />
+    <slot></slot>
   </button>
 
   <div v-else class="dropdown">
     <button
-      :class="[{ 'is-active': active }, 'button', { 'tooltip': name }, 'dropdown-toggle', { 'tooltip-bottom': floats && name }]"
+      href="#"
+      class="dropdown-toggle"
+      tabindex="0"
+      :class="[{ 'is-active': active }, 'button', { 'tooltip': name }, { 'tooltip-bottom': floats && name }]"
       :data-tooltip="name"
     >
       <slot />
     </button>
     <div class="menu">
-      <slot name="dropdown" />
+      <slot name="dropdown"></slot>
     </div>
   </div>
 </template>
@@ -37,7 +41,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './node_modules/spectre.css/src/_variables.scss';
+@import "./node_modules/spectre.css/src/_variables.scss";
+
+.dropdown {
+  &.active .menu,
+  .dropdown-toggle:hover + .menu,
+  .menu:hover {
+    display: block;
+  }
+
+  .menu {
+    max-height: max-content;
+    animation: slide-down 0.5s ease 1;
+  }
+}
 
 .button {
   background: none;

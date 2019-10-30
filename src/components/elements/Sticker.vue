@@ -1,6 +1,6 @@
 <template>
   <span class="sticker">
-    <img :src="contentUrl" :alt="name" />
+    <img :src="contentUrl" :alt="name" :title="name" />
     <p v-if="showName">{{name}}</p>
   </span>
 </template>
@@ -8,8 +8,6 @@
 <script>
 export default {
   props: {
-    id: Number,
-    fileId: Number,
     name: String,
     showName: {
       type: Boolean,
@@ -18,7 +16,7 @@ export default {
   },
   computed: {
     contentUrl () {
-      return process.env.VUE_APP_CONTENT_URL + '/' + this.fileId + '/'
+      return `${process.env.VUE_APP_API_URL}stickers/${this.name}/`
     }
   }
 }

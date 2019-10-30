@@ -24,14 +24,9 @@
       </router-link>
     </h2>
 
-    <div v-if="cut" v-html="cutText"></div>
-    <div v-else v-html="text"></div>
-
-    <router-link
-      v-if="cut && post.has_cut"
-      :to="{ name: 'post',  params: { post: post.url, blog: post.blog, user: post.creator }}"
-      class="btn btn-sm"
-    >{{ post.cut_name || 'Читать дальше' }}</router-link>
+    <post-body v-if="cut" :html="post.cut_text" />
+    <post-body v-else :html="post.text" />
+    <cut v-if="cut && post.has_cut" :name="post.cut_name" :url="post.url" />
 
     <div class="columns article-footer">
       <div class="column col-lg-auto">
@@ -61,10 +56,11 @@
 <script>
 import { mapState } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
+import Cut from '@/components/elements/Cut.vue'
+import PostBody from '@/components/PostBody.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
 import resizeTweet from '@/utils/resizeTweet'
-import processStickers from '@/utils/stickers'
 
 export default {
   props: {
@@ -82,15 +78,11 @@ export default {
     ...mapState({
       user: state => state.users.me
     }),
-    cutText () {
-      return processStickers(this.post.cut_text)
-    },
-    text () {
-      return processStickers(this.post.text)
-    },
   },
   components: {
-    Avatar
+    Avatar,
+    PostBody,
+    Cut
   }
 }
 </script>

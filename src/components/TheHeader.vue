@@ -220,7 +220,8 @@ header a {
   margin-right: 4px;
 }
 
-.menu {
+.dropdown .menu {
   min-width: 240px;
+  max-height: max-content;
 }
 </style>

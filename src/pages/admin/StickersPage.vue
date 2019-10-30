@@ -2,14 +2,7 @@
   <div class="container">
     <div class="columns">
       <div class="column col-12 col-md-2">
-        <sticker
-          v-for="s in stickers"
-          :key="s.id"
-          :id="s.id"
-          :fileId="s.file.id"
-          :name="s.name"
-          :showName="true"
-        ></sticker>
+        <sticker v-for="s in stickers" :key="s.name" :name="s.name" :showName="true"></sticker>
       </div>
     </div>
   </div>
