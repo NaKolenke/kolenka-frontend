@@ -5,7 +5,6 @@
       ref="editor"
       editor-class="comment-editor"
       :store="store"
-      :limit="400"
       :storageKey="'comments/' + postUrl + '/' + parentId"
     />
     <div>
