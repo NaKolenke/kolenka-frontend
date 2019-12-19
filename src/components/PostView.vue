@@ -9,7 +9,7 @@
     <h2>
       <router-link
         v-if="user && user.id === post.creator.id"
-        :to="{ name: 'edit-post', params: { edit: post } }"
+        :to="{ name: 'edit-post', params: { post: post.url, object: post } }"
         class="btn btn-sm btn-link tooltip tooltip-right"
         data-tooltip="Редактировать запись"
       >

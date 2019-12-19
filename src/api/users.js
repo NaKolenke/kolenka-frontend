@@ -16,9 +16,9 @@ export default {
       .get('users/self/')
       .then(res => res.data)
   },
-  editSelf: (user) => {
+  editSelf: ({ name, email, about, birthday }) => {
     return request
-      .post(`users/self/`, user)
+      .post(`users/self/`, { name, email, about, birthday })
       .then(res => res.data)
   },
   editAvatar: (id) => {

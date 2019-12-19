@@ -1,13 +1,13 @@
 import { Node } from 'tiptap'
-import View from '@/editor/node/iframeView'
+import View from '@/components/editor/node/iframeView'
 
 export default class Iframe extends Node {
 
-  get name() {
+  get name () {
     return 'iframe'
   }
 
-  get schema() {
+  get schema () {
     return {
       attrs: {
         src: {
@@ -31,7 +31,7 @@ export default class Iframe extends Node {
     }
   }
 
-  commands({ type }) {
+  commands ({ type }) {
     return attrs => (state, dispatch) => {
       const { selection } = state
       const position = selection.$cursor ? selection.$cursor.pos : selection.$to.pos
@@ -41,7 +41,7 @@ export default class Iframe extends Node {
     }
   }
 
-  get view() {
+  get view () {
     return View
   }
 

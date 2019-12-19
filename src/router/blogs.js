@@ -1,6 +1,6 @@
-import BlogListPage from '@/pages/BlogListPage'
-import BlogPage from '@/pages/BlogPage'
-import CreateBlogPage from '@/pages/CreateBlogPage'
+import BlogListPage from '@/pages/blogs/BlogListPage'
+import BlogPage from '@/pages/blogs/BlogPage'
+import CreateBlogPage from '@/pages/blogs/CreateBlogPage'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 

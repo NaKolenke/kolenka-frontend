@@ -38,7 +38,13 @@ const actions = {
     })
   },
   editSelf (_context, { user }) {
-    return api.editSelf(user).then(res => {
+    return api.editSelf(
+      {
+        name: user.name,
+        email: user.email,
+        about: user.about,
+        birthday: user.birthday
+      }).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }

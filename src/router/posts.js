@@ -1,6 +1,6 @@
-import PostPage from '@/pages/PostPage'
-import WritePostPage from '@/pages/WritePostPage'
-import UserDraftsPage from '@/pages/DraftsPage'
+import PostPage from '@/pages/posts/PostPage'
+import WritePostPage from '@/pages/posts/WritePostPage'
+import UserDraftsPage from '@/pages/posts/DraftsPage'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import PostPageSidebar from '@/pages/sidebar/PostView.vue'
@@ -20,7 +20,7 @@ export default [
     }
   },
   {
-    path: '/edit/post',
+    path: '/posts/:post/edit',
     name: 'edit-post',
     components: {
       default: WritePostPage,

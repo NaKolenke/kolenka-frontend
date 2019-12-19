@@ -2,7 +2,13 @@
   <div class="iframe">
     <span class="mark icon-new-tab"></span>
     <div :class="['form-group', 'iframe_input_wrap', { 'has-error' : error }]">
-      <input class="iframe_input form-input" @paste.stop type="url" v-model="visibleSource" :disabled="!editable" />
+      <input
+        class="iframe_input form-input"
+        @paste.stop
+        type="url"
+        v-model="visibleSource"
+        :disabled="!editable"
+      />
       <p v-if="error" class="form-input-hint">{{ error }}</p>
     </div>
   </div>
@@ -15,7 +21,7 @@ const WEB_URL = process.env.VUE_APP_URL
 
 const verifiedHosts = [
   // YouTube
-  function(src) {
+  function (src) {
     let match = src.match(/youtube.com\/watch\?v=([a-zA-Z0-9_]+)/)
 
     if (!match)
@@ -24,7 +30,7 @@ const verifiedHosts = [
     return `https://www.youtube.com/embed/${match[1]}`
   },
   // Twitch
-  function(src) {
+  function (src) {
     let match = src.match(/twitch.tv\/([a-zA-Z0-9]+)/)
 
     if (!match)
@@ -33,7 +39,7 @@ const verifiedHosts = [
     return `https://player.twitch.tv/?channel=${match[1]}`
   },
   // Soundcloud
-  function(src) {
+  function (src) {
     let match = src.match(/soundcloud\.com\/[a-zA-Z0-9_-]+\/(sets\/[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)/)
 
     if (!match)
@@ -42,7 +48,7 @@ const verifiedHosts = [
     return `https://w.soundcloud.com/player/?url=${encodeURIComponent(src)}&color=%23f70000&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=true`
   },
   // Vimeo
-  function(src) {
+  function (src) {
     let match = src.match(/vimeo\.com\/([0-9]+)/)
 
     if (!match)
@@ -51,7 +57,7 @@ const verifiedHosts = [
     return `https://player.vimeo.com/video/${match[1]}`
   },
   // Twitter
-  function(src) {
+  function (src) {
     let match = src.match(/twitter\.com\/[a-zA-Z0-9_]+\/status\/[0-9]+/)
 
     if (!match)
@@ -63,16 +69,16 @@ const verifiedHosts = [
 
 export default {
   props: ['node', 'updateAttrs', 'editable'],
-  data() {
+  data () {
     return {
       error: null,
       throttled: null,
       visibleSource: ''
     }
   },
-  mounted() {
+  mounted () {
     this.visibleSource = this.node.attrs.src
-    
+
     this.throttled = throttle(1000, false, src => {
       this.checkUrl(src)
     })
@@ -88,32 +94,32 @@ export default {
     }
   },
   methods: {
-    checkUrl(src) {      
+    checkUrl (src) {
       fetch(src, {
         method: 'HEAD'
       })
-      .then(res => {
-        const headers = res.headers
+        .then(res => {
+          const headers = res.headers
 
-        if (!headers['X-Frame-Options']) {
-          this.updateSrc()
-        } else {
-          if (headers['X-Frame-Options'] === `allow-from ${WEB_URL}`) {
+          if (!headers['X-Frame-Options']) {
             this.updateSrc()
           } else {
-            this.error = 'Текущий сайт не может быть отображен, так как на нем установлен заголовок "X-Frame-Options"'
+            if (headers['X-Frame-Options'] === `allow-from ${WEB_URL}`) {
+              this.updateSrc()
+            } else {
+              this.error = 'Текущий сайт не может быть отображен, так как на нем установлен заголовок "X-Frame-Options"'
+            }
           }
-        }
-      })
-      .catch(err => {
-        this.error = 'Неверный адрес сайта'
-      })
+        })
+        .catch(err => {
+          this.error = 'Неверный адрес сайта'
+        })
     },
-    updateSrc(src) {
+    updateSrc (src) {
       this.updateAttrs({ src })
       this.error = null
     },
-    checkVerified(src) {
+    checkVerified (src) {
       for (let i = 0; i < verifiedHosts.length; i++) {
         let host = verifiedHosts[i]
         let result = host(src)
@@ -129,7 +135,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../node_modules/spectre.css/src/_variables.scss';
+@import "./node_modules/spectre.css/src/_variables.scss";
 
 .iframe {
   position: relative;
@@ -145,7 +151,7 @@ export default {
   left: 16px;
   top: 50%;
   opacity: 0.5;
-  transform: translateY(-50%)
+  transform: translateY(-50%);
 }
 
 .iframe_input_wrap {

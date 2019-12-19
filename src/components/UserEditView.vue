@@ -33,7 +33,7 @@
 
         <div class="form-group">
           <label class="form-label" for="about">О себе</label>
-          <editor type="basic" ref="editor" editor-class="bio-editor" :store="store"></editor>
+          <editor ref="editor"></editor>
         </div>
 
         <button id="edit-btn" class="btn btn-primary" @click="edit" :disabled="!isValid">Изменить</button>
@@ -65,9 +65,6 @@ export default {
   props: ['user'],
   data () {
     return {
-      store: {
-        html: ''
-      },
       validation: {
         username: {
           length: () => this.user.name.length >= 3
@@ -98,7 +95,7 @@ export default {
   },
   methods: {
     edit () {
-      this.user.about = this.store.html
+      this.user.about = this.$refs.editor.getHtml()
       this.$parent.editUser(this.user)
     },
     imageUploaded (images) {

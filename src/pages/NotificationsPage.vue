@@ -43,9 +43,9 @@
         </div>
       </div>
     </transition-group>
-    <button class="btn btn-link tooltip tooltip-left" @click="test()" data-tooltip="Test">
+    <!-- <button class="btn btn-link tooltip tooltip-left" @click="test()" data-tooltip="Test">
       <i class="icon icon-check"></i>
-    </button>
+    </button>-->
     <pagination-view :page="page" :page-count="pageCount"></pagination-view>
   </div>
   <div v-else class="empty">

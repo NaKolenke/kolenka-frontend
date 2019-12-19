@@ -2,7 +2,8 @@
   <div class="container col-9 col-mx-auto">
     <div class="columns">
       <div class="column">
-        <h2>Новая запись</h2>
+        <h2 v-if="isInEditMode">Редактирование поста</h2>
+        <h2 v-else>Новый пост</h2>
         <div class="form-horizontal">
           <div class="form-group">
             <div class="col-3 col-sm-12">
@@ -37,15 +38,10 @@
             </div>
           </div>
 
-          <editor
-            type="extended"
-            editor-class="post-editor"
-            ref="editor"
-            :store="store"
-            storageKey="post-text"
-            storageType="local"
-            v-validate="validation.body"
-          ></editor>
+          <div v-if="isLoading">
+            <loading-view></loading-view>
+          </div>
+          <editor ref="editor" v-validate="validation.body"></editor>
 
           <div class="form-group">
             <div class="col-3 col-sm-12">
@@ -102,24 +98,22 @@
 <script>
 import { mapState } from 'vuex'
 import Editor from '@/components/editor/Editor.vue'
+import LoadingView from '@/components/LoadingView.vue'
 import slugify from 'speakingurl'
 import errors from '@/utils/errors'
 
 export default {
   metaInfo () {
     return {
-      title: 'Написать запись'
+      title: 'Редактирование поста'
     }
   },
   data () {
     return {
       model: {
-        title: localStorage.getItem('post-title') || '',
-        blog: null
-      },
-      store: {
-        html: '',
-        length: 0
+        title: '',
+        blog: null,
+        tags: [],
       },
       validation: {
         title: {
@@ -129,13 +123,14 @@ export default {
           notNull: () => this.model.blog != null
         },
         body: {
-          length: () => this.store.length >= 10
+          length: () => this.$refs.editor.getHtml().length >= 10
         },
         slug: {
           isUrl: () => /^[A-Za-z0-9-_]+$/.test(this.newSlug)
         }
       },
       isSending: false,
+      isLoading: false,
       isChangingSlug: false,
       newSlug: ''
     }
@@ -147,18 +142,33 @@ export default {
     }
   },
   mounted () {
-    const edit = this.$route.params.edit
-
     if (this.isInEditMode) {
-      this.model.title = edit.title
-      this.model.blog = edit.blog.id
-      this.$refs.editor.setContent(edit.text)
+      this.refreshPost(this.$route)
+    } else {
+      this.model.title = ''
+      this.model.blog = null
+      this.model.tags = []
+      this.$refs.editor.setContent('')
     }
   },
-  beforeDestroy () {
-    localStorage.setItem('post-title', this.model.title)
-  },
   methods: {
+    refreshPost (route) {
+      this.isLoading = true
+      this.$store.dispatch('posts/getPost', { url: route.params.post })
+        .then(post => {
+          this.isLoading = false
+
+          this.model.title = post.title
+          this.model.blog = post.blog.id
+          this.model.tags = post.tags
+          this.$refs.editor.setContent(post.text)
+        })
+        .catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+          this.$router.push({ path: '/404' })
+        })
+    },
     send (draft) {
       this.isSending = true
 
@@ -166,15 +176,15 @@ export default {
       if (this.isInEditMode) {
         result = this.$store.dispatch('posts/editPost', {
           title: this.model.title,
-          text: this.store.html,
-          url: this.$route.params.edit.url,
+          text: this.$refs.editor.getHtml(),
+          url: this.$route.params.post,
           draft: draft,
           blogId: this.model.blog
         })
       } else {
         result = this.$store.dispatch('posts/createPost', {
           title: this.model.title,
-          text: this.store.html,
+          text: this.$refs.editor.getHtml(),
           url: (this.slugChanged ? this.newSlug : this.slug),
           draft: draft,
           blogId: this.model.blog
@@ -182,8 +192,6 @@ export default {
       }
 
       result.then(data => {
-        localStorage.setItem('post-text', null)
-        localStorage.setItem('post-title', null)
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.url } })
       }).catch(error => {
@@ -213,7 +221,7 @@ export default {
         (this.slugChanged ? this.validation.slug.success : true)
     },
     isInEditMode () {
-      return this.$route.params.edit
+      return this.$route.params.post
     },
     ...mapState({
       user: state => state.users.me,
@@ -222,7 +230,8 @@ export default {
 
   },
   components: {
-    Editor
+    Editor,
+    LoadingView,
   }
 }
 </script>
@@ -231,17 +240,5 @@ export default {
 .slug-input {
   display: inline-block;
   width: auto;
-}
-
-.post-editor .ProseMirror {
-  min-height: 300px;
-}
-
-.post-editor .ProseMirror:focus {
-  outline: none;
-}
-
-.post-editor:focus-within {
-  border-color: blueviolet;
 }
 </style>

@@ -147,7 +147,7 @@ $secondary-color: lighten($primary-color, 58%);
 
 ul li p:first-child,
 ol li p:first-child {
-  display: inline-block;
+  display: inline;
 }
 
 img {
@@ -173,62 +173,60 @@ img {
 @import "../node_modules/spectre.css/src/_variables.scss";
 
 // Tables override for editor (so we don't need to specify .table every time)
-.form-group {
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    @if $rtl == true {
-      text-align: right;
-    } @else {
-      text-align: left;
-    }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  @if $rtl == true {
+    text-align: right;
+  } @else {
+    text-align: left;
+  }
 
-    &.table-striped {
-      tbody {
-        tr:nth-of-type(odd) {
-          background: $bg-color;
+  &.table-striped {
+    tbody {
+      tr:nth-of-type(odd) {
+        background: $bg-color;
+      }
+    }
+  }
+
+  &,
+  &.table-striped {
+    tbody {
+      tr {
+        &.active {
+          background: $bg-color-dark;
         }
       }
     }
+  }
 
-    &,
-    &.table-striped {
-      tbody {
-        tr {
-          &.active {
-            background: $bg-color-dark;
-          }
+  &.table-hover {
+    tbody {
+      tr {
+        &:hover {
+          background: $bg-color-dark;
         }
       }
     }
+  }
 
-    &.table-hover {
-      tbody {
-        tr {
-          &:hover {
-            background: $bg-color-dark;
-          }
-        }
-      }
-    }
+  // Scollable tables
+  &.table-scroll {
+    display: block;
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+    white-space: nowrap;
+  }
 
-    // Scollable tables
-    &.table-scroll {
-      display: block;
-      overflow-x: auto;
-      padding-bottom: 0.75rem;
-      white-space: nowrap;
-    }
-
-    td,
-    th {
-      border: $border-width solid $border-color;
-      padding: $unit-3 $unit-2;
-    }
-    th {
-      border-bottom-width: $border-width-lg;
-    }
+  td,
+  th {
+    border: $border-width solid $border-color;
+    padding: $unit-3 $unit-2;
+  }
+  th {
+    border-bottom-width: $border-width-lg;
   }
 }
 

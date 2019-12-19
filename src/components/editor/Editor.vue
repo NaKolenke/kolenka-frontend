@@ -1,322 +1,223 @@
 <template>
-  <div class="form-group" style="position:relative">
+  <div>
     <editor-menu-bar
+      :class="{ 'floating': isMenuBarFloating }"
+      :style="[{ 'left': menuBarOffsetLeft }]"
       :editor="editor"
       v-slot="{ commands, isActive }"
-      :class="{ 'floating': menuBarFloats }"
-      :style="[{ 'left': menuBarOffsetLeft }]"
     >
       <div class="menu-bar">
-        <editor-button
-          name="Жирный"
-          :active="isActive.bold()"
-          @command="commands.bold"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-bold"></span>
-        </editor-button>
-        <editor-button
-          name="Наклонный"
-          :active="isActive.italic()"
-          @command="commands.italic"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-italic"></span>
-        </editor-button>
-        <editor-button
-          name="Подчёркнутый"
-          :active="isActive.underline()"
-          @command="commands.underline"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-underline"></span>
-        </editor-button>
-        <editor-button
-          name="Зачёркнутый"
-          :active="isActive.strike()"
-          @command="commands.strike"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-strikethrough"></span>
-        </editor-button>
-        <editor-button
-          name="Параграф"
-          :active="isActive.paragraph()"
-          @command="commands.paragraph"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-pilcrow"></span>
-        </editor-button>
-        <!-- с текстом довольно много проблем. Наиболее близкое решение: https://github.com/scrumpy/tiptap/issues/309 -->
-        <!--
-        <editor-button
-          name="Цвет текста"
-          :active="isActive.color()"
-          :floats="menuBarFloats"
-          @command="commands.color"
-          :dropdown="true"
-        >
-          <span class="icon-eyedropper"></span>
-          <template v-slot:dropdown>
-            <color-picker
-              theme="light"
-              :sucker-hide="true"
-              @changeColor="colorChanged($event, commands.color)"
-              :colors-default="['#3b4351', '#FFFFFF', '#FF1900', '#F47365',
-                                '#FFB243', '#FFE623', '#6EFF2A', '#1BC7B1',
-                                '#00BEFF', '#2E81FF', '#5D61FF', '#FF89CF',
-                                '#FC3CAD', '#BF3DCE', '#8E00A7', '#000000']"
-            />
-          </template>
-        </editor-button>-->
+        <span id="format">
+          <editor-button name="Жирный" :active="isActive.bold()" @command="commands.bold">
+            <span class="icon-bold"></span>
+          </editor-button>
 
-        <span v-if="isExtended" class="span"></span>
+          <editor-button name="Наклонный" :active="isActive.italic()" @command="commands.italic">
+            <span class="icon-italic"></span>
+          </editor-button>
 
-        <editor-button
-          v-if="isExtended"
-          name="Заголовок"
-          :active="isActive.heading()"
-          :floats="menuBarFloats"
-          :dropdown="true"
-        >
-          <span class="icon-font-size"></span>
-          <template v-slot:dropdown>
-            <button
-              v-for="i in (1, 6)"
-              :key="i"
-              :class="[{ 'is-active': isActive.heading({ level: i }) }, 'button']"
-              @click="commands.heading({ level: i })"
-            >
-              <h1 v-if="i == 1" style="width: 230px">Заголовок {{ i }}</h1>
-              <h2 v-if="i == 2">Заголовок {{ i }}</h2>
-              <h3 v-if="i == 3">Заголовок {{ i }}</h3>
-              <h4 v-if="i == 4">Заголовок {{ i }}</h4>
-              <h5 v-if="i == 5">Заголовок {{ i }}</h5>
-              <h6 v-if="i == 6">Заголовок {{ i }}</h6>
-            </button>
-          </template>
-        </editor-button>
+          <editor-button name="Зачёркнутый" :active="isActive.strike()" @command="commands.strike">
+            <span class="icon-strikethrough"></span>
+          </editor-button>
 
-        <editor-button
-          v-if="isExtended"
-          name="Выравнивание по левому краю"
-          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'left'"
-          @command="commands.alignment({ textAlign: 'left' })"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-paragraph-left"></span>
-        </editor-button>
-        <editor-button
-          v-if="isExtended"
-          name="Выравнивание по центру"
-          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'center'"
-          @command="commands.alignment({ textAlign: 'center' })"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-paragraph-center"></span>
-        </editor-button>
-        <editor-button
-          v-if="isExtended"
-          name="Выравнивание по правому краю"
-          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'right'"
-          @command="commands.alignment({ textAlign: 'right' })"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-paragraph-right"></span>
-        </editor-button>
-        <editor-button
-          v-if="isExtended"
-          name="Выравнивание по ширине"
-          :active="isActive.alignment() && editor.activeMarkAttrs.alignment.textAlign === 'justify'"
-          @command="commands.alignment({ textAlign: 'justify' })"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-paragraph-justify"></span>
-        </editor-button>
+          <editor-button
+            name="Подчёркнутый"
+            :active="isActive.underline()"
+            @command="commands.underline"
+          >
+            <span class="icon-underline"></span>
+          </editor-button>
+
+          <editor-button name="Код" :active="isActive.code()" @command="commands.code">
+            <span class="icon-embed"></span>
+          </editor-button>
+        </span>
 
         <span class="span"></span>
 
-        <editor-button
-          name="Список"
-          :active="isActive.bullet_list()"
-          @command="commands.bullet_list"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-list2"></span>
-        </editor-button>
-        <editor-button
-          name="Нумерованный список"
-          :active="isActive.ordered_list()"
-          @command="commands.ordered_list"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-list-numbered"></span>
-        </editor-button>
+        <span id="block-format">
+          <editor-button
+            name="Заголовок"
+            :active="isActive.heading({ level: 1 }) "
+            @command="commands.heading({ level: 1 })"
+          >
+            <span class="icon-font-size"></span>
+          </editor-button>
+
+          <editor-button
+            name="Подзаголовок"
+            :active="isActive.heading({ level: 2 })"
+            @command="commands.heading({ level: 2 })"
+          >
+            <span class="icon-font-size" style="font-size: 0.7em;"></span>
+          </editor-button>
+
+          <editor-button
+            name="Параграф"
+            :active="isActive.paragraph()"
+            @command="commands.paragraph"
+          >
+            <span class="icon-pilcrow"></span>
+          </editor-button>
+
+          <editor-button
+            name="Цитата"
+            :active="isActive.blockquote()"
+            @command="commands.blockquote"
+          >
+            <span class="icon-quotes-right"></span>
+          </editor-button>
+
+          <editor-button
+            name="Блок кода"
+            :active="isActive.code_block()"
+            @command="commands.code_block"
+          >
+            <span class="icon-embed2"></span>
+          </editor-button>
+        </span>
 
         <span class="span"></span>
 
-        <editor-button
-          name="Цитата"
-          :active="isActive.blockquote()"
-          @command="commands.blockquote"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-quotes-right"></span>
-        </editor-button>
-        <editor-button
-          name="Код"
-          :active="isActive.code()"
-          @command="commands.code"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-embed"></span>
-        </editor-button>
-        <editor-button
-          name="Блок кода"
-          :active="isActive.code_block()"
-          @command="commands.code_block"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-embed2"></span>
-        </editor-button>
+        <span id="lists">
+          <editor-button
+            name="Список"
+            :active="isActive.bullet_list()"
+            @command="commands.bullet_list"
+          >
+            <span class="icon-list2"></span>
+          </editor-button>
+          <editor-button
+            name="Нумерованный список"
+            :active="isActive.ordered_list()"
+            @command="commands.ordered_list"
+          >
+            <span class="icon-list-numbered"></span>
+          </editor-button>
+        </span>
 
-        <editor-button
-          name="Изображение"
-          :active="isActive.image()"
-          @command="imageModal.show = true"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-image"></span>
-        </editor-button>
+        <span class="span"></span>
 
-        <modal
-          :open="imageModal.show"
-          :closed="imageModalClose"
-          title="Вставить изображение"
-          @ok="chooseImage(commands.image)"
-        >
-          <tabs>
-            <tab title="По ссылке">
-              <div :class="['form-group', {'has-error': imageModal.urlError}, 'mt-2']">
-                <input
-                  class="form-input"
-                  type="url"
-                  placeholder="Ссылка на изображение"
-                  v-model="imageModal.url"
-                  autofocus
-                />
-                <p v-if="imageModal.urlError" class="form-input-hint">Введите ссылку на изображение</p>
-              </div>
-            </tab>
-            <tab title="Загрузить">
-              <image-upload
-                @complete="imageUploaded($event, commands.image)"
-                :multiple="true"
-                class="mt-2"
-              />
-            </tab>
-            <tab title="История загрузок">
-              <div class="columns mt-2">
-                <div
-                  v-for="item in myFiles.slice((page - 1) * 20, 20 * page)"
-                  :key="item.id"
-                  class="column col-3"
-                >
-                  <a
-                    href="#"
-                    @click.prevent="commands.image({ src: getUrlById(item.id) }); imageModal.show = false"
-                  >
-                    <img :src="getUrlById(item.id)" width="100%" height="auto" />
-                  </a>
+        <span id="embed">
+          <editor-button name="Изображение" :active="isActive.image()" @command="showImageModal">
+            <span class="icon-image"></span>
+          </editor-button>
+
+          <modal
+            :open="isImageModalShowed"
+            :closed="closeImageModal"
+            title="Вставить изображение"
+            @ok="chooseImage(commands.image)"
+          >
+            <tabs>
+              <tab title="По ссылке">
+                <div :class="['form-group', {'has-error': imageModalError}, 'mt-2']">
+                  <input
+                    class="form-input"
+                    type="url"
+                    placeholder="Ссылка на изображение"
+                    v-model="imageModalUrl"
+                    autofocus
+                  />
+                  <p v-if="imageModalError" class="form-input-hint">Введите ссылку на изображение</p>
                 </div>
-              </div>
-              <pagination-view
-                :page="page"
-                :page-count="pageCount"
-                @paginate-relative="paginateRelative"
-                @paginate-to="paginateTo"
-              ></pagination-view>
-            </tab>
-          </tabs>
-        </modal>
+              </tab>
+              <tab title="Загрузить">
+                <image-upload
+                  @complete="imageUploaded($event, commands.image)"
+                  :multiple="true"
+                  class="mt-2"
+                />
+              </tab>
+              <tab title="История загрузок">
+                <div class="columns mt-2">
+                  <div
+                    v-for="item in myFiles.slice((imageContentPage - 1) * 20, 20 * imageContentPage)"
+                    :key="item.id"
+                    class="column col-3"
+                  >
+                    <a
+                      href="#"
+                      @click.prevent="commands.image({ src: getUrlById(item.id) }); closeImageModal()"
+                    >
+                      <img :src="getUrlById(item.id)" width="100%" height="auto" />
+                    </a>
+                  </div>
+                </div>
+                <pagination-view
+                  :page="imageContentPage"
+                  :page-count="imageContentPageCount"
+                  @paginate-relative="paginateRelative"
+                  @paginate-to="paginateTo"
+                ></pagination-view>
+              </tab>
+            </tabs>
+          </modal>
 
-        <editor-button
-          name="Embed (youtube, etc)"
-          :active="isActive.iframe()"
-          @command="embedModal.show = true"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-new-tab"></span>
-        </editor-button>
+          <editor-button
+            name="Embed (youtube, etc)"
+            :active="isActive.iframe()"
+            @command="showEmbedModal"
+          >
+            <span class="icon-new-tab"></span>
+          </editor-button>
 
-        <modal
-          :open="embedModal.show"
-          :closed="embedModalClose"
-          title="Embed"
-          @ok="chooseEmbed(commands.iframe)"
-        >
-          <input
-            class="form-input"
-            type="url"
-            placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)"
-            v-model="embedModal.url"
-            autofocus
-          />
-        </modal>
-
-        <span v-if="isExtended" class="span"></span>
-
-        <editor-button
-          v-if="isExtended"
-          name="Горизонтальная линия"
-          @command="commands.horizontal_rule"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-page-break"></span>
-        </editor-button>
-
-        <span v-if="isExtended" class="span"></span>
-
-        <editor-button
-          v-if="isExtended"
-          name="Таблица"
-          :active="isActive.table()"
-          @command="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
-          :floats="menuBarFloats"
-        >
-          <span class="icon-table2"></span>
-        </editor-button>
+          <modal
+            :open="isEmbedModalShowed"
+            :closed="closeEmbedModal"
+            title="Embed"
+            @ok="chooseEmbed(commands.iframe)"
+          >
+            <input
+              class="form-input"
+              type="url"
+              placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)"
+              v-model="embedModalUrl"
+              autofocus
+            />
+          </modal>
+        </span>
 
         <span class="span"></span>
 
-        <editor-button name="Помощь" @command="showHelp = true" :floats="menuBarFloats">?</editor-button>
+        <span id="tables">
+          <editor-button
+            name="Таблица"
+            :active="isActive.table()"
+            @command="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
+          >
+            <span class="icon-table2"></span>
+          </editor-button>
+        </span>
 
-        <modal
-          :open="showHelp"
-          :closed="closeHelp"
-          title="Помощь по редактору текста"
-          size="lg"
-          :hideButtons="true"
-        >
-          <h4>Общее</h4>
-          <p>
-            Для добавления переноса на новую строку используйте
-            <kbd>Ctrl/Shift+Return</kbd>
-          </p>
-          <p>Редактор поддерживает некоторые правила Markdown</p>
-          <p>
-            Для пропорционального масштабирования изображения зажмите
-            <kbd>Shift</kbd>
-          </p>
-          <h4>Embed</h4>
-          <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
-        </modal>
+        <span class="span"></span>
 
-        <div v-if="isActive.code_block()">
-          <small>Для выхода из режима редактирования кода нажмите Ctrl/Shift+Return</small>
-        </div>
+        <span id="help">
+          <editor-button name="Помощь" @command="showHelpModal">?</editor-button>
 
-        <div v-if="isExtended && isActive.table()" class="mt-1">
+          <modal
+            :open="isHelpModalShowed"
+            :closed="closeHelpModal"
+            title="Помощь по редактору текста"
+            size="lg"
+            :hideButtons="true"
+          >
+            <h4>Общее</h4>
+            <p>
+              Для добавления переноса на новую строку используйте
+              <kbd>Ctrl/Shift+Return</kbd>
+            </p>
+            <p>Редактор поддерживает некоторые правила Markdown</p>
+            <p>
+              Для пропорционального масштабирования изображения зажмите
+              <kbd>Shift</kbd>
+            </p>
+            <h4>Embed</h4>
+            <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
+          </modal>
+        </span>
+
+        <div v-if="isActive.table()" class="mt-1">
           <small>Редактировать таблицу</small>
 
           <button
@@ -366,20 +267,30 @@
         </div>
       </div>
     </editor-menu-bar>
-    <div :class="[editorClass, 'editor', 'form-input']" ref="editorWrapper">
-      <editor-content :editor="editor"></editor-content>
+
+    <div :class="['editor', 'form-input']" ref="editorWrapper">
+      <editor-content class="editor-content" :editor="editor"></editor-content>
     </div>
-    <small
-      v-if="limit > 0"
-      style="position:absolute;bottom:-18px;right:4px"
-    >{{ store.length }} / {{ limit }}</small>
+
+    <div class="stickers-list" v-show="showStickers" ref="stickers">
+      <template v-if="hasStickersResults">
+        <div
+          v-for="(sticker, index) in filteredStickers"
+          :key="sticker.id"
+          class="stickers-list__item"
+          :class="{ 'is-selected': navigatedStickerIndex === index }"
+          @click="selectSticker(sticker)"
+        >
+          <sticker :name="sticker.name" />
+          {{ sticker.name }}
+        </div>
+      </template>
+      <div v-else class="stickers-list__item is-empty">Нет подходящих стикеров</div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import Pagination from '@/models/pagination'
-
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
   Blockquote,
@@ -396,185 +307,187 @@ import {
   Strike,
   Underline,
   History,
-  HorizontalRule,
   Image,
   Table,
   TableHeader,
   TableCell,
-  TableRow
-} from 'tiptap-extensions'
-import Alignment from '@/editor/mark/Align'
-import Color from '@/editor/mark/Color'
-import CBExtended from '@/editor/extensions/CodeBlockExtended'
-import Limit from '@/editor/extensions/Limit'
-import Iframe from '@/editor/node/iframe'
-import Modal from '@/components/elements/Modal.vue'
-import ImageUpload from '@/components/editor/ImageUploadView.vue'
-// import ColorPicker from '@caohenghu/vue-colorpicker'
-import { ImageExtended } from '@/editor/node/ImageExtended'
+  TableRow} from 'tiptap-extensions'
+import Popper from "popper.js";
+import Iframe from '@/components/editor/node/iframe'
+import StickerNode from '@/components/editor/node/Stickers'
+
 import EditorButton from '@/components/editor/EditorButton.vue'
+import Modal from '@/components/elements/Modal.vue'
 import Tabs from '@/components/elements/Tabs.vue'
 import Tab from '@/components/elements/Tab.vue'
 import PaginationView from '@/components/PaginationView.vue'
-import Stickers from '@/editor/node/Stickers'
+import ImageUpload from '@/components/editor/ImageUploadView.vue'
+import Sticker from '@/components/elements/Sticker.vue'
+
+import { mapState } from 'vuex'
+import errors from '@/utils/errors'
+import Pagination from '@/models/pagination'
 
 export default {
-  props: {
-    type: null, // type: basic, extended
-    editorClass: null,
-    limit: {
-      type: Number,
-      default: -1
-    }, // -1 = no limit, 0 = readonly, 1+ = limit
-    store: {
-      type: Object,
-      default () {
-        return {
-          html: '',
-          text: '',
-          length: 0
-        }
-      }
-    },
-    storageKey: {
-      type: String,
-      default: null
-    },
-    storageType: {
-      type: String,
-      default: 'session' // session, local
-    }
-  },
   data () {
     return {
-      editor: null,
-      imageModal: {
-        show: false,
-        url: '',
-        urlError: false,
-        uploadError: null
-      },
-      embedModal: {
-        show: false,
-        url: ''
-      },
-      color: '#3b4351',
-      isFocused: false,
-      menuBarFloats: false,
-      menuBarOffsetLeft: '0px',
-      showHelp: false,
-      page: 1,
-      pageCount: 1
+      editor: new Editor({
+        content: '',
+        extensions: [
+          new History(),
+          new Bold(),
+          new Italic(),
+          new Link(),
+          new Underline(),
+          new Strike(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3], }),
+          new Bold(),
+
+          new ListItem(),
+          new BulletList(),
+          new OrderedList(),
+
+          new Blockquote(),
+          new Code(),
+          new CodeBlock(),
+          new Image(),
+          // new ImageExtended(),
+          // new CBExtended(),
+          new Iframe(),
+          new Table({
+            resizable: true,
+          }),
+          new TableHeader(),
+          new TableCell(),
+          new TableRow(),
+          new StickerNode({
+            items: this.getStickers,
+            // is called when a suggestion starts
+            onEnter: ({
+              items, query, range, command, virtualNode,
+            }) => {
+              this.stickerQuery = query
+              this.filteredStickers = items
+              this.suggestionRange = range
+              this.renderPopup(virtualNode)
+              this.insertSticker = command
+            },
+            // is called when a suggestion has changed
+            onChange: ({
+              items, query, range, virtualNode,
+            }) => {
+              this.stickerQuery = query
+              this.filteredStickers = items
+              this.suggestionRange = range
+              this.navigatedStickerIndex = 0
+              this.renderPopup(virtualNode)
+            },
+            // is called when a suggestion is cancelled
+            onExit: () => {
+              this.stickerQuery = null
+              this.filteredStickers = []
+              this.suggestionRange = null
+              this.navigatedStickerIndex = 0
+              this.destroyPopup()
+            },
+            onKeyDown: ({ event }) => {
+              // pressing up arrow
+              if (event.keyCode === 38) {
+                this.upHandler()
+                event.preventDefault()
+                return true
+              }
+              // pressing down arrow
+              if (event.keyCode === 40) {
+                this.downHandler()
+                return true
+              }
+              // pressing enter
+              if (event.keyCode === 13) {
+                this.enterHandler()
+                return true
+              }
+              return false
+            },
+            // is called when a suggestion has changed
+            // this function is optional because there is basic filtering built-in
+            // you can overwrite it if you prefer your own filtering
+            // in this example we use fuse.js with support for fuzzy search
+            onFilter: (items, query) => {
+              if (!query) {
+                return items
+              }
+              return items.filter(s => s.name.includes(query))
+            },
+          }),
+        ],
+      }),
+      isMenuBarFloating: false,
+      menuBarOffsetLeft: 0,
+
+      isHelpModalShowed: false,
+
+      isImageModalShowed: false,
+      imageModalUrl: null,
+      imageModalError: null,
+      imageContentPage: 1,
+      imageContentPageCount: 1,
+
+      isEmbedModalShowed: false,
+      embedModalUrl: null,
+
+      navigatedStickerIndex: 0,
+      stickerQuery: null,
+      filteredStickers: [],
+      suggestionRange: null,
     }
   },
   mounted () {
-    const self = this
-
-    const options = {
-      extensions: [
-        new Bold(),
-        new Italic(),
-        new Link(),
-        new Underline(),
-        new Strike(),
-        new Color(),
-        new HardBreak(),
-
-        new ListItem(),
-        new BulletList(),
-        new OrderedList(),
-
-        new Blockquote(),
-        new Code(),
-        new CodeBlock(),
-        new Image(),
-        new ImageExtended(),
-        new CBExtended(),
-        new Iframe(),
-        new Stickers({
-          items: () => [
-            { id: 1, name: 'Philipp Kühn' },
-            { id: 2, name: 'Hans Pagel' },
-            { id: 3, name: 'Kris Siepert' },
-            { id: 4, name: 'Justin Schueler' }
-          ]
-        })
-      ],
-      onFocus () {
-        self.isFocused = true
-      },
-      onBlur () {
-        self.isFocused = false
-      },
-      onUpdate (_state) {
-        self.store.html = self.editor.getHTML()
-        self.store.text = self.editor.state.doc.textContent
-        self.store.length = self.store.text.length
-      },
-      content: this.storageValue() || ''
-    }
-
-    if (this.limit > 0) {
-      options.extensions.push(new Limit({
-        limit: this.limit
-      }))
-    } else if (this.limit === 0) {
-      options.editable = false
-    }
-
-    if (this.isExtended) {
-      options.extensions.push(
-        new History(),
-        new Heading({ levels: [1, 2, 3, 4, 5, 6] }),
-        new HorizontalRule(),
-        new Table(),
-        new TableHeader(),
-        new TableCell(),
-        new TableRow(),
-        new Alignment()
-      )
-    }
-
-    this.editor = new Editor(options)
+    this.refreshMyFiles(1)
+    this.refreshStickers()
 
     window.addEventListener('keydown', this.onKeyDown)
-    if (this.isExtended)
-      window.addEventListener('scroll', this.onScroll)
-
-    this.refreshMyFiles(1)
-
-    window.addEventListener('beforeunload', () => {
-      this.saveContentsToStorage()
-    })
+    window.addEventListener('scroll', this.onScroll)
   },
   beforeDestroy () {
-    this.saveContentsToStorage()
-
-    if (this.editor)
-      this.editor.destroy()
+    this.editor.destroy()
 
     window.removeEventListener('keydown', this.onKeyDown)
-    if (this.isExtended)
-      window.removeEventListener('scroll', this.onScroll)
+    window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
-    imageModalClose () {
-      this.imageModal.show = false
-      this.imageModal.urlError = false
-    },
     setContent (body) {
       this.editor.setContent(body)
-      this.store.html = this.editor.getHTML()
-      this.store.text = this.editor.state.doc.textContent
-      this.store.length = this.store.text.length
+    },
+    getHtml () {
+      return this.editor.getHTML()
+    },
+    showHelpModal () {
+      this.isHelpModalShowed = true
+    },
+    closeHelpModal () {
+      this.isHelpModalShowed = false
+    },
+    showImageModal () {
+      this.isImageModalShowed = true
+    },
+    closeImageModal () {
+      this.isImageModalShowed = false
+    },
+    showEmbedModal () {
+      this.isEmbedModalShowed = true
+    },
+    closeEmbedModal () {
+      this.isEmbedModalShowed = false
     },
     chooseImage (command) {
       if (this.imageModal.url.length > 0) {
         command({ src: this.imageModal.url })
         this.imageModal.url = ''
-        this.imageModalClose()
+        this.closeImageModal()
       } else {
-        this.imageModal.urlError = true
+        this.imageModalError = true
       }
     },
     imageUploaded (images, command) {
@@ -582,28 +495,46 @@ export default {
         command({ src: process.env.VUE_APP_CONTENT_URL + `/${i.id}` })
       })
 
-      this.imageModal.show = false
+      this.closeImageModal()
     },
     chooseEmbed (command) {
-      if (this.embedModal.url.length > 0) {
-        command({ src: this.embedModal.url })
-        this.embedModal.url = ''
-        this.embedModal.show = false
+      if (this.embedModalUrl.length > 0) {
+        command({ src: this.embedModalUrl })
+        this.embedModalUrl = ''
+        this.closeEmbedModal()
       }
     },
-    embedModalClose () {
-      this.embedModal.show = false
+    paginateRelative (offset) {
+      this.imageContentPage += offset
+
+      this.refreshMyFiles(this.imageContentPage)
     },
-    colorChanged (color, command) {
-      let c = color.rgba
-      command({ color: `rgb(${c.r}, ${c.g}, ${c.b})` })
+    paginateTo (offset) {
+      this.imageContentPage = offset
+
+      this.refreshMyFiles(this.imageContentPage)
+    },
+    refreshMyFiles (page) {
+      this.$store.dispatch('content/getOwned', { pagination: new Pagination(page) })
+        .then(res => {
+          this.imageContentPageCount = res.meta.page_count
+        }).catch(error => {
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
+    },
+    refreshStickers () {
+      this.$store.dispatch('stickers/getAll')
+    },
+    getUrlById (id) {
+      return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
     },
     onKeyDown (e) {
-      if (e.keyCode === 9 && // TAB
-        this.isFocused &&
-        this.editor.isActive.code_block()) {
-        e.preventDefault()
-      }
+      // if (e.keyCode === 9 && // TAB
+      //   this.isFocused &&
+      //   this.editor.isActive.code_block()) {
+      //   e.preventDefault()
+      // }
     },
     onScroll (_e) {
       let wrapper = this.$refs.editorWrapper
@@ -612,105 +543,79 @@ export default {
 
       if (scroll > clientRect.top + scroll) {
         this.menuBarOffsetLeft = clientRect.left + 1 + 'px'
-        this.menuBarFloats = true
+        this.isMenuBarFloating = true
       } else {
-        this.menuBarFloats = false
+        this.isMenuBarFloating = false
       }
     },
-    closeHelp () {
-      this.showHelp = false
+    upHandler () {
+      this.navigatedStickerIndex = ((this.navigatedStickerIndex + this.filteredStickers.length) - 1) % this.filteredStickers.length
     },
-    storageValue () {
-      if (this.storageType === 'local') {
-        return localStorage.getItem(this.storageKey)
-      } else {
-        return sessionStorage.getItem(this.storageKey)
+    downHandler () {
+      this.navigatedStickerIndex = (this.navigatedStickerIndex + 1) % this.filteredStickers.length
+    },
+    enterHandler () {
+      const sticker = this.filteredStickers[this.navigatedStickerIndex]
+      if (sticker) {
+        this.selectSticker(sticker)
       }
     },
-    paginateRelative (offset) {
-      this.page += offset
-
-      this.refreshMyFiles(this.page)
+    selectSticker (sticker) {
+      this.insertSticker({
+        range: this.suggestionRange,
+        attrs: {
+          label: sticker.name,
+        },
+      })
+      this.editor.focus()
     },
-    paginateTo (offset) {
-      this.page = offset
-
-      this.refreshMyFiles(this.page)
-    },
-    refreshMyFiles (page) {
-      this.$store.dispatch('content/getOwned', { pagination: new Pagination(page) })
-        .then(res => {
-          this.pageCount = res.meta.page_count
-        }).catch(err => {
-          console.log(err)
-        })
-    },
-    saveContentsToStorage () {
-      if (!this.storageKey)
+    renderPopup (node) {
+      if (this.popup) {
         return
+      }
 
-      if (this.storageType === 'session') {
-        sessionStorage.setItem(this.storageKey, this.store.html)
-      } else {
-        localStorage.setItem(this.storageKey, this.store.html)
+      this.popup = new Popper(node, this.$refs.stickers, {
+        placement: 'bottom'
+      });
+    },
+    destroyPopup () {
+      if (this.popup) {
+        this.popup.destroy()
+        this.popup = null
       }
     },
-    getUrlById (id) {
-      return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
+    getStickers () {
+      return this.stickers
     }
   },
   computed: {
     ...mapState({
-      myFiles: state => state.content.my
+      myFiles: state => state.content.my,
+      stickers: state => state.stickers.available
     }),
-    isBasic () {
-      return this.type !== 'extended'
+    showStickers () {
+      return !!this.stickerQuery
     },
-    isExtended () {
-      return this.type === 'extended'
+    hasStickersResults () {
+      return this.filteredStickers.length != 0
     }
   },
   components: {
-    EditorContent,
     EditorMenuBar,
+    EditorContent,
     EditorButton,
     Modal,
-    // ColorPicker,
-    ImageUpload,
     Tabs,
     Tab,
-    PaginationView
-  }
+    PaginationView,
+    ImageUpload,
+    Sticker,
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 @import "./node_modules/spectre.css/src/_variables.scss";
-
-.editor {
-  height: auto;
-}
-
-.menu-bar {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.menu-bar .button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  padding: 2px 10px;
-  border-radius: 3px;
-}
-
-.menu-bar .button:hover,
-.menu-bar .button.is-active {
-  //background: #cecece;
-  background: $primary-color;
-  color: $secondary-color;
-}
 
 .menu-bar .span {
   display: inline-block;
@@ -725,17 +630,47 @@ export default {
   background: #fff;
 }
 
-.hu-color-picker.light {
-  box-shadow: none;
-  background: none;
-  padding: 0;
+.editor {
+  height: auto;
 }
 
-.hu-color-picker .color-set .alpha {
-  display: none; /* hide opacity slider */
+.editor .ProseMirror {
+  min-height: 300px;
 }
 
-.hu-color-picker .color-type:last-of-type {
-  display: none; /* hide rgba display */
+.editor .ProseMirror:focus {
+  outline: none;
+}
+
+.editor:focus-within {
+  border-color: $primary-color;
+}
+
+.stickers-list {
+  padding: 0.2rem;
+  border: 2px solid $border-color;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background-color: rgba($bg-color-light, 0.9);
+
+  &__no-results {
+    padding: 0.2rem 0.5rem;
+  }
+  &__item {
+    border-radius: 5px;
+    padding: 0.2rem 0.5rem;
+    margin-bottom: 0.2rem;
+    cursor: pointer;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &.is-selected,
+    &:hover {
+      background-color: rgba($bg-color-dark, 0.9);
+    }
+    &.is-empty {
+      opacity: 0.5;
+    }
+  }
 }
 </style>

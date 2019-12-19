@@ -1,12 +1,12 @@
 import { Image } from 'tiptap-extensions'
-import View from '@/editor/node/ImageView.vue'
+import View from '@/components/editor/node/ImageView.vue'
 
 export class ImageExtended extends Image {
-  get view() {
+  get view () {
     return View
   }
 
-  get schema() {
+  get schema () {
     return {
       inline: true,
       attrs: {

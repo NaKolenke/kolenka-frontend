@@ -1,12 +1,6 @@
 <template>
   <div>
-    <editor
-      type="basic"
-      ref="editor"
-      editor-class="comment-editor"
-      :store="store"
-      :storageKey="'comments/' + postUrl + '/' + parentId"
-    />
+    <editor ref="editor" />
     <div>
       <input
         class="btn btn-primary float-left"
@@ -37,11 +31,7 @@ export default {
   },
   data () {
     return {
-      isSending: false,
-      store: {
-        html: '',
-        length: 0
-      }
+      isSending: false
     }
   },
   methods: {
@@ -49,7 +39,7 @@ export default {
       this.isSending = true
       this.$store
         .dispatch('comments/postComment',
-          { url: this.postUrl, text: this.store.html, parent: this.parentId })
+          { url: this.postUrl, text: this.$refs.editor.getHtml(), parent: this.parentId })
         .then(comment => {
           this.isSending = false
           this.$refs.editor.setContent('')
@@ -63,7 +53,7 @@ export default {
   },
   computed: {
     isValid () {
-      return this.store.length > 3
+      return this.$refs.editor.getHtml().length > 3
     }
   },
   components: {
