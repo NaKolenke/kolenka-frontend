@@ -1,6 +1,6 @@
 <template>
   <div>
-    <editor ref="editor" />
+    <editor ref="editor"></editor>
     <div>
       <input
         class="btn btn-primary float-left"
@@ -31,8 +31,12 @@ export default {
   },
   data () {
     return {
-      isSending: false
+      isSending: false,
+      isMounted: false
     }
+  },
+  mounted () {
+    this.isMounted = true
   },
   methods: {
     send () {
@@ -53,7 +57,10 @@ export default {
   },
   computed: {
     isValid () {
-      return this.$refs.editor.getHtml().length > 3
+      if (this.isMounted) {
+        return this.$refs.editor.getHtml().length > 9
+      }
+      return false
     }
   },
   components: {
