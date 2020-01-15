@@ -177,7 +177,8 @@ export default {
         result = this.$store.dispatch('posts/editPost', {
           title: this.model.title,
           text: this.$refs.editor.getHtml(),
-          url: this.$route.params.post,
+          url: this.slug,
+          originalUrl: this.$route.params.post,
           draft: draft,
           blogId: this.model.blog
         })

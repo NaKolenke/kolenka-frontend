@@ -34,8 +34,8 @@ const actions = {
       return res.post
     })
   },
-  editPost (_context, { title, text, url, draft, blogId }) {
-    return api.editPost(title, text, url, draft, blogId).then(res => {
+  editPost (_context, { title, text, url, originalUrl, draft, blogId }) {
+    return api.editPost(title, text, url, originalUrl, draft, blogId).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }

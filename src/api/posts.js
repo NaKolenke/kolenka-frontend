@@ -24,9 +24,9 @@ export default {
         })
       .then(res => res.data)
   },
-  editPost: (title, text, url, draft, blogId) => {
+  editPost: (title, text, url, originalUrl, draft, blogId) => {
     return request
-      .put(`posts/${url}/`,
+      .put(`posts/${originalUrl}/`,
         {
           blog: blogId,
           cut_name: null,
