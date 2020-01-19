@@ -2,7 +2,7 @@
   <div>    
     <editor-menu-bar
       class="menu-bar"
-      :class="{ 'floating': isMenuBarFloating }"
+      :class="{ 'floating': isMenuBarFloating && !disableFloatingMenu }"
       :style="[{ 'left': menuBarOffsetLeft }, { 'width': menuBarWidth }]"
       :editor="editor"
       v-slot="{ commands, isActive }"
@@ -33,6 +33,7 @@
           @insertRowAfter="commands.addRowAfter"
           @removeRow="commands.deleteRow"
           @mergeCells="commands.toggleCellMerge"
+          @help="showHelpModal"
         />
 
         <modal
@@ -100,6 +101,27 @@
             autofocus
           />
         </modal>
+
+        <modal
+          :open="isHelpModalShowed"
+          :closed="closeHelpModal"
+          title="Помощь по редактору текста"
+          size="lg"
+          :hideButtons="true"
+        >
+          <h4>Общее</h4>
+          <p>
+            Для добавления переноса на новую строку используйте
+            <kbd>Ctrl/Shift+Return</kbd>
+          </p>
+          <p>Редактор поддерживает некоторые правила Markdown</p>
+          <p>
+            Для пропорционального масштабирования изображения зажмите
+            <kbd>Shift</kbd>
+          </p>
+          <h4>Embed</h4>
+          <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
+        </modal>
       </div>
     </editor-menu-bar>
 
@@ -142,6 +164,7 @@ import {
 import Popper from "popper.js";
 import Iframe from '@/components/editor/node/iframe'
 import StickerNode from '@/components/editor/node/Stickers'
+import SpoilerNode from '@/components/editor/node/spoiler'
 
 import Modal from '@/components/elements/Modal.vue'
 import Tabs from '@/components/elements/Tabs.vue'
@@ -156,6 +179,9 @@ import errors from '@/utils/errors'
 import Pagination from '@/models/pagination'
 
 export default {
+  props: {
+    disableFloatingMenu: Boolean
+  },
   data () {
     return {
       editor: new Editor({
@@ -248,6 +274,7 @@ export default {
               return items.filter(s => s.name.includes(query))
             },
           }),
+          new SpoilerNode()
         ],
       }),
       isMenuBarFloating: false,
@@ -357,7 +384,7 @@ export default {
     getUrlById (id) {
       return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
     },
-    onKeyDown (e) {
+    onKeyDown (_e) {
       // if (e.keyCode === 9 && // TAB
       //   this.editor.isActive.code_block()) {
       //   e.preventDefault()

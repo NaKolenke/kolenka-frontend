@@ -67,7 +67,7 @@
       </div>
       <div class="column col-auto editor-menu-column">
         <small class="text-gray button-group-caption"></small><br>
-        <button class="editor-button tooltip" data-tooltip="Помощь">
+        <button class="editor-button tooltip" data-tooltip="Помощь" @click="call('help')">
           ?
         </button>
       </div>

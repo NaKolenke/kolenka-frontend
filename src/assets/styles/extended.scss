@@ -1,0 +1,8 @@
+.inline-input {
+  border: none;
+  background-color: transparent;
+
+  &.full {
+    width: 100%;
+  }
+}
