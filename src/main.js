@@ -14,7 +14,7 @@ Vue.filter('moment', function (timestamp) {
   return Moment.unix(timestamp).format('LLL')
 })
 
-new Vue({
+window.__app = new Vue({
   router,
   store,
   render: h => h(App),
