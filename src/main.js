@@ -3,6 +3,7 @@ import Vue from 'vue'
 import store from './store'
 import App from './App.vue'
 import router from './router'
+import './assets/styles/extended.scss'
 
 import Moment from 'moment'
 import 'moment/locale/ru'
@@ -14,7 +15,7 @@ Vue.filter('moment', function (timestamp) {
   return Moment.unix(timestamp).format('LLL')
 })
 
-new Vue({
+window.__app = new Vue({
   router,
   store,
   render: h => h(App),

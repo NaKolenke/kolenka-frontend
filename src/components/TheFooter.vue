@@ -3,7 +3,7 @@
     <div class="container">
       <div class="columns">
         <div class="column col-9 col-mx-auto col-xl-11 col-md-12">
-          kolenka.net, {{ new Date().getFullYear() }}
+          kolenka.net, {{ new Date().getFullYear() }}, <small><a href="/posts/usloviya-predostavleniya-sajta">Условия предоставления сайта</a></small>
         </div>
       </div>
     </div>

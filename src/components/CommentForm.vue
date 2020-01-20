@@ -1,9 +1,9 @@
 <template>
   <div>
-    <editor ref="editor"></editor>
+    <editor disableFloatingMenu ref="editor"></editor>
     <div>
       <input
-        class="btn btn-primary float-left"
+        class="btn btn-primary float-left mt-2"
         type="submit"
         value="Отправить"
         @click="send"

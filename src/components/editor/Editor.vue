@@ -1,292 +1,141 @@
 <template>
-  <div>
+  <div>    
     <editor-menu-bar
-      :class="{ 'floating': isMenuBarFloating }"
-      :style="[{ 'left': menuBarOffsetLeft }]"
+      class="menu-bar"
+      :class="{ 'floating': isMenuBarFloating && !disableFloatingMenu }"
+      :style="[{ 'left': menuBarOffsetLeft }, { 'width': menuBarWidth }]"
       :editor="editor"
       v-slot="{ commands, isActive }"
     >
-      <div class="menu-bar">
-        <span id="format">
-          <editor-button name="Жирный" :active="isActive.bold()" @command="commands.bold">
-            <span class="icon-bold"></span>
-          </editor-button>
+      <div>
+        <editor-menu
+          :activeButtons="activeButtons"
+          :activeHeading="isActive.heading"
+          @bold="commands.bold"
+          @italic="commands.italic"
+          @strike="commands.strike"
+          @underline="commands.underline"
+          @mono="commands.code"
+          @heading="commands.heading"
+          @paragraph="commands.paragraph"
+          @quote="commands.blockquote"
+          @codeblock="commands.code_block"
+          @bulletlist="commands.bullet_list"
+          @orderedlist="commands.ordered_list"
+          @image="showImageModal"
+          @embed="showEmbedModal"
+          @table="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
+          @removeTable="commands.deleteTable"
+          @insertColumnBefore="commands.addColumnBefore"
+          @insertColumnAfter="commands.addColumnAfter"
+          @removeColumn="commands.deleteColumn"
+          @insertRowBefore="commands.addRowBefore"
+          @insertRowAfter="commands.addRowAfter"
+          @removeRow="commands.deleteRow"
+          @mergeCells="commands.toggleCellMerge"
+          @help="showHelpModal"
+        />
 
-          <editor-button name="Наклонный" :active="isActive.italic()" @command="commands.italic">
-            <span class="icon-italic"></span>
-          </editor-button>
-
-          <editor-button name="Зачёркнутый" :active="isActive.strike()" @command="commands.strike">
-            <span class="icon-strikethrough"></span>
-          </editor-button>
-
-          <editor-button
-            name="Подчёркнутый"
-            :active="isActive.underline()"
-            @command="commands.underline"
-          >
-            <span class="icon-underline"></span>
-          </editor-button>
-
-          <editor-button name="Код" :active="isActive.code()" @command="commands.code">
-            <span class="icon-embed"></span>
-          </editor-button>
-        </span>
-
-        <span class="span"></span>
-
-        <span id="block-format">
-          <editor-button
-            name="Заголовок"
-            :active="isActive.heading({ level: 1 }) "
-            @command="commands.heading({ level: 1 })"
-          >
-            <span class="icon-font-size"></span>
-          </editor-button>
-
-          <editor-button
-            name="Подзаголовок"
-            :active="isActive.heading({ level: 2 })"
-            @command="commands.heading({ level: 2 })"
-          >
-            <span class="icon-font-size" style="font-size: 0.7em;"></span>
-          </editor-button>
-
-          <editor-button
-            name="Параграф"
-            :active="isActive.paragraph()"
-            @command="commands.paragraph"
-          >
-            <span class="icon-pilcrow"></span>
-          </editor-button>
-
-          <editor-button
-            name="Цитата"
-            :active="isActive.blockquote()"
-            @command="commands.blockquote"
-          >
-            <span class="icon-quotes-right"></span>
-          </editor-button>
-
-          <editor-button
-            name="Блок кода"
-            :active="isActive.code_block()"
-            @command="commands.code_block"
-          >
-            <span class="icon-embed2"></span>
-          </editor-button>
-        </span>
-
-        <span class="span"></span>
-
-        <span id="lists">
-          <editor-button
-            name="Список"
-            :active="isActive.bullet_list()"
-            @command="commands.bullet_list"
-          >
-            <span class="icon-list2"></span>
-          </editor-button>
-          <editor-button
-            name="Нумерованный список"
-            :active="isActive.ordered_list()"
-            @command="commands.ordered_list"
-          >
-            <span class="icon-list-numbered"></span>
-          </editor-button>
-        </span>
-
-        <span class="span"></span>
-
-        <span id="embed">
-          <editor-button name="Изображение" :active="isActive.image()" @command="showImageModal">
-            <span class="icon-image"></span>
-          </editor-button>
-
-          <modal
-            :open="isImageModalShowed"
-            :closed="closeImageModal"
-            title="Вставить изображение"
-            @ok="chooseImage(commands.image)"
-          >
-            <tabs>
-              <tab title="По ссылке">
-                <div :class="['form-group', {'has-error': imageModalError}, 'mt-2']">
-                  <input
-                    class="form-input"
-                    type="url"
-                    placeholder="Ссылка на изображение"
-                    v-model="imageModalUrl"
-                    autofocus
-                  />
-                  <p v-if="imageModalError" class="form-input-hint">Введите ссылку на изображение</p>
-                </div>
-              </tab>
-              <tab title="Загрузить">
-                <image-upload
-                  @complete="imageUploaded($event, commands.image)"
-                  :multiple="true"
-                  class="mt-2"
+        <modal
+          :open="isImageModalShowed"
+          :closed="closeImageModal"
+          title="Вставить изображение"
+          @ok="chooseImage(commands.image)"
+        >
+          <tabs>
+            <tab title="По ссылке">
+              <div :class="['form-group', {'has-error': imageModalError}, 'mt-2']">
+                <input
+                  class="form-input"
+                  type="url"
+                  placeholder="Ссылка на изображение"
+                  v-model="imageModalUrl"
+                  autofocus
                 />
-              </tab>
-              <tab title="История загрузок">
-                <div class="columns mt-2">
-                  <div
-                    v-for="item in myFiles.slice((imageContentPage - 1) * 20, 20 * imageContentPage)"
-                    :key="item.id"
-                    class="column col-3"
+                <p v-if="imageModalError" class="form-input-hint">Введите ссылку на изображение</p>
+              </div>
+            </tab>
+            <tab title="Загрузить">
+              <image-upload
+                @complete="imageUploaded($event, commands.image)"
+                :multiple="true"
+                class="mt-2"
+              />
+            </tab>
+            <tab title="История загрузок">
+              <div class="columns mt-2">
+                <div
+                  v-for="item in myFiles.slice((imageContentPage - 1) * 20, 20 * imageContentPage)"
+                  :key="item.id"
+                  class="column col-3"
+                >
+                  <a
+                    href="#"
+                    @click.prevent="commands.image({ src: getUrlById(item.id) }); closeImageModal()"
                   >
-                    <a
-                      href="#"
-                      @click.prevent="commands.image({ src: getUrlById(item.id) }); closeImageModal()"
-                    >
-                      <img :src="getUrlById(item.id)" width="100%" height="auto" />
-                    </a>
-                  </div>
+                    <img :src="getUrlById(item.id)" width="100%" height="auto" />
+                  </a>
                 </div>
-                <pagination-view
-                  :page="imageContentPage"
-                  :page-count="imageContentPageCount"
-                  @paginate-relative="paginateRelative"
-                  @paginate-to="paginateTo"
-                ></pagination-view>
-              </tab>
-            </tabs>
-          </modal>
+              </div>
+              <pagination-view
+                :page="imageContentPage"
+                :page-count="imageContentPageCount"
+                @paginate-relative="paginateRelative"
+                @paginate-to="paginateTo"
+              ></pagination-view>
+            </tab>
+          </tabs>
+        </modal>
 
-          <editor-button
-            name="Embed (youtube, etc)"
-            :active="isActive.iframe()"
-            @command="showEmbedModal"
-          >
-            <span class="icon-new-tab"></span>
-          </editor-button>
+        <modal
+          :open="isEmbedModalShowed"
+          :closed="closeEmbedModal"
+          title="Embed"
+          @ok="chooseEmbed(commands.iframe)"
+        >
+          <input
+            class="form-input"
+            type="url"
+            placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)"
+            v-model="embedModalUrl"
+            autofocus
+          />
+        </modal>
 
-          <modal
-            :open="isEmbedModalShowed"
-            :closed="closeEmbedModal"
-            title="Embed"
-            @ok="chooseEmbed(commands.iframe)"
-          >
-            <input
-              class="form-input"
-              type="url"
-              placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)"
-              v-model="embedModalUrl"
-              autofocus
-            />
-          </modal>
-        </span>
-
-        <span class="span"></span>
-
-        <span id="tables">
-          <editor-button
-            name="Таблица"
-            :active="isActive.table()"
-            @command="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
-          >
-            <span class="icon-table2"></span>
-          </editor-button>
-        </span>
-
-        <span class="span"></span>
-
-        <span id="help">
-          <editor-button name="Помощь" @command="showHelpModal">?</editor-button>
-
-          <modal
-            :open="isHelpModalShowed"
-            :closed="closeHelpModal"
-            title="Помощь по редактору текста"
-            size="lg"
-            :hideButtons="true"
-          >
-            <h4>Общее</h4>
-            <p>
-              Для добавления переноса на новую строку используйте
-              <kbd>Ctrl/Shift+Return</kbd>
-            </p>
-            <p>Редактор поддерживает некоторые правила Markdown</p>
-            <p>
-              Для пропорционального масштабирования изображения зажмите
-              <kbd>Shift</kbd>
-            </p>
-            <h4>Embed</h4>
-            <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
-          </modal>
-        </span>
-
-        <div v-if="isActive.table()" class="mt-1">
-          <small>Редактировать таблицу</small>
-
-          <button
-            class="button tooltip"
-            @click="commands.deleteTable"
-            data-tooltip="Удалить таблицу"
-          >
-            <span class="icon-blocked"></span>
-          </button>
-          <button
-            class="button tooltip"
-            @click="commands.addColumnBefore"
-            data-tooltip="Добавить колонку перед"
-          >
-            <span class="icon-arrow-left2"></span>
-          </button>
-          <button
-            class="button tooltip"
-            @click="commands.addColumnAfter"
-            data-tooltip="Добавить колонку после"
-          >
-            <span class="icon-arrow-right2"></span>
-          </button>
-          <button class="button" @click="commands.deleteColumn">удалить колонку</button>
-          <button
-            class="button tooltip"
-            @click="commands.addRowBefore"
-            data-tooltip="Добавить строку перед"
-          >
-            <span class="icon-arrow-up2"></span>
-          </button>
-          <button
-            class="button tooltip"
-            @click="commands.addRowAfter"
-            data-tooltip="Добавить строку после"
-          >
-            <span class="icon-arrow-down2"></span>
-          </button>
-          <button class="button" @click="commands.deleteRow">удалить строку</button>
-          <button
-            class="button tooltip"
-            @click="commands.toggleCellMerge"
-            data-tooltip="Объединить ячейки"
-          >
-            <span class="icon-insert-template"></span>
-          </button>
-        </div>
+        <modal
+          :open="isHelpModalShowed"
+          :closed="closeHelpModal"
+          title="Помощь по редактору текста"
+          size="lg"
+          :hideButtons="true"
+        >
+          <h4>Общее</h4>
+          <p>
+            Для добавления переноса на новую строку используйте
+            <kbd>Ctrl/Shift+Return</kbd>
+          </p>
+          <p>Редактор поддерживает некоторые правила Markdown</p>
+          <p>
+            Для пропорционального масштабирования изображения зажмите
+            <kbd>Shift</kbd>
+          </p>
+          <h4>Embed</h4>
+          <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
+        </modal>
       </div>
     </editor-menu-bar>
 
-    <div :class="['editor', 'form-input']" ref="editorWrapper">
+    <div class="editor form-input" ref="editorWrapper">
       <editor-content class="editor-content" :editor="editor"></editor-content>
     </div>
 
-    <div class="stickers-list" v-show="showStickers" ref="stickers">
-      <template v-if="hasStickersResults">
-        <div
-          v-for="(sticker, index) in filteredStickers"
-          :key="sticker.id"
-          class="stickers-list__item"
-          :class="{ 'is-selected': navigatedStickerIndex === index }"
-          @click="selectSticker(sticker)"
-        >
-          <sticker :name="sticker.name" />
-          {{ sticker.name }}
-        </div>
-      </template>
-      <div v-else class="stickers-list__item is-empty">Нет подходящих стикеров</div>
-    </div>
+    <sticker-list 
+      v-show="showStickers" 
+      :stickers="filteredStickers" 
+      :sticker-index="navigatedStickerIndex"
+      @select-sticker="selectSticker"
+      ref="stickers"
+    />
   </div>
 </template>
 
@@ -315,20 +164,25 @@ import {
 import Popper from "popper.js";
 import Iframe from '@/components/editor/node/iframe'
 import StickerNode from '@/components/editor/node/Stickers'
+import SpoilerNode from '@/components/editor/node/spoiler'
+import CutNode from '@/components/editor/node/cut'
 
-import EditorButton from '@/components/editor/EditorButton.vue'
 import Modal from '@/components/elements/Modal.vue'
 import Tabs from '@/components/elements/Tabs.vue'
 import Tab from '@/components/elements/Tab.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import ImageUpload from '@/components/editor/ImageUploadView.vue'
-import Sticker from '@/components/elements/Sticker.vue'
+import StickerList from '@/components/editor/StickerList.vue'
+import EditorMenu from '@/components/editor/EditorMenu.vue'
 
 import { mapState } from 'vuex'
 import errors from '@/utils/errors'
 import Pagination from '@/models/pagination'
 
 export default {
+  props: {
+    disableFloatingMenu: Boolean
+  },
   data () {
     return {
       editor: new Editor({
@@ -421,10 +275,13 @@ export default {
               return items.filter(s => s.name.includes(query))
             },
           }),
+          new SpoilerNode(),
+          new CutNode()
         ],
       }),
       isMenuBarFloating: false,
       menuBarOffsetLeft: 0,
+      menuBarWidth: 'auto',
 
       isHelpModalShowed: false,
 
@@ -529,23 +386,24 @@ export default {
     getUrlById (id) {
       return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
     },
-    onKeyDown (e) {
+    onKeyDown (_e) {
       // if (e.keyCode === 9 && // TAB
-      //   this.isFocused &&
       //   this.editor.isActive.code_block()) {
       //   e.preventDefault()
       // }
     },
-    onScroll (_e) {
+    onScroll () {
       let wrapper = this.$refs.editorWrapper
       let scroll = window.pageYOffset || document.documentElement.scrollTop
       let clientRect = wrapper.getBoundingClientRect()
 
       if (scroll > clientRect.top + scroll) {
         this.menuBarOffsetLeft = clientRect.left + 1 + 'px'
+        this.menuBarWidth = clientRect.width - 2 + 'px'
         this.isMenuBarFloating = true
       } else {
         this.isMenuBarFloating = false
+        this.menuBarWidth = 'auto'
       }
     },
     upHandler () {
@@ -574,7 +432,7 @@ export default {
         return
       }
 
-      this.popup = new Popper(node, this.$refs.stickers, {
+      this.popup = new Popper(node, this.$refs.stickers.$el, {
         placement: 'bottom'
       });
     },
@@ -598,79 +456,62 @@ export default {
     },
     hasStickersResults () {
       return this.filteredStickers.length != 0
+    },
+    activeButtons() {
+      return {
+        bold: this.editor.isActive.bold(),
+        italic: this.editor.isActive.italic(),
+        strike: this.editor.isActive.strike(),
+        underline: this.editor.isActive.underline(),
+        mono: this.editor.isActive.code(),
+        paragraph: this.editor.isActive.paragraph(),
+        quote: this.editor.isActive.blockquote(),
+        codeblock: this.editor.isActive.code_block(),
+        bulletlist: this.editor.isActive.bullet_list(),
+        orderedlist: this.editor.isActive.ordered_list(),
+        image: this.editor.isActive.image(),
+        embed: this.editor.isActive.iframe(),
+        table: this.editor.isActive.table(),
+      }
     }
   },
   components: {
     EditorMenuBar,
     EditorContent,
-    EditorButton,
     Modal,
     Tabs,
     Tab,
     PaginationView,
     ImageUpload,
-    Sticker,
+    StickerList,
+    EditorMenu,
   },
 }
 </script>
 
-<style lang="scss" scoped>
-@import "./node_modules/spectre.css/src/_variables.scss";
-
-.menu-bar .span {
-  display: inline-block;
-  width: 12px;
-}
-
-.menu-bar.floating {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 999;
-  background: #fff;
-}
-
+<style>
 .editor {
   height: auto;
-}
-
-.editor .ProseMirror {
-  min-height: 300px;
 }
 
 .editor .ProseMirror:focus {
   outline: none;
 }
+</style>
+
+<style lang="scss" scoped>
+@import "./node_modules/spectre.css/src/_variables.scss";
+
+.menu-bar.floating {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: $zindex-1;
+  background: $bg-color-light;
+  border-bottom: 1px solid $border-color;
+}
 
 .editor:focus-within {
   border-color: $primary-color;
-}
-
-.stickers-list {
-  padding: 0.2rem;
-  border: 2px solid $border-color;
-  font-size: 0.8rem;
-  font-weight: bold;
-  background-color: rgba($bg-color-light, 0.9);
-
-  &__no-results {
-    padding: 0.2rem 0.5rem;
-  }
-  &__item {
-    border-radius: 5px;
-    padding: 0.2rem 0.5rem;
-    margin-bottom: 0.2rem;
-    cursor: pointer;
-    &:last-child {
-      margin-bottom: 0;
-    }
-    &.is-selected,
-    &:hover {
-      background-color: rgba($bg-color-dark, 0.9);
-    }
-    &.is-empty {
-      opacity: 0.5;
-    }
-  }
 }
 </style>

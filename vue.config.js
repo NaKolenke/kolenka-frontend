@@ -24,7 +24,6 @@ module.exports = {
     // devtool: 'source-map'
   },
   transpileDependencies: [
-    'pulse-framework',
     'tiptap',
     'tiptap-commands',
     'tiptap-extensions'

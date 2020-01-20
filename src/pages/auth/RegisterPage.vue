@@ -11,6 +11,7 @@
               v-model="username"
               v-validate="validation.username"
               name="username"
+              type="text"
               id="username"
               required
             >
@@ -26,6 +27,7 @@
               name="email"
               id="email"
               inputmode="email"
+              type="email"
               required
             >
             <div class="form-input-hint" v-if="!validation.email.success && validation.showErrors">Неверный адрес электронной почты</div>
@@ -38,6 +40,7 @@
               v-model="name"
               v-validate="validation.name"
               name="name"
+              type="text"
               id="name"
               required
             >
@@ -56,6 +59,13 @@
               required
             >
             <div class="form-input-hint" v-if="!validation.password.success && validation.showErrors">Неверный пароль</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-checkbox">
+              <input v-model="agreed" type="checkbox" required>
+              <i class="form-icon"></i> С <a href="/posts/usloviya-predostavleniya-sajta">условиями предоставления сайта</a> согласен
+            </label>
           </div>
 
           <input type="submit" id="login-btn" class="btn btn-primary" value="Зарегистрироваться">
@@ -85,6 +95,7 @@ export default {
       email: '',
       name: '',
       password: '',
+      agreed: false,
       validation: {
         username: {
           length: () => this.username.length >= 3
@@ -132,7 +143,8 @@ export default {
       return this.validation.username.success &&
         this.validation.email.success &&
         this.validation.name.success &&
-        this.validation.password.success
+        this.validation.password.success &&
+        this.agreed
     },
     ...mapState({
       user: state => state.users.me
