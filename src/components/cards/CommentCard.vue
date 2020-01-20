@@ -12,9 +12,15 @@
               :to="{ name: 'user', params: { user: comment.creator.username }}"
               class="text-dark"
             >{{ comment.creator.name || comment.creator.username }}</router-link>
-            <br />
-            <small class="text-gray">
-              {{ comment.created_date | moment}}
+          </div>
+
+          <div class="tile-subtitle">
+            <post-body class="mt-1 comment-body" :html="comment.text" />
+            <small class="subpanel text-gray">
+              <a href="#" data-tooltip="Ответить" @click.prevent="reply">
+                Ответить
+              </a>
+              <span>{{ comment.created_date | moment}}</span>
               <a
                 :href="'#' + commentId"
                 title="Ссылка на комментарий"
@@ -22,18 +28,8 @@
             </small>
           </div>
 
-          <div class="tile-subtitle">
-            <post-body class="mt-1 comment-body" :html="comment.text" />
-            <small class="float-right" v-if="!isReplying">
-              <button class="reply tooltip" data-tooltip="Ответить" @click="reply">
-                <span class="icon-bubble2"></span>
-              </button>
-            </small>
-            <div class="clearfix"></div>
-          </div>
-
-          <div class="panel mt-2 mb-2" v-if="isReplying">
-            <div class="panel-header h6">
+          <div class="panel mt-2" v-if="isReplying">
+            <h6 class="panel-header mb-0">
               Ответ
               <button
                 class="btn btn-link btn-sm float-right tooltip"
@@ -42,11 +38,11 @@
               >
                 <i class="icon icon-cross"></i>
               </button>
-            </div>
+            </h6>
             <div class="panel-body" style="overflow:visible">
               <comment-form :post-url="postUrl" :parent-id="comment.id" @sent="commentSent" />
             </div>
-            <div class="panel-footer"></div>
+            <div class="panel-footer pb-0"></div>
           </div>
         </div>
       </div>
@@ -94,7 +90,7 @@ export default {
   },
   methods: {
     reply () {
-      this.isReplying = true
+      this.isReplying = !this.isReplying
     },
     cancelReply () {
       this.isReplying = false
@@ -121,6 +117,14 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+@import "./node_modules/spectre.css/src/_variables.scss";
+
+.subpanel * {
+  padding-right: $control-padding-x;
+}
+</style>
+
 <style>
 .comment {
   border-top: none;
@@ -142,11 +146,5 @@ export default {
 
 .comment-body img {
   max-width: 100%;
-}
-
-.comment .reply {
-  border: none;
-  background: none;
-  cursor: pointer;
 }
 </style>
