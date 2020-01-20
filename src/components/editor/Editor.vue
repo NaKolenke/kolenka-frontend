@@ -165,6 +165,7 @@ import Popper from "popper.js";
 import Iframe from '@/components/editor/node/iframe'
 import StickerNode from '@/components/editor/node/Stickers'
 import SpoilerNode from '@/components/editor/node/spoiler'
+import CutNode from '@/components/editor/node/cut'
 
 import Modal from '@/components/elements/Modal.vue'
 import Tabs from '@/components/elements/Tabs.vue'
@@ -274,7 +275,8 @@ export default {
               return items.filter(s => s.name.includes(query))
             },
           }),
-          new SpoilerNode()
+          new SpoilerNode(),
+          new CutNode()
         ],
       }),
       isMenuBarFloating: false,

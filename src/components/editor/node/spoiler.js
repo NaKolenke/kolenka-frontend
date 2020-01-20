@@ -55,6 +55,7 @@ export default class Spoiler extends Node {
     }
   }
 
+  // || test
   inputRules({ type }) {
     return [
       wrappingInputRule(/^\s*\|\|\s$/, type),
