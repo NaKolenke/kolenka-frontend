@@ -1,8 +1,21 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div class="column col-12 col-md-2">
-        <sticker v-for="s in stickers" :key="s.name" :name="s.name" :showName="true"></sticker>
+      <div class="column col-6">
+        <h4>Добавить стикер</h4>
+        <div class="card">
+          <div class="card-body">
+            <add-sticker />
+          </div>
+        </div>
+      </div>
+      <div class="column col-6">
+        <h4>Список активных стикеров</h4>
+        <div class="card">
+          <div class="card-body">
+            <sticker v-for="s in stickers" :key="s.name" :name="s.name" class="tooltip tooltip-bottom" :data-tooltip="s.name" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -11,6 +24,7 @@
 <script>
 import { mapState } from 'vuex'
 import Sticker from '@/components/elements/Sticker.vue'
+import AddSticker from '@/components/AddStickerView.vue'
 import errors from '@/utils/errors'
 
 export default {
@@ -53,6 +67,7 @@ export default {
   },
   components: {
     Sticker,
+    AddSticker,
   }
 }
 </script>
