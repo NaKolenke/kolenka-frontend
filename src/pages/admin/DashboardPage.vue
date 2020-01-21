@@ -1,8 +1,36 @@
 <template>
   <div class="container">
     <div class="columns">
-      <div class="column col-6 col-md-2">Всего пользователей зарегестрировано: {{totalUsers}}</div>
-      <div class="column col-6 col-md-2">Активные пользователи: {{activeUsers}}</div>
+      <div class="column col-6 col-md-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="columns">
+              <div class="column col-auto">
+                <h1 class="mb-2"><i class="icon icon-people"></i></h1>
+              </div>
+              <div class="column col-auto">
+                <h3 class="mb-0">{{ totalUsers }}</h3>
+                Всего пользователей зарегистрировано
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column col-6 col-md-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="columns">
+              <div class="column col-auto">
+                <h1 class="mb-2"><i class="icon icon-time"></i></h1>
+              </div>
+              <div class="column col-auto">
+                <h3 class="mb-0">{{ activeUsers }}</h3>
+                Активные пользователи
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
