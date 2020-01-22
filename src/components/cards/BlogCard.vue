@@ -10,6 +10,15 @@
           <div class="column col-10">
             <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
             <span class="readers label m-2">Читатели: {{blog.readers}}</span>
+
+            <vote
+              class="float-right"
+              :rating="blog.rating"
+              :votedUp="blog.user_voted > 0"
+              :votedDown="blog.user_voted < 0"
+              :id="blog.id"
+              :type="'blog'"
+            />
           </div>
           <div class="column col-auto">
             <button
@@ -60,6 +69,7 @@ import { mapState } from 'vuex'
 import errors from '@/utils/errors'
 import Pagination from '@/models/pagination'
 import Avatar from '@/components/elements/Avatar.vue'
+import Vote from '@/components/Vote.vue'
 
 export default {
   props: {
@@ -98,7 +108,7 @@ export default {
           // this.$blogs.collect(this.blog, 'my')
         }).catch(error => {
           errors.handle(error)
-          this.toast.error(errors.getText(error))
+          this.$toast.error(errors.getText(error))
         })
     }
   },
@@ -112,7 +122,8 @@ export default {
     }),
   },
   components: {
-    Avatar
+    Avatar,
+    Vote
   }
 }
 </script>

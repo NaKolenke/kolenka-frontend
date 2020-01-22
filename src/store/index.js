@@ -13,6 +13,7 @@ import search from './search'
 import stickers from './stickers'
 import tags from './tags'
 import users from './users'
+import votes from './votes'
 
 Vue.use(Vuex)
 
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     stickers,
     tags,
     users,
+    votes,
   },
   strict: debug,
 })

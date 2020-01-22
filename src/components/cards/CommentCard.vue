@@ -24,6 +24,16 @@
 
           <div class="tile-subtitle">
             <post-body class="mt-1 comment-body" :html="comment.text" />
+
+            <vote
+              class="float-right"
+              :rating="comment.rating"
+              :votedUp="comment.user_voted > 0"
+              :votedDown="comment.user_voted < 0"
+              :id="comment.id"
+              :type="'comment'"
+            />
+
             <small class="float-right" v-if="!isReplying">
               <button class="reply tooltip" data-tooltip="Ответить" @click="reply">
                 <span class="icon-bubble2"></span>
@@ -68,6 +78,7 @@ import { mapGetters } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 import CommentForm from '@/components/CommentForm.vue'
 import PostBody from '@/components/PostBody.vue'
+import Vote from '@/components/Vote.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
 import resizeTweet from '@/utils/resizeTweet'
@@ -116,7 +127,8 @@ export default {
   components: {
     Avatar,
     CommentForm,
-    PostBody
+    PostBody,
+    Vote,
   }
 }
 </script>

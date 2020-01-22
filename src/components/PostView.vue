@@ -48,6 +48,14 @@
         <span v-for="tag in post.tags" :key="tag.title" class="chip">
           <router-link :to="{ name: 'tag',  params: { tag: tag.url }}">#{{ tag.title }}</router-link>
         </span>
+        <vote
+          class="float-right"
+          :rating="post.rating"
+          :votedUp="post.user_voted > 0"
+          :votedDown="post.user_voted < 0"
+          :id="post.id"
+          :type="'post'"
+        />
       </div>
     </div>
   </div>
@@ -58,6 +66,7 @@ import { mapState } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 import Cut from '@/components/elements/Cut.vue'
 import PostBody from '@/components/PostBody.vue'
+import Vote from '@/components/Vote.vue'
 import wrapCode from '@/utils/wrapCode'
 import wrapYoutube from '@/utils/wrapYoutube'
 import resizeTweet from '@/utils/resizeTweet'
@@ -82,7 +91,8 @@ export default {
   components: {
     Avatar,
     PostBody,
-    Cut
+    Cut,
+    Vote
   }
 }
 </script>

@@ -1,0 +1,116 @@
+<template>
+  <span v-if="isLoading" class="loading" style="width:90px"></span>
+  <span v-else>
+    <img class="vote-img mx-2" :src="imageUp" @click.prevent="voteUp()" />
+    <span style="font-size: 1.2rem;">{{ rating }}</span>
+    <img class="vote-img mx-2 upside" :src="imageDown" @click.prevent="voteDown()" />
+  </span>
+</template>
+
+<script>
+import errors from '@/utils/errors'
+
+export default {
+  props: {
+    rating: Number,
+    votedUp: Boolean,
+    votedDown: Boolean,
+    id: Number,
+    type: String,
+  },
+  data: function () {
+    return {
+      isLoading: false
+    };
+  },
+  methods: {
+    voteUp () {
+      this.isLoading = true
+
+      this.$store.dispatch('votes/vote', { id: this.id, type: this.type, value: this.votedUp ? 0 : 1 })
+        .then(_res => {
+          this.isLoading = false
+          if (this.votedUp) {
+            this.votedUp = false
+            this.votedDown = false
+            this.rating--
+          } else if (this.votedDown) {
+            this.votedUp = true
+            this.votedDown = false
+            this.rating = this.rating + 2
+          } else {
+            this.votedUp = true
+            this.votedDown = false
+            this.rating++
+          }
+        })
+        .catch(error => {
+          this.isLoading = false
+
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
+    },
+    voteDown () {
+      this.isLoading = true
+
+      this.$store.dispatch('votes/vote', { id: this.id, type: this.type, value: this.votedDown ? 0 : -1 })
+        .then(_res => {
+          this.isLoading = false
+          if (this.votedDown) {
+            this.votedUp = false
+            this.votedDown = false
+            this.rating++
+          } else if (this.votedUp) {
+            this.votedUp = false
+            this.votedDown = true
+            this.rating = this.rating - 2
+          } else {
+            this.votedUp = false
+            this.votedDown = true
+            this.rating--
+          }
+        })
+        .catch(error => {
+          this.isLoading = false
+
+          errors.handle(error)
+          this.$toast.error(errors.getText(error))
+        })
+    },
+  },
+  computed: {
+    imageUp () {
+      if (this.votedUp) {
+        return "/images/vote-active.png"
+      } else {
+        return "/images/vote-inactive.png"
+      }
+    },
+    imageDown () {
+      if (this.votedDown) {
+        return "/images/vote-active.png"
+      } else {
+        return "/images/vote-inactive.png"
+      }
+    }
+  },
+  components: {
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.vote-img {
+  height: 18px;
+
+  &:hover {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  }
+}
+
+.upside {
+  transform: rotate(180deg);
+}
+</style>

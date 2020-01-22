@@ -46,7 +46,8 @@ export default {
   },
   getText: (error) => {
     var code = getErrorCode(error)
-    if (code !== null) {
+    console.log(code)
+    if (code !== null && code !== undefined) {
       return errorCodes[code]
     } else if (_.has(error, 'silent')) {
       // workaround

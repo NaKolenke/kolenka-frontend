@@ -58,7 +58,7 @@ export default {
       })
       .catch(error => {
         errors.handle(error)
-        this.toast.error(errors.getText(error))
+        this.$toast.error(errors.getText(error))
       })
   },
   components: {
