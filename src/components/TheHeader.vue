@@ -15,7 +15,7 @@
       </section>
 
       <section class="navbar-section py-2">
-        <router-link to="/page/about">О сайте</router-link>
+        <router-link to="/posts/o-saite">О сайте</router-link>
         <template v-if="user">
           <router-link
             to="/feedback"
