@@ -40,7 +40,7 @@ import CommentSkeleton from '@/components/skeletons/Comment.vue'
 export default {
   metaInfo () {
     return {
-      title: 'Запись'
+      title: this.post.title || 'Запись'
     }
   },
   data: function () {

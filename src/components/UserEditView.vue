@@ -6,24 +6,14 @@
 
         <div class="form-group">
           <label class="form-label" for="name">Имя пользователя</label>
-          <input
-            class="form-input"
-            v-model="user.name"
-            v-validate="validation.username"
-            name="name"
-            id="name"
-          />
+          <input class="form-input" v-model="user.name" name="name" id="name" />
+          <!-- v-validate="validation.username" -->
         </div>
 
         <div class="form-group">
           <label class="form-label" for="email">Email</label>
-          <input
-            class="form-input"
-            v-model="user.email"
-            v-validate="validation.email"
-            name="email"
-            id="email"
-          />
+          <input class="form-input" v-model="user.email" name="email" id="email" />
+          <!-- v-validate="validation.email" -->
         </div>
 
         <div class="form-group">
@@ -63,19 +53,19 @@ Moment.locale('ru')
 
 export default {
   props: ['user'],
-  data () {
-    return {
-      validation: {
-        username: {
-          length: () => this.user.name.length >= 3
-        },
-        email: {
-          length: () => this.user.email.length >= 5,
-          isEmail: () => /\S+@\S+\.\S+/.test(this.user.email) // Broad check
-        }
-      }
-    }
-  },
+  // data () {
+  //   return {
+  //     validation: {
+  //       username: {
+  //         length: () => this.user.name.length >= 3
+  //       },
+  //       email: {
+  //         length: () => this.user.email.length >= 5,
+  //         isEmail: () => /\S+@\S+\.\S+/.test(this.user.email) // Broad check
+  //       }
+  //     }
+  //   }
+  // },
   mounted () {
     this.$refs.editor.setContent(this.user.about)
   },
@@ -89,8 +79,9 @@ export default {
       }
     },
     isValid () {
-      return this.validation.username.success &&
-        this.validation.email.success
+      // return this.validation.username.success &&
+      //   this.validation.email.success
+      return true
     }
   },
   methods: {
