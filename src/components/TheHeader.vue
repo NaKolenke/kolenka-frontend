@@ -185,7 +185,7 @@ export default {
 
 <style scoped>
 #header {
-  background-color: #323a45;
+  background-color: #3b4351;
 }
 
 header a {

@@ -3,7 +3,7 @@
   <span v-else>
     <img class="vote-img mx-2" :src="imageUp" @click.prevent="voteUp()" />
     <span style="font-size: 1.2rem;">{{ rating }}</span>
-    <img class="vote-img mx-2 upside" :src="imageDown" @click.prevent="voteDown()" />
+    <img class="vote-img mx-2" :src="imageDown" @click.prevent="voteDown()" />
   </span>
 </template>
 
@@ -82,16 +82,16 @@ export default {
   computed: {
     imageUp () {
       if (this.votedUp) {
-        return "/images/vote-active.png"
+        return "/images/vote-up-active.png"
       } else {
-        return "/images/vote-inactive.png"
+        return "/images/vote-up.png"
       }
     },
     imageDown () {
       if (this.votedDown) {
-        return "/images/vote-active.png"
+        return "/images/vote-down-active.png"
       } else {
-        return "/images/vote-inactive.png"
+        return "/images/vote-down.png"
       }
     }
   },
@@ -108,9 +108,5 @@ export default {
     opacity: 0.5;
     filter: alpha(opacity=50);
   }
-}
-
-.upside {
-  transform: rotate(180deg);
 }
 </style>
