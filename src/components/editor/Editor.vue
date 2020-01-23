@@ -1,5 +1,5 @@
 <template>
-  <div>    
+  <div>
     <editor-menu-bar
       class="menu-bar"
       :class="{ 'floating': isMenuBarFloating && !disableFloatingMenu }"
@@ -121,6 +121,8 @@
           </p>
           <h4>Embed</h4>
           <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
+          <h4>Cut</h4>
+          <p>Чтобы добавить разрыв поста, на новой строке введите ---опциональное название для кнопки ката---. Можно использовать конструкцию ------, тогда будет подставлено название по умолчанию "Читать далее"</p>
         </modal>
       </div>
     </editor-menu-bar>
@@ -129,9 +131,9 @@
       <editor-content class="editor-content" :editor="editor"></editor-content>
     </div>
 
-    <sticker-list 
-      v-show="showStickers" 
-      :stickers="filteredStickers" 
+    <sticker-list
+      v-show="showStickers"
+      :stickers="filteredStickers"
       :sticker-index="navigatedStickerIndex"
       @select-sticker="selectSticker"
       ref="stickers"
@@ -457,7 +459,7 @@ export default {
     hasStickersResults () {
       return this.filteredStickers.length != 0
     },
-    activeButtons() {
+    activeButtons () {
       return {
         bold: this.editor.isActive.bold(),
         italic: this.editor.isActive.italic(),

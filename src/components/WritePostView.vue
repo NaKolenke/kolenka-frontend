@@ -46,12 +46,7 @@
           <label class="form-label" for="blog">В блог</label>
         </div>
         <div class="col-9 col-sm-12">
-          <select
-            class="form-select"
-            id="blog"
-            v-model="model.blog"
-            v-validate="validation.blog"
-          >
+          <select class="form-select" id="blog" v-model="model.blog" v-validate="validation.blog">
             <option :value="null" selected>Нет</option>
             <option
               v-for="blog in blogs"

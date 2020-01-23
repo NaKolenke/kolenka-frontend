@@ -8,21 +8,3 @@
     width: 100%;
   }
 }
-
-cut {
-  position: relative;
-  display: block;
-  height: 28px;
-  color: #000;
-  border-top: 1px dashed $gray-color;
-  border-bottom: 1px dashed $gray-color;
-  margin: $control-padding-y 0;
-}
-
-cut::before {
-  content: 'CUT';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}

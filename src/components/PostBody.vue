@@ -22,7 +22,10 @@ export default {
   },
   methods: {
     processCut (template) {
-      return template.replace(/(<cut>)/gm, ``)
+      var processed = template.replace(/(<cut>)/gm, ``)
+      processed = processed.replace(/(<cut><\/cut >)/gm, ``)
+      processed = processed.replace(/(<cut name="[a-zA-Zа-яА-Я .,!?\-0-9]*"><\/cut >)/gm, ``)
+      return processed
     },
     processStickers (template) {
       return template.replace(/:([a-z0-9_]*?):/gm, `<sticker name="$1"/>`)
