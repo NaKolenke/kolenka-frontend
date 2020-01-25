@@ -254,6 +254,8 @@ export default {
         this.isSending = false
         this.$router.replace({ name: 'post', params: { post: data.url } })
       }).catch(error => {
+        this.isSending = false
+
         errors.handle(error)
         this.$toast.error(errors.getText(error))
       })
