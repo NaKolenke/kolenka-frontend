@@ -6,4 +6,11 @@ export default {
       .get(`tags/`)
       .then(res => res.data)
   },
+  getSuggestions: (tag) => {
+    return request
+      .post(`tags/suggestion/`, {
+        title: tag
+      })
+      .then(res => res.data)
+  },
 }

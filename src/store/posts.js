@@ -26,16 +26,16 @@ const actions = {
       return res.post
     })
   },
-  createPost (_context, { title, text, url, draft, blogId }) {
-    return api.createPost(title, text, url, draft, blogId).then(res => {
+  createPost (_context, { title, text, url, draft, blogId, tags }) {
+    return api.createPost(title, text, url, draft, blogId, tags).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
       return res.post
     })
   },
-  editPost (_context, { title, text, url, originalUrl, draft, blogId }) {
-    return api.editPost(title, text, url, originalUrl, draft, blogId).then(res => {
+  editPost (_context, { title, text, url, originalUrl, draft, blogId, tags }) {
+    return api.editPost(title, text, url, originalUrl, draft, blogId, tags).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
@@ -72,6 +72,14 @@ const actions = {
         return Promise.reject(res.error)
       }
 
+      return res
+    })
+  },
+  deletePost (_context, { url }) {
+    return api.deletePost(url).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
       return res
     })
   },

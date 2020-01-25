@@ -8,7 +8,7 @@
     </span>
     <h2>
       <router-link
-        v-if="user && user.id === post.creator.id"
+        v-if="canEdit"
         :to="{ name: 'edit-post', params: { post: post.url, object: post } }"
         class="btn btn-sm btn-link tooltip tooltip-right"
         data-tooltip="Редактировать запись"
@@ -45,8 +45,8 @@
             <span style="padding-left:4px">{{ post.comments }}</span>
           </span>
         </router-link>
-        <span v-for="tag in post.tags" :key="tag.title" class="chip">
-          <router-link :to="{ name: 'tag',  params: { tag: tag.url }}">#{{ tag.title }}</router-link>
+        <span v-for="tag in post.tags" :key="tag.id" class="chip">
+          <router-link :to="{ name: 'tag',  params: { title: tag.title }}">#{{ tag.title }}</router-link>
         </span>
         <vote
           class="float-right"
@@ -87,6 +87,20 @@ export default {
     ...mapState({
       user: state => state.users.me
     }),
+    canEdit () {
+      if (this.user) {
+        if (this.user.id === this.post.creator.id) {
+          return true
+        }
+        if (this.post.blog) {
+          if (this.user.id === this.post.blog.creator.id) {
+            return true
+          }
+        }
+        return this.user.is_admin
+      }
+      return false
+    }
   },
   components: {
     Avatar,

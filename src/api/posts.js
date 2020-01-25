@@ -11,7 +11,12 @@ export default {
       .get(`posts/${url}/`)
       .then(res => res.data)
   },
-  createPost: (title, text, url, draft, blogId) => {
+  getPostById: (id) => {
+    return request
+      .get(`posts/by-id/${id}/`)
+      .then(res => res.data)
+  },
+  createPost: (title, text, url, draft, blogId, tags) => {
     return request
       .post(`posts/`,
         {
@@ -20,11 +25,12 @@ export default {
           is_draft: draft,
           text,
           title,
-          url
+          url,
+          tags,
         })
       .then(res => res.data)
   },
-  editPost: (title, text, url, originalUrl, draft, blogId) => {
+  editPost: (title, text, url, originalUrl, draft, blogId, tags) => {
     return request
       .put(`posts/${originalUrl}/`,
         {
@@ -33,7 +39,8 @@ export default {
           is_draft: draft,
           text,
           title,
-          url
+          url,
+          tags
         })
       .then(res => res.data)
   },
@@ -55,6 +62,16 @@ export default {
   getUserPosts: (username, page, limit) => {
     return request
       .get(`/users/${username}/posts/?page=${page || 1}&limit=${limit || 20}`)
+      .then(res => res.data)
+  },
+  deletePost: (url) => {
+    return request
+      .delete(`posts/${url}/`)
+      .then(res => res.data)
+  },
+  deletePostById: (id) => {
+    return request
+      .delete(`posts/by-id/${id}/`)
       .then(res => res.data)
   },
 }

@@ -38,6 +38,10 @@ class Request {
     return this.instance.put(url, data)
   }
 
+  delete (url, data = null) {
+    return this.instance.delete(url, data)
+  }
+
   setAuth (token, refreshToken) {
     if (token != null) {
       this.instance.defaults.headers.common['Authorization'] = token;
