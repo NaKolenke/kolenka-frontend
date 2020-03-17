@@ -28,7 +28,8 @@ export default {
       const achievement = images[0]
       this.$store.dispatch('achievements/add', { title: this.achievementName, file_id: achievement.id })
         .then(_ => {
-          this.$toast.show('Награда добавлен')
+          this.$toast.show('Награда добавлена')
+          this.$emit('achievement-added')
         })
         .catch(error => {
           errors.handle(error)

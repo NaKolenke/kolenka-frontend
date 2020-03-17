@@ -33,7 +33,7 @@
       <br />
     </div>
 
-    <div v-if="user.achievements">
+    <div v-if="user.achievements.length > 0">
       <h3>
         Награды
         <button

@@ -20,7 +20,7 @@
         <h4>Добавить нараду</h4>
         <div class="card">
           <div class="card-body">
-            <add-achievement />
+            <add-achievement @achievement-added="refreshAchievements()" />
           </div>
         </div>
       </div>
@@ -144,9 +144,12 @@ export default {
       return
     }
 
-    this.$store.dispatch('achievements/getAll')
+    this.refreshAchievements()
   },
   methods: {
+    refreshAchievements: function () {
+      this.$store.dispatch('achievements/getAll')
+    },
     showAssignDialog: function (achievement) {
       this.isAssignDialogShowed = true
       this.assignAchievement = achievement
@@ -181,7 +184,7 @@ export default {
           this.assignUsers = []
           this.assignComment = ''
 
-          this.$store.dispatch('achievements/getAll')
+          this.refreshAchievements()
         }).catch(error => {
           errors.handle(error)
           this.$toast.error(errors.getText(error))
@@ -200,7 +203,7 @@ export default {
           this.assignUsers = []
           this.assignComment = ''
 
-          this.$store.dispatch('achievements/getAll')
+          this.refreshAchievements()
         }).catch(error => {
           errors.handle(error)
           this.$toast.error(errors.getText(error))
