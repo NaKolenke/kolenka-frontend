@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import achievements from './achievements'
 import admin from './admin'
 import auth from './auth'
 import blogs from './blogs'
@@ -21,6 +22,7 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
   modules: {
+    achievements,
     admin,
     auth,
     blogs,

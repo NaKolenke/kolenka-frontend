@@ -4,10 +4,22 @@
       <ul class="menu">
         <li class="divider" data-content="РАЗДЕЛЫ"></li>
         <li class="menu-item">
-          <router-link :class="{ 'active': activeUrl == 'admin-activity' }" :to="{ name: 'admin-activity' }">Активность</router-link>
+          <router-link
+            :class="{ 'active': activeUrl == 'admin-activity' }"
+            :to="{ name: 'admin-activity' }"
+          >Активность</router-link>
         </li>
         <li class="menu-item">
-          <router-link :class="{ 'active': activeUrl == 'admin-stickers' }" :to="{ name: 'admin-stickers' }">Стикеры</router-link>
+          <router-link
+            :class="{ 'active': activeUrl == 'admin-stickers' }"
+            :to="{ name: 'admin-stickers' }"
+          >Стикеры</router-link>
+        </li>
+        <li class="menu-item">
+          <router-link
+            :class="{ 'active': activeUrl == 'admin-achievements' }"
+            :to="{ name: 'admin-achievements' }"
+          >Награды</router-link>
         </li>
       </ul>
     </side-block>

@@ -11,6 +11,7 @@ import NotificationsPage from '@/pages/NotificationsPage.vue'
 import SearchPage from '@/pages/SearchPage.vue'
 import DashboardPage from '@/pages/admin/DashboardPage.vue'
 import StickersPage from '@/pages/admin/StickersPage.vue'
+import AchievementsPage from '@/pages/admin/AchievementsPage.vue'
 
 import DefaultSidebar from '@/pages/sidebar/DefaultView.vue'
 import DocsSidebar from '@/pages/sidebar/DocsView.vue'
@@ -102,6 +103,19 @@ const routes = [
     name: 'admin-stickers',
     components: {
       default: StickersPage,
+      sidebar: AdminSidebar
+    },
+    props: {
+      sidebar: {
+        hide: false
+      }
+    }
+  },
+  {
+    path: '/admin/achievements',
+    name: 'admin-achievements',
+    components: {
+      default: AchievementsPage,
       sidebar: AdminSidebar
     },
     props: {

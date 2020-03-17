@@ -13,7 +13,13 @@
         <h4>Список активных стикеров</h4>
         <div class="card">
           <div class="card-body">
-            <sticker v-for="s in stickers" :key="s.name" :name="s.name" class="tooltip tooltip-bottom" :data-tooltip="s.name" />
+            <sticker
+              v-for="s in stickers"
+              :key="s.name"
+              :name="s.name"
+              class="tooltip tooltip-bottom"
+              :data-tooltip="s.name"
+            />
           </div>
         </div>
       </div>
@@ -40,8 +46,7 @@ export default {
     stickerUploaded (images) {
       const sticker = images[0]
       this.$store.dispatch('stickers/add', { name: this.stickerName, file_id: sticker.id })
-        .then(data => {
-          console.log(data)
+        .then(_ => {
           this.$toast.show('Стикер добавлен')
         })
         .catch(error => {
@@ -56,9 +61,6 @@ export default {
         return false
       }
       return this.user.is_admin
-    },
-    isLocal () {
-      return window.location.hostname === 'localhost'
     },
     ...mapState({
       user: state => state.users.me,

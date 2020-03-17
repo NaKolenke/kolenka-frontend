@@ -33,6 +33,26 @@
       <br />
     </div>
 
+    <div v-if="user.achievements">
+      <h3>
+        Награды
+        <button
+          class="btn btn-action"
+          @click="showAchievementsAsList = !showAchievementsAsList"
+        >
+          <i v-if="showAchievementsAsList" class="icon icon-apps"></i>
+          <i v-else class="icon icon-menu"></i>
+        </button>
+      </h3>
+
+      <achievement
+        v-for="item in user.achievements"
+        :key="item.id"
+        :achievement="item"
+        :justIcon="!showAchievementsAsList"
+      ></achievement>
+    </div>
+
     <div v-if="user.about" class="card description mt-2">
       <post-body class="card-body" :html="user.about" />
     </div>
@@ -43,16 +63,23 @@
 import Avatar from '@/components/elements/Avatar.vue'
 import PostBody from '@/components/PostBody.vue'
 import Vote from '@/components/Vote.vue'
+import Achievement from '@/components/Achievement.vue'
 
 export default {
   props: {
     user: Object, // User object
     canEdit: Boolean // If current user can edit the profile
   },
+  data: function () {
+    return {
+      showAchievementsAsList: false
+    };
+  },
   components: {
     Avatar,
     PostBody,
-    Vote
+    Vote,
+    Achievement,
   }
 }
 </script>
