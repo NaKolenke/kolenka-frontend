@@ -28,7 +28,7 @@ export default {
   mounted () {
     this.recalculateTabs()
 
-    this.observer = new MutationObserver(mutations => {
+    this.observer = new MutationObserver(_mutations => {
       this.recalculateTabs()
     })
 
@@ -66,7 +66,7 @@ export default {
     }
   },
   watch: {
-    'active' (v) {
+    'active' (_v) {
       this.recalculateTabs()
     }
   }

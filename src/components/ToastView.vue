@@ -3,7 +3,7 @@
     <div class="container" :style="{ bottom: y + 'px' }" v-if="!isClosing">
       <div class="toast" :class="toastClass">
         <button class="btn btn-clear float-right" @click="close()"></button>
-        <slot/>
+        <slot />
       </div>
     </div>
   </transition>
@@ -22,7 +22,7 @@ export default {
     close () {
       this.isClosing = true
     },
-    animationLeave(el, done) {
+    animationLeave (_el, _done) {
       this.$toast.hide(this)
     }
   },
@@ -48,10 +48,12 @@ export default {
   padding: 8px;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: all .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 

@@ -154,7 +154,7 @@ export default {
     if (this.$route.query)
       this.refresh(this.$route)
   },
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate (to, _from, _next) {
     this.refresh(to)
   },
   methods: {

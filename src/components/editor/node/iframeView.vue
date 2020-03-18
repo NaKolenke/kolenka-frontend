@@ -111,7 +111,7 @@ export default {
             }
           }
         })
-        .catch(err => {
+        .catch(_err => {
           this.error = 'Неверный адрес сайта'
         })
     },

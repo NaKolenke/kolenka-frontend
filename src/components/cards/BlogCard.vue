@@ -5,37 +5,35 @@
     </div>
 
     <div class="column col-11 col-md-10">
-      <h3>
-        <div v-if="blog.url" class="columns">
-          <div class="column col-10">
-            <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
-            <span class="readers label m-2">Читатели: {{blog.readers}}</span>
-
-            <vote
-              class="float-right"
-              :rating="blog.rating"
-              :votedUp="blog.user_voted > 0"
-              :votedDown="blog.user_voted < 0"
-              :id="blog.id"
-              :type="'blog'"
-            />
-          </div>
-          <div class="column col-auto">
-            <button
-              v-if="user && blog.blog_type === 1 && !contains"
-              class="btn btn-sm"
-              @click="joinBlog"
-            >Присоединиться</button>
-            <button v-if="user && contains" class="btn btn-sm" disabled>Вы присоединились</button>
-            <router-link
-              v-if="user && blog.creator.id === user.id"
-              :to="{ name: 'edit-blog', params: { edit: blog } }"
-              class="btn btn-sm"
-            >Редактировать</router-link>
-          </div>
-        </div>
-        <span v-else>{{ blog.title }}</span>
+      <vote
+        class="float-right"
+        :rating="blog.rating"
+        :votedUp="blog.user_voted > 0"
+        :votedDown="blog.user_voted < 0"
+        :id="blog.id"
+        :type="'blog'"
+      />
+      <h3 v-if="blog.url">
+        <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
       </h3>
+      <h3 v-else>{{ blog.title }}</h3>
+
+      <p class="readers label">Читатели: {{blog.readers}}</p>
+      <span>
+        <button
+          v-if="user && (blog.blog_type === 1 || blog.blog_type === 2) && !contains"
+          class="btn btn-sm mx-2"
+          @click="joinBlog"
+        >Присоединиться</button>
+
+        <button v-if="user && contains" class="btn btn-sm mx-2" disabled>Вы присоединились</button>
+
+        <router-link
+          v-if="user && blog.creator.id === user.id"
+          :to="{ name: 'edit-blog', params: { edit: blog } }"
+          class="btn btn-sm mx-2"
+        >Редактировать</router-link>
+      </span>
 
       <p v-html="blog.description"></p>
 

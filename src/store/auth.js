@@ -58,7 +58,12 @@ const actions = {
     dispatch('users/invalidateUser', {}, { root: true })
   },
   restoreToken ({ commit }) {
-    var t = JSON.parse(localStorage.getItem('token'))
+    var t = null
+    try {
+      t = JSON.parse(localStorage.getItem('token'))
+    } catch (_) {
+      // do nothing
+    }
     if (t !== null) {
       var refresh = JSON.parse(localStorage.getItem('refresh_token'))
       return api.refreshToken(refresh.token).then(res => {
@@ -74,7 +79,12 @@ const actions = {
     }
   },
   loadTokensFromStorage ({ commit }) {
-    var t = JSON.parse(localStorage.getItem('token'))
+    var t = null
+    try {
+      t = JSON.parse(localStorage.getItem('token'))
+    } catch (_) {
+      // do nothing
+    }
     if (t !== null) {
       var refresh = JSON.parse(localStorage.getItem('refresh_token'))
 

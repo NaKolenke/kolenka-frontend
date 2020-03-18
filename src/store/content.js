@@ -20,7 +20,7 @@ const actions = {
       return res.file
     })
   },
-  getOwned ({ state, commit }, { pagination }) {
+  getOwned ({ commit }, { pagination }) {
     // var start = (pagination.page - 1) * pagination.limit
     // var end = pagination.page * pagination.limit
     // if (state.my.length > start) {
