@@ -15,4 +15,12 @@ export default {
         })
       .then(res => res.data)
   },
+  editComment: (url, text, id) => {
+    return request
+      .put(`posts/${url}/comments/${id}`,
+        {
+          text
+        })
+      .then(res => res.data)
+  },
 }

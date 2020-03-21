@@ -46,6 +46,16 @@ const actions = {
       return res.comment
     })
   },
+  editComment ({ commit }, { url, text, id }) {
+    return api.editComment(url, text, id).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
+
+      commit('editComment', res.comment)
+      return res.comment
+    })
+  },
 }
 
 const mutations = {
@@ -54,6 +64,14 @@ const mutations = {
   },
   addComment (state, comment) {
     state.current_comments = [comment].concat(state.current_comments)
+  },
+  editComment (state, comment) {
+    state.current_comments = state.current_comments.map(c => {
+      if (c.id == comment.id) {
+        return comment
+      }
+      return c
+    })
   }
 }
 

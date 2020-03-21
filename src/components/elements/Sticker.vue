@@ -24,14 +24,12 @@ export default {
 
 <style lang="scss" scoped>
 .sticker {
-  padding: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
 
   img {
-    width: 48px;
-  }
-  p {
-    width: 48px;
-    text-align: center;
+    // width: 24px;
+    height: 24px;
   }
 }
 </style>

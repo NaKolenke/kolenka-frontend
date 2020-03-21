@@ -15,10 +15,28 @@
           </div>
 
           <div class="tile-subtitle">
-            <post-body class="mt-1 comment-body" :html="comment.text" />
+            <post-body v-if="!isEditing" class="mt-1 comment-body" :html="comment.text" />
+
+            <div class="panel mt-2" v-if="isEditing">
+              <h6 class="panel-header mb-0">
+                Редактирование
+                <button
+                  class="btn btn-link btn-sm float-right tooltip"
+                  @click="cancelEdit"
+                  data-tooltip="Отменить"
+                >
+                  <i class="icon icon-cross"></i>
+                </button>
+              </h6>
+              <div class="panel-body" style="overflow:visible">
+                <comment-form :post-url="postUrl" :comment="comment" @sent="commentSent" />
+              </div>
+              <div class="panel-footer pb-0"></div>
+            </div>
 
             <vote
               class="float-right"
+              v-if="!isEditing"
               :rating="comment.rating"
               :votedUp="comment.user_voted > 0"
               :votedDown="comment.user_voted < 0"
@@ -26,8 +44,9 @@
               :type="'comment'"
             />
 
-            <small class="subpanel text-gray">
+            <small class="subpanel text-gray" v-if="!isEditing">
               <a href="#" data-tooltip="Ответить" @click.prevent="reply">Ответить</a>
+              <a v-if="canEdit(comment)" href="#" @click.prevent="edit">Редактировать</a>
 
               <span>{{ comment.created_date | moment}}</span>
               <a :href="'#' + commentId" title="Ссылка на комментарий">#</a>
@@ -59,6 +78,7 @@
           :key="item.id"
           :comment="item"
           :post-url="postUrl"
+          :user="user"
         />
       </div>
     </div>
@@ -80,12 +100,14 @@ export default {
   props: [
     'comment',
     'parentId',
-    'postUrl'
+    'postUrl',
+    'user'
   ],
   data () {
     return {
       active: false,
-      isReplying: false
+      isReplying: false,
+      isEditing: false
     }
   },
   mounted () {
@@ -99,22 +121,41 @@ export default {
     reply () {
       this.isReplying = !this.isReplying
     },
+    edit () {
+      this.isEditing = true
+    },
     cancelReply () {
       this.isReplying = false
     },
+    cancelEdit () {
+      this.isEditing = false
+    },
     commentSent () {
       this.isReplying = false
+      this.isEditing = false
+    },
+    canEdit (comment) {
+      if (!this.user) {
+        return false
+      }
+      if (this.user.id === comment.creator.id) {
+        return true
+      }
+      if (this.user.is_admin) {
+        return true
+      }
+      return false
     }
   },
   computed: {
-    commentId () {
-      return 'comment_' + this.comment.id
-    },
     ...mapGetters({
       commentById: 'comments/byId',
       commentHasChilds: 'comments/hasChilds',
       commentChilds: 'comments/getChilds',
-    })
+    }),
+    commentId () {
+      return 'comment_' + this.comment.id
+    },
   },
   components: {
     Avatar,

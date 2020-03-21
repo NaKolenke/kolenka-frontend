@@ -257,7 +257,7 @@ pre {
 }
 
 p {
-  margin: 0 0 $line-height / 1.5;
+  margin: 0 0 $line-height / 5;
 }
 
 a:focus,

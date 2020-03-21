@@ -27,23 +27,43 @@ import errors from '@/utils/errors'
 export default {
   props: {
     postUrl: String, // Url of the post the comment in
-    parentId: Number // Parent comment id
+    parentId: { // if this specified - then new comment will be send as child item
+      type: Number,
+      required: false
+    },
+    comment: { // if this specified - we assume, that currently we in edit mode
+      type: Object,
+      required: false
+    }
   },
   data () {
     return {
       isSending: false,
-      isMounted: false
+      isMounted: false,
+      isEditing: false
     }
   },
   mounted () {
     this.isMounted = true
+    this.isEditing = false
+
+    if (this.comment) {
+      this.$refs.editor.setContent(this.comment.text)
+      this.isEditing = true
+    }
   },
   methods: {
     send () {
       this.isSending = true
-      this.$store
-        .dispatch('comments/postComment',
+      var task = null
+      if (!this.comment) { // is we don't have comment - then send new
+        task = this.$store.dispatch('comments/postComment',
           { url: this.postUrl, text: this.$refs.editor.getHtml(), parent: this.parentId })
+      } else { // is we have comment - then edit current comment
+        task = this.$store.dispatch('comments/editComment',
+          { url: this.postUrl, text: this.$refs.editor.getHtml(), id: this.comment.id })
+      }
+      task
         .then(comment => {
           this.isSending = false
           this.$refs.editor.setContent('')

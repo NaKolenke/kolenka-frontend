@@ -21,6 +21,7 @@
         :key="item.id"
         :comment="item"
         :post-url="post.url"
+        :user="user"
       ></comment-card>
       <div class="bottom-padd"></div>
     </div>
@@ -39,8 +40,13 @@ import CommentSkeleton from '@/components/skeletons/Comment.vue'
 
 export default {
   metaInfo () {
+    var title = 'Запись'
+    if (this.post) {
+      title = this.post.title
+    }
+
     return {
-      title: this.post.title || 'Запись'
+      title: title
     }
   },
   data: function () {
