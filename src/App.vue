@@ -258,6 +258,7 @@ pre {
 
 p {
   margin: 0 0 $line-height / 5;
+  min-height: 1rem;
 }
 
 a:focus,
