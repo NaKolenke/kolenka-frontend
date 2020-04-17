@@ -31,8 +31,9 @@ const errorCodes = {
 }
 
 var getErrorCode = (error) => {
-  if (_.has(error, 'response')) {
-    // it's server error
+  // if (_.has(error, 'response')) {
+  if (error.response) {
+    // it's server error, but server responsed
     var data = error.response.data
     if (_.has(data, 'error')) {
       // there is error in request
@@ -46,7 +47,7 @@ var getErrorCode = (error) => {
 
 export default {
   handle: (error) => {
-    console.log(error)
+    console.log(JSON.stringify(error))
   },
   getText: (error) => {
     var code = getErrorCode(error)

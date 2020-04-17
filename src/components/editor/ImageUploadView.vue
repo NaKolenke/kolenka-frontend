@@ -72,6 +72,7 @@
  * Events:
  *  @complete - when all files were uploaded. Gets uploaded file array
  */
+import errors from '@/utils/errors'
 
 export default {
   props: {
@@ -169,8 +170,10 @@ export default {
             this.removeImage(fileIndex)
             output.push(file)
           })
-          .catch(err => {
-            this.$log.error(err)
+          .catch(error => {
+            errors.handle(error)
+            this.$toast.error(errors.getText(error))
+
             previewItem.uploading = false
           })
       })

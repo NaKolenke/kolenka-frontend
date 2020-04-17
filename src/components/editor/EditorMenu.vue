@@ -2,22 +2,58 @@
   <div class="editor-menu">
     <div class="columns">
       <div class="column col-auto editor-menu-column">
-        <small class="text-gray button-group-caption">Текст</small><br>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.bold }" data-tooltip="Жирный" @click="call('bold')">
+        <small class="text-gray button-group-caption">Текст</small>
+        <br />
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.bold }"
+          data-tooltip="Жирный"
+          @click="call('bold')"
+        >
           <span class="icon-bold"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.italic }" data-tooltip="Наклонный" @click="call('italic')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.italic }"
+          data-tooltip="Наклонный"
+          @click="call('italic')"
+        >
           <span class="icon-italic"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.strike }" data-tooltip="Зачеркнутый" @click="call('strike')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.strike }"
+          data-tooltip="Зачеркнутый"
+          @click="call('strike')"
+        >
           <span class="icon-strikethrough"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.underline }" data-tooltip="Подчеркнутый" @click="call('underline')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.underline }"
+          data-tooltip="Подчеркнутый"
+          @click="call('underline')"
+        >
           <span class="icon-underline"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.mono }" data-tooltip="Моноширный" @click="call('mono')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.mono }"
+          data-tooltip="Моноширный"
+          @click="call('mono')"
+        >
           <span class="icon-embed"></span>
         </button>
+
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.link }"
+          data-tooltip="Ссылка"
+          @click="call('link')"
+        >
+          <span class="icon-editor-link"></span>
+        </button>
+
         <select class="form-select heading-select" v-model="heading" @change="headingSelect">
           <option value="0">Обычный</option>
           <option value="1">Заголовок 1</option>
@@ -30,73 +66,148 @@
         <span class="span"></span>
       </div>
       <div class="column col-auto editor-menu-column">
-        <small class="text-gray button-group-caption">Блоки</small><br>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.paragraph }" data-tooltip="Параграф" @click="call('paragraph')">
+        <small class="text-gray button-group-caption">Блоки</small>
+        <br />
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.paragraph }"
+          data-tooltip="Параграф"
+          @click="call('paragraph')"
+        >
           <span class="icon-pilcrow"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.quote }" data-tooltip="Цитата" @click="call('quote')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.quote }"
+          data-tooltip="Цитата"
+          @click="call('quote')"
+        >
           <span class="icon-quotes-right"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.codeblock }" data-tooltip="Блок кода" @click="call('codeblock')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.codeblock }"
+          data-tooltip="Блок кода"
+          @click="call('codeblock')"
+        >
           <span class="icon-embed2"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.table }" data-tooltip="Таблица" @click="call('table')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.table }"
+          data-tooltip="Таблица"
+          @click="call('table')"
+        >
           <span class="icon-table2"></span>
         </button>
         <span class="span"></span>
       </div>
       <div class="column col-auto editor-menu-column">
-        <small class="text-gray button-group-caption">Списки</small><br>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.bulletlist }" data-tooltip="Список" @click="call('bulletlist')">
+        <small class="text-gray button-group-caption">Списки</small>
+        <br />
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.bulletlist }"
+          data-tooltip="Список"
+          @click="call('bulletlist')"
+        >
           <span class="icon-list2"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.orderedlist }" data-tooltip="Нумерованный список" @click="call('orderedlist')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.orderedlist }"
+          data-tooltip="Нумерованный список"
+          @click="call('orderedlist')"
+        >
           <span class="icon-list-numbered"></span>
         </button>
         <span class="span"></span>
       </div>
       <div class="column col-auto editor-menu-column">
-        <small class="text-gray button-group-caption">Медиа</small><br>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.image }" data-tooltip="Изображение" @click="call('image')">
+        <small class="text-gray button-group-caption">Медиа</small>
+        <br />
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.image }"
+          data-tooltip="Изображение"
+          @click="call('image')"
+        >
           <span class="icon-image"></span>
         </button>
-        <button class="editor-button tooltip" :class="{ 'active': activeButtons.embed }" data-tooltip="Embed (youtube, etc)" @click="call('embed')">
+        <button
+          class="editor-button tooltip"
+          :class="{ 'active': activeButtons.embed }"
+          data-tooltip="Embed (youtube, etc)"
+          @click="call('embed')"
+        >
           <span class="icon-new-tab"></span>
         </button>
         <span class="span"></span>
       </div>
       <div class="column col-auto editor-menu-column">
-        <small class="text-gray button-group-caption"></small><br>
-        <button class="editor-button tooltip" data-tooltip="Помощь" @click="call('help')">
-          ?
-        </button>
+        <small class="text-gray button-group-caption"></small>
+        <br />
+        <button class="editor-button tooltip" data-tooltip="Помощь" @click="call('help')">?</button>
       </div>
     </div>
     <div class="columns">
       <div class="column col-auto editor-menu-column" v-if="activeButtons.table">
-        <small class="text-gray button-group-caption">Таблица</small><br>
-        <button class="editor-button tooltip" data-tooltip="Удалить таблицу" @click="call('removeTable')">
+        <small class="text-gray button-group-caption">Таблица</small>
+        <br />
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Удалить таблицу"
+          @click="call('removeTable')"
+        >
           <span class="icon-blocked"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Добавить колонку перед" @click="call('insertColumnBefore')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Добавить колонку перед"
+          @click="call('insertColumnBefore')"
+        >
           <span class="icon-arrow-left2"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Добавить колонку после" @click="call('insertColumnAfter')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Добавить колонку после"
+          @click="call('insertColumnAfter')"
+        >
           <span class="icon-arrow-right2"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Удалить колонку" @click="call('removeColumn')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Удалить колонку"
+          @click="call('removeColumn')"
+        >
           <span class="icon-circle-right"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Добавить строку перед" @click="call('insertRowBefore')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Добавить строку перед"
+          @click="call('insertRowBefore')"
+        >
           <span class="icon-arrow-up2"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Добавить строку после" @click="call('insertRowAfter')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Добавить строку после"
+          @click="call('insertRowAfter')"
+        >
           <span class="icon-arrow-down2"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Удалить строку" @click="call('removeRow')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Удалить строку"
+          @click="call('removeRow')"
+        >
           <span class="icon-circle-up"></span>
         </button>
-        <button class="editor-button tooltip" data-tooltip="Объединить ячейки" @click="call('mergeCells')">
+        <button
+          class="editor-button tooltip"
+          data-tooltip="Объединить ячейки"
+          @click="call('mergeCells')"
+        >
           <span class="icon-insert-template"></span>
         </button>
       </div>
@@ -110,22 +221,22 @@ export default {
     activeButtons: Object,
     activeHeading: Function
   },
-  data() {
+  data () {
     return {
       heading: 0
     }
   },
-  beforeUpdate() {
+  beforeUpdate () {
     this.checkActiveHeading()
   },
   methods: {
-    call(name, value) {
+    call (name, value) {
       this.$emit(name, value)
     },
-    headingSelect() {
+    headingSelect () {
       this.call("heading", { level: this.heading })
     },
-    checkActiveHeading() {
+    checkActiveHeading () {
       for (const level in [0, 1, 2, 3, 4, 5, 6]) {
         const isActive = this.activeHeading({ level })
 

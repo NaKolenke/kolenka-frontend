@@ -16,6 +16,7 @@
           @strike="commands.strike"
           @underline="commands.underline"
           @mono="commands.code"
+          @link="showLinkModal"
           @heading="commands.heading"
           @paragraph="commands.paragraph"
           @quote="commands.blockquote"
@@ -36,94 +37,13 @@
           @help="showHelpModal"
         />
 
-        <modal
-          :open="isImageModalShowed"
-          :closed="closeImageModal"
-          title="Вставить изображение"
-          @ok="chooseImage(commands.image)"
-        >
-          <tabs>
-            <tab title="По ссылке">
-              <div :class="['form-group', {'has-error': imageModalError}, 'mt-2']">
-                <input
-                  class="form-input"
-                  type="url"
-                  placeholder="Ссылка на изображение"
-                  v-model="imageModalUrl"
-                  autofocus
-                />
-                <p v-if="imageModalError" class="form-input-hint">Введите ссылку на изображение</p>
-              </div>
-            </tab>
-            <tab title="Загрузить">
-              <image-upload
-                @complete="imageUploaded($event, commands.image)"
-                :multiple="true"
-                class="mt-2"
-              />
-            </tab>
-            <tab title="История загрузок">
-              <div class="columns mt-2">
-                <div
-                  v-for="item in myFiles.slice((imageContentPage - 1) * 20, 20 * imageContentPage)"
-                  :key="item.id"
-                  class="column col-3"
-                >
-                  <a
-                    href="#"
-                    @click.prevent="commands.image({ src: getUrlById(item.id) }); closeImageModal()"
-                  >
-                    <img :src="getUrlById(item.id)" width="100%" height="auto" />
-                  </a>
-                </div>
-              </div>
-              <pagination-view
-                :page="imageContentPage"
-                :page-count="imageContentPageCount"
-                @paginate-relative="paginateRelative"
-                @paginate-to="paginateTo"
-              ></pagination-view>
-            </tab>
-          </tabs>
-        </modal>
+        <insert-image-modal :isShowed.sync="isImageModalShowed" :command="commands.image" />
 
-        <modal
-          :open="isEmbedModalShowed"
-          :closed="closeEmbedModal"
-          title="Embed"
-          @ok="chooseEmbed(commands.iframe)"
-        >
-          <input
-            class="form-input"
-            type="url"
-            placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)"
-            v-model="embedModalUrl"
-            autofocus
-          />
-        </modal>
+        <insert-embed-modal :isShowed.sync="isEmbedModalShowed" :command="commands.iframe" />
 
-        <modal
-          :open="isHelpModalShowed"
-          :closed="closeHelpModal"
-          title="Помощь по редактору текста"
-          size="lg"
-          :hideButtons="true"
-        >
-          <h4>Общее</h4>
-          <p>
-            Для добавления переноса на новую строку используйте
-            <kbd>Ctrl/Shift+Return</kbd>
-          </p>
-          <p>Редактор поддерживает некоторые правила Markdown</p>
-          <p>
-            Для пропорционального масштабирования изображения зажмите
-            <kbd>Shift</kbd>
-          </p>
-          <h4>Embed</h4>
-          <p>Поддерживаемые сервисы: YouTube, Vimeo, Soundcloud, Twitch, Twitter</p>
-          <h4>Cut</h4>
-          <p>Чтобы добавить разрыв поста, на новой строке введите ---опциональное название для кнопки ката---. Можно использовать конструкцию ------, тогда будет подставлено название по умолчанию "Читать далее"</p>
-        </modal>
+        <link-modal :isShowed.sync="isLinkModalShowed" :command="commands.link" :editor="editor" />
+
+        <help-modal :isShowed.sync="isHelpModalShowed" />
       </div>
     </editor-menu-bar>
 
@@ -154,7 +74,6 @@ import {
   Bold,
   Code,
   Italic,
-  Link,
   Strike,
   Underline,
   History,
@@ -164,22 +83,21 @@ import {
   TableCell,
   TableRow} from 'tiptap-extensions'
 import Popper from "popper.js";
+import BetterLink from '@/components/editor/mark/BetterLink'
 import Iframe from '@/components/editor/node/iframe'
 import StickerNode from '@/components/editor/node/Stickers'
 import SpoilerNode from '@/components/editor/node/spoiler'
 import CutNode from '@/components/editor/node/cut'
 
-import Modal from '@/components/elements/Modal.vue'
-import Tabs from '@/components/elements/Tabs.vue'
-import Tab from '@/components/elements/Tab.vue'
-import PaginationView from '@/components/PaginationView.vue'
-import ImageUpload from '@/components/editor/ImageUploadView.vue'
 import StickerList from '@/components/editor/StickerList.vue'
 import EditorMenu from '@/components/editor/EditorMenu.vue'
 
+import HelpModal from '@/components/editor/modals/HelpModal.vue'
+import InsertImageModal from '@/components/editor/modals/InsertImageModal.vue'
+import InsertEmbedModal from '@/components/editor/modals/InsertEmbedModal.vue'
+import LinkModal from '@/components/editor/modals/LinkModal.vue'
+
 import { mapState } from 'vuex'
-import errors from '@/utils/errors'
-import Pagination from '@/models/pagination'
 
 export default {
   props: {
@@ -193,7 +111,7 @@ export default {
           new History(),
           new Bold(),
           new Italic(),
-          new Link(),
+          new BetterLink({ openOnClick: false }),
           new Underline(),
           new Strike(),
           new HardBreak(),
@@ -286,15 +204,9 @@ export default {
       menuBarWidth: 'auto',
 
       isHelpModalShowed: false,
-
       isImageModalShowed: false,
-      imageModalUrl: null,
-      imageModalError: null,
-      imageContentPage: 1,
-      imageContentPageCount: 1,
-
       isEmbedModalShowed: false,
-      embedModalUrl: null,
+      isLinkModalShowed: false,
 
       navigatedStickerIndex: 0,
       stickerQuery: null,
@@ -303,7 +215,6 @@ export default {
     }
   },
   mounted () {
-    this.refreshMyFiles(1)
     this.refreshStickers()
 
     window.addEventListener('keydown', this.onKeyDown)
@@ -325,9 +236,6 @@ export default {
     showHelpModal () {
       this.isHelpModalShowed = true
     },
-    closeHelpModal () {
-      this.isHelpModalShowed = false
-    },
     showImageModal () {
       this.isImageModalShowed = true
     },
@@ -340,53 +248,15 @@ export default {
     closeEmbedModal () {
       this.isEmbedModalShowed = false
     },
-    chooseImage (command) {
-      if (this.imageModal.url.length > 0) {
-        command({ src: this.imageModal.url })
-        this.imageModal.url = ''
-        this.closeImageModal()
-      } else {
-        this.imageModalError = true
-      }
-    },
-    imageUploaded (images, command) {
-      images.forEach(i => {
-        command({ src: process.env.VUE_APP_CONTENT_URL + `/${i.id}` })
-      })
+    showLinkModal () {
 
-      this.closeImageModal()
+      this.isLinkModalShowed = true
     },
-    chooseEmbed (command) {
-      if (this.embedModalUrl.length > 0) {
-        command({ src: this.embedModalUrl })
-        this.embedModalUrl = ''
-        this.closeEmbedModal()
-      }
-    },
-    paginateRelative (offset) {
-      this.imageContentPage += offset
-
-      this.refreshMyFiles(this.imageContentPage)
-    },
-    paginateTo (offset) {
-      this.imageContentPage = offset
-
-      this.refreshMyFiles(this.imageContentPage)
-    },
-    refreshMyFiles (page) {
-      this.$store.dispatch('content/getOwned', { pagination: new Pagination(page) })
-        .then(res => {
-          this.imageContentPageCount = res.meta.page_count
-        }).catch(error => {
-          errors.handle(error)
-          this.$toast.error(errors.getText(error))
-        })
+    closeLinkModal () {
+      this.isLinkModalShowed = false
     },
     refreshStickers () {
       this.$store.dispatch('stickers/getAll')
-    },
-    getUrlById (id) {
-      return `${process.env.VUE_APP_CONTENT_URL}/${id}/`
     },
     onKeyDown (_e) {
       // if (e.keyCode === 9 && // TAB
@@ -450,7 +320,6 @@ export default {
   },
   computed: {
     ...mapState({
-      myFiles: state => state.content.my,
       stickers: state => state.stickers.available
     }),
     showStickers () {
@@ -466,6 +335,7 @@ export default {
         strike: this.editor.isActive.strike(),
         underline: this.editor.isActive.underline(),
         mono: this.editor.isActive.code(),
+        link: this.editor.isActive.link(),
         paragraph: this.editor.isActive.paragraph(),
         quote: this.editor.isActive.blockquote(),
         codeblock: this.editor.isActive.code_block(),
@@ -480,13 +350,12 @@ export default {
   components: {
     EditorMenuBar,
     EditorContent,
-    Modal,
-    Tabs,
-    Tab,
-    PaginationView,
-    ImageUpload,
     StickerList,
     EditorMenu,
+    HelpModal,
+    InsertImageModal,
+    InsertEmbedModal,
+    LinkModal
   },
 }
 </script>
