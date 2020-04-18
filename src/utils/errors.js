@@ -47,6 +47,7 @@ var getErrorCode = (error) => {
 
 export default {
   handle: (error) => {
+    console.log(error)
     console.log(JSON.stringify(error))
   },
   getText: (error) => {

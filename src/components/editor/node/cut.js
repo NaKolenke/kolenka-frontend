@@ -1,13 +1,5 @@
-/** @jsx h */
 import { Node } from 'tiptap'
 import { textblockTypeInputRule } from 'tiptap-commands'
-import * as _ from 'lodash'
-
-function hFlatten (obj) {
-  const out = _.merge(obj, (obj || {}).attrs)
-  delete out.attrs
-  return out
-}
 
 export default class Cut extends Node {
   get name () {
@@ -41,25 +33,19 @@ export default class Cut extends Node {
   // ------
   inputRules ({ type }) {
     return [
-      textblockTypeInputRule(/^---([a-zA-Zа-яА-Я .,!?\-0-9]*)---$/, type, (match) => { return { 'name': match[1] } }),
+      textblockTypeInputRule(
+        /^--\s?([a-zA-Zа-яА-Я .,!?\-0-9]*)\s?--$/,
+        type,
+        (match) => {
+          return {
+            'name': match[1] || "Читать дальше"
+          }
+        }),
     ]
-  }
-
-  $createElement (name, attrs, children) {
-    return [
-      name,
-      hFlatten(attrs)
-    ].concat(children).filter(x => !_.isNil(x))
   }
 
   get view () {
     return {
-      // there are some props available
-      // `node` is a Prosemirror Node Object
-      // `updateAttrs` is a function to update attributes defined in `schema`
-      // `view` is the ProseMirror view instance
-      // `options` is an array of your extension options
-      // `selected`
       props: ['node', 'updateAttrs', 'view'],
       computed: {
         name: {
@@ -74,7 +60,7 @@ export default class Cut extends Node {
           },
         },
       },
-      template: `<cut style="border: 1px solid black; padding: 6px;">Кат: {{name}}</cut>`,
+      template: `<span style="border: 1px solid black; padding: 6px; line-height: 2rem;">Кат: {{name}}</span>`,
     }
   }
 

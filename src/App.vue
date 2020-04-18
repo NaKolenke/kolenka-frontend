@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-component :version="version" />
+    <header-component />
 
     <div class="container col-9 col-mx-auto col-xl-11 col-md-12">
       <div class="columns">
@@ -22,7 +22,7 @@
     </div>
 
     <vue-progress-bar />
-    <footer-component />
+    <footer-component :version="version" />
   </div>
 </template>
 

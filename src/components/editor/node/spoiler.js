@@ -1,13 +1,8 @@
-/** @jsx h */
 import { Node } from 'tiptap'
 import { wrappingInputRule } from 'tiptap-commands'
-import * as _ from 'lodash'
 
-function hFlatten(obj) {
-  const out = _.merge(obj, obj.attrs)
-  delete out.attrs
-  return out
-}
+import SpoilerComponent from '@/components/editor/node/SpoilerComponent'
+
 
 export default class Spoiler extends Node {
   get name () {
@@ -26,46 +21,33 @@ export default class Spoiler extends Node {
       selectable: true,
       editable: true,
       draggable: false,
-      toDOM: node => {
-        const accordionNumber = 'accordion-' + Date.now()
-        return (
-          <div class="accordion card">
-            <input type="checkbox" id={accordionNumber} name="accordion-radio" hidden />
-            <label class="accordion-header" for={accordionNumber}>
-              <div class="columns">
-                <div class="column col-lg-auto">
-                  {node.attrs.title}
-                </div>
-                <div class="column col-1 text-right">
-                  <i class="icon icon-arrow-right mr-1"></i>
-                </div>
-              </div>
-            </label>
-            <div class="accordion-body">
-              <div class="px-2">
-                {0}
-              </div>
-            </div>
-          </div>
-        )
-      },
       parseDOM: [{
-        tag: 'div[class="accordion"]'
+        tag: 'spoiler',
+        getAttrs: dom => ({
+          title: dom.getAttribute('title'),
+        }),
       }],
+      toDOM: (node) => (
+        ['spoiler', { title: node.attrs.title }, 0]
+      ),
     }
   }
 
   // || test
-  inputRules({ type }) {
+  inputRules ({ type }) {
     return [
-      wrappingInputRule(/^\s*\|\|\s$/, type),
+      wrappingInputRule(
+        /^\s*\|\|\s?([a-zA-Zа-яА-Я .,!?\-0-9]*)\s?\|\|\s$/,
+        type,
+        (match) => {
+          return { 'title': match[1] || "Спойлер" }
+        }),
     ]
   }
 
-  $createElement (name, attrs, children) {
-    return [
-      name,
-      hFlatten(attrs)
-    ].concat(children).filter(x => !_.isNil(x))
+
+  get view () {
+    return SpoilerComponent
   }
+
 }

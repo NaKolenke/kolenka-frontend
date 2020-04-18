@@ -46,7 +46,10 @@
           </span>
         </router-link>
         <span v-for="tag in post.tags" :key="tag.id" class="chip">
-          <router-link :to="{ name: 'tag',  params: { title: tag.title }}">#{{ tag.title }}</router-link>
+          <router-link
+            :to="{ name: 'tag',  params: { title: tag.title }}"
+            v-if="tag.title"
+          >#{{ tag.title }}</router-link>
         </span>
         <vote
           class="float-right"

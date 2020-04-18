@@ -22,7 +22,7 @@ export default class Stickers extends Node {
   get schema () {
     return {
       attrs: {
-        label: {}
+        label: ''
       },
       group: 'inline',
       inline: true,
@@ -41,26 +41,6 @@ export default class Stickers extends Node {
           }
         }
       ]
-      // toDOM: node => [
-      //   'img',
-      //   {
-      //     'sticker': node.attrs.label,
-      //     src: 'https://beta.kolenka.net/api/stickers/' + node.attrs.label,
-      //     class: 'sticker',
-      //   }
-      //   // `${this.options.matcher.char}${node.attrs.label}${this.options.matcher.char}`
-      // ],
-      // parseDOM: [
-      //   {
-      //     tag: "img[sticker]",
-      //     getAttrs: dom => {
-      //       console.log(dom)
-      //       const label = dom.getAttribute('sticker')
-      //       // const label = dom.innerText.split(this.options.matcher.char).join('')
-      //       return { label }
-      //     }
-      //   }
-      // ]
     }
   }
 
@@ -71,7 +51,9 @@ export default class Stickers extends Node {
   get plugins () {
     return [
       SuggestionsPlugin({
-        command: ({ range, attrs, schema }) => replaceText(range, schema.nodes[this.name], attrs),
+        command: ({ range, attrs, schema }) => {
+          return replaceText(range, schema.nodes[this.name], attrs)
+        },
         appendText: ' ',
         matcher: this.options.matcher,
         items: this.options.items,

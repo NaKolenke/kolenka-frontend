@@ -5,6 +5,8 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import Sticker from '@/components/elements/Sticker'
+import Cut from '@/components/elements/post/Cut.vue'
+import Spoiler from '@/components/elements/post/Spoiler.vue'
 
 export default {
   props: {
@@ -33,6 +35,8 @@ export default {
   },
   components: {
     Sticker, //  eslint-disable-line vue/no-unused-components
+    Cut, //  eslint-disable-line vue/no-unused-components
+    Spoiler, //  eslint-disable-line vue/no-unused-components
     VRuntimeTemplate
   }
 }

@@ -17,18 +17,6 @@
       <section class="navbar-section py-2">
         <router-link to="/posts/rubriki">Рубрики</router-link>
         <router-link to="/posts/o-saite">О сайте</router-link>
-        <template v-if="user">
-          <router-link
-            to="/feedback"
-            class="tooltip tooltip-bottom"
-            :data-tooltip="feedbackTooltip"
-          >
-            <p id="version">Версия {{version}}</p>
-          </router-link>
-        </template>
-        <template v-else>
-          <p id="version">Версия {{version}}</p>
-        </template>
 
         <template v-if="user">
           <div class="dropdown dropdown-right">
@@ -119,36 +107,7 @@ import { mapState, mapGetters } from 'vuex'
 import Avatar from '@/components/elements/Avatar.vue'
 
 export default {
-  data: function () {
-    return {
-      feedbackTooltip: ''
-    }
-  },
-  props: {
-    version: String,
-  },
-  created () {
-    this.refreshFeedbackTooltip()
-  },
   methods: {
-    refreshFeedbackTooltip () {
-      if (this.isAdmin) {
-        this.$store.dispatch('feedback/getList')
-          .then(data => {
-            let newFeedbackCount = data.feedback.filter(f => !f.is_resolved).length
-            if (newFeedbackCount > 0) {
-              this.feedbackTooltip = 'Есть ' + newFeedbackCount + ' новых отзывов'
-            } else {
-              this.feedbackTooltip = 'Нет новых отзывов'
-            }
-          }).catch(err => {
-            this.$log.error(err)
-            this.feedbackTooltip = 'Не удалось получить список отзывов'
-          })
-      } else {
-        this.feedbackTooltip = 'Тут вы можете оставить комменатрий по работе сайта'
-      }
-    },
     logout () {
       this.$store.dispatch('auth/logout')
 
@@ -191,7 +150,7 @@ export default {
 
 header a {
   color: #ffffff;
-  margin: 0 0 0 20px;
+  margin: 0 0 0 18px;
 }
 
 #header-brand-prefix {
