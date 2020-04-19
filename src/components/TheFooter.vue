@@ -67,7 +67,6 @@ export default {
       }
       return this.user.is_admin
     },
-
   },
 }
 </script>

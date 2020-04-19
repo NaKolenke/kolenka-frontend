@@ -17,6 +17,8 @@
           @underline="commands.underline"
           @mono="commands.code"
           @link="showLinkModal"
+          @spoiler="showSpoilerModal"
+          @cut="showCutModal"
           @heading="commands.heading"
           @paragraph="commands.paragraph"
           @quote="commands.blockquote"
@@ -42,6 +44,12 @@
         <insert-embed-modal :isShowed.sync="isEmbedModalShowed" :command="commands.iframe" />
 
         <link-modal :isShowed.sync="isLinkModalShowed" :command="commands.link" :editor="editor" />
+        <spoiler-modal
+          :isShowed.sync="isSpoilerModalShowed"
+          :command="commands.spoiler"
+          :editor="editor"
+        />
+        <cut-modal :isShowed.sync="isCutModalShowed" :command="commands.cut" :editor="editor" />
 
         <help-modal :isShowed.sync="isHelpModalShowed" />
       </div>
@@ -96,6 +104,8 @@ import HelpModal from '@/components/editor/modals/HelpModal.vue'
 import InsertImageModal from '@/components/editor/modals/InsertImageModal.vue'
 import InsertEmbedModal from '@/components/editor/modals/InsertEmbedModal.vue'
 import LinkModal from '@/components/editor/modals/LinkModal.vue'
+import SpoilerModal from '@/components/editor/modals/SpoilerModal.vue'
+import CutModal from '@/components/editor/modals/CutModal.vue'
 
 import { mapState } from 'vuex'
 
@@ -207,6 +217,8 @@ export default {
       isImageModalShowed: false,
       isEmbedModalShowed: false,
       isLinkModalShowed: false,
+      isSpoilerModalShowed: false,
+      isCutModalShowed: false,
 
       navigatedStickerIndex: 0,
       stickerQuery: null,
@@ -249,11 +261,16 @@ export default {
       this.isEmbedModalShowed = false
     },
     showLinkModal () {
-
       this.isLinkModalShowed = true
     },
     closeLinkModal () {
       this.isLinkModalShowed = false
+    },
+    showSpoilerModal () {
+      this.isSpoilerModalShowed = true
+    },
+    showCutModal () {
+      this.isCutModalShowed = true
     },
     refreshStickers () {
       this.$store.dispatch('stickers/getAll')
@@ -336,6 +353,8 @@ export default {
         underline: this.editor.isActive.underline(),
         mono: this.editor.isActive.code(),
         link: this.editor.isActive.link(),
+        cut: this.editor.isActive.cut(),
+        spoiler: this.editor.isActive.spoiler(),
         paragraph: this.editor.isActive.paragraph(),
         quote: this.editor.isActive.blockquote(),
         codeblock: this.editor.isActive.code_block(),
@@ -355,7 +374,9 @@ export default {
     HelpModal,
     InsertImageModal,
     InsertEmbedModal,
-    LinkModal
+    LinkModal,
+    SpoilerModal,
+    CutModal
   },
 }
 </script>

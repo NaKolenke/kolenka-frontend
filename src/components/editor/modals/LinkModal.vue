@@ -4,7 +4,15 @@
       <input class="form-input" placeholder="Название" v-model="title" autofocus />
     </div>-->
     <div :class="['form-group', 'mt-2']">
-      <input class="form-input" type="url" placeholder="Ссылка" v-model="url" autofocus />
+      <input
+        @keyup.enter="editLink"
+        @keyup.esc="close"
+        class="form-input"
+        type="url"
+        placeholder="Ссылка"
+        v-model="url"
+        ref="input"
+      />
     </div>
   </modal>
 </template>
@@ -58,6 +66,9 @@ export default {
     isShowed: function (newVal, _) {
       if (newVal) {
         this.refreshState()
+        this.$nextTick(function () {
+          this.$refs.input.focus()
+        });
       }
     }
   },

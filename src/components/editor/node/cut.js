@@ -44,6 +44,16 @@ export default class Cut extends Node {
     ]
   }
 
+  commands ({ type }) {
+    return attrs => (state, dispatch) => {
+      const { selection } = state
+      const position = selection.$cursor ? selection.$cursor.pos : selection.$to.pos
+      const node = type.create(attrs)
+      const transaction = state.tr.insert(position, node)
+      dispatch(transaction)
+    }
+  }
+
   get view () {
     return {
       props: ['node', 'updateAttrs', 'view'],

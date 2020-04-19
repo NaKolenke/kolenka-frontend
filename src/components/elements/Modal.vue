@@ -1,5 +1,7 @@
 <template>
-  <div :class="[{ 'modal': !size }, { 'modal-sm': size === 'sm' }, { 'modal': size === 'lg' }, { 'modal-lg': size === 'lg' }, {'active' : isOpen}]">
+  <div
+    :class="[{ 'modal': !size }, { 'modal-sm': size === 'sm' }, { 'modal': size === 'lg' }, { 'modal-lg': size === 'lg' }, {'active' : isOpen}]"
+  >
     <a href="#close" class="modal-overlay" aria-label="Close" @click.prevent="close"></a>
     <div class="modal-container">
       <div class="modal-header">
@@ -40,31 +42,31 @@ export default {
     size: String, // Size: sm, lg
     hideButtons: Boolean // Hide "ok" and "cancel" buttons
   },
-  data() {
+  data () {
     return {
       isOpen: this.open
     }
   },
   methods: {
-    close() {
+    close () {
       this.isOpen = false
       if (typeof this.closed === 'function') {
         this.closed()
       }
     },
-    onOk() {
+    onOk () {
       this.$emit('ok')
     },
-    onCancel() {
+    onCancel () {
       this.$emit('cancel')
       this.close()
     },
-    openModal() {
+    openModal () {
       this.isOpen = true
     }
   },
   watch: {
-    'open'() {
+    'open' () {
       this.isOpen = this.open
     }
   }

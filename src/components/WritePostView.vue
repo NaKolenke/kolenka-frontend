@@ -39,7 +39,14 @@
       <div v-if="isLoading">
         <loading-view></loading-view>
       </div>
-      <editor ref="editor" v-validate="validation.body"></editor>
+      <textarea
+        v-if="rawEditor && isAdmin"
+        v-model="rawPost"
+        class="form-input"
+        rows="10"
+        cols="80"
+      ></textarea>
+      <editor v-else ref="editor" v-validate="validation.body"></editor>
 
       <div class="form-group mt-2">
         <div class="col-3 col-sm-12">
@@ -109,6 +116,12 @@
       <div class="form-group float-right">
         <div class="btn-group btn-group-block">
           <div v-if="isSending" class="loading" style="margin-right: 32px"></div>
+
+          <label class="form-switch form-input-hint">
+            <input type="checkbox" v-model="rawEditor" />
+            <i class="form-icon"></i> Редактировать HTML
+          </label>
+
           <input
             type="submit"
             class="btn"
@@ -116,6 +129,7 @@
             @click="send(true)"
             :disabled="!isValid || isSending"
           />
+
           <input
             type="submit"
             class="btn btn-primary"
@@ -137,6 +151,7 @@
 
 <script>
 import { mapState } from 'vuex'
+// import indent from '../../node_modules/indent.js/lib/indent'
 import Editor from '@/components/editor/Editor.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import slugify from 'speakingurl'
@@ -160,7 +175,7 @@ export default {
           notNull: () => this.model.blog != null
         },
         body: {
-          length: () => this.$refs.editor.getHtml().length >= 10
+          //   length: () => this.$refs.editor.getHtml().length >= 10
         },
         slug: {
           isUrl: () => /^[A-Za-z0-9-_]+$/.test(this.newSlug)
@@ -171,6 +186,8 @@ export default {
       isChangingSlug: false,
       newSlug: '',
       blogs: [],
+      rawEditor: false,
+      rawPost: ''
     }
   },
   created () {
@@ -229,10 +246,17 @@ export default {
       this.isSending = true
 
       let result = null
+      var text = null
+      if (this.rawEditor) {
+        text = this.rawPost
+      } else {
+        text = this.$refs.editor.getHtml()
+      }
+
       if (this.isInEditMode) {
         result = this.$store.dispatch('posts/editPost', {
           title: this.model.title,
-          text: this.$refs.editor.getHtml(),
+          text: text,
           url: this.slug,
           originalUrl: this.$route.params.post,
           draft: draft,
@@ -242,7 +266,7 @@ export default {
       } else {
         result = this.$store.dispatch('posts/createPost', {
           title: this.model.title,
-          text: this.$refs.editor.getHtml(),
+          text: text,
           url: (this.slugChanged ? this.newSlug : this.slug),
           draft: draft,
           blogId: this.model.blog,
@@ -297,9 +321,23 @@ export default {
           errors.handle(error)
           this.$toast.error(errors.getText(error))
         })
+    },
+    prettyXml (sourceXml) {
+      // sourceXml = sourceXml.replace(/>/gi, '>\n').replace(/<\//gi, '\n</')
+      // return indent.html(sourceXml, { tabString: '  ' })
+      return sourceXml
     }
   },
   computed: {
+    ...mapState({
+      user: state => state.users.me
+    }),
+    isAdmin: function () {
+      if (!this.user) {
+        return false
+      }
+      return this.user.is_admin
+    },
     slug () {
       return slugify(this.model.title, { lang: 'ru' })
     },
@@ -320,6 +358,18 @@ export default {
       myBlogs: state => state.blogs.my,
       suggestedTags: state => state.tags.suggested,
     }),
+  },
+  watch: {
+    rawEditor: function (newVal, _) {
+      if (newVal) {
+        var rawHtml = this.$refs.editor.getHtml()
+        this.rawPost = this.prettyXml(rawHtml)
+      } else {
+        this.$nextTick(function () {
+          this.$refs.editor.setContent(this.rawPost)
+        })
+      }
+    }
   },
   components: {
     Editor,

@@ -4,6 +4,7 @@
       <div class="column col-auto editor-menu-column">
         <small class="text-gray button-group-caption">Текст</small>
         <br />
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.bold }"
@@ -12,6 +13,7 @@
         >
           <span class="icon-bold"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.italic }"
@@ -20,6 +22,7 @@
         >
           <span class="icon-italic"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.strike }"
@@ -28,6 +31,7 @@
         >
           <span class="icon-strikethrough"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.underline }"
@@ -36,6 +40,7 @@
         >
           <span class="icon-underline"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.mono }"
@@ -65,9 +70,11 @@
         </select>
         <span class="span"></span>
       </div>
+
       <div class="column col-auto editor-menu-column">
         <small class="text-gray button-group-caption">Блоки</small>
         <br />
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.paragraph }"
@@ -76,6 +83,7 @@
         >
           <span class="icon-pilcrow"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.quote }"
@@ -84,6 +92,7 @@
         >
           <span class="icon-quotes-right"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.codeblock }"
@@ -92,14 +101,7 @@
         >
           <span class="icon-embed2"></span>
         </button>
-        <button
-          class="editor-button tooltip"
-          :class="{ 'active': activeButtons.table }"
-          data-tooltip="Таблица"
-          @click="call('table')"
-        >
-          <span class="icon-table2"></span>
-        </button>
+
         <span class="span"></span>
       </div>
       <div class="column col-auto editor-menu-column">
@@ -113,6 +115,7 @@
         >
           <span class="icon-list2"></span>
         </button>
+
         <button
           class="editor-button tooltip"
           :class="{ 'active': activeButtons.orderedlist }"
@@ -123,33 +126,59 @@
         </button>
         <span class="span"></span>
       </div>
+
       <div class="column col-auto editor-menu-column">
         <small class="text-gray button-group-caption">Медиа</small>
         <br />
-        <button
-          class="editor-button tooltip"
-          :class="{ 'active': activeButtons.image }"
-          data-tooltip="Изображение"
-          @click="call('image')"
-        >
-          <span class="icon-image"></span>
-        </button>
-        <button
-          class="editor-button tooltip"
-          :class="{ 'active': activeButtons.embed }"
-          data-tooltip="Embed (youtube, etc)"
-          @click="call('embed')"
-        >
-          <span class="icon-new-tab"></span>
-        </button>
+
+        <div class="dropdown">
+          <button class="btn btn-link dropdown-toggle text-dark" tabindex="0">
+            Добавить
+            <i class="icon icon-caret"></i>
+          </button>
+
+          <ul class="menu">
+            <li class="menu-item">
+              <a
+                href="#"
+                :class="{ 'active': activeButtons.image }"
+                @click="call('image')"
+              >Изображение</a>
+            </li>
+
+            <li class="menu-item">
+              <a href="#" :class="{ 'active': activeButtons.embed }" @click="call('embed')">Embed</a>
+            </li>
+
+            <li class="menu-item">
+              <a href="#" :class="{ 'active': activeButtons.table }" @click="call('table')">Таблица</a>
+            </li>
+
+            <li class="menu-item">
+              <a href="#" :class="{ 'active': activeButtons.cut }" @click="call('cut')">Кат</a>
+            </li>
+
+            <li class="menu-item">
+              <a
+                href="#"
+                :class="{ 'active': activeButtons.spoiler }"
+                @click="call('spoiler')"
+              >Спойлер</a>
+            </li>
+          </ul>
+        </div>
+
         <span class="span"></span>
       </div>
+
       <div class="column col-auto editor-menu-column">
         <small class="text-gray button-group-caption"></small>
         <br />
+
         <button class="editor-button tooltip" data-tooltip="Помощь" @click="call('help')">?</button>
       </div>
     </div>
+
     <div class="columns">
       <div class="column col-auto editor-menu-column" v-if="activeButtons.table">
         <small class="text-gray button-group-caption">Таблица</small>

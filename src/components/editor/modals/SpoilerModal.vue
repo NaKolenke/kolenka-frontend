@@ -1,19 +1,20 @@
 <template>
-  <modal :open="isShowed" :closed="close" title="Embed" @ok="chooseEmbed()">
-    <input
-      @keyup.enter="chooseEmbed"
-      @keyup.esc="close"
-      class="form-input"
-      type="url"
-      placeholder="Ссылка (YouTube, Vimeo, Soundcloud, Twitch)"
-      v-model="embedModalUrl"
-    />
+  <modal :open="isShowed" :closed="close" title="Добавить спойлер" @ok="insertSpoiler()">
+    <div :class="['form-group', 'mt-2']">
+      <input
+        @keyup.enter="insertSpoiler"
+        @keyup.esc="close"
+        class="form-input"
+        placeholder="Название: Спойлер"
+        v-model="title"
+        ref="input"
+      />
+    </div>
   </modal>
 </template>
 
 <script>
 import Modal from '@/components/elements/Modal.vue'
-
 
 export default {
   props: {
@@ -21,23 +22,22 @@ export default {
       type: Boolean,
       default: false
     },
-    command: Function
+    command: Function,
+    editor: Object
   },
   data: function () {
     return {
-      embedModalUrl: null,
+      title: null
     }
   },
   methods: {
     close: function () {
       this.$emit("update:isShowed", false)
     },
-    chooseEmbed () {
-      if (this.embedModalUrl.length > 0) {
-        this.command({ src: this.embedModalUrl })
-        this.embedModalUrl = ''
-        this.close()
-      }
+    insertSpoiler () {
+      this.command({ name: this.title })
+      this.title = ''
+      this.close()
     },
   },
   watch: {

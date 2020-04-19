@@ -1,5 +1,5 @@
 import { Node } from 'tiptap'
-import { wrappingInputRule } from 'tiptap-commands'
+import { wrappingInputRule, toggleWrap } from 'tiptap-commands'
 
 import SpoilerComponent from '@/components/editor/node/SpoilerComponent'
 
@@ -45,9 +45,11 @@ export default class Spoiler extends Node {
     ]
   }
 
+  commands ({ type, schema }) {
+    return attrs => toggleWrap(type, schema.nodes.paragraph, attrs)
+  }
 
   get view () {
     return SpoilerComponent
   }
-
 }
