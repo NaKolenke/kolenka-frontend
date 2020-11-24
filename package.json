@@ -15,7 +15,7 @@
     "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.6.5",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.1.2",
     "indent.js": "^0.3.5",
     "lodash": "^4.17.19",
     "logdown": "^3.3.1",
