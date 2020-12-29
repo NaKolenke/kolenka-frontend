@@ -19,6 +19,7 @@ import AdminSidebar from '@/pages/sidebar/AdminView.vue'
 import TestingPage from '@/pages/TestingPage.vue'
 
 import blogs from './blogs'
+import jams from './jams'
 import posts from './posts'
 import users from './users'
 
@@ -28,6 +29,7 @@ const routes = [
   ...blogs,
   ...posts,
   ...users,
+  ...jams,
   {
     path: '/',
     name: 'home',

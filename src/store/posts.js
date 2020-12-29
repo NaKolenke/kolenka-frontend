@@ -26,16 +26,16 @@ const actions = {
       return res.post
     })
   },
-  createPost (_context, { title, text, url, draft, blogId, tags }) {
-    return api.createPost(title, text, url, draft, blogId, tags).then(res => {
+  createPost (_context, { title, text, url, draft, blogId, tags, jamEntries }) {
+    return api.createPost(title, text, url, draft, blogId, tags, jamEntries).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
       return res.post
     })
   },
-  editPost (_context, { title, text, url, originalUrl, draft, blogId, tags }) {
-    return api.editPost(title, text, url, originalUrl, draft, blogId, tags).then(res => {
+  editPost (_context, { title, text, url, originalUrl, draft, blogId, tags, jamEntries }) {
+    return api.editPost(title, text, url, originalUrl, draft, blogId, tags, jamEntries).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
@@ -82,6 +82,9 @@ const actions = {
       }
       return res
     })
+  },
+  resetCurrentPost ({ commit }) {
+    commit('setCurrent', null)
   },
 }
 

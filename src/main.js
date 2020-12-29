@@ -14,6 +14,9 @@ Moment.locale('ru')
 Vue.filter('moment', function (timestamp) {
   return Moment.unix(timestamp).format('LLL')
 })
+Vue.filter('moment_date', function (timestamp) {
+  return Moment.unix(timestamp).format('LL')
+})
 
 window.__app = new Vue({
   router,

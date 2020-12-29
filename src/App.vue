@@ -2,33 +2,42 @@
   <div id="app">
     <header-component />
 
-    <div class="container col-9 col-mx-auto col-xl-11 col-md-12">
+    <div class="container col-9 col-mx-auto">
       <div class="columns">
-        <div :class="['column', { 'col-9': showSidebar }, { 'col-12': !showSidebar }, 'col-md-12']">
+        <div
+          :class="[
+            'column',
+            { 'col-9': showSidebar },
+            { 'col-12': !showSidebar },
+          ]"
+        >
           <router-view />
         </div>
 
-        <div
-          v-if="showSidebar"
-          id="sidebar"
-          class="column col-3 col-md-12"
-          style="position: relative"
-        >
-          <transition name="sidebar-fade" mode="in-out">
-            <router-view name="sidebar" />
-          </transition>
+        <div v-if="showSidebar" id="sidebar" class="column col-3">
+          <!-- <transition name="sidebar-fade" mode="in-out"> -->
+          <router-view name="sidebar" />
+          <!-- </transition> -->
         </div>
       </div>
     </div>
 
     <vue-progress-bar />
     <footer-component :version="version" />
+
+    <transition name="fade">
+      <div v-if="isLoading" id="loading-overlay">
+        <div class="loading loading-lg"></div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+
 import { mapState } from 'vuex'
+
 import ProgressBar from 'vue-progressbar'
 import HeaderComponent from '@/components/TheHeader.vue'
 import FooterComponent from '@/components/TheFooter.vue'
@@ -36,8 +45,11 @@ import ToastPlugin from '@/plugins/toast'
 import LogPlugin from '@/plugins/log'
 import ScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
+import VueFeather from 'vue-feather';
+
 import '@/directives/validate'
 import df from '@/mixins/dataFetch'
+
 import Pagination from './models/pagination'
 import errors from '@/utils/errors'
 
@@ -50,6 +62,7 @@ Vue.use(LogPlugin)
 Vue.use(VueMeta, {
   refreshOnceOnNavigation: true
 })
+Vue.use(VueFeather)
 
 export default {
   name: 'App',
@@ -80,7 +93,9 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.users.me
+      user: state => state.users.me,
+      isLoading: state => state.isLoading
+
     }),
     showSidebar () {
       return !this.$route.matched[0].props.sidebar || !this.$route.matched[0].props.sidebar.hide
@@ -119,6 +134,10 @@ export default {
 </script>
 
 <style scoped>
+#sidebar {
+  position: relative;
+}
+
 .sidebar-fade-enter-active,
 .sidebar-fade-leave-active {
   transition-duration: 0.3s;
@@ -276,6 +295,38 @@ body {
   min-height: 100%;
   position: relative;
   padding-bottom: 32px;
+}
+
+#loading-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 2;
+  .loading {
+    margin-top: 64px;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.mr-16 {
+  margin-right: 16px;
+}
+
+.mr-32 {
+  margin-right: 32px;
 }
 </style>
 

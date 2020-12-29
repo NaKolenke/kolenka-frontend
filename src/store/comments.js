@@ -26,8 +26,9 @@ const getters = {
 }
 
 const actions = {
-  getComments ({ commit }, { url, pagination }) {
-    return api.getComments(url, pagination.page, pagination.limit).then(res => {
+  getComments ({ commit }, { url, suburl, type, pagination }) {
+    commit('storeCurrentComments', [])
+    return api.getComments(url, suburl, type, pagination.page, pagination.limit).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
@@ -36,8 +37,8 @@ const actions = {
       return res.comments
     })
   },
-  postComment ({ commit }, { url, text, parent }) {
-    return api.postComment(url, text, parent).then(res => {
+  postComment ({ commit }, { url, suburl, text, parent, type }) {
+    return api.postComment(url, suburl, text, parent, type).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
@@ -46,8 +47,8 @@ const actions = {
       return res.comment
     })
   },
-  editComment ({ commit }, { url, text, id }) {
-    return api.editComment(url, text, id).then(res => {
+  editComment ({ commit }, { url, suburl, text, id, type }) {
+    return api.editComment(url, suburl, text, id, type).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }

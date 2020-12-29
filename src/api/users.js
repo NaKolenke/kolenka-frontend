@@ -26,4 +26,14 @@ export default {
       .post(`users/self/`, { avatar: id })
       .then(res => res.data)
   },
+  getJamEntriesForUser: (username) => {
+    return request
+      .get(`users/${username}/jam-entries/`)
+      .then(res => res.data)
+  },
+  getJamsOrganizedByUser: (username) => {
+    return request
+      .get(`users/${username}/jams/`)
+      .then(res => res.data)
+  },
 }

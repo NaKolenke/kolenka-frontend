@@ -38,13 +38,14 @@ export default {
         })
       .then(res => res.data)
   },
-  editBlog: (title, description, type, url) => {
+  editBlog: (title, description, type, url, originalUrl) => {
     return request
-      .put(`blogs/${url}/`,
+      .put(`blogs/${originalUrl}/`,
         {
           blog_type: type,
           description,
-          title
+          title,
+          url,
         })
       .then(res => res.data)
   },

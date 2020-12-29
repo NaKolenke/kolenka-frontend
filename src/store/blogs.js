@@ -66,8 +66,8 @@ const actions = {
       return res.blog
     })
   },
-  editBlog (_context, { title, description, type, url }) {
-    return api.editBlog(title, description, type, url).then(res => {
+  editBlog (_context, { title, description, type, url, originalUrl }) {
+    return api.editBlog(title, description, type, url, originalUrl).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }

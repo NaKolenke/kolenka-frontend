@@ -14,38 +14,57 @@
         :type="'blog'"
       />
       <h3 v-if="blog.url">
-        <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{ blog.title }}</router-link>
+        <router-link :to="{ name: 'blog', params: { name: blog.url } }">{{
+          blog.title
+        }}</router-link>
       </h3>
       <h3 v-else>{{ blog.title }}</h3>
 
-      <p class="readers label">Читатели: {{blog.readers}}</p>
+      <p class="readers label">Читатели: {{ blog.readers }}</p>
       <span>
         <button
-          v-if="user && (blog.blog_type === 1 || blog.blog_type === 2) && !contains"
+          v-if="
+            user && (blog.blog_type === 1 || blog.blog_type === 2) && !contains
+          "
           class="btn btn-sm mx-2"
           @click="joinBlog"
-        >Присоединиться</button>
+        >
+          Присоединиться
+        </button>
 
-        <button v-if="user && contains" class="btn btn-sm mx-2" disabled>Вы присоединились</button>
+        <button v-if="user && contains" class="btn btn-sm mx-2" disabled>
+          Вы присоединились
+        </button>
 
         <router-link
           v-if="user && blog.creator.id === user.id"
-          :to="{ name: 'edit-blog', params: { edit: blog } }"
+          :to="{ name: 'edit-blog', params: { edit: blog, blog: blog.url } }"
           class="btn btn-sm mx-2"
-        >Редактировать</router-link>
+          >Редактировать</router-link
+        >
       </span>
 
       <p v-html="blog.description"></p>
 
       <div v-if="preview && posts.length > 0" class="columns">
-        <div class="column col-6 col-md-12" v-for="item in posts" :key="item.id">
+        <div
+          class="column col-6 col-md-12"
+          v-for="item in posts"
+          :key="item.id"
+        >
           <div class="card my-1">
             <div class="card-header">
               <div class="card-title h5">
-                <router-link :to="{ name: 'post', params: { post: item.url } }">{{ item.title }}</router-link>
+                <router-link
+                  :to="{ name: 'post', params: { post: item.url } }"
+                  >{{ item.title }}</router-link
+                >
               </div>
               <div class="card-subtitle text-gray">
-                <small>{{ item.created_date | moment }} / {{ item.creator.name || item.creator.username }}</small>
+                <small
+                  >{{ item.created_date | moment }} /
+                  {{ item.creator.name || item.creator.username }}</small
+                >
               </div>
             </div>
             <div class="card-body">

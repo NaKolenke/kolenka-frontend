@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="my-2">
     <editor-menu-bar
       class="menu-bar"
-      :class="{ 'floating': isMenuBarFloating && !disableFloatingMenu }"
-      :style="[{ 'left': menuBarOffsetLeft }, { 'width': menuBarWidth }]"
+      :class="{ floating: isMenuBarFloating && !disableFloatingMenu }"
+      :style="[{ left: menuBarOffsetLeft }, { width: menuBarWidth }]"
       :editor="editor"
       v-slot="{ commands, isActive }"
     >
@@ -27,7 +27,13 @@
           @orderedlist="commands.ordered_list"
           @image="showImageModal"
           @embed="showEmbedModal"
-          @table="commands.createTable({rowsCount: 3, colsCount: 3, withHeaderRow: false })"
+          @table="
+            commands.createTable({
+              rowsCount: 3,
+              colsCount: 3,
+              withHeaderRow: false,
+            })
+          "
           @removeTable="commands.deleteTable"
           @insertColumnBefore="commands.addColumnBefore"
           @insertColumnAfter="commands.addColumnAfter"
@@ -39,17 +45,31 @@
           @help="showHelpModal"
         />
 
-        <insert-image-modal :isShowed.sync="isImageModalShowed" :command="commands.image" />
+        <insert-image-modal
+          :isShowed.sync="isImageModalShowed"
+          :command="commands.image"
+        />
 
-        <insert-embed-modal :isShowed.sync="isEmbedModalShowed" :command="commands.iframe" />
+        <insert-embed-modal
+          :isShowed.sync="isEmbedModalShowed"
+          :command="commands.iframe"
+        />
 
-        <link-modal :isShowed.sync="isLinkModalShowed" :command="commands.link" :editor="editor" />
+        <link-modal
+          :isShowed.sync="isLinkModalShowed"
+          :command="commands.link"
+          :editor="editor"
+        />
         <spoiler-modal
           :isShowed.sync="isSpoilerModalShowed"
           :command="commands.spoiler"
           :editor="editor"
         />
-        <cut-modal :isShowed.sync="isCutModalShowed" :command="commands.cut" :editor="editor" />
+        <cut-modal
+          :isShowed.sync="isCutModalShowed"
+          :command="commands.cut"
+          :editor="editor"
+        />
 
         <help-modal :isShowed.sync="isHelpModalShowed" />
       </div>
@@ -89,7 +109,8 @@ import {
   Table,
   TableHeader,
   TableCell,
-  TableRow} from 'tiptap-extensions'
+  TableRow
+} from 'tiptap-extensions'
 import Popper from "popper.js";
 import BetterLink from '@/components/editor/mark/BetterLink'
 import Iframe from '@/components/editor/node/iframe'

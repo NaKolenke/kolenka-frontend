@@ -10,6 +10,7 @@
           v-for="tag in tags"
           :key="tag.id"
           :to="{ name: 'tag', params: { title: tag.title }}"
+          class="tag"
         >{{tag.title}}</router-link>
       </div>
     </div>
@@ -102,7 +103,7 @@ h4 {
   text-align: right;
 }
 
-a {
+.tag {
   text-decoration: none;
   margin-left: 0px;
   margin-right: 6px;

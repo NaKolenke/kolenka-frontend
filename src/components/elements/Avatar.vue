@@ -1,5 +1,5 @@
 <template>
-  <div class="popover popover-right">
+  <div class="popover" :class="'popover-' + popoverSide">
     <router-link :to="{ name: 'user', params: { user: user ? user.username : null }}">
       <figure
         class="avatar"
@@ -42,7 +42,11 @@ export default {
       default: true // Show user info card
     },
     badge: [String, Number, Boolean], // Show small badge
-    header: Boolean // If we are inside the header
+    header: Boolean, // If we are inside the header
+    popoverSide: {
+      type: String,
+      default: 'right'
+    }
   },
   computed: {
     isSmall () {

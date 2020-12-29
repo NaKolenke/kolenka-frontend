@@ -19,7 +19,7 @@ export default [
     }
   },
   {
-    path: '/edit/blog',
+    path: '/blogs/:blog/edit',
     name: 'edit-blog',
     components: {
       default: CreateBlogPage,

@@ -1,6 +1,11 @@
 <template>
   <ul class="nav">
-    <user-page-menu-item :index="0" :currentTab="currentTab" @navTo="navTo" title="О себе" />
+    <user-page-menu-item
+      :index="0"
+      :currentTab="currentTab"
+      @navTo="navTo"
+      title="О себе"
+    />
 
     <user-page-menu-item
       :index="1"
@@ -11,9 +16,26 @@
       :badge="user.achievements.length"
     />
 
-    <user-page-menu-item :index="2" :currentTab="currentTab" @navTo="navTo" title="Блоги" />
+    <user-page-menu-item
+      :index="2"
+      :currentTab="currentTab"
+      @navTo="navTo"
+      title="Блоги"
+    />
 
-    <user-page-menu-item :index="3" :currentTab="currentTab" @navTo="navTo" title="Посты" />
+    <user-page-menu-item
+      :index="3"
+      :currentTab="currentTab"
+      @navTo="navTo"
+      title="Посты"
+    />
+
+    <user-page-menu-item
+      :index="4"
+      :currentTab="currentTab"
+      @navTo="navTo"
+      title="Джемы"
+    />
   </ul>
 </template>
 

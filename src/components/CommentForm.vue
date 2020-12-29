@@ -9,7 +9,7 @@
         @click="send"
         :disabled="isSending || !isValid"
       />
-      <div v-if="isSending" class="loading float-left" style="margin-top: 10px; margin-left: 20px"></div>
+      <div v-if="isSending" class="loading float-left"></div>
       <div class="clearfix"></div>
     </div>
   </div>
@@ -26,7 +26,18 @@ import errors from '@/utils/errors'
 
 export default {
   props: {
-    postUrl: String, // Url of the post the comment in
+    postUrl: {
+      type: String,
+      required: false
+    },
+    jamUrl: {
+      type: String,
+      required: false
+    },
+    jamEntryUrl: {
+      type: String,
+      required: false
+    },
     parentId: { // if this specified - then new comment will be send as child item
       type: Number,
       required: false
@@ -56,12 +67,29 @@ export default {
     send () {
       this.isSending = true
       var task = null
+
+      var type = 'post'
+      var url = null
+      var suburl = null
+
+      if (this.postUrl) {
+        type = 'post'
+        url = this.postUrl
+      } else if (this.jamEntryUrl) {
+        type = 'jam-entry'
+        url = this.jamUrl
+        suburl = this.jamEntryUrl
+      } else if (this.jamUrl) {
+        type = 'jam'
+        url = this.jamUrl
+      }
+
       if (!this.comment) { // is we don't have comment - then send new
         task = this.$store.dispatch('comments/postComment',
-          { url: this.postUrl, text: this.$refs.editor.getHtml(), parent: this.parentId })
+          { url: url, suburl: suburl, type: type, text: this.$refs.editor.getHtml(), parent: this.parentId })
       } else { // is we have comment - then edit current comment
         task = this.$store.dispatch('comments/editComment',
-          { url: this.postUrl, text: this.$refs.editor.getHtml(), id: this.comment.id })
+          { url: url, suburl: suburl, type: type, text: this.$refs.editor.getHtml(), id: this.comment.id })
       }
       task
         .then(comment => {
@@ -104,6 +132,11 @@ export default {
 
 .comment-editor .ProseMirror p {
   margin: 0 0 0.2rem;
+}
+
+.loading {
+  margin-top: 10px;
+  margin-left: 20px;
 }
 </style>
 

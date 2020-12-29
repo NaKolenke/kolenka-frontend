@@ -1,42 +1,49 @@
 <template>
-  <div>
+  <div v-if="post">
     <template v-if="loading.post">
       <post-skeleton />
     </template>
     <post-view v-else :post="post" :cut="false"></post-view>
 
-    <div id="comments_container" v-if="post && !post.is_draft">
-      <h3 id="comments">
-        Комментарии
-        <small class="text-gray">{{ commentsCount }}</small>
-      </h3>
-      <comment-form v-if="user" :post-url="post.url" @sent="addComment"></comment-form>
-      <div v-if="user" class="mt-2"></div>
-      <template v-if="loading.comments">
-        <comment-skeleton />
-      </template>
-      <comment-card
-        v-else
-        v-for="item in comments"
-        :key="item.id"
-        :comment="item"
-        :post-url="post.url"
-        :user="user"
-      ></comment-card>
-      <div class="bottom-padd"></div>
+    <div class="container my-2" v-if="post.jam_entries.length > 0">
+      <h3>К этому посту прилинкованы заявки:</h3>
+      <div class="columns">
+        <div
+          class="column col-2"
+          v-for="entry in post.jam_entries"
+          :key="entry.id"
+        >
+          <router-link
+            :to="{
+              name: 'jam-entry',
+              params: { jamUrl: entry.jam.url, entryUrl: entry.url },
+            }"
+            class="text-center"
+          >
+            <div>
+              <jam-entry-logo :entry="entry" />
+            </div>
+            <p>
+              {{ entry.title }}
+            </p>
+          </router-link>
+        </div>
+      </div>
     </div>
+
+    <comments-section v-if="post && !post.is_draft" :postUrl="post.url" />
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import errors from '@/utils/errors'
-import Pagination from '@/models/pagination'
+
 import PostView from '@/components/PostView.vue'
-import CommentCard from '@/components/cards/CommentCard.vue'
-import CommentForm from '@/components/CommentForm.vue'
+
+import CommentsSection from '@/components/comments/CommentsSection.vue'
 import PostSkeleton from '@/components/skeletons/Post.vue'
-import CommentSkeleton from '@/components/skeletons/Comment.vue'
+import JamEntryLogo from '@/components/elements/JamEntryLogo.vue'
 
 export default {
   metaInfo () {
@@ -57,6 +64,9 @@ export default {
       }
     }
   },
+  created () {
+    this.$store.dispatch('posts/resetCurrentPost')
+  },
   mounted () {
     this.refreshPost(this.$route)
   },
@@ -70,43 +80,25 @@ export default {
         .then(_post => {
           this.loading.post = false
         })
-        .then(() => this.refreshComments(route))
+        // .then(() => this.refreshComments(route))
         .catch(error => {
           errors.handle(error)
           this.$toast.error(errors.getText(error))
           this.$router.push({ path: '/404' })
         })
     },
-    refreshComments (route) {
-      return this.$store.dispatch('comments/getComments', { url: route.params.post, pagination: new Pagination(1) })
-        .then(_res => {
-          this.loading.comments = false
-        }).catch(err => {
-          console.log(err)
-        })
-    },
-    addComment (id) {
-      this.$nextTick(() => {
-        this.$scrollTo('#comment_' + id, 1000, { cancelable: true })
-      })
-    }
   },
   computed: {
     ...mapState({
       user: state => state.users.me,
       post: state => state.posts.current
     }),
-    ...mapGetters({
-      commentsCount: 'comments/commentsCount',
-      comments: 'comments/topLevelComments',
-    })
   },
   components: {
     PostView,
-    CommentCard,
-    CommentForm,
     PostSkeleton,
-    CommentSkeleton
+    CommentsSection,
+    JamEntryLogo
   }
 }
 </script>

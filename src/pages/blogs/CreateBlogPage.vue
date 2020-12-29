@@ -2,7 +2,7 @@
   <div class="container col-9 col-mx-auto">
     <div class="columns">
       <div class="column">
-        <h2>{{ isInEditMode ? 'Редактировать блог' : 'Новый блог' }}</h2>
+        <h2>{{ isInEditMode ? "Редактировать блог" : "Новый блог" }}</h2>
         <div class="form-horizontal">
           <div class="form-group">
             <div class="col-3 col-sm-12">
@@ -19,18 +19,22 @@
               />
               <p class="form-input-hint">
                 /blogs/
-                <span
-                  v-if="!isChangingSlug"
-                  @click="changeSlug"
-                >{{ slugChanged ? newSlug : slug }}</span>
+                <span v-if="!isChangingSlug" @click="changeSlug">{{
+                  slugChanged ? newSlug : slug
+                }}</span>
                 <input
                   v-else
                   type="text"
-                  :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']"
+                  :class="[
+                    'form-input',
+                    'input-sm',
+                    { 'is-error': !validation.slug.success },
+                    'slug-input',
+                  ]"
                   v-model="newSlug"
                   v-validate="validation.slug"
                   @blur="isChangingSlug = false"
-                  @keyup="if ($event.keyCode === 27) isChangingSlug = false"
+                  @keyup="if ($event.keyCode === 27) isChangingSlug = false;"
                   autofocus
                 />
               </p>
@@ -59,16 +63,20 @@
             </div>
             <div class="col-9 col-sm-12">
               <select class="form-select">
-                <option value="1">Публичный (вступать и писать могут все)</option>
-                <option value="2">Закрытый (вступать и писать могут только по приглашениям)</option>
+                <option value="1">
+                  Публичный (вступать и писать могут все)
+                </option>
+                <option value="2">
+                  Закрытый (вступать и писать могут только по приглашениям)
+                </option>
                 <option value="3">Скрытый</option>
               </select>
             </div>
           </div>
 
           <div class="form-group float-right">
-            <div class="btn-group btn-group-block" style="width:350px">
-              <div v-if="isLoading" class="loading" style="margin-right: 32px"></div>
+            <div class="btn-group btn-group-block" style="width: 350px">
+              <div v-if="isLoading" class="loading mr-32"></div>
               <input
                 type="submit"
                 class="btn btn-primary"
@@ -141,7 +149,8 @@ export default {
           title: this.model.title,
           description: this.model.description,
           type: this.model.type,
-          url: this.$route.params.edit.url
+          url: this.slug,
+          originalUrl: this.$route.params.blog,
         })
       } else {
         result = this.$store.dispatch('blogs/createBlog', {

@@ -1,8 +1,12 @@
 import Vue from 'vue'
 
-Vue.directive("validate", function(el, binding) {  
+Vue.directive("validate", function (el, binding) {
   const errors = []
   let isValid = true
+
+  if (!binding.value) {
+    return
+  }
 
   const items = Object.entries(binding.value)
 
@@ -17,10 +21,10 @@ Vue.directive("validate", function(el, binding) {
       errors.push(items[i][0])
     }
   }
-  
+
   if (binding.oldValue && binding.oldValue.success === isValid)
     return
 
   Vue.set(binding.value, 'success', isValid)
-  Vue.set(binding.value, 'errors', errors)  
+  Vue.set(binding.value, 'errors', errors)
 })

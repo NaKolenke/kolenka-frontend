@@ -1,23 +1,47 @@
 import request from '@/utils/request'
 
 export default {
-  getComments: (url, page, limit) => {
+  getComments: (url, suburl, type, page, limit) => {
+    var requestUrl = null
+    if (type === 'post') {
+      requestUrl = `posts/${url}/comments/`
+    } else if (type === 'jam') {
+      requestUrl = `jams/${url}/comments/`
+    } else if (type === 'jam-entry') {
+      requestUrl = `jams/${url}/entry/${suburl}/comments/`
+    }
     return request
-      .get(`posts/${url}/comments/?page=${page || 1}&limit=${limit || 20}`)
+      .get(`${requestUrl}?page=${page || 1}&limit=${limit || 20}`)
       .then(res => res.data)
   },
-  postComment: (url, text, parent) => {
+  postComment: (url, suburl, text, parent, type) => {
+    var requestUrl = null
+    if (type === 'post') {
+      requestUrl = `posts/${url}/comments/`
+    } else if (type === 'jam') {
+      requestUrl = `jams/${url}/comments/`
+    } else if (type === 'jam-entry') {
+      requestUrl = `jams/${url}/entry/${suburl}/comments/`
+    }
     return request
-      .post(`posts/${url}/comments/`,
+      .post(requestUrl,
         {
           text,
           parent: parent || 0
         })
       .then(res => res.data)
   },
-  editComment: (url, text, id) => {
+  editComment: (url, suburl, text, id, type) => {
+    var requestUrl = null
+    if (type === 'post') {
+      requestUrl = `posts/${url}/comments/`
+    } else if (type === 'jam') {
+      requestUrl = `jams/${url}/comments/`
+    } else if (type === 'jam-entry') {
+      requestUrl = `jams/${url}/entry/${suburl}/comments/`
+    }
     return request
-      .put(`posts/${url}/comments/${id}`,
+      .put(`${requestUrl}${id}/`,
         {
           text
         })

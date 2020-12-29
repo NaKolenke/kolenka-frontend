@@ -38,13 +38,7 @@ const actions = {
     })
   },
   editSelf (_context, { user }) {
-    return api.editSelf(
-      {
-        name: user.name,
-        email: user.email,
-        about: user.about,
-        birthday: user.birthday
-      }).then(res => {
+    return api.editSelf({ name: user.name, email: user.email, about: user.about, birthday: user.birthday }).then(res => {
       if (res.success !== 1) {
         return Promise.reject(res.error)
       }
@@ -63,6 +57,24 @@ const actions = {
   },
   invalidateUser ({ commit }) {
     commit('invalidateSelf')
+  },
+  getJamEntriesForUser (_context, { username }) {
+    return api.getJamEntriesForUser(username).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
+
+      return res
+    })
+  },
+  getJamsOrganizedByUser (_context, { username }) {
+    return api.getJamsOrganizedByUser(username).then(res => {
+      if (res.success !== 1) {
+        return Promise.reject(res.error)
+      }
+
+      return res
+    })
   },
 }
 

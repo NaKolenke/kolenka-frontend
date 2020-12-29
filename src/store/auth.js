@@ -55,7 +55,7 @@ const actions = {
     localStorage.setItem('refresh_token', null)
 
     commit('invalidateTokens')
-    dispatch('users/invalidateUser', {}, { root: true })
+    return dispatch('users/invalidateUser', {}, { root: true })
   },
   restoreToken ({ commit }) {
     var t = null

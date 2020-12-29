@@ -2,6 +2,7 @@
   <div>
     <h2 v-if="isInEditMode">Редактирование поста</h2>
     <h2 v-else>Новый пост</h2>
+
     <div class="form-horizontal">
       <div class="form-group">
         <div class="col-3 col-sm-12">
@@ -16,20 +17,25 @@
             v-validate="validation.title"
             required
           />
+
           <p class="form-input-hint">
             /posts/
-            <span
-              v-if="!isChangingSlug"
-              @click="changeSlug"
-            >{{ slugChanged ? newSlug : slug }}</span>
+            <span v-if="!isChangingSlug" @click="changeSlug">{{
+              slugChanged ? newSlug : slug
+            }}</span>
             <input
               v-else
               type="text"
-              :class="['form-input', 'input-sm', { 'is-error': !validation.slug.success }, 'slug-input']"
+              :class="[
+                'form-input',
+                'input-sm',
+                { 'is-error': !validation.slug.success },
+                'slug-input',
+              ]"
               v-model="newSlug"
               v-validate="validation.slug"
               @blur="isChangingSlug = false"
-              @keyup="if ($event.keyCode === 27) isChangingSlug = false"
+              @keyup="if ($event.keyCode === 27) isChangingSlug = false;"
               autofocus
             />
           </p>
@@ -45,7 +51,8 @@
         class="form-input"
         rows="10"
         cols="80"
-      ></textarea>
+      >
+      </textarea>
       <editor v-else ref="editor" v-validate="validation.body"></editor>
 
       <div class="form-group mt-2">
@@ -53,14 +60,20 @@
           <label class="form-label" for="tags">Теги</label>
         </div>
         <div class="col-9 col-sm-12">
-          <span v-for="tag in model.tags" :key="tag.id" :value="tag.id" class="chip">
-            {{tag.title}}
+          <span
+            v-for="tag in model.tags"
+            :key="tag.id"
+            :value="tag.id"
+            class="chip"
+          >
+            {{ tag.title }}
             <a
               class="icon icon-delete mx-2"
               aria-label="Remove tag"
               role="button"
               @click="removeTag(tag)"
-            ></a>
+            >
+            </a>
           </span>
 
           <input
@@ -79,13 +92,14 @@
             :value="tag.id"
             class="chip"
           >
-            {{tag.title}}
+            {{ tag.title }}
             <a
               class="icon icon-check mx-2"
               aria-label="Add tag"
               role="button"
               @click="addTag(tag)"
-            ></a>
+            >
+            </a>
           </span>
         </div>
       </div>
@@ -94,30 +108,61 @@
         <div class="col-3 col-sm-12">
           <label class="form-label" for="blog">В блог</label>
         </div>
+
         <div class="col-9 col-sm-12">
-          <select class="form-select" id="blog" v-model="model.blog" v-validate="validation.blog">
+          <select
+            class="form-select"
+            id="blog"
+            v-model="model.blog"
+            v-validate="validation.blog"
+          >
             <option :value="null" selected>Нет</option>
-            <option
-              v-for="blog in blogs"
-              :key="blog.id"
-              :value="blog.id"
-            >{{ blog.title }} (Создатель: {{ blog.creator.username }})</option>
+            <option v-for="blog in blogs" :key="blog.id" :value="blog.id">
+              {{ blog.title }} (Создатель: {{ blog.creator.username }})
+            </option>
           </select>
+
           <p class="form-input-hint" style="margin-bottom: 0">
             Чтобы опубликовать запись, выберите блог.
             <br />
-            <i
-              v-if="user.is_admin"
-            >Так как используется учетная запись администратора, можно выбрать любой блог</i>
+            <i v-if="user.is_admin">
+              Так как используется учетная запись администратора, можно выбрать
+              любой блог
+            </i>
           </p>
+        </div>
+      </div>
+
+      <div class="form-group mt-2">
+        <div class="col-3 col-sm-12">
+          <label class="form-label">
+            Этот пост связан с заявками на джем:
+          </label>
+        </div>
+        <div class="col-9 col-sm-12">
+          <router-link
+            v-for="entry in model.jamEntries"
+            :key="entry.id"
+            :to="{
+              name: 'jam-entry',
+              params: { jamUrl: entry.jam.url, entryUrl: entry.url },
+            }"
+            class="text-center mx-2"
+          >
+            {{ entry.title }}
+          </router-link>
+
+          <button class="btn btn-sm" @click="isEntrySelectModalShowed = true">
+            Редактировать список
+          </button>
         </div>
       </div>
 
       <div class="form-group float-right">
         <div class="btn-group btn-group-block">
-          <div v-if="isSending" class="loading" style="margin-right: 32px"></div>
+          <div v-if="isSending" class="loading mr-32"></div>
 
-          <label class="form-switch form-input-hint">
+          <label class="form-switch form-input-hint" v-if="user.is_admin">
             <input type="checkbox" v-model="rawEditor" />
             <i class="form-icon"></i> Редактировать HTML
           </label>
@@ -142,21 +187,32 @@
 
       <div class="form-group float-left" v-if="isInEditMode">
         <div class="btn-group btn-group-block">
-          <input type="submit" class="btn btn-error" value="Удалить" @click="deletePost()" />
+          <input
+            type="submit"
+            class="btn btn-error"
+            value="Удалить"
+            @click="deletePost()"
+          />
         </div>
       </div>
     </div>
+
+    <select-entry-for-post-modal
+      :isShowed.sync="isEntrySelectModalShowed"
+      v-model="model.jamEntries"
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-// import indent from '../../node_modules/indent.js/lib/indent'
 import Editor from '@/components/editor/Editor.vue'
 import LoadingView from '@/components/LoadingView.vue'
 import slugify from 'speakingurl'
 import Pagination from '@/models/pagination'
 import errors from '@/utils/errors'
+
+import SelectEntryForPostModal from '@/components/jams/SelectEntryForPostModal'
 
 export default {
   data () {
@@ -165,7 +221,8 @@ export default {
         title: '',
         blog: null,
         tags: [],
-        newTag: ''
+        newTag: '',
+        jamEntries: []
       },
       validation: {
         title: {
@@ -187,7 +244,8 @@ export default {
       newSlug: '',
       blogs: [],
       rawEditor: false,
-      rawPost: ''
+      rawPost: '',
+      isEntrySelectModalShowed: false
     }
   },
   created () {
@@ -222,6 +280,8 @@ export default {
           }
           this.model.tags = post.tags
           this.$refs.editor.setContent(post.text)
+
+          this.model.jamEntries = post.jam_entries
         })
         .catch(error => {
           errors.handle(error)
@@ -243,6 +303,11 @@ export default {
       }
     },
     send (draft) {
+      if (!this.slug) {
+        this.$toast.error('Не указана ссылка для поста')
+
+        return
+      }
       this.isSending = true
 
       let result = null
@@ -262,6 +327,7 @@ export default {
           draft: draft,
           blogId: this.model.blog,
           tags: this.model.tags.map(t => t.title),
+          jamEntries: this.model.jamEntries
         })
       } else {
         result = this.$store.dispatch('posts/createPost', {
@@ -271,6 +337,7 @@ export default {
           draft: draft,
           blogId: this.model.blog,
           tags: this.model.tags.map(t => t.title),
+          jamEntries: this.model.jamEntries
         })
       }
 
@@ -339,7 +406,7 @@ export default {
       return this.user.is_admin
     },
     slug () {
-      return slugify(this.model.title, { lang: 'ru' })
+      return slugify(this.model.title, { lang: 'ru', custom: { '*': 'star' } })
     },
     slugChanged () {
       return this.newSlug !== '' && this.newSlug !== this.slug
@@ -374,6 +441,7 @@ export default {
   components: {
     Editor,
     LoadingView,
+    SelectEntryForPostModal
   }
 }
 </script>

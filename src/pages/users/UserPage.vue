@@ -27,6 +27,10 @@
       <template v-if="currentTab == 3">
         <user-page-posts :user="user" />
       </template>
+
+      <template v-if="currentTab == 4">
+        <user-page-jams :user="user" />
+      </template>
     </div>
   </div>
 </template>
@@ -39,6 +43,7 @@ import UserPageAbout from '@/components/users/UserPageAbout.vue'
 import UserPageAchievements from '@/components/users/UserPageAchievements.vue'
 import UserPageBlogs from '@/components/users/UserPageBlogs.vue'
 import UserPagePosts from '@/components/users/UserPagePosts.vue'
+import UserPageJams from '@/components/users/UserPageJams.vue'
 import errors from '@/utils/errors'
 
 export default {
@@ -94,6 +99,7 @@ export default {
     UserPageAchievements,
     UserPageBlogs,
     UserPagePosts,
+    UserPageJams,
   }
 }
 </script>

@@ -42,7 +42,7 @@
         >
           <span class="chip">
             <span class="icon-bubble2"></span>
-            <span style="padding-left:4px">{{ post.comments }}</span>
+            <span class="pl-2">{{ post.comments }}</span>
           </span>
         </router-link>
         <span v-for="tag in post.tags" :key="tag.id" class="chip">

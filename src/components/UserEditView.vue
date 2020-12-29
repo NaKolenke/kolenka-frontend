@@ -31,7 +31,6 @@
 
       <div class="column col-4">
         <div class="form-group">
-          <!--<img :src="process.env.VUE_APP_CONTENT_URL + `/' + user.avatar.id + '/'" style="width: auto; max-width: 100%" />-->
           <image-upload @complete="imageUploaded">
             <h4>Изменить аватар</h4>
             <avatar :user="user" size="xl" :card="false" />

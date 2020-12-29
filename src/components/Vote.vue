@@ -1,8 +1,8 @@
 <template>
-  <span v-if="isLoading" class="loading" style="width:90px"></span>
+  <span v-if="isLoading" class="loading"></span>
   <span v-else>
     <img class="vote-img mx-2" :src="imageUp" @click.prevent="voteUp()" />
-    <span style="font-size: 1.2rem;">{{ rating }}</span>
+    <span class="vote-text">{{ rating }}</span>
     <img class="vote-img mx-2" :src="imageDown" @click.prevent="voteDown()" />
   </span>
 </template>
@@ -108,5 +108,13 @@ export default {
     opacity: 0.5;
     filter: alpha(opacity=50);
   }
+}
+
+.loading {
+  width: 90px;
+}
+
+.vote-text {
+  font-size: 1.2rem;
 }
 </style>

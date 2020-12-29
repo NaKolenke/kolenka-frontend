@@ -2,20 +2,27 @@
   <div class="card comment" :id="commentId">
     <div class="card-body">
       <div class="tile">
-        <div class="tile-icon" style="position:relative">
+        <div class="tile-icon" style="position: relative">
           <avatar :user="comment.creator" :size="'sm'" />
         </div>
 
         <div class="tile-content p-relative">
           <div class="tile-title text-bold">
             <router-link
-              :to="{ name: 'user', params: { user: comment.creator.username }}"
+              :to="{ name: 'user', params: { user: comment.creator.username } }"
               class="text-dark"
-            >{{ comment.creator.name || comment.creator.username }}</router-link>
+              >{{
+                comment.creator.name || comment.creator.username
+              }}</router-link
+            >
           </div>
 
           <div class="tile-subtitle">
-            <post-body v-if="!isEditing" class="mt-1 comment-body" :html="comment.text" />
+            <post-body
+              v-if="!isEditing"
+              class="mt-1 comment-body"
+              :html="comment.text"
+            />
 
             <div class="panel mt-2" v-if="isEditing">
               <h6 class="panel-header mb-0">
@@ -28,8 +35,14 @@
                   <i class="icon icon-cross"></i>
                 </button>
               </h6>
-              <div class="panel-body" style="overflow:visible">
-                <comment-form :post-url="postUrl" :comment="comment" @sent="commentSent" />
+              <div class="panel-body" style="overflow: visible">
+                <comment-form
+                  :post-url="postUrl"
+                  :jam-url="jamUrl"
+                  :jam-entry-url="jamEntryUrl"
+                  :comment="comment"
+                  @sent="commentSent"
+                />
               </div>
               <div class="panel-footer pb-0"></div>
             </div>
@@ -45,10 +58,14 @@
             />
 
             <small class="subpanel text-gray" v-if="!isEditing">
-              <a href="#" data-tooltip="Ответить" @click.prevent="reply">Ответить</a>
-              <a v-if="canEdit(comment)" href="#" @click.prevent="edit">Редактировать</a>
+              <a href="#" data-tooltip="Ответить" @click.prevent="reply"
+                >Ответить</a
+              >
+              <a v-if="canEdit(comment)" href="#" @click.prevent="edit"
+                >Редактировать</a
+              >
 
-              <span>{{ comment.created_date | moment}}</span>
+              <span>{{ comment.created_date | moment }}</span>
               <a :href="'#' + commentId" title="Ссылка на комментарий">#</a>
             </small>
           </div>
@@ -64,20 +81,28 @@
                 <i class="icon icon-cross"></i>
               </button>
             </h6>
-            <div class="panel-body" style="overflow:visible">
-              <comment-form :post-url="postUrl" :parent-id="comment.id" @sent="commentSent" />
+            <div class="panel-body" style="overflow: visible">
+              <comment-form
+                :post-url="postUrl"
+                :jam-url="jamUrl"
+                :jam-entry-url="jamEntryUrl"
+                :parent-id="comment.id"
+                @sent="commentSent"
+              />
             </div>
             <div class="panel-footer pb-0"></div>
           </div>
         </div>
       </div>
 
-      <div v-if="commentHasChilds(comment.id)" style="padding-left: .4rem">
+      <div v-if="commentHasChilds(comment.id)" style="padding-left: 0.4rem">
         <comment-card
           v-for="item in commentChilds(comment.id)"
           :key="item.id"
           :comment="item"
           :post-url="postUrl"
+          :jam-url="jamUrl"
+          :jam-entry-url="jamEntryUrl"
           :user="user"
         />
       </div>
@@ -101,6 +126,8 @@ export default {
     'comment',
     'parentId',
     'postUrl',
+    'jamUrl',
+    'jamEntryUrl',
     'user'
   ],
   data () {

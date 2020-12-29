@@ -16,7 +16,7 @@ export default {
       .get(`posts/by-id/${id}/`)
       .then(res => res.data)
   },
-  createPost: (title, text, url, draft, blogId, tags) => {
+  createPost: (title, text, url, draft, blogId, tags, jamEntries) => {
     return request
       .post(`posts/`,
         {
@@ -27,10 +27,11 @@ export default {
           title,
           url,
           tags,
+          jam_entries: jamEntries
         })
       .then(res => res.data)
   },
-  editPost: (title, text, url, originalUrl, draft, blogId, tags) => {
+  editPost: (title, text, url, originalUrl, draft, blogId, tags, jamEntries) => {
     return request
       .put(`posts/${originalUrl}/`,
         {
@@ -40,7 +41,8 @@ export default {
           text,
           title,
           url,
-          tags
+          tags,
+          jam_entries: jamEntries
         })
       .then(res => res.data)
   },
