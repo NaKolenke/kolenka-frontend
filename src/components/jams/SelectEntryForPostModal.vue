@@ -53,6 +53,7 @@ export default {
   data: function () {
     return {
       entries: [],
+
     }
   },
   created () {
@@ -78,12 +79,11 @@ export default {
       return this.value.some(e => e.id === entry.id)
     },
     selectEntry: function (entry) {
-      this.value.push(entry)
-      this.$emit('input', this.value)
+      this.$emit('input', this.value.concat(entry))
     },
     unselectEntry: function (entry) {
-      this.value = this.value.filter(e => e.id !== entry.id)
-      this.$emit('input', this.value)
+      var newVal = this.value.filter(e => e.id !== entry.id)
+      this.$emit('input', newVal)
     },
     close: function () {
       this.$emit("update:isShowed", false)

@@ -2,7 +2,7 @@
   <span v-if="isLoading" class="loading"></span>
   <span v-else>
     <img class="vote-img mx-2" :src="imageUp" @click.prevent="voteUp()" />
-    <span class="vote-text">{{ rating }}</span>
+    <span class="vote-text">{{ model.rating }}</span>
     <img class="vote-img mx-2" :src="imageDown" @click.prevent="voteDown()" />
   </span>
 </template>
@@ -20,28 +20,39 @@ export default {
   },
   data: function () {
     return {
-      isLoading: false
+      isLoading: false,
+      model: {
+        rating: Number,
+        votedUp: Boolean,
+        votedDown: Boolean,
+      }
     };
   },
+  mounted: function () {
+    this.model.rating = this.rating
+    this.model.votedUp = this.votedUp
+    this.model.votedDown = this.votedDown
+  },
+
   methods: {
     voteUp () {
       this.isLoading = true
 
-      this.$store.dispatch('votes/vote', { id: this.id, type: this.type, value: this.votedUp ? 0 : 1 })
+      this.$store.dispatch('votes/vote', { id: this.id, type: this.type, value: this.model.votedUp ? 0 : 1 })
         .then(_res => {
           this.isLoading = false
-          if (this.votedUp) {
-            this.votedUp = false
-            this.votedDown = false
-            this.rating--
+          if (this.model.votedUp) {
+            this.model.votedUp = false
+            this.model.votedDown = false
+            this.model.rating--
           } else if (this.votedDown) {
-            this.votedUp = true
-            this.votedDown = false
-            this.rating = this.rating + 2
+            this.model.votedUp = true
+            this.model.votedDown = false
+            this.model.rating = this.model.rating + 2
           } else {
-            this.votedUp = true
-            this.votedDown = false
-            this.rating++
+            this.model.votedUp = true
+            this.model.votedDown = false
+            this.model.rating++
           }
         })
         .catch(error => {
@@ -54,21 +65,21 @@ export default {
     voteDown () {
       this.isLoading = true
 
-      this.$store.dispatch('votes/vote', { id: this.id, type: this.type, value: this.votedDown ? 0 : -1 })
+      this.$store.dispatch('votes/vote', { id: this.id, type: this.type, value: this.model.votedDown ? 0 : -1 })
         .then(_res => {
           this.isLoading = false
-          if (this.votedDown) {
-            this.votedUp = false
-            this.votedDown = false
-            this.rating++
-          } else if (this.votedUp) {
-            this.votedUp = false
-            this.votedDown = true
-            this.rating = this.rating - 2
+          if (this.model.votedDown) {
+            this.model.votedUp = false
+            this.model.votedDown = false
+            this.model.rating++
+          } else if (this.model.votedUp) {
+            this.model.votedUp = false
+            this.model.votedDown = true
+            this.model.rating = this.model.rating - 2
           } else {
-            this.votedUp = false
-            this.votedDown = true
-            this.rating--
+            this.model.votedUp = false
+            this.model.votedDown = true
+            this.model.rating--
           }
         })
         .catch(error => {
@@ -81,14 +92,14 @@ export default {
   },
   computed: {
     imageUp () {
-      if (this.votedUp) {
+      if (this.model.votedUp) {
         return "/images/vote-up-active.png"
       } else {
         return "/images/vote-up.png"
       }
     },
     imageDown () {
-      if (this.votedDown) {
+      if (this.model.votedDown) {
         return "/images/vote-down-active.png"
       } else {
         return "/images/vote-down.png"

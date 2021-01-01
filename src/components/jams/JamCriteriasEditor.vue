@@ -96,7 +96,8 @@ export default {
         nextElement.order = currentOrder
       }
 
-      this.$emit('input', this.value.sort((a, b) => a.order - b.order))
+      var newVal = [...this.value]
+      this.$emit('input', newVal.sort((a, b) => a.order - b.order))
     },
     removeCriteria: function (id) {
       this.$emit('input', this.value.filter(c => c.id !== id))

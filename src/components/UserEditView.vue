@@ -6,19 +6,35 @@
 
         <div class="form-group">
           <label class="form-label" for="name">Имя пользователя</label>
-          <input class="form-input" v-model="user.name" name="name" id="name" />
+          <input
+            class="form-input"
+            v-model="userModel.name"
+            name="name"
+            id="name"
+          />
           <!-- v-validate="validation.username" -->
         </div>
 
         <div class="form-group">
           <label class="form-label" for="email">Email</label>
-          <input class="form-input" v-model="user.email" name="email" id="email" />
+          <input
+            class="form-input"
+            v-model="userModel.email"
+            name="email"
+            id="email"
+          />
           <!-- v-validate="validation.email" -->
         </div>
 
         <div class="form-group">
           <label class="form-label" for="birthday">День рождения</label>
-          <input class="form-input" v-model="birthday" type="date" name="birthday" id="birthday" />
+          <input
+            class="form-input"
+            v-model="birthday"
+            type="date"
+            name="birthday"
+            id="birthday"
+          />
         </div>
 
         <div class="form-group">
@@ -26,7 +42,14 @@
           <editor ref="editor"></editor>
         </div>
 
-        <button id="edit-btn" class="btn btn-primary" @click="edit" :disabled="!isValid">Изменить</button>
+        <button
+          id="edit-btn"
+          class="btn btn-primary"
+          @click="edit"
+          :disabled="!isValid"
+        >
+          Изменить
+        </button>
       </div>
 
       <div class="column col-4">
@@ -52,20 +75,22 @@ Moment.locale('ru')
 
 export default {
   props: ['user'],
-  // data () {
-  //   return {
-  //     validation: {
-  //       username: {
-  //         length: () => this.user.name.length >= 3
-  //       },
-  //       email: {
-  //         length: () => this.user.email.length >= 5,
-  //         isEmail: () => /\S+@\S+\.\S+/.test(this.user.email) // Broad check
-  //       }
-  //     }
-  //   }
-  // },
+  data () {
+    return {
+      userModel: {}
+      //     validation: {
+      //       username: {
+      //         length: () => this.user.name.length >= 3
+      //       },
+      //       email: {
+      //         length: () => this.user.email.length >= 5,
+      //         isEmail: () => /\S+@\S+\.\S+/.test(this.user.email) // Broad check
+      //       }
+      //     }
+    }
+  },
   mounted () {
+    Object.assign(this.userModel, this.user)
     this.$refs.editor.setContent(this.user.about)
   },
   computed: {
@@ -74,7 +99,7 @@ export default {
         return Moment(this.user.birthday).format(Moment.HTML5_FMT.DATE)
       },
       set (date) {
-        this.user.birthday = date
+        this.userModel.birthday = date
       }
     },
     isValid () {
@@ -85,8 +110,8 @@ export default {
   },
   methods: {
     edit () {
-      this.user.about = this.$refs.editor.getHtml()
-      this.$parent.editUser(this.user)
+      this.userModel.about = this.$refs.editor.getHtml()
+      this.$parent.editUser(this.userModel)
     },
     imageUploaded (images) {
       const avatar = images[0]
