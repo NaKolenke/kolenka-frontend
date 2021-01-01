@@ -125,11 +125,12 @@ export default {
       this.$store.dispatch('startLoading')
 
       var jamUrl = this.$route.params.jamUrl
+      var entryUrl = null
       var request = null
       if (this.$route.name === 'my-jam-entry') {
         request = this.$store.dispatch('jams/getMyEntry', { jamUrl: jamUrl })
       } else {
-        var entryUrl = this.$route.params.entryUrl
+        entryUrl = this.$route.params.entryUrl
         request = this.$store.dispatch('jams/getEntry', { jamUrl: jamUrl, entryUrl: entryUrl })
       }
       request
@@ -140,7 +141,7 @@ export default {
           return Promise.resolve()
         })
         .then(_ => {
-          return this.$store.dispatch('jams/getEntryCriterias', { jamUrl: jamUrl, entryUrl: entryUrl })
+          return this.$store.dispatch('jams/getEntryCriterias', { jamUrl: jamUrl, entryUrl: this.entry.url })
         })
         .then(votes => {
           this.formVotes(votes)
