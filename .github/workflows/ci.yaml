@@ -63,7 +63,7 @@ jobs:
 
   deploy-beta:
     runs-on: ubuntu-latest
-    needs: build
+    # needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Deploy on remote machine
