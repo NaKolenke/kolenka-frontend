@@ -73,7 +73,9 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           envs: GITHUB_RUN_ID
-          script: ./deploy-frontend.sh $GITHUB_RUN_ID
+          script: |
+            echo $GITHUB_RUN_ID
+            ./deploy-frontend.sh $GITHUB_RUN_ID
 
   deploy-production:
     runs-on: ubuntu-latest
