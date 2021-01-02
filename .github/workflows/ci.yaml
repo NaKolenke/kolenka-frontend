@@ -72,6 +72,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
+          envs: GITHUB_RUN_ID
           script: ./deploy-frontend.sh $GITHUB_RUN_ID
 
   deploy-production:
@@ -85,4 +86,5 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
+          envs: GITHUB_RUN_ID
           script: ./deploy-frontend.sh $GITHUB_RUN_ID prod
