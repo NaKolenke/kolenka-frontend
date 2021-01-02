@@ -179,8 +179,7 @@ export default {
           }
 
           this.$store.dispatch('stopLoading')
-
-          this.$router.push({ name: 'jam', params: { name: data.url } })
+          this.$router.push({ name: 'jam', params: { jamUrl: data.url } })
         })
         .catch(error => {
           errors.handle(error)
@@ -204,7 +203,10 @@ export default {
           this.startDate = Moment.unix(data.start_date).format('YYYY-MM-DD')
           this.endDate = Moment.unix(data.end_date).format('YYYY-MM-DD')
           this.criterias = data.criterias
-          this.logoId = data.logo.id
+          this.logoId = null
+          if (data.logo) {
+            this.logoId = data.logo.id
+          }
 
           this.$store.dispatch('stopLoading')
         })

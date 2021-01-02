@@ -139,7 +139,6 @@ export default {
       this.$store.dispatch('startLoading')
 
       this.jamUrl = this.$route.params.jamUrl
-      console.log(this.jamUrl)
       this.$store.dispatch('jams/getMyEntry', { jamUrl: this.jamUrl })
         .then(data => {
           this.title = data.title

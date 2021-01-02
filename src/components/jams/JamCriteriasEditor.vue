@@ -49,7 +49,7 @@
 <script>
 export default {
   props: {
-    value: Object
+    value: Array
   },
   methods: {
     addCriteria: function () {

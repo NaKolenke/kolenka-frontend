@@ -45,7 +45,7 @@ export default {
             this.model.votedUp = false
             this.model.votedDown = false
             this.model.rating--
-          } else if (this.votedDown) {
+          } else if (this.model.votedDown) {
             this.model.votedUp = true
             this.model.votedDown = false
             this.model.rating = this.model.rating + 2

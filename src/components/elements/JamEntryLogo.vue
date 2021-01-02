@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     contentUrl () {
-      return process.env.VUE_APP_CONTENT_URL + '/' + this.jam.logo.id + '/'
+      return process.env.VUE_APP_CONTENT_URL + '/' + this.entry.logo.id + '/'
     },
     stubUrl () {
       return `${process.env.VUE_APP_API_URL}stickers/avatar${Math.floor(Math.random() * 2) + 1}/`
