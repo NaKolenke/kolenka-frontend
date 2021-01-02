@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           source: "build.tar.gz"
-          target: "kolenka-front-builds/build.tar.gz"
+          target: "kolenka-front-builds"
 
   build-prod:
     runs-on: ubuntu-latest
