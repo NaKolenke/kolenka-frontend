@@ -1,6 +1,6 @@
 <img src="logo.png"/>
 
-[![CircleCI](https://circleci.com/gh/NaKolenke/kolenka-frontend.svg?style=shield)](https://circleci.com/gh/NaKolenke/kolenka-frontend)
+![Building](https://github.com/NaKolenke/kolenka-frontend/workflows/CI%20and%20CD/badge.svg)
 [![Hits-of-Code](https://hitsofcode.com/github/NaKolenke/kolenka-frontend)](https://hitsofcode.com/view/github/NaKolenke/kolenka-frontend)
 
 kolenka.net - это сайт небольшого коммьюнити разработчиков игр. В этом репозитории лежит фронтенд всего сайта. У нас есть блоги, в которые пользователи могут писать посты, а другие пользователи могут комментировать эти посты.

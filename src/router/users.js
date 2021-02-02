@@ -1,3 +1,4 @@
+import NoLoginPage from '@/pages/auth/NoLoginPage.vue'
 import LoginPage from '@/pages/auth/LoginPage.vue'
 import RegisterPage from '@/pages/auth/RegisterPage.vue'
 import RestorePasswordPage from '@/pages/auth/RestorePassword.vue'
@@ -13,7 +14,8 @@ export default [
   {
     path: '/login',
     components: {
-      default: LoginPage,
+      default: NoLoginPage,
+      // default: LoginPage,
       sidebar: DefaultSidebar
     },
     props: {
@@ -25,7 +27,8 @@ export default [
   {
     path: '/register',
     components: {
-      default: RegisterPage,
+      default: NoLoginPage,
+      // default: RegisterPage,
       sidebar: DefaultSidebar
     },
     props: {
@@ -37,7 +40,8 @@ export default [
   {
     path: '/restore',
     components: {
-      default: RestorePasswordPage,
+      default: NoLoginPage,
+      // default: RestorePasswordPage,
       sidebar: DefaultSidebar
     },
     props: {
@@ -49,7 +53,8 @@ export default [
   {
     path: '/recover-pass',
     components: {
-      default: NewPasswordPage,
+      default: NoLoginPage,
+      // default: NewPasswordPage,
       sidebar: DefaultSidebar
     },
     props: {

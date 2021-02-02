@@ -10,7 +10,7 @@
         </router-link>
         <router-link to="/blogs">Блоги</router-link>
         <router-link to="/users">Люди</router-link>
-        <router-link to="/jams">Джемы</router-link>
+        <router-link v-if="false" to="/jams">Джемы</router-link>
         <router-link v-if="false" to="/stream">Активность</router-link>
         <router-link to="/search">Поиск</router-link>
       </section>
@@ -23,7 +23,7 @@
           <div class="dropdown dropdown-right">
             <div class="btn-group">
               <router-link
-                :to="{ name: 'user', params: { user: user.username }}"
+                :to="{ name: 'user', params: { user: user.username } }"
                 class="btn btn-link text-secondary"
               >
                 <avatar
@@ -42,14 +42,18 @@
 
               <ul class="menu">
                 <li class="menu-item">
-                  <router-link :to="{ name: 'user', params: { user: user.username }}">
+                  <router-link
+                    :to="{ name: 'user', params: { user: user.username } }"
+                  >
                     <i class="icon icon-people"></i> Профиль
                   </router-link>
                 </li>
                 <li class="menu-item">
                   <router-link :to="{ name: 'notifications' }">
                     <i class="icon icon-flag"></i>
-                    <span :class="{'badge' : notifications.length > 0 }">Уведомления</span>
+                    <span :class="{ badge: notifications.length > 0 }"
+                      >Уведомления</span
+                    >
                   </router-link>
                 </li>
                 <li class="divider"></li>
@@ -59,7 +63,9 @@
                   </router-link>
                 </li>
                 <li class="menu-item">
-                  <router-link :to="{ name: 'userPosts', params: { user: user.username } }">
+                  <router-link
+                    :to="{ name: 'userPosts', params: { user: user.username } }"
+                  >
                     <i class="icon icon-copy"></i> Посты
                   </router-link>
                 </li>
@@ -76,7 +82,7 @@
                 </li>
                 <li v-if="isLocal" class="divider"></li>
                 <li v-if="isAdmin" class="menu-item">
-                  <router-link :to="{name:'admin-activity'}">
+                  <router-link :to="{ name: 'admin-activity' }">
                     <i class="icon icon-apps"></i> Управление
                   </router-link>
                 </li>
