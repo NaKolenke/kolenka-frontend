@@ -5,7 +5,10 @@
     </template>
     <post-view v-else :post="post" :cut="false"></post-view>
 
-    <div class="container my-2" v-if="post.jam_entries.length > 0">
+    <div
+      class="container my-2"
+      v-if="post.jam_entries && post.jam_entries.length > 0"
+    >
       <h3>К этому посту прилинкованы заявки:</h3>
       <div class="columns">
         <div
